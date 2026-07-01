@@ -1,0 +1,50 @@
+[
+  {
+    "model": "hgt_v2_best",
+    "val_loss": 0.15405339713801036,
+    "auroc": 0.9836032489114556,
+    "auprc": 0.9730892210052043,
+    "cell_acc": 0.9960705830668977,
+    "cell_f1": 0.9935457899432301
+  },
+  {
+    "model": "random",
+    "val_loss": 1.4244542555375532,
+    "auroc": NaN,
+    "auprc": NaN,
+    "cell_acc": 0.09090762104173909,
+    "cell_f1": 0.07987342369758027
+  },
+  {
+    "model": "mlp",
+    "val_loss": 0.09917243841019543,
+    "auroc": NaN,
+    "auprc": NaN,
+    "cell_acc": 0.9253599168047837,
+    "cell_f1": 0.8882988142859354
+  },
+  {
+    "model": "homo_gcn",
+    "val_loss": 0.1410508971999992,
+    "auroc": NaN,
+    "auprc": NaN,
+    "cell_acc": 0.8944602548347454,
+    "cell_f1": 0.8630858780146
+  },
+  {
+    "model": "ablation_no_mirna",
+    "val_loss": 0.015877628106285225,
+    "auroc": NaN,
+    "auprc": NaN,
+    "cell_acc": 0.98945045350924,
+    "cell_f1": 0.9821043155321802
+  },
+  {
+    "model": "ablation_no_coexpr",
+    "val_loss": 0.011758788573470983,
+    "auroc": NaN,
+    "auprc": NaN,
+    "cell_acc": 0.9933071568802427,
+    "cell_f1": 0.9889045105832843
+  }
+]

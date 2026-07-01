@@ -1,0 +1,46 @@
+\section{Estado actual y siguientes pasos}
+
+\begin{frame}{Conclusiones hasta ahora}
+  \begin{enumerate}
+    \item El pipeline de datos y el grafo heterog\'eneo ya est\'an operativos y producen artefactos reutilizables.
+    \item La variante V2 es, hasta ahora, la mejor configuraci\'on para combinar clasificaci\'on celular y predicci\'on de enlaces miRNA-gen.
+    \item El proyecto ya genera resultados interpretables: saliencia por tipo celular, circuitos regulatorios y enriquecimiento funcional.
+    \item Existen candidatos con inter\'es biol\'ogico directo para EM, pero necesitan validaci\'on externa y contraste con literatura/experimento.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Limitaciones y riesgos actuales}
+  \begin{itemize}
+    \item La expresi\'on de miRNAs proviene de bulk, no de c\'elula \`unica; la resoluci\'on celular es indirecta.
+    \item Parte del conocimiento miRNA-gen viene de predicci\'on computacional y no exclusivamente de validaci\'on experimental.
+    \item La clasificaci\'on celular es muy fuerte; la pregunta dif\'icil y m\'as valiosa sigue siendo la causalidad regulatoria.
+    \item Falta profundizar en diferencias MS vs control y estabilidad entre seeds o particiones.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Roadmap para la siguiente iteraci\'on de esta presentaci\'on}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{3.2cm}X}
+    \toprule
+    Siguiente bloque & Acci\'on sugerida \\
+    \midrule
+    Datos & A\~nadir tablas de distribuci\'on MS vs control y recuentos por subtipo celular \\
+    Resultados & Incorporar comparaci\'on por seed, por checkpoint y por ablation con narrativa homog\'enea \\
+    Biolog\'ia & Resumir soporte bibliogr\'afico de miR-146a-3p, miR-140-5p y miR-23a-3p \\
+    Validaci\'on & Integrar datasets externos o literatura curada para evaluar top circuits \\
+    Visuales & Duplicar slides de red para Microglia, Monocyte y Oligodendrocyte \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+\begin{frame}{Cierre}
+  \begin{block}{Mensaje central}
+    El proyecto ya pas\'o de integrar datos heterog\'eneos a producir hip\'otesis reguladoras concretas, cuantificables y visualizables por tipo celular en EM.
+  \end{block}
+
+  \vspace{0.8em}
+
+  \centering
+  \Large
+  Siguiente meta: convertir los mejores circuitos en evidencia biol\'ogica defendible.
+\end{frame}

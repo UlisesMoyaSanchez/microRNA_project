@@ -1,0 +1,46 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# experiments (results, not code)
+experiments/*/
+!experiments/.gitkeep
+
+# checkpoints, logs
+*.ckpt
+*.pt
+lightning_logs/
+*.log
+
+# notebooks outputs
+notebooks/.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# data files
+*.csv
+*.npz
+*.npy
+*.h5
+
+# SLURM output
+*.out
+*.err
+
+# misc
+.DS_Store
+*.swp
+
+# large/generated data & model artifacts - regenerate via data/01_download, 02_preprocess, 03_build_graph
+data/raw/
+data/processed/
+data/graphs/
+checkpoints/
+checkpoints_v2/
+checkpoints_v3/
+checkpoints_v4/
+logs/

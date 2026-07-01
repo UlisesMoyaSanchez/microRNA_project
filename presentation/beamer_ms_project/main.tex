@@ -1,0 +1,82 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\pgfplotsset{compat=1.18}
+
+\definecolor{msblue}{RGB}{10,70,110}
+\definecolor{mscyan}{RGB}{30,135,160}
+\definecolor{msgray}{RGB}{70,70,70}
+\definecolor{mslight}{RGB}{236,244,247}
+\definecolor{msgreen}{RGB}{40,125,80}
+\definecolor{msorange}{RGB}{190,110,35}
+
+\setbeamercolor{structure}{fg=msblue}
+\setbeamercolor{title}{fg=white,bg=msblue}
+\setbeamercolor{frametitle}{fg=white,bg=msblue}
+\setbeamercolor{block title}{fg=white,bg=mscyan}
+\setbeamercolor{block body}{bg=mslight}
+\setbeamercolor{itemize item}{fg=msblue}
+\setbeamercolor{enumerate item}{fg=msblue}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.5ex,dp=1ex,leftskip=1em]{author in head/foot}%
+    \color{white}\scriptsize Proyecto miRNA-MS
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.5ex,dp=1ex,rightskip=1em plus1fil]{title in head/foot}%
+    \color{white}\scriptsize \insertframenumber{} / \inserttotalframenumber
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{mscyan},
+  backgroundcolor=\color{mslight}
+}
+
+\title{Descubrimiento de Redes de Regulaci\'on de miRNAs en Esclerosis M\'ultiple}
+\subtitle{Versi\'on evolutiva para defensa oral del proyecto miRNA-MS}
+\author{Repositorio: microRNA\_project}
+\institute{Integraci\'on multi-\'omica con grafos heterog\'eneos y deep learning}
+\date{30 de mayo de 2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Objetivo de la presentaci\'on}
+  \tableofcontents
+\end{frame}
+
+\input{sections/01_context.tex}
+\input{sections/02_data_graph.tex}
+\input{sections/03_model_results.tex}
+\input{sections/04_outlook.tex}
+
+\end{document}

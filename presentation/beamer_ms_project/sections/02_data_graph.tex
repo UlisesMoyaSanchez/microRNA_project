@@ -1,0 +1,143 @@
+\section{Datos, entradas y grafo}
+
+\begin{frame}{Fuentes de datos utilizadas}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}X}
+    \toprule
+    \textbf{Bloque} & \textbf{Fuente} & \textbf{Contenido} & \textbf{Escala} & \textbf{Rol en el proyecto} \\
+    \midrule
+    scRNA-seq & CellxGene Census & C\'elulas MS y controles de sangre, cerebro y LCR & \textasciitilde 110k c\'elulas, 61,497 genes crudos & Construcci\'on de nodos de c\'elula, genes HVG y etiquetas celulares \\
+    miRNAs & GEO GSE289530 & CD14+, CD8+ y neutr\'ofilos; MS vs control; plataforma GPL19117 & 166 muestras, 2,578 probes humanos & Se\~nal de miRNAs y contexto de regulaci\'on \\
+    Interacciones & miRDB v6.0 & Predicciones miRNA$\rightarrow$gen con score & 412,771 pares deduplicados; umbral $\geq 80$ & Esqueleto de aristas regulatorias \\
+    \bottomrule
+  \end{tabularx}
+
+  \vspace{0.6em}
+  \normalsize
+  \begin{itemize}
+    \item En el grafo final se restringe a genes HVG y miRNAs con interacciones suficientes.
+    \item El dataset GEO configurado y documentado en el repositorio es GSE289530.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo real de metadatos de entrada: miRNA bulk}
+  \scriptsize
+  \begin{lstlisting}
+Sample_geo_accession    Sample_title        Sample_source_name_ch1  condition  accession
+GSM8793382              HSG_HC_CD14_1       Peripheral Blood       Control    GSE289530
+GSM8793396              HSG_HC_CD8_1        Peripheral Blood       Control    GSE289530
+GSM8793409              HSG_HC_NEU_1        Peripheral Blood       Control    GSE289530
+  \end{lstlisting}
+
+  \vspace{0.3em}
+  \begin{itemize}
+    \item El archivo `data/processed/mirna_meta.tsv` conserva la traza entre muestra, condici\'on y acceso GEO.
+    \item Las muestras representan subpoblaciones inmunes relevantes para EM: monocitos CD14+, CD8+ y neutr\'ofilos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo real de matriz de expresi\'on de miRNAs}
+  \scriptsize
+  \begin{lstlisting}
+miRNA              GSM8793382  GSM8793383  GSM8793384  GSM8793385
+hsa-let-7a-2-3p    0.3648      0.6321      0.6899      0.3738
+hsa-let-7a-3p      0.5851      0.6304      0.6330      0.9575
+hsa-let-7a-5p      3.4855      3.6050      3.5661      3.5447
+hsa-let-7b-3p      0.5835      1.0319      0.7823      0.8177
+  \end{lstlisting}
+
+  \vspace{0.3em}
+  \begin{itemize}
+    \item La tabla procesada `data/processed/mirna_expr.tsv` ya est\'a normalizada y homogeneizada entre muestras.
+    \item La presentaci\'on puede crecer luego con ejemplos diferenciales MS vs control o con boxplots por subtipo celular.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Etiquetas celulares del problema supervisado}
+  \begin{columns}[T]
+    \begin{column}{0.53\textwidth}
+      \begin{block}{11 clases objetivo}
+        \small
+        Astrocyte, B\_cell, CD4\_T, CD8\_T, Microglia, Monocyte, NK\_cell, Oligodendrocyte, T\_cell, Th17, Treg.
+      \end{block}
+      \begin{block}{Marcadores de referencia en config\_v2}
+        \small
+        \begin{itemize}
+          \item Th17: IL17A, RORC, IL23R, CCR6
+          \item Treg: FOXP3, IL2RA, CTLA4
+          \item Microglia: CX3CR1, P2RY12, TMEM119, SLC2A5
+          \item Oligodendrocyte: MBP, PLP1, MOG, CNP
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{tikzpicture}[x=1cm, y=0.6cm]
+        \foreach \i/\name in {0/Astrocyte,1/B\_cell,2/CD4\_T,3/CD8\_T,4/Microglia,5/Monocyte,6/NK\_cell,7/Oligodendrocyte,8/T\_cell,9/Th17,10/Treg} {
+          \node[draw=mscyan, rounded corners, fill=mslight, minimum width=4.4cm, minimum height=0.45cm, anchor=west, font=\scriptsize] at (0,-\i) {\i\hspace{0.5em} \name};
+        }
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pipeline de datos}
+  \centering
+  \begin{tikzpicture}[node distance=1.55cm, every node/.style={font=\small}]
+    \node[draw=msblue, rounded corners, fill=mslight, text width=2.5cm, minimum height=1cm, align=center] (a) {01\_download};
+    \node[draw=msblue, rounded corners, fill=mslight, text width=2.8cm, minimum height=1cm, align=center, right of=a, xshift=1.3cm] (b) {02\_preprocess};
+    \node[draw=msblue, rounded corners, fill=mslight, text width=2.8cm, minimum height=1cm, align=center, right of=b, xshift=1.3cm] (c) {03\_build\_graph};
+    \node[draw=msgreen, rounded corners, fill=green!8, text width=2.2cm, minimum height=1cm, align=center, below of=b, yshift=-0.8cm] (d) {training};
+    \node[draw=msorange, rounded corners, fill=orange!10, text width=2.4cm, minimum height=1cm, align=center, right of=d, xshift=2.3cm] (e) {analysis};
+    \draw[->, thick, msblue] (a) -- (b);
+    \draw[->, thick, msblue] (b) -- (c);
+    \draw[->, thick, msblue] (c) -- (d);
+    \draw[->, thick, msblue] (d) -- (e);
+  \end{tikzpicture}
+
+  \vspace{0.8em}
+  \begin{itemize}
+    \item `preprocess_scrna.py`: QC, HVG, PCA, Leiden, anotaci\'on celular.
+    \item `preprocess_mirna.py`: parseo GEO, mapeo de probes, normalizaci\'on y filtrado.
+    \item `build_heterograph.py`: armado de `HeteroData` y mapas de \'indices.
+    \item `interpret.py` y `visualize.py`: saliencia, circuitos y figuras finales.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Grafo heterog\'eneo construido}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{tikzpicture}[every node/.style={font=\small}]
+        \node[draw=msblue, circle, fill=blue!10, minimum size=1.0cm] (m) at (0, 0) {miRNA};
+        \node[draw=msgreen, circle, fill=green!10, minimum size=1.0cm] (g) at (3.1, 1.5) {gene};
+        \node[draw=msorange, circle, fill=orange!10, minimum size=1.0cm] (c) at (3.1, -1.5) {cell};
+        \draw[->, thick, msblue] (m) -- node[above, font=\scriptsize] {regulates} (g);
+        \draw[->, thick, msblue] (g) -- node[below, font=\scriptsize] {regulated\_by} (m);
+        \draw[->, thick, msgreen] (c) -- node[right, font=\scriptsize] {expresses} (g);
+        \draw[->, thick, msgreen] (g) -- node[left, font=\scriptsize] {expressed\_in} (c);
+        \draw[->, thick, msorange, bend left=18] (g) to node[above, font=\scriptsize] {coexpressed\_with} +(1.7,0);
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \small
+      \begin{tabular}{lr}
+        \toprule
+        \textbf{Entidad / arista} & \textbf{Tam.} \\
+        \midrule
+        genes & 3,000 \\
+        c\'elulas & 110,798 \\
+        miRNAs & 2,460 \\
+        miRNA$\rightarrow$gene & 44,186 \\
+        cell$\rightarrow$gene & 15,978,902 \\
+        gene$\leftrightarrow$gene & 1,130 \\
+        \bottomrule
+      \end{tabular}
+
+      \vspace{0.5em}
+      \begin{itemize}
+        \item Features de c\'elula: PCA 50D.
+        \item Features de gene: expresi\'on media 1D.
+        \item Features de miRNA: embedding aprendible 64D.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

@@ -1,0 +1,115 @@
+\section{Problema y motivacion}
+
+\begin{frame}{Problema biom\'edico y computacional}
+  \begin{block}{Contexto cl\'inico}
+    La esclerosis m\'ultiple (EM) es una enfermedad autoinmune y neurodegenerativa cr\'onica con heterogeneidad celular, inflamatoria y temporal.
+  \end{block}
+
+  \vspace{0.5em}
+
+  \begin{block}{Dificultad principal}
+    Los miRNAs regulan genes y v\'ias de se\~nalizaci\'on de forma altamente dependiente del contexto celular. Los enfoques bulk promedian la se\~nal y ocultan qu\'e circuitos est\'an activos en monocitos, c\'elulas T, microgl\'ia u oligodendrocitos.
+  \end{block}
+
+  \vspace{0.5em}
+
+  \begin{itemize}
+    \item Un miRNA puede regular cientos de genes y un gen puede tener m\'ultiples reguladores.
+    \item Las bases de interacci\'on por secuencia generan falsos positivos si no se incorpora contexto biol\'ogico.
+    \item La EM requiere explicaciones por tipo celular, no solo m\'etricas globales.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Mensaje cl\'inico para abrir la defensa}
+  \begin{block}{Problema que resuelve este trabajo}
+    \small
+    En EM sabemos que existen alteraciones transcript\'omicas e inmunes, pero no es trivial identificar qu\'e reguladores organizan esas alteraciones dentro de cada tipo celular.
+  \end{block}
+
+  \vspace{0.5em}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Aporte del proyecto}
+        \small
+        El proyecto integra c\'elulas, genes y miRNAs dentro de una sola estructura de grafo para convertir datos heterog\'eneos en hip\'otesis reguladoras priorizadas.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Valor para audiencia biom\'edica}
+        \small
+        El modelo no se limita a decir qu\'e c\'elula observa, sino que propone qu\'e miRNAs podr\'ian estar modulando genes clave en Th17, microgl\'ia, monocitos y oligodendrocitos.
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.4em}
+
+  \begin{itemize}
+    \item Frase sugerida para exponer: ``nuestro objetivo no es solo clasificar c\'elulas, sino priorizar circuitos reguladores con relevancia biol\'ogica en EM''.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hip\'otesis y preguntas del proyecto}
+  \begin{block}{Hip\'otesis}
+    Integrar scRNA-seq, expresi\'on bulk de miRNAs y relaciones miRNA$\rightarrow$gen en un grafo heterog\'eneo permite aprender regulaci\'on espec\'ifica por tipo celular y priorizar circuitos con relevancia para EM.
+  \end{block}
+
+  \vspace{0.5em}
+
+  \begin{enumerate}
+    \item \textbf{Clasificaci\'on}: \`Puede el modelo reconocer correctamente 11 tipos celulares?
+    \item \textbf{Link prediction}: \`Puede distinguir qu\'e pares miRNA-gen son plausibles en este contexto?
+    \item \textbf{Interpretabilidad}: \`Qu\'e miRNAs y circuitos emergen como candidatos biol\'ogicos prioritarios?
+    \item \textbf{Traducci\'on}: \`Qu\'e resultados son suficientemente estables para guiar validaci\'on externa?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Objetivo general y entregables actuales}
+  \begin{columns}[T]
+    \begin{column}{0.57\textwidth}
+      \begin{block}{Objetivo general}
+        Construir una pipeline reproducible que una datos abiertos, genere un grafo heterog\'eneo y entrene una arquitectura tipo HGT para descubrir circuitos reguladores de miRNAs en EM.
+      \end{block}
+
+      \begin{block}{Entregables generados}
+        \begin{itemize}
+          \item Descarga y preprocesamiento de datos.
+          \item Grafo PyG `HeteroData` listo para entrenamiento.
+          \item Modelos baseline y variantes V2-V4.
+          \item Interpretaci\'on: saliencia, circuitos top y enriquecimiento funcional.
+          \item Figuras ya exportadas a PDF en `results/figures/`.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \begin{tikzpicture}[every node/.style={font=\small}]
+        \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d1) at (0, 2.8) {scRNA-seq\\c\'elula \`unica};
+        \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d2) at (0, 1.35) {miRNA bulk\\GEO / Affymetrix};
+        \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d3) at (0, -0.1) {miRDB v6.0\\interacciones};
+        \node[draw=msgreen, rounded corners, fill=green!8, text width=3.8cm, minimum height=1.1cm, align=center] (m) at (0, -1.95) {Grafo heterog\'eneo +\\miRNAGraphTransformer};
+        \node[draw=msorange, rounded corners, fill=orange!10, text width=3.8cm, minimum height=1.1cm, align=center] (o) at (0, -3.8) {Tipos celulares +\\circuitos miRNA-gen};
+        \draw[->, thick, msblue] (d1) -- (m);
+        \draw[->, thick, msblue] (d2) -- (m);
+        \draw[->, thick, msblue] (d3) -- (m);
+        \draw[->, thick, msgreen] (m) -- (o);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Guion sugerido para una defensa de 10 minutos}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{2.5cm}X}
+    \toprule
+    Tiempo & Punto a comunicar \\
+    \midrule
+    1 minuto & Plantear el problema cl\'inico y la necesidad de resoluci\'on por tipo celular \\
+    2 minutos & Resumir datos y construcci\'on del grafo heterog\'eneo \\
+    2 minutos & Explicar qu\'e aprende el modelo y por qu\'e no basta un enfoque cl\'asico \\
+    2 minutos & Mostrar resultados V2 y comparativa contra baselines y ablaciones \\
+    2 minutos & Presentar 2--3 hallazgos biol\'ogicos concretos \\
+    1 minuto & Cerrar con limitaciones y siguiente validaci\'on \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
