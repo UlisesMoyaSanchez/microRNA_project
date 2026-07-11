@@ -31,6 +31,21 @@ from sklearn.metrics import (
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+MIRNA_GENE_REL = ("miRNA", "regulates", "gene")
+
+
+def get_mirna_gene_edges(graph: HeteroData) -> torch.Tensor | None:
+    """
+    Positive miRNA→gene edges, or None when the relation is absent (ablation_no_mirna).
+
+    Must not use HeteroData.get(): for a tuple edge-type key it returns None even when
+    the relation exists, which silently disables link prediction in both training and
+    evaluation. Membership has to be tested against edge_types.
+    """
+    if MIRNA_GENE_REL not in graph.edge_types:
+        return None
+    return graph[MIRNA_GENE_REL].edge_index
+
 
 def evaluate(
     model,
@@ -52,9 +67,8 @@ def evaluate(
     total_loss = 0.0
     n_batches  = 0
 
-    # Safely get positive edges for link prediction (absent in ablation_no_mirna)
-    _edge_store   = full_graph.get(("miRNA", "regulates", "gene"))
-    pos_edge_full = _edge_store.edge_index if (_edge_store is not None and hasattr(_edge_store, "edge_index")) else None
+    # Positive edges for link prediction (absent in ablation_no_mirna)
+    pos_edge_full = get_mirna_gene_edges(full_graph)
 
     def _map_global_to_local(batch, max_pairs: int = 256):
         """Remap global miRNA→gene edges to local batch indices via n_id."""

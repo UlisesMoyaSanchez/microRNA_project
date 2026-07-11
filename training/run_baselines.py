@@ -38,7 +38,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from models.hetero_gnn import miRNAGraphTransformer
 from models.baselines import MLPBaseline, HomoGCNBaseline, RandomBaseline
 from models.losses import CombinedLoss
-from training.evaluate import evaluate
+from training.evaluate import evaluate, get_mirna_gene_edges
 from training.train import (
     load_graph,
     split_graph,
@@ -312,6 +312,15 @@ def main() -> None:
         log.info(f"\n{'='*60}")
         log.info(f"Experiment: {name}")
         log.info(f"{'='*60}")
+
+        # Only no_mirna may legitimately lack link prediction. Anything else reporting
+        # "disabled" here means AUROC will come back nan — which is a bug, not a result.
+        _pos = get_mirna_gene_edges(exp_graph)
+        if _pos is None:
+            level = log.info if name == "ablation_no_mirna" else log.warning
+            level(f"  Link prediction DISABLED for '{name}' (no miRNA→gene edges) — AUROC will be nan")
+        else:
+            log.info(f"  Link prediction active — {_pos.shape[1]:,} positive miRNA→gene edges")
 
         # Build loaders for this graph (may differ for ablations)
         if exp_graph is not graph:

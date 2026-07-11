@@ -36,7 +36,7 @@ from torch_geometric.utils import negative_sampling
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from models.hetero_gnn import miRNAGraphTransformer
 from models.losses import CombinedLoss
-from training.evaluate import evaluate
+from training.evaluate import evaluate, get_mirna_gene_edges
 
 
 # ── Setup ──────────────────────────────────────────────────────────────────────
@@ -199,9 +199,8 @@ def train_one_epoch(
     totals: dict[str, float] = {"loss": 0.0, "link_loss": 0.0, "clf_loss": 0.0}
     n_batches = 0
 
-    # Safely get positive edges for link prediction (absent in ablation_no_mirna)
-    _edge_store   = loader.data.get(("miRNA", "regulates", "gene"))
-    pos_edge_full = _edge_store.edge_index if (_edge_store is not None and hasattr(_edge_store, "edge_index")) else None
+    # Positive edges for link prediction (absent in ablation_no_mirna)
+    pos_edge_full = get_mirna_gene_edges(loader.data)
 
     for batch in loader:
         batch = batch.to(device)
@@ -306,6 +305,17 @@ def main() -> None:
     num_cell_types = len(cell_type_labels)
     log.info(f"Graph: {graph}")
     log.info(f"Cell types: {num_cell_types}")
+
+    # State the link-prediction status out loud. A silent "None" here previously
+    # disabled the link head for every model without any visible signal.
+    _pos = get_mirna_gene_edges(graph)
+    if _pos is None:
+        log.warning(
+            "No (miRNA, regulates, gene) edges — LINK PREDICTION DISABLED "
+            "(classification only). Expected only for the no_mirna ablation."
+        )
+    else:
+        log.info(f"Link prediction ACTIVE — {_pos.shape[1]:,} positive miRNA→gene edges")
 
     # ── Data splits ───────────────────────────────────────────────────────────
     tcfg = cfg["training"]
