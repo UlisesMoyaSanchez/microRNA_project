@@ -62,8 +62,8 @@
   \small
   \begin{itemize}
     \item \textbf{Mini-batching}: el grafo completo vive en CPU; `NeighborLoader` muestrea vecindarios por batch (`num\_neighbors=[10, 5]`, uno por capa HGT; `batch\_size=512`).
-    \item \textbf{Negative sampling}: `torch\_geometric.utils.negative\_sampling` (m\'etodo `sparse`) --- un negativo aleatorio \emph{uniforme} por cada arista miRNA$\rightarrow$gen positiva, mismo criterio en entrenamiento y evaluaci\'on.
-    \item \textbf{Partici\'on de datos}: split aleatorio 80/10/10 \textbf{sobre nodos `cell`} (`torch.randperm`, semilla = `project.seed`). \textbf{No existe una partici\'on equivalente a nivel de arista miRNA-gen} --- ver evaluaci\'on cr\'itica m\'as adelante.
+    \item \textbf{Negative sampling}: \emph{(versi\'on publicada)} un negativo \emph{uniforme} al azar por cada arista positiva. \textbf{Corregido:} ahora negativos \textbf{pareados por grado} (`splits.LinkSampler`) --- ver Experimento 2.
+    \item \textbf{Partici\'on de datos}: split 80/10/10 \textbf{sobre nodos `cell`}. \emph{(versi\'on publicada:} no hab\'ia partici\'on a nivel de arista miRNA-gen\emph{)}. \textbf{Corregido:} holdout expl\'icito de aristas (`splits.build\_edge\_split`, `RandomLinkSplit` con `rev\_edge\_types`).
     \item \textbf{Optimizaci\'on}: AdamW + `CosineAnnealingLR` (`T\_max = num\_epochs`, 200 en V2); gradient clipping (`max\_norm=1.0`); early stopping por `val\_loss` (patience configurable).
     \item \textbf{Multi-GPU}: DDP con backend NCCL, `torchrun --nproc\_per\_node=4` sobre 4$\times$ A100; desbalance de clases en link prediction compensable v\'ia `pos\_weight` en la BCE (`CombinedLoss`, actualmente no fijado en los configs revisados).
   \end{itemize}
@@ -95,53 +95,59 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Comparativa actualizada: baselines y ablaciones}
+\begin{frame}{Comparativa corregida: baselines y ablaciones}
   \small
   \begin{tabular}{lccccc}
     \toprule
-    \textbf{Modelo} & \textbf{val\_loss} & \textbf{AUROC} & \textbf{AUPRC} & \textbf{acc} & \textbf{F1} \\
+    \textbf{Modelo} & \textbf{AUROC} & \textbf{AUPRC} & \textbf{acc} & \textbf{F1} \\
     \midrule
-    HGT V2 best & 0.1541 & 0.9836 & 0.9731 & 0.9961 & 0.9935 \\
-    Random & 1.4245 & -- & -- & 0.0909 & 0.0799 \\
-    MLP & 0.0992 & -- & -- & 0.9254 & 0.8883 \\
-    Homo GCN & 0.1411 & -- & -- & 0.8945 & 0.8631 \\
-    Ablation no miRNA & 0.0159 & -- & -- & 0.9895 & 0.9821 \\
-    Ablation no coexpr & 0.0118 & -- & -- & 0.9933 & 0.9889 \\
+    \textbf{HGT V2} & \textbf{0.9836} & \textbf{0.9731} & \textbf{0.9961} & \textbf{0.9935} \\
+    Ablation no coexpr & 0.9374 & 0.9223 & 0.9896 & 0.9821 \\
+    Homo GCN & 0.9170 & 0.9039 & 0.8940 & 0.8617 \\
+    MLP & 0.7899 & 0.7702 & 0.9231 & 0.8840 \\
+    Random & 0.5126 & 0.5086 & 0.0910 & 0.0797 \\
+    Ablation no miRNA & --- & --- & 0.9903 & 0.9837 \\
     \bottomrule
   \end{tabular}
 
-  \vspace{0.6em}
-  \begin{block}{Lectura cr\'itica}
-    Los resultados nuevos del baseline muestran que la clasificaci\'on celular es comparativamente m\'as f\'acil que la de link prediction; por eso AUROC y AUPRC de HGT V2 son el diferencial realmente importante frente a MLP, Homo GCN y ablaciones.
+  \vspace{0.4em}
+  \begin{block}{Advertencia: esta tabla \emph{cambi\'o} respecto a la versi\'on anterior}
+    \scriptsize
+    Antes, todos los AUROC de baselines sal\'ian vac\'ios. \textbf{No era un resultado: era un bug} que desactivaba silenciosamente la predicci\'on de enlaces. Corregido, `random` cae en 0.5126 --- justo donde debe caer el azar, lo que confirma que la m\'etrica ya se calcula bien.
+
+    \vspace{0.2em}
+    \textbf{El gui\'on anterior dec\'ia que V2 era el \emph{\'unico} modelo con link prediction. Ya no es cierto: no debe decirse.}
   \end{block}
+
+  \vspace{0.1em}
+  \scriptsize
+  `no_miRNA` no tiene AUROC porque se le quitaron esas aristas: la tarea \emph{no existe} para \'el. Es un gui\'on correcto, no un dato faltante.
 \end{frame}
 
-\begin{frame}{Qu\'e cambi\'o con el baseline actualizado}
+\begin{frame}{C\'omo defender la comparativa (versi\'on corregida)}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
-      \begin{block}{Hallazgo principal}
+      \begin{block}{Lo que la tabla \emph{s\'i} sostiene}
         \small
-        Las ablaciones `no miRNA` y `no coexpr` mantienen m\'etricas de clasificaci\'on muy altas: `acc=0.9895` y `acc=0.9933`, respectivamente.
+        V2 es el mejor en ambas tareas, y su ventaja en regulaci\'on es \textbf{real pero moderada}: 0.9836 frente a 0.9374 de la mejor ablaci\'on y 0.9170 del GCN homog\'eneo.
       \end{block}
-
-      \begin{block}{Interpretaci\'on correcta}
+      \begin{block}{Lo que \textbf{no} sostiene}
         \small
-        Eso no implica que el modelo completo sea redundante. Implica que la identidad celular puede recuperarse con otras se\~nales del grafo, pero la parte de regulaci\'on miRNA$\rightarrow$gen sigue dependiendo del modelo heterog\'eneo completo.
+        No sostiene que la arquitectura heterog\'enea sea \emph{imprescindible}. Un GCN que ignora los tipos de nodo ya llega a 0.917. \textbf{Reclamar m\'as que eso es invitar a que un revisor lo desmonte.}
       \end{block}
     \end{column}
-    \begin{column}{0.46\textwidth}
-      \begin{itemize}
-        \item MLP: `acc=0.9254`, `F1=0.8883`
-        \item Homo GCN: `acc=0.8945`, `F1=0.8631`
-        \item Ablation no miRNA: `acc=0.9895`, `F1=0.9821`
-        \item Ablation no coexpr: `acc=0.9933`, `F1=0.9889`
-        \item HGT V2: `acc=0.9961`, `F1=0.9935`, `AUROC=0.9836`
-      \end{itemize}
-
-      \vspace{0.4em}
-      \begin{block}{Mensaje para defensa}
+    \begin{column}{0.47\textwidth}
+      \begin{block}{Las dos tareas se comportan distinto}
         \small
-        El mejor argumento a favor de V2 no es solo la exactitud celular, sino que es el \textbf{\'unico} modelo de esta comparativa que adem\'as entrega una tarea de regulaci\'on con AUROC/AUPRC altos.
+        \begin{itemize}
+          \item \textbf{Clasificaci\'on celular}: casi todos los modelos superan 0.89. La identidad celular est\'a \emph{muy} marcada en los datos; distingue poco entre arquitecturas.
+          \item \textbf{Link prediction}: aqu\'i s\'i se separan (0.51 $\to$ 0.98). Es la tarea que \textbf{discrimina} entre modelos, y la \'unica cercana a mecanismo.
+        \end{itemize}
+      \end{block}
+      \vspace{0.2em}
+      \begin{block}{Mensaje para defensa}
+        \scriptsize
+        ``La ventaja de V2 est\'a en la tarea regulatoria, no en la clasificatoria --- y la reportamos con su magnitud real, no inflada.''
       \end{block}
     \end{column}
   \end{columns}
@@ -152,7 +158,7 @@
     \begin{column}{0.48\textwidth}
       \begin{block}{Tarea 1: clasificaci\'on celular}
         \small
-        Pregunta: \`a qu\'e tipo celular pertenece esta observaci\'on?
+        Pregunta: \textquestiondown{}a qu\'e tipo celular pertenece esta observaci\'on?
       \end{block}
       \begin{itemize}
         \item M\'etricas: `cell_acc`, `cell_f1`
@@ -164,13 +170,13 @@
     \begin{column}{0.48\textwidth}
       \begin{block}{Tarea 2: predicci\'on regulatoria}
         \small
-        Pregunta: \`qu\'e par miRNA-gen es plausible en este contexto biol\'ogico?
+        Pregunta: \textquestiondown{}qu\'e par miRNA-gen es plausible en este contexto biol\'ogico?
       \end{block}
       \begin{itemize}
         \item M\'etricas: AUROC, AUPRC
         \item Problema m\'as dif\'icil y m\'as cercano a mecanismo
-        \item No queda cubierto por los baselines cl\'asicos reportados
-        \item Es el valor cient\'ifico diferencial de HGT V2
+        \item Es la tarea que \textbf{s\'i} discrimina entre arquitecturas (0.51 a 0.98)
+        \item Es el valor cient\'ifico diferencial de HGT V2 --- con la magnitud real, no inflada
       \end{itemize}
     \end{column}
   \end{columns}
@@ -180,15 +186,6 @@
     \small
     Una ablaci\'on puede retener excelente accuracy celular y aun as\'i perder valor biol\'ogico si ya no modela bien la regulaci\'on miRNA$\rightarrow$gen.
   \end{block}
-\end{frame}
-
-\begin{frame}{Narrativa recomendada para defender la comparativa}
-  \begin{enumerate}
-    \item Mostrar primero que `random`, `MLP` y `Homo GCN` quedan claramente por debajo.
-    \item Aclarar despu\'es que las ablaciones altas no invalidan V2: muestran que la identidad celular est\'a muy marcada en los datos.
-    \item Separar expl\'icitamente clasificaci\'on celular de inferencia regulatoria.
-    \item Cerrar con el argumento central: V2 sigue siendo el mejor modelo completo porque combina `acc=0.9961`, `AUROC=0.9836` y `AUPRC=0.9731`.
-  \end{enumerate}
 \end{frame}
 
 \begin{frame}{M\'etricas principales en test y lectura para audiencia biom\'edica}
@@ -223,7 +220,7 @@
 
 \begin{frame}{Figura ya generada: UMAP de las c\'elulas}
   \centering
-  \includegraphics[width=0.9\textwidth]{../../results/figures/01_umap_embeddings.pdf}
+  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/01_umap_embeddings.pdf}
 
   \vspace{0.3em}
   \scriptsize
@@ -232,7 +229,7 @@
 
 \begin{frame}{Figura ya generada: heatmap de saliencia de miRNAs}
   \centering
-  \includegraphics[width=0.88\textwidth]{../../results/figures/02_mirna_heatmap.pdf}
+  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/02_mirna_heatmap.pdf}
 
   \vspace{0.3em}
   \scriptsize
@@ -240,7 +237,7 @@
 \end{frame}
 
 \begin{frame}{Hallazgos interpretables: miRNAs destacados por tipo celular}
-  \small
+  \scriptsize
   \begin{tabularx}{\textwidth}{>{\bfseries}p{2.3cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.4cm}}
     \toprule
     Tipo celular & miRNAs destacados & Lectura biol\'ogica \\
@@ -252,9 +249,11 @@
     \bottomrule
   \end{tabularx}
 
-  \vspace{0.5em}
+  \vspace{0.4em}
   \begin{itemize}
+    \scriptsize
     \item Estos resultados no sustituyen validaci\'on experimental, pero s\'i priorizan hip\'otesis con mejor fundamento que un ranking por expresi\'on aislada.
+    \item \textbf{Nota:} derivan del modelo \emph{previo} a la correcci\'on del split. Se re-derivar\'an tras el reentrenamiento.
   \end{itemize}
 \end{frame}
 
@@ -273,15 +272,19 @@
     \bottomrule
   \end{tabular}
 
-  \vspace{0.6em}
-  \begin{block}{Interpretaci\'on}
-    Los scores provienen de `top_circuits_by_celltype.tsv` y permiten pasar de ``miRNAs influyentes'' a pares regulatorios concretos que se pueden contrastar en literatura o en bases experimentales.
+  \vspace{0.5em}
+  \begin{block}{Interpretaci\'on --- y una advertencia importante}
+    \scriptsize
+    Los scores permiten pasar de ``miRNAs influyentes'' a \textbf{pares regulatorios concretos}, contrastables contra literatura o bases experimentales.
+
+    \vspace{0.2em}
+    \textbf{Pero estos scores provienen del modelo \emph{anterior} a la correcci\'on del split.} Hasta reentrenar, se presentan como \textbf{hip\'otesis preliminares}, no como hallazgos validados --- validarlos ahora contra la literatura arriesgar\'ia validar un artefacto.
   \end{block}
 \end{frame}
 
 \begin{frame}{Figura ya generada: red regulatoria por tipo celular}
   \centering
-  \includegraphics[width=0.82\textwidth]{../../results/figures/03_network_Th17.pdf}
+  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/03_network_Th17.pdf}
 
   \vspace{0.3em}
   \scriptsize
@@ -312,7 +315,7 @@
 
 \begin{frame}{Figura ya generada: curvas ROC y PR}
   \centering
-  \includegraphics[width=0.8\textwidth]{../../results/figures/05_auroc_auprc.pdf}
+  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/05_auroc_auprc.pdf}
 
   \vspace{0.3em}
   \scriptsize

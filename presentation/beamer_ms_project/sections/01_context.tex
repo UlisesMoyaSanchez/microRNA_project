@@ -58,10 +58,10 @@
   \vspace{0.5em}
 
   \begin{enumerate}
-    \item \textbf{Clasificaci\'on}: \`Puede el modelo reconocer correctamente 11 tipos celulares?
-    \item \textbf{Link prediction}: \`Puede distinguir qu\'e pares miRNA-gen son plausibles en este contexto?
-    \item \textbf{Interpretabilidad}: \`Qu\'e miRNAs y circuitos emergen como candidatos biol\'ogicos prioritarios?
-    \item \textbf{Traducci\'on}: \`Qu\'e resultados son suficientemente estables para guiar validaci\'on externa?
+    \item \textbf{Clasificaci\'on}: \textquestiondown{}Puede el modelo reconocer correctamente 11 tipos celulares?
+    \item \textbf{Link prediction}: \textquestiondown{}Puede distinguir qu\'e pares miRNA-gen son plausibles en este contexto?
+    \item \textbf{Interpretabilidad}: \textquestiondown{}Qu\'e miRNAs y circuitos emergen como candidatos biol\'ogicos prioritarios?
+    \item \textbf{Traducci\'on}: \textquestiondown{}Qu\'e resultados son suficientemente estables para guiar validaci\'on externa?
   \end{enumerate}
 \end{frame}
 
@@ -84,7 +84,7 @@
     \end{column}
     \begin{column}{0.40\textwidth}
       \begin{tikzpicture}[every node/.style={font=\small}]
-        \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d1) at (0, 2.8) {scRNA-seq\\c\'elula \`unica};
+        \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d1) at (0, 2.8) {scRNA-seq\\c\'elula \'unica};
         \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d2) at (0, 1.35) {miRNA bulk\\GEO / Affymetrix};
         \node[draw=msblue, rounded corners, fill=mslight, text width=3.6cm, minimum height=0.95cm, align=center] (d3) at (0, -0.1) {miRDB v6.0\\interacciones};
         \node[draw=msgreen, rounded corners, fill=green!8, text width=3.8cm, minimum height=1.1cm, align=center] (m) at (0, -1.95) {Grafo heterog\'eneo +\\miRNAGraphTransformer};

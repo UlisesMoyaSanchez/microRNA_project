@@ -11,7 +11,7 @@
 
 \begin{frame}{Limitaciones y riesgos actuales}
   \begin{itemize}
-    \item La expresi\'on de miRNAs proviene de bulk, no de c\'elula \`unica; la resoluci\'on celular es indirecta.
+    \item La expresi\'on de miRNAs proviene de bulk, no de c\'elula \'unica; la resoluci\'on celular es indirecta.
     \item Parte del conocimiento miRNA-gen viene de predicci\'on computacional y no exclusivamente de validaci\'on experimental.
     \item La clasificaci\'on celular es muy fuerte; la pregunta dif\'icil y m\'as valiosa sigue siendo la causalidad regulatoria.
     \item Falta profundizar en diferencias MS vs control y estabilidad entre seeds o particiones.
@@ -28,46 +28,147 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Evaluaci\'on t\'ecnica independiente --- riesgo metodol\'ogico principal}
-  \begin{block}{No hay partici\'on train/test a nivel de arista miRNA$\rightarrow$gen}
+\begin{frame}{El problema que encontramos al auditar nuestro propio modelo}
+  \begin{block}{En una frase cl\'inica}
     \small
-    El split actual (`train.py::split\_graph`) solo particiona nodos `cell`. Las aristas miRNA$\rightarrow$gen usadas en `evaluate.py` son el \textbf{mismo conjunto completo} visto durante entrenamiento (`pos\_edge\_full`), solo remuestreadas dentro de los vecindarios de las c\'elulas de test, con nuevos negativos aleatorios.
+    Est\'abamos \textbf{validando el score en los mismos pacientes que lo generaron}. La partici\'on separaba \emph{c\'elulas} en entrenamiento y prueba, pero las 44,186 interacciones miRNA$\to$gen usadas para evaluar eran \textbf{las mismas} que se hab\'ian usado para entrenar.
   \end{block}
 
+  \vspace{0.4em}
+
+  \small
+  Eso abre dos preguntas distintas, y es importante no confundirlas:
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Sospecha 1: \textquestiondown{}el modelo hace trampa?}
+        \scriptsize
+        La interacci\'on miRNA$\to$gen que le pedimos predecir \textbf{tambi\'en estaba dibujada en el grafo} que le damos de entrada. \textquestiondown{}Estaba simplemente \emph{leyendo la respuesta}?
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Sospecha 2: \textquestiondown{}los controles son v\'alidos?}
+        \scriptsize
+        Los ``controles'' (pares falsos) se eleg\'ian \textbf{al azar}, sin parear por popularidad del gen. \textquestiondown{}El AUROC de 0.98 mide regulaci\'on, o mide \textbf{confusi\'on por popularidad}?
+      \end{block}
+    \end{column}
+  \end{columns}
+
   \vspace{0.5em}
-  \begin{itemize}
-    \item Consecuencia: el AUROC/AUPRC actual (\textasciitilde 0.98) mide qu\'e tan bien el modelo \textbf{reconstruye} interacciones ya vistas en un contexto celular distinto, no si generaliza a pares miRNA-gen no vistos.
-    \item Antes de reclamar ``predicci\'on'' en un manuscrito, se necesita un \textbf{holdout expl\'icito de aristas} (un \% de pares miRNA-gen nunca visto en entrenamiento, en ning\'un split de c\'elulas).
-    \item Esto no invalida el trabajo hecho --- indica qu\'e experimento falta antes de someterlo a revisi\'on por pares.
-  \end{itemize}
+  \begin{block}{Qu\'e hicimos}
+    \small
+    En lugar de asumir la respuesta, dise\~namos \textbf{un experimento para cada sospecha}. Las dos siguientes diapositivas muestran los resultados. \textbf{No son los que esper\'abamos.}
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Experimento 1 --- \textquestiondown{}El modelo estaba leyendo la respuesta?}
+  \begin{block}{Dise\~no}
+    \small
+    Mismo modelo, mismos pares, misma prueba. Lo \'unico que cambia es \textbf{qu\'e ve el modelo en el grafo de entrada}. Si su desempe\~no depende de ver la arista que debe predecir, al taparla debe derrumbarse.
+  \end{block}
+
+  \vspace{0.4em}
+  \centering
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Qu\'e ve el modelo} & \textbf{AUROC} & \textbf{Ca\'ida} \\
+    \midrule
+    (a) El grafo intacto --- \emph{como se public\'o} & 0.9853 & --- \\
+    (c) \textbf{Se tapa la arista que debe predecir} & \textbf{0.9766} & \textbf{$-$0.009} \\
+    (b) Se quitan \emph{todas} las aristas miRNA$\to$gen & 0.5551 & $-$0.430 \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.4em}
+  \raggedright
+  \begin{block}{Lectura}
+    \scriptsize
+    \textbf{El modelo no estaba haciendo trampa.} Taparle la respuesta le cuesta 0.009 de AUROC --- pr\'acticamente nada.
+
+    \vspace{0.2em}
+    La tercera fila dice algo distinto y esperable: sin \emph{ninguna} arista miRNA$\to$gen el modelo cae a 0.55 (azar). Eso \textbf{no es un defecto}: significa que la se\~nal vive en la \textbf{topolog\'ia} de la red regulatoria, que es justo lo que este tipo de modelo debe explotar.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Experimento 2 --- \textquestiondown{}Es especificidad, o confusi\'on por popularidad?}
+  \begin{block}{Dise\~no --- un dise\~no caso-control 2$\times$2}
+    \scriptsize
+    Cruzamos \textbf{dos tipos de control} (al azar vs \textbf{pareado por popularidad del gen}) con \textbf{dos ``pruebas diagn\'osticas''}: nuestro modelo, y un \emph{marcador tonto} que ignora por completo al miRNA y solo puntua ``\textquestiondown{}qu\'e tan popular es este gen?''.
+  \end{block}
+
+  \vspace{0.3em}
+  \centering
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{``Prueba diagn\'ostica''} & \textbf{Controles al azar} & \textbf{Controles pareados} \\
+    \midrule
+    Marcador tonto (solo popularidad) & 0.7760 & \textbf{0.5150} \\
+    \textbf{Modelo HGT V2} & 0.9758 & \textbf{0.8828} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.4em}
+  \raggedright
+  \begin{block}{Lectura --- las dos columnas cuentan la historia}
+    \scriptsize
+    \begin{itemize}
+      \item \textbf{Columna 1 (controles al azar):} el marcador \emph{tonto} ya alcanza 0.776 --- \textbf{con controles mal elegidos hasta una regla trivial parece buena.} Por eso el 0.98 publicado es evidencia d\'ebil por s\'i solo.
+      \item \textbf{Columna 2 (controles pareados):} el marcador tonto se desploma al azar (0.515), como debe. \textbf{Y nuestro modelo aguanta en 0.8828.}
+    \end{itemize}
+    \vspace{0.2em}
+    \textbf{Conclusi\'on:} el modelo aprendi\'o \textbf{especificidad regulatoria real}, no popularidad. Pero el n\'umero honesto es \textbf{0.88, no 0.98}.
+  \end{block}
 \end{frame}
 
 \begin{frame}{Evaluaci\'on t\'ecnica independiente --- riesgos secundarios y precisiones}
   \small
   \begin{itemize}
-    \item \textbf{Negative sampling uniforme, no ``hard negatives''}: en un grafo disperso (44,186 positivos sobre \textasciitilde 7.4M pares miRNA$\times$gen posibles, densidad $\approx 0.6\%$), distinguir positivos de aleatorios es m\'as f\'acil que distinguir positivos de negativos biol\'ogicamente plausibles. El AUROC actual probablemente sobreestima la especificidad regulatoria real.
+    \item \textbf{Negative sampling uniforme} (\emph{ya medido, ver Experimento 2}): en un grafo disperso (44,186 positivos sobre \textasciitilde 7.4M pares posibles, densidad $\approx 0.6\%$), distinguir positivos de controles al azar es mucho m\'as f\'acil que distinguirlos de controles pareados. \textbf{Ya no es una sospecha: la sobreestimaci\'on es de $\approx$9 puntos de AUROC} (0.9758 $\to$ 0.8828). El entrenamiento ya usa controles pareados.
     \item \textbf{Features de nodo `gene` son 1-D} (expresi\'on media log-normalizada): la capacidad de diferenciar genes en link-prediction depende casi enteramente de la topolog\'ia del grafo, no de features intr\'insecas ricas.
     \item \textbf{La ablaci\'on ``no coexpr'' remueve solo 1,130 de \textasciitilde 16M aristas totales} ($\approx 0.007\%$): que la accuracy casi no cambie no es evidencia fuerte de que la co-expresi\'on sea irrelevante, es una fracci\'on demasiado peque\~na del grafo para notarse en clasificaci\'on.
     \item \textbf{Correcci\'on}: el scheduler coseno (`CosineAnnealingLR`, `T\_max=200`) \textbf{ya est\'a activo} --- no es una recomendaci\'on pendiente. Si se extiende a 300 \'epocas hay que ajustar `T\_max` o usar warm restarts; si no, el LR ya habr\'a decaido a \textasciitilde 0 antes de la \'epoca 300.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Mi valoraci\'on general del estado del proyecto}
-  \begin{block}{En conjunto}
-    \small
-    Trabajo t\'ecnicamente s\'olido y con buena disciplina de reproducibilidad para un proyecto de tesis de maestr\'ia. El pipeline multi-fuente, la arquitectura HGT y el dise\~no de ablaciones est\'an bien pensados y correctamente ejecutados.
+\begin{frame}{Lo que falta: el \'ultimo experimento pendiente}
+  \begin{block}{Lo que los dos experimentos \emph{no} pueden descartar}
+    \scriptsize
+    Ambos usan el modelo \textbf{ya entrenado}, y ese modelo vio las 44,186 interacciones como respuestas durante el entrenamiento. Aunque no las lea del grafo (Experimento 1), \textbf{pudo haberlas memorizado en sus par\'ametros}. Ning\'un an\'alisis \emph{post hoc} resuelve esto: solo se resuelve \textbf{reentrenando} sobre una cohorte de validaci\'on real.
   \end{block}
 
-  \vspace{0.5em}
-  \begin{itemize}
-    \item Los resultados de \textbf{clasificaci\'on celular} (`acc` 0.994--0.996) son confiables y est\'an evaluados con un split real a nivel de c\'elula.
-    \item Los resultados de \textbf{link-prediction} (AUROC \textasciitilde 0.98), aunque prometedores y con hallazgos biol\'ogicos plausibles, \textbf{no est\'an listos para publicarse como ``predicci\'on''} hasta resolver el split a nivel de arista --- en mi opini\'on, este es el gap t\'ecnico m\'as importante a cerrar, incluso antes que la validaci\'on externa ya listada en `goal.md`.
-  \end{itemize}
+  \vspace{0.2em}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{block}{Ya construido y verificado}
+        \scriptsize
+        Se apartaron \textbf{8,836 interacciones} (20\%) que el modelo \textbf{nunca ver\'a}: ni como respuesta, ni dibujadas en el grafo, ni en direcci\'on inversa. Comprobado con una prueba autom\'atica de fuga.
 
-  \vspace{0.4em}
-  \begin{block}{Recomendaci\'on concreta}
-    \small
-    Agregar un holdout de aristas, re-evaluar V2 con ese split, y reportar el AUROC/AUPRC ``honesto'' junto al actual (transductivo) para mostrar la diferencia. Esto fortalece la narrativa cient\'ifica y anticipa la objeci\'on m\'as probable de un revisor.
+        \vspace{0.2em}
+        44,186 = 24,745 (grafo) + 10,605 (entrenar) + 4,418 (validar) + 4,418 (probar)
+      \end{block}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Qu\'e esperamos}
+        \scriptsize
+        El AUROC honesto deber\'ia caer \textbf{en o por debajo de 0.88}.
+        \begin{itemize}
+          \item $\gtrsim$0.80 $\Rightarrow$ generaliza. Publicable como \emph{predicci\'on}.
+          \item $\to$0.55 $\Rightarrow$ hab\'ia memorizado. Replantear.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.2em}
+  \begin{block}{Postura ante la audiencia}
+    \scriptsize
+    \textbf{Preferimos encontrar esto nosotros que un revisor.} Hasta que ese n\'umero exista, \textbf{no} presentamos los circuitos concretos como hallazgos validados: todos derivan del modelo que a\'un no ha pasado esta prueba.
   \end{block}
 \end{frame}
 

@@ -1,0 +1,309 @@
+\section{Puente conceptual para audiencia cl\'inica}
+
+% ---------------------------------------------------------------------------
+% Esta secci\'on existe para una audiencia que domina la parte m\'edica y no la
+% computacional. Cada concepto de machine learning se introduce con su
+% equivalente cl\'inico, que en varios casos NO es una analog\'ia libre sino
+% literalmente el mismo objeto matem\'atico (AUROC, controles pareados).
+% ---------------------------------------------------------------------------
+
+\begin{frame}{C\'omo leer esta secci\'on}
+  \begin{block}{Prop\'osito}
+    Traducir cada t\'ermino computacional de esta presentaci\'on al concepto cl\'inico o epidemiol\'ogico equivalente, para poder juzgar el trabajo sin necesidad de saber deep learning.
+  \end{block}
+
+  \vspace{0.6em}
+
+  \begin{itemize}
+    \item En varios casos la equivalencia \textbf{no es una met\'afora}: la curva ROC del modelo es la misma curva ROC de una prueba diagn\'ostica, y los ``negativos pareados'' son literalmente controles pareados.
+    \item La pregunta que debe poder hacerle a este trabajo al final de la secci\'on es la misma que le har\'ia a un estudio cl\'inico: \emph{\textquestiondown{}c\'omo s\'e que esto no est\'a sobreajustado a sus propios datos?}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{\textquestiondown{}Qu\'e es un ``grafo'' y por qu\'e usarlo aqu\'i?}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Idea en una frase}
+        \small
+        Un grafo es simplemente una forma ordenada de escribir \emph{qui\'en se relaciona con qui\'en}. No es un concepto nuevo para ustedes: una v\'ia de se\~nalizaci\'on dibujada en un art\'iculo \textbf{ya es un grafo}.
+      \end{block}
+
+      \small
+      Tres tipos de entidad y relaciones que ya conocen:
+      \begin{itemize}
+        \item una \textbf{c\'elula} \emph{expresa} un \textbf{gen};
+        \item un \textbf{miRNA} \emph{regula} un \textbf{gen};
+        \item dos \textbf{genes} se \emph{co-expresan}.
+      \end{itemize}
+
+      \vspace{0.3em}
+      \begin{block}{Por qu\'e importa}
+        \scriptsize
+        Un an\'alisis cl\'asico mira una tabla: una fila por c\'elula, una columna por gen. Esa tabla \textbf{no puede representar} que un miRNA regula un gen --- no hay d\'onde escribirlo. El grafo s\'i.
+      \end{block}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \centering
+      \begin{tikzpicture}[every node/.style={font=\scriptsize}]
+        \node[draw=msblue, circle, fill=blue!10, minimum size=1.1cm] (m) at (0, 0) {miRNA};
+        \node[draw=msgreen, circle, fill=green!10, minimum size=1.1cm] (g) at (2.9, 0) {gen};
+        \node[draw=msorange, circle, fill=orange!10, minimum size=1.1cm] (c) at (2.9, -2.4) {c\'elula};
+        \draw[->, very thick, msblue] (m) -- node[above, font=\scriptsize] {regula} (g);
+        \draw[->, very thick, msorange] (c) -- node[right, font=\scriptsize] {expresa} (g);
+        \draw[->, thick, msgreen, loop above] (g) to node[above, font=\scriptsize] {co-expresa} (g);
+      \end{tikzpicture}
+
+      \vspace{0.6em}
+      \scriptsize
+      \begin{tabular}{lr}
+        \toprule
+        c\'elulas & 110,798 \\
+        genes & 3,000 \\
+        miRNAs & 2,460 \\
+        \midrule
+        aristas miRNA$\to$gen & 44,186 \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{\textquestiondown{}Qu\'e ``aprende'' realmente el modelo?}
+  \begin{block}{El principio, en una frase cl\'inica}
+    \small
+    \textbf{A una entidad se la conoce por su vecindario.} Igual que usted caracteriza a un linfocito por los marcadores que expresa, el modelo caracteriza a cada c\'elula, gen y miRNA \textbf{por aquello a lo que est\'a conectado en el grafo}.
+  \end{block}
+
+  \vspace{0.4em}
+
+  \small
+  El modelo repite este paso \textbf{4 veces} (las ``4 capas''). En cada ronda, cada entidad actualiza su descripci\'on interna resumiendo la de sus vecinos:
+
+  \begin{center}
+  \begin{tikzpicture}[every node/.style={font=\scriptsize}, node distance=0.6cm]
+    \node[draw=msblue, rounded corners, fill=mslight, text width=2.6cm, minimum height=0.9cm, align=center] (r1) at (0,0) {\textbf{Ronda 1}\\vecinos directos};
+    \node[draw=msblue, rounded corners, fill=mslight, text width=2.6cm, minimum height=0.9cm, align=center] (r2) at (3.4,0) {\textbf{Ronda 2}\\vecinos de vecinos};
+    \node[draw=msblue, rounded corners, fill=mslight, text width=2.6cm, minimum height=0.9cm, align=center] (r3) at (6.8,0) {\textbf{Rondas 3--4}\\contexto amplio};
+    \node[draw=msgreen, rounded corners, fill=green!10, text width=2.6cm, minimum height=0.9cm, align=center] (r4) at (10.2,0) {\textbf{Resultado}\\``huella'' num\'erica};
+    \draw[->, thick, msblue] (r1) -- (r2);
+    \draw[->, thick, msblue] (r2) -- (r3);
+    \draw[->, thick, msgreen] (r3) -- (r4);
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3em}
+  \begin{itemize}
+    \small
+    \item Tras 4 rondas, la ``huella'' de un gen contiene informaci\'on de c\'elulas y miRNAs que est\'an hasta 4 pasos de distancia. \textbf{Ah\'i est\'a el contexto celular} que un an\'alisis bulk promedia y pierde.
+    \item La palabra t\'ecnica para esa huella es \emph{embedding}; la palabra para el proceso es \emph{paso de mensajes}. Nada m\'as.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Las dos preguntas que responde el modelo}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Tarea 1 --- Clasificar la c\'elula}
+        \small
+        \emph{\textquestiondown{}De qu\'e tipo celular es esta c\'elula?} (11 clases: Th17, microgl\'ia, monocito\ldots)
+      \end{block}
+      \small
+      \begin{itemize}
+        \item Es la tarea \textbf{f\'acil}. Equivale a un citometrista experto leyendo marcadores.
+        \item \'Util como \textbf{control de sanidad}: si el modelo fallara aqu\'i, no valdr\'ia la pena mirar lo dem\'as.
+        \item \textbf{No es el aporte cient\'ifico.} Es descriptiva.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Tarea 2 --- Proponer regulaci\'on}
+        \small
+        \emph{\textquestiondown{}Es plausible que este miRNA regule este gen, en este contexto celular?}
+      \end{block}
+      \small
+      \begin{itemize}
+        \item Es la tarea \textbf{dif\'icil} y la \'unica cercana a \textbf{mecanismo}.
+        \item Es lo que permite pasar de ``este miRNA est\'a alterado en EM'' a ``\textbf{este miRNA regula este gen en Th17}''.
+        \item Es la que se eval\'ua con \textbf{AUROC}, y sobre la que hay que ser m\'as escr\'upuloso.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.5em}
+  \begin{block}{Advertencia que conviene decir en voz alta}
+    \small
+    Una alta exactitud en la Tarea 1 \textbf{no respalda} ninguna afirmaci\'on sobre la Tarea 2. Son preguntas distintas y se validan por separado.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{AUROC: es la misma curva ROC que ya conocen}
+  \begin{block}{No es una analog\'ia --- es el mismo objeto}
+    \small
+    El AUROC de este modelo se calcula \textbf{exactamente igual} que el de una prueba diagn\'ostica: se var\'ia el umbral, se grafica sensibilidad contra 1$-$especificidad, y se integra el \'area bajo la curva.
+  \end{block}
+
+  \vspace{0.4em}
+
+  \begin{columns}[T]
+    \begin{column}{0.53\textwidth}
+      \small
+      \begin{block}{La lectura intuitiva}
+        Tome un par miRNA-gen \textbf{verdadero} y uno \textbf{falso}, al azar. El AUROC es la probabilidad de que el modelo le d\'e mayor puntaje al verdadero.
+      \end{block}
+      \begin{itemize}
+        \small
+        \item \textbf{0.50} = moneda al aire. Sin informaci\'on.
+        \item \textbf{0.70--0.80} = discriminaci\'on modesta.
+        \item \textbf{0.90+} = discriminaci\'on excelente\ldots \emph{siempre que los ``controles'' sean adecuados.} Esa condici\'on es toda la discusi\'on que sigue.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Equivalencias directas}
+        \scriptsize
+        \begin{tabular}{@{}ll@{}}
+          \toprule
+          \textbf{En el modelo} & \textbf{En cl\'inica} \\
+          \midrule
+          par positivo & caso \\
+          par negativo & control \\
+          score del modelo & valor del biomarcador \\
+          AUROC & \'area bajo ROC \\
+          \bottomrule
+        \end{tabular}
+      \end{block}
+      \scriptsize
+      \textbf{Por qu\'e tambi\'en reportamos AUPRC:} los pares reales son $\approx$0.6\% de los posibles. Con prevalencia tan baja el AUROC puede verse bien y el \textbf{valor predictivo positivo} ser malo --- el problema de tamizar una enfermedad rara.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Validaci\'on: cohorte de derivaci\'on vs cohorte de validaci\'on}
+  \begin{block}{La regla que ustedes ya aplican}
+    \small
+    Un modelo de riesgo \textbf{no se valida en los mismos pacientes con los que se construy\'o}. Se necesita una cohorte de validaci\'on independiente, o el desempe\~no est\'a inflado por construcci\'on.
+  \end{block}
+
+  \vspace{0.5em}
+
+  \small
+  En machine learning esto se llama \textbf{partici\'on train/test}, y es exactamente lo mismo:
+
+  \begin{center}
+  \begin{tikzpicture}[every node/.style={font=\scriptsize}]
+    \node[draw=msblue, rounded corners, fill=mslight, text width=3.2cm, minimum height=1.0cm, align=center] (tr) at (0,0) {\textbf{Entrenamiento}\\(``derivaci\'on'')\\el modelo ve las respuestas};
+    \node[draw=msorange, rounded corners, fill=orange!10, text width=3.2cm, minimum height=1.0cm, align=center] (te) at (5.2,0) {\textbf{Prueba}\\(``validaci\'on'')\\nunca vistas antes};
+    \node[draw=msgreen, rounded corners, fill=green!10, text width=3.4cm, minimum height=1.0cm, align=center] (rr) at (10.4,0) {\textbf{M\'etrica honesta}\\lo \'unico reportable};
+    \draw[->, thick, msblue] (tr) -- (te);
+    \draw[->, thick, msgreen] (te) -- (rr);
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.5em}
+  \begin{block}{El punto delicado de este proyecto --- y lo trataremos de frente}
+    \small
+    La versi\'on publicada de nuestro modelo part\'ia las \textbf{c\'elulas} en entrenamiento y prueba, pero \textbf{no part\'ia las interacciones miRNA-gen}: las mismas 44,186 interacciones se usaban para entrenar y para evaluar. Es el equivalente a validar un score de riesgo en los mismos pacientes que lo generaron. La secci\'on final muestra qu\'e encontramos al corregirlo.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Controles pareados: el concepto m\'as importante de esta charla}
+  \begin{block}{El problema, en t\'erminos de dise\~no de estudio}
+    \small
+    Si sus \textbf{controles} no est\'an \textbf{pareados} por las variables que m\'as influyen en el desenlace, su marcador puede parecer excelente y en realidad estar midiendo \textbf{el factor de confusi\'on}, no la biolog\'ia.
+  \end{block}
+
+  \vspace{0.2em}
+  \scriptsize
+  Aqu\'i el confusor tiene nombre: la \textbf{popularidad del gen}. Algunos genes son diana de \emph{muchos} miRNAs. Un modelo perezoso puede aprender ``\emph{ante la duda, di que s\'i si el gen es popular}'' y acertar mucho\ldots sin saber \textbf{nada} de regulaci\'on.
+
+  \vspace{0.2em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Control mal elegido (``al azar'')}
+        \scriptsize
+        Un par real contra un par \emph{completamente aleatorio}, que casi siempre cae en un gen impopular. \textbf{Distinguirlos es trivial.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Control pareado (``hard negative'')}
+        \scriptsize
+        Un par real contra un par falso con \textbf{el mismo miRNA} y un gen \textbf{igual de popular}. Ni la promiscuidad del miRNA ni la popularidad del gen explican la diferencia: \textbf{solo la regulaci\'on}.
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3em}
+  \begin{block}{Por qu\'e insistimos}
+    \scriptsize
+    Es la prueba de fuego. Si el modelo aguanta \emph{contra controles pareados}, el hallazgo es biol\'ogico; si se derrumba, era un artefacto. \textbf{Hicimos esa prueba} --- resultado en la secci\'on final.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Ablaci\'on y saliencia: dos herramientas con equivalente experimental}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Ablaci\'on = experimento de \emph{knockout}}
+        \small
+        Se \textbf{elimina un componente} del grafo (p.ej. todas las aristas miRNA$\to$gen), se reentrena, y se mide cu\'anto se pierde.
+      \end{block}
+      \small
+      \begin{itemize}
+        \item Si al quitar algo el desempe\~no \textbf{no cae}, ese componente no era necesario \emph{para esa tarea}.
+        \item Misma l\'ogica que noquear un gen para ver si el fenotipo persiste.
+        \item \textbf{Cuidado}: hay que verificar que se elimin\'o una fracci\'on \emph{suficiente} para que el efecto sea detectable.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Saliencia = ``\textquestiondown{}qu\'e variable pesa m\'as?''}
+        \small
+        Mide cu\'anto cambia la predicci\'on del modelo al perturbar levemente un miRNA. Un miRNA con alta saliencia es aquel del que la decisi\'on \textbf{depende m\'as}.
+      \end{block}
+      \small
+      \begin{itemize}
+        \item Conceptualmente cercano a un \textbf{tama\~no de efecto} en un modelo multivariado.
+        \item \textbf{No es causalidad.} Es priorizaci\'on de hip\'otesis: dice d\'onde mirar, no qu\'e concluir.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.4em}
+  \begin{block}{}
+    \small
+    Estas dos herramientas son las que convierten una red opaca en \textbf{hip\'otesis biol\'ogicas concretas} --- que despu\'es hay que validar en el banco, no en la computadora.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Glosario m\'inimo para seguir el resto de la presentaci\'on}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X}
+    \toprule
+    T\'ermino & Qu\'e significa, en t\'erminos cl\'inicos \\
+    \midrule
+    Grafo heterog\'eneo & Mapa de relaciones con m\'as de un tipo de entidad (c\'elulas, genes, miRNAs). Una v\'ia de se\~nalizaci\'on dibujada ya es un grafo. \\
+    Nodo / arista & Entidad / relaci\'on entre dos entidades. \\
+    Embedding & ``Huella'' num\'erica de una entidad, resumida a partir de su vecindario. \\
+    HGT / capa & Una ronda de resumen del vecindario. 4 capas = informaci\'on que viaja hasta 4 pasos. \\
+    \emph{Link prediction} & Proponer una relaci\'on miRNA$\to$gen que no est\'a en la base de datos. La tarea que genera hip\'otesis. \\
+    AUROC / AUPRC & \'Area bajo la curva ROC / bajo la curva precisi\'on-recall. Id\'enticas a las de una prueba diagn\'ostica. \\
+    \emph{Train/test split} & Cohorte de derivaci\'on vs cohorte de validaci\'on. \\
+    \emph{Data leakage} & El modelo vio la respuesta durante el entrenamiento. Invalida la m\'etrica. \\
+    \emph{Hard negative} & Control \textbf{pareado} por el factor de confusi\'on (aqu\'i: la popularidad del gen). \\
+    Ablaci\'on & Experimento de \emph{knockout} sobre el modelo. \\
+    Saliencia & Cu\'anto pesa cada miRNA en la decisi\'on. An\'alogo a un tama\~no de efecto. \\
+    \emph{Overfitting} & El modelo memoriz\'o sus datos en vez de aprender la regla general. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
