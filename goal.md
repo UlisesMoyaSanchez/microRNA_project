@@ -75,6 +75,51 @@ enrichment interpretation outputs, exported figures (`results/figures/`).
 
 Ordered roughly by importance / reviewer visibility:
 
+- [~] **No edge-level train/test split for link prediction (found 2026-07-01;
+      code fixed 2026-07-11, retrain pending).** The old split partitioned
+      `cell` nodes only, so the miRNA→gene edges scored in `evaluate()` were
+      the *same full edge set* supervised during training (`pos_edge_full`).
+      The ~0.98 AUROC measured reconstruction of already-seen interactions in
+      a new cell context, not generalization to held-out pairs.
+
+      **Diagnosed (job 5593, `training/diagnose_leakage.py`).** Two distinct
+      leaks were possible; only one was real:
+      - *Message passing:* masking the scored pair out of the encoder costs
+        almost nothing — AUROC 0.9853 → 0.9766 (−0.009). The model was **not**
+        reading the answer off the edge it was asked to predict.
+      - *Relation removal:* dropping miRNA↔gene entirely collapses it to
+        0.5551. The signal lives in the interaction topology, which is what an
+        HGT is supposed to exploit — not a bug.
+      - What the diagnostic **cannot** rule out is weight-level memorization,
+        since the checkpoint still trained on those pairs as targets. Only a
+        held-out edge set can.
+
+      **Fixed in `training/splits.py`** (branch `edge-split-hard-negatives`):
+      `RandomLinkSplit` with `rev_edge_types`, so the reverse relation
+      `(gene, regulated_by, miRNA)` is stripped in lockstep — otherwise a
+      held-out edge stays reachable in one hop and the split is worthless.
+      44,186 positives → 24,745 message-passing / 10,605 train-supervision /
+      4,418 val / 4,418 test, verified leak-free by `training/test_edge_split.py`.
+      **Open:** the retrain under this split (`configs/config_v2_edgesplit.yaml`)
+      and the resulting held-out AUROC.
+- [~] **Negative sampling is uniform-random, not "hard negatives"
+      (measured 2026-07-11, job 5595; training fix pending).** Confirmed and
+      quantified with `training/eval_hard_negatives.py`, crossing two negative
+      samplers with two scorers on the same pairs:
+
+      | scorer | uniform neg | degree-matched neg |
+      |---|---|---|
+      | gene-degree heuristic (model-free) | 0.7760 | 0.5150 |
+      | HGT V2 | 0.9758 | **0.8828** |
+
+      Read: uniform negatives inflate the metric by ~9 AUROC points, and a
+      model-free "guess the popular gene" heuristic gets 0.776 against them —
+      so the published number is weak evidence of specificity. But the HGT
+      holds 0.8828 when negatives are popularity-matched, while the heuristic
+      falls to chance. **The result is regulatory specificity, not popularity
+      bias.** Degree-matched negatives are now used in training as well
+      (`splits.LinkSampler`), shared with the eval script so the reported
+      metric describes the trained objective. **Open:** the retrain.
 - [ ] **Data provenance in the manuscript text.** The interaction table is
       miRDB v6.0 predictions, not miRTarBase (miRTarBase's server was
       unavailable during data collection). This is already disclosed inside
@@ -141,16 +186,36 @@ paper (RNA Biology/Scientific Reports-style).
 
 ## 5. Suggested Next Steps
 
+**Everything below is gated on one number: the held-out-edge AUROC from the
+retrain under `configs/config_v2_edgesplit.yaml`.** The saliency rankings,
+`top_circuits_by_celltype.tsv`, and `miR-23a-3p→CCL7` at 0.986 all derive from
+the `checkpoints_v2` model, which was trained on every edge it was later scored
+on. Validating those circuits against the literature *before* the gate clears
+risks validating an artifact — and would be the expensive kind of mistake to
+make, because it spends collaborators' credibility, not just GPU hours.
+
+Expected: at or below 0.8828 (that figure still enjoys weight-level
+memorization). ≳0.80 keeps the methods-venue tier live; a collapse toward 0.55
+means the model memorized pairs rather than learning transferable structure, and
+the paper re-centers on the cell-type/interpretability side.
+
+- [ ] **(GATE)** Land the retrain under the edge-level split + hard negatives,
+      and rebuild `results/comparison/` with held-out and transductive AUROC as
+      separate columns.
+- [ ] Re-derive the circuit rankings from the retrained checkpoint before any
+      biological claim is made about them.
 - [ ] Resolve the miRDB/miRTarBase naming + citation issue (repo + future
       manuscript text).
-- [ ] Run MS-vs-control differential saliency analysis.
+- [ ] Run MS-vs-control differential saliency analysis. *(blocked by the gate)*
 - [ ] Identify an external validation source for the top 2–3 circuits
       (miR-23a-3p→CCL7, miR-140-5p/oligodendrocytes, miR-146a-3p/Th17) and
-      check them against it.
+      check them against it. *(blocked by the gate)*
 - [ ] Run multi-seed training to report stability, not just single-run
-      metrics.
+      metrics. Deferred until the split/negatives design is final — error bars
+      on a number that is about to change are wasted GPU time.
 - [ ] Extend V2 training past 200 epochs with a cosine LR schedule and
-      confirm whether AUROC improves past 0.99.
+      confirm whether AUROC improves past 0.99. **Reframe:** the target is now
+      the held-out number, not the transductive 0.99.
 - [ ] Decide authorship/affiliations.
 - [ ] Revisit the venue list above once external validation results exist —
       that's the deciding factor between the methods-venue and

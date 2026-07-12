@@ -40,6 +40,35 @@
   \end{columns}
 \end{frame}
 
+\begin{frame}{Detalle t\'ecnico: mec\'anica interna de las capas HGT}
+  \small
+  \begin{block}{Flujo de c\'omputo}
+    \scriptsize (`models/layers.py`, `models/hetero\_gnn.py`) \small
+    \begin{enumerate}
+      \item \textbf{NodeProjector}: `Linear(-1, hidden)` + ReLU por tipo de nodo (proyecci\'on \emph{lazy} de PyG: se adapta a la dimensi\'on real de entrada en el primer forward, sin fijarla a mano).
+      \item \textbf{HGTLayer $\times$ L}: envuelve `torch\_geometric.nn.HGTConv` (Hu et al., WWW 2020) --- atenci\'on espec\'ifica por tipo de relaci\'on, seguida de \textbf{conexi\'on residual} + \textbf{LayerNorm} por tipo de nodo, y dropout tras la convoluci\'on.
+      \item \textbf{TargetPredictor}: concatena `[emb\_miRNA | emb\_gene]` ($2\times$hidden) $\to$ MLP (Linear--ReLU--Dropout 0.1--Linear) $\to$ logit escalar.
+      \item \textbf{CellTypeClassifier}: MLP (hidden $\to$ hidden/2 $\to$ 11 clases), dropout 0.1.
+    \end{enumerate}
+  \end{block}
+
+  \begin{itemize}
+    \item Las dos cabezas comparten el mismo backbone de embeddings --- no hay ramas separadas antes de la \'ultima capa HGT.
+    \item El t\'ermino de sparsity act\'ua sobre el embedding de miRNA que sale de este backbone.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Detalle t\'ecnico: protocolo de entrenamiento y muestreo}
+  \small
+  \begin{itemize}
+    \item \textbf{Mini-batching}: el grafo completo vive en CPU; `NeighborLoader` muestrea vecindarios por batch (`num\_neighbors=[10, 5]`, uno por capa HGT; `batch\_size=512`).
+    \item \textbf{Negative sampling}: `torch\_geometric.utils.negative\_sampling` (m\'etodo `sparse`) --- un negativo aleatorio \emph{uniforme} por cada arista miRNA$\rightarrow$gen positiva, mismo criterio en entrenamiento y evaluaci\'on.
+    \item \textbf{Partici\'on de datos}: split aleatorio 80/10/10 \textbf{sobre nodos `cell`} (`torch.randperm`, semilla = `project.seed`). \textbf{No existe una partici\'on equivalente a nivel de arista miRNA-gen} --- ver evaluaci\'on cr\'itica m\'as adelante.
+    \item \textbf{Optimizaci\'on}: AdamW + `CosineAnnealingLR` (`T\_max = num\_epochs`, 200 en V2); gradient clipping (`max\_norm=1.0`); early stopping por `val\_loss` (patience configurable).
+    \item \textbf{Multi-GPU}: DDP con backend NCCL, `torchrun --nproc\_per\_node=4` sobre 4$\times$ A100; desbalance de clases en link prediction compensable v\'ia `pos\_weight` en la BCE (`CombinedLoss`, actualmente no fijado en los configs revisados).
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Configuraci\'on V2: variante ganadora}
   \small
   \begin{tabularx}{\textwidth}{>{\bfseries}p{3.2cm}X}

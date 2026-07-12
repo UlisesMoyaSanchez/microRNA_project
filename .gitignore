@@ -44,3 +44,11 @@ checkpoints_v2/
 checkpoints_v3/
 checkpoints_v4/
 logs/
+
+# LaTeX build artifacts (presentation/)
+*.aux
+*.nav
+*.snm
+*.toc
+*.vrb
+*.out.tex

@@ -53,9 +53,19 @@ def evaluate(
     criterion,
     device: torch.device,
     full_graph: HeteroData,
+    sampler=None,
+    sup_edges: torch.Tensor | None = None,
 ) -> dict[str, float]:
     """
     Run one pass over the val/test loader and return metrics.
+
+    sampler + sup_edges (a splits.LinkSampler and a global miRNA→gene supervision edge
+    set) give the held-out-edge metric: only sup_edges are scored as positives, and
+    negatives are degree-matched and excluded against every known edge.
+
+    Without them the old transductive path runs — every miRNA→gene edge in the graph is
+    fair game as a positive, negatives are uniform. That number is kept deliberately: it
+    is what was published, so the comparison table can show both side by side.
     """
     from torch_geometric.utils import negative_sampling
 
@@ -64,7 +74,7 @@ def evaluate(
     all_edge_labels: list[np.ndarray] = []
     all_cell_preds:  list[np.ndarray] = []
     all_cell_labels: list[np.ndarray] = []
-    total_loss = 0.0
+    totals = {"loss": 0.0, "link_loss": 0.0, "clf_loss": 0.0}
     n_batches  = 0
 
     # Positive edges for link prediction (absent in ablation_no_mirna)
@@ -98,11 +108,18 @@ def evaluate(
         for batch in loader:
             batch = batch.to(device)
 
-            batch_pos = _map_global_to_local(batch, max_pairs=256)
-            if batch_pos is None and pos_edge_full is not None:
-                continue  # batch has no miRNA/gene overlap — skip
-
-            if batch_pos is not None:
+            if sampler is not None and sup_edges is not None:
+                # Held-out-edge path: score only the supervision edges of this split.
+                mirna_idx, gene_idx, labels = sampler.sample(
+                    batch, sup_edges, device, max_pairs=256
+                )
+                if mirna_idx is None:
+                    continue  # no supervision edge landed in this batch
+            elif pos_edge_full is not None:
+                # Transductive path (the published number).
+                batch_pos = _map_global_to_local(batch, max_pairs=256)
+                if batch_pos is None:
+                    continue  # batch has no miRNA/gene overlap — skip
                 n_mirna = batch["miRNA"].num_nodes
                 n_gene  = batch["gene"].num_nodes
                 n_pos = batch_pos.shape[1]
@@ -137,7 +154,8 @@ def evaluate(
                 cell_labels=batch["cell"].y,
                 mirna_emb=mirna_emb,
             )
-            total_loss += loss_dict["loss"].item()
+            for k in totals:
+                totals[k] += loss_dict[k].item()
 
             if labels is not None and "edge_logits" in out:
                 all_edge_logits.append(torch.sigmoid(out["edge_logits"]).cpu().numpy())
@@ -150,7 +168,10 @@ def evaluate(
             n_batches += 1
 
     # ── Metrics ───────────────────────────────────────────────────────────────
-    metrics: dict[str, float] = {"loss": total_loss / max(n_batches, 1)}
+    # link_loss and clf_loss are reported separately: a model without a link head
+    # optimizes a strictly smaller objective, so its total `loss` is not comparable
+    # across rows of the comparison table. The per-task terms are.
+    metrics: dict[str, float] = {k: v / max(n_batches, 1) for k, v in totals.items()}
 
     if all_edge_logits:
         edge_scores = np.concatenate(all_edge_logits)

@@ -45,7 +45,13 @@ from training.train import (
     train_one_epoch,
     save_checkpoint,
     set_seed,
-    sample_link_prediction_pairs,
+)
+from training.splits import (
+    LinkSampler,
+    REL_FWD,
+    assert_no_edge_leakage,
+    build_edge_split,
+    gene_in_degree,
 )
 
 
@@ -108,6 +114,9 @@ def train_model(
     checkpoint_path: str,
     num_epochs: int | None,
     log: logging.Logger,
+    sampler: LinkSampler | None = None,
+    train_sup: torch.Tensor | None = None,
+    val_sup: torch.Tensor | None = None,
 ) -> dict[str, float]:
     """Full train + early stopping loop. Returns best val metrics."""
     tcfg = cfg["training"]
@@ -130,8 +139,14 @@ def train_model(
     best_metrics: dict[str, float] = {}
 
     for epoch in range(1, epochs + 1):
-        train_metrics = train_one_epoch(model, train_loader, optimizer, criterion, device)
-        val_metrics   = evaluate(model, val_loader, criterion, device, graph)
+        train_metrics = train_one_epoch(
+            model, train_loader, optimizer, criterion, device,
+            sampler=sampler, sup_edges=train_sup,
+        )
+        val_metrics = evaluate(
+            model, val_loader, criterion, device, graph,
+            sampler=sampler, sup_edges=val_sup,
+        )
 
         log.info(
             f"  epoch {epoch:03d} | train_loss={train_metrics['loss']:.4f} | "
@@ -154,7 +169,7 @@ def train_model(
     return best_metrics
 
 
-def evaluate_only(
+def evaluate_both(
     model,
     val_loader: NeighborLoader,
     graph: HeteroData,
@@ -162,8 +177,19 @@ def evaluate_only(
     device: torch.device,
     checkpoint_path: str,
     log: logging.Logger,
+    sampler: LinkSampler | None = None,
+    val_sup: torch.Tensor | None = None,
 ) -> dict[str, float]:
-    """Warm up lazy linears, load checkpoint, and evaluate."""
+    """
+    Warm up lazy linears, load the checkpoint, and score it two ways on the same cells:
+
+      auroc            — held-out edges, degree-matched negatives. The honest number.
+      auroc_transd     — every miRNA→gene edge is fair game, uniform negatives. This is
+                         the protocol that produced the published 0.9836, kept so the
+                         table shows the drop rather than quietly replacing the number.
+
+    Both come from the *best* checkpoint, not whatever was last in memory after training.
+    """
     # PyG uses Linear(-1, ...) (lazy) — must run one forward pass to
     # materialize parameter shapes before load_state_dict can work.
     with torch.no_grad():
@@ -192,7 +218,15 @@ def evaluate_only(
         classification_weight=tcfg["loss_classification_weight"],
         sparsity_weight=tcfg["loss_sparsity_weight"],
     ).to(device)
-    return evaluate(model, val_loader, criterion, device, graph)
+
+    metrics = evaluate(
+        model, val_loader, criterion, device, graph,
+        sampler=sampler, sup_edges=val_sup,
+    )
+    transd = evaluate(model, val_loader, criterion, device, graph)
+    metrics["auroc_transd"] = transd.get("auroc", float("nan"))
+    metrics["auprc_transd"] = transd.get("auprc", float("nan"))
+    return metrics
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
@@ -220,11 +254,44 @@ def main() -> None:
     metadata = graph.metadata()
 
     tcfg = cfg["training"]
+    seed = cfg["project"]["seed"]
     train_mask, val_mask, _ = split_graph(
-        graph, tcfg["val_ratio"], tcfg["test_ratio"], cfg["project"]["seed"]
+        graph, tcfg["val_ratio"], tcfg["test_ratio"], seed
     )
     graph["cell"].train_mask = train_mask
     graph["cell"].val_mask   = val_mask
+
+    # ── Edge-level split ───────────────────────────────────────────────────
+    # Same split for every row, so the models are compared on identical held-out
+    # edges. graph is replaced by the message-passing graph: val/test edges are
+    # absent from it in both directions.
+    edge_split = build_edge_split(
+        graph,
+        val_ratio=tcfg["val_ratio"],
+        test_ratio=tcfg["test_ratio"],
+        seed=seed,
+        disjoint_train_ratio=tcfg.get("disjoint_train_ratio", 0.3),
+    )
+    assert_no_edge_leakage(edge_split)
+
+    # The pre-split graph, kept only to reproduce the *published* V2 number under the
+    # protocol that produced it. Nothing else may be evaluated on it.
+    intact_graph = graph
+
+    graph     = edge_split.mp_graph
+    train_sup = edge_split.train_sup
+    val_sup   = edge_split.val_sup
+
+    train_edges = torch.cat([graph[REL_FWD].edge_index, train_sup], dim=1)
+    deg = gene_in_degree(train_edges, graph["gene"].num_nodes)
+    sampler = LinkSampler(
+        all_pos_global=edge_split.all_pos,
+        deg=deg,
+        seed=seed,
+        hard=tcfg.get("hard_negatives", True),
+    )
+    metadata = graph.metadata()
+    set_seed(seed, 0)  # build_edge_split reseeds the global RNG
 
     num_workers = min(4, int(os.environ.get("SLURM_CPUS_PER_TASK", 4)) - 1)
     loader_kwargs = dict(
@@ -242,6 +309,16 @@ def main() -> None:
 
     experiments = [
         # (label, model_class, graph_to_use, ckpt_path)
+        (
+            # The headline row: the same V2 architecture retrained under the held-out-edge
+            # split with degree-matched negatives. Loads the checkpoint produced by
+            #   sbatch --export=ALL,CONFIG=configs/config_v2_edgesplit.yaml training/slurm_train.sh
+            # when it exists, so this does not silently duplicate that run.
+            "hgt_v2_edgesplit",
+            lambda: miRNAGraphTransformer.from_config(cfg, metadata, num_cell_types),
+            graph,
+            os.path.join(tcfg["checkpoint_dir"], "best_model.pt"),
+        ),
         (
             "random",
             lambda: RandomBaseline.from_config(cfg, metadata, num_cell_types),
@@ -282,29 +359,48 @@ def main() -> None:
         ),
     ]
 
-    # ── Load V2 (best model) metrics for comparison ────────────────────────
+    # ── V2 (the published model) — transductive reference row only ─────────
+    # This checkpoint was trained with every miRNA→gene edge as a supervision target,
+    # so the "held-out" edges of the split above are not held out *for it*. Scoring it
+    # on them would report a memorized number in the honest column. Its held-out cells
+    # are left nan on purpose, and it is evaluated on the intact graph — the protocol
+    # that actually produced the published 0.9836.
     v2_metrics_path = os.path.join(out_dir, "v2_metrics.json")
     if os.path.exists(v2_metrics_path):
         with open(v2_metrics_path) as fh:
             v2_metrics = json.load(fh)
         log.info(f"Loaded V2 metrics from {v2_metrics_path}")
     else:
-        log.info("Evaluating V2 (best model) from checkpoint...")
+        log.info("Evaluating V2 (published) from checkpoint on the INTACT graph...")
         v2_ckpt = str(project_dir / "checkpoints_v2" / "best_model.pt")
-        v2_model = miRNAGraphTransformer.from_config(cfg, metadata, num_cell_types).to(device)
-        v2_metrics = evaluate_only(v2_model, val_loader, graph, cfg, device, v2_ckpt, log)
+        v2_model = miRNAGraphTransformer.from_config(
+            cfg, intact_graph.metadata(), num_cell_types
+        ).to(device)
+        intact_val_loader = NeighborLoader(
+            intact_graph,
+            num_neighbors={et: tcfg["num_neighbors"] for et in intact_graph.edge_types},
+            batch_size=tcfg["batch_size"],
+            input_nodes=("cell", val_mask),
+            shuffle=False,
+        )
+        v2_metrics = evaluate_both(
+            v2_model, intact_val_loader, intact_graph, cfg, device, v2_ckpt, log,
+            sampler=None, val_sup=None,   # transductive only — see comment above
+        )
         with open(v2_metrics_path, "w") as fh:
             json.dump(v2_metrics, fh, indent=2)
         del v2_model
         torch.cuda.empty_cache()
 
     all_results: list[dict] = [{
-        "model":       "hgt_v2_best",
-        "val_loss":    v2_metrics.get("loss", float("nan")),
-        "auroc":       v2_metrics.get("auroc", float("nan")),
-        "auprc":       v2_metrics.get("auprc", float("nan")),
-        "cell_acc":    v2_metrics.get("cell_acc", float("nan")),
-        "cell_f1":     v2_metrics.get("cell_f1", float("nan")),
+        "model":        "hgt_v2_published",
+        "link_loss":    v2_metrics.get("link_loss", float("nan")),
+        "clf_loss":     v2_metrics.get("clf_loss", float("nan")),
+        "auroc":        float("nan"),   # no honest held-out number exists for this ckpt
+        "auprc":        float("nan"),
+        "auroc_transd": v2_metrics.get("auroc_transd", v2_metrics.get("auroc", float("nan"))),
+        "cell_acc":     v2_metrics.get("cell_acc", float("nan")),
+        "cell_f1":      v2_metrics.get("cell_f1", float("nan")),
     }]
 
     # ── Run each experiment ────────────────────────────────────────────────
@@ -319,8 +415,10 @@ def main() -> None:
         if _pos is None:
             level = log.info if name == "ablation_no_mirna" else log.warning
             level(f"  Link prediction DISABLED for '{name}' (no miRNA→gene edges) — AUROC will be nan")
+            exp_sampler, exp_train_sup, exp_val_sup = None, None, None
         else:
             log.info(f"  Link prediction active — {_pos.shape[1]:,} positive miRNA→gene edges")
+            exp_sampler, exp_train_sup, exp_val_sup = sampler, train_sup, val_sup
 
         # Build loaders for this graph (may differ for ablations)
         if exp_graph is not graph:
@@ -358,49 +456,68 @@ def main() -> None:
 
         if name == "random":
             # Random baseline: no training, just evaluate
-            metrics = evaluate_only(model, exp_val_loader, exp_graph, cfg, device, "", log)
+            eval_ckpt = ""
         elif args.skip_training and ckpt_path and os.path.exists(ckpt_path):
             log.info("  Skip-training mode: loading existing checkpoint")
-            metrics = evaluate_only(model, exp_val_loader, exp_graph, cfg, device, ckpt_path, log)
+            eval_ckpt = ckpt_path
         else:
             if ckpt_path:
                 os.makedirs(os.path.dirname(ckpt_path), exist_ok=True)
-            metrics = train_model(
+            eval_ckpt = ckpt_path or "/tmp/baseline_tmp.pt"
+            train_model(
                 model, exp_train_loader, exp_val_loader, exp_graph,
-                cfg, device, ckpt_path or "/tmp/baseline_tmp.pt",
-                args.epochs, log,
+                cfg, device, eval_ckpt, args.epochs, log,
+                sampler=exp_sampler, train_sup=exp_train_sup, val_sup=exp_val_sup,
             )
 
+        # Always score the best checkpoint, both ways — not whatever weights training
+        # happened to end on.
+        metrics = evaluate_both(
+            model, exp_val_loader, exp_graph, cfg, device, eval_ckpt, log,
+            sampler=exp_sampler, val_sup=exp_val_sup,
+        )
+
         all_results.append({
-            "model":    name,
-            "val_loss": metrics.get("loss",     float("nan")),
-            "auroc":    metrics.get("auroc",    float("nan")),
-            "auprc":    metrics.get("auprc",    float("nan")),
-            "cell_acc": metrics.get("cell_acc", float("nan")),
-            "cell_f1":  metrics.get("cell_f1",  float("nan")),
+            "model":        name,
+            "link_loss":    metrics.get("link_loss",    float("nan")),
+            "clf_loss":     metrics.get("clf_loss",     float("nan")),
+            "auroc":        metrics.get("auroc",        float("nan")),
+            "auprc":        metrics.get("auprc",        float("nan")),
+            "auroc_transd": metrics.get("auroc_transd", float("nan")),
+            "cell_acc":     metrics.get("cell_acc",     float("nan")),
+            "cell_f1":      metrics.get("cell_f1",      float("nan")),
         })
 
         torch.cuda.empty_cache()
 
     # ── Save comparison table ──────────────────────────────────────────────
+    # auroc       = held-out edges, degree-matched negatives  ← the number to quote
+    # auroc_transd= all edges scorable, uniform negatives     ← the published protocol
+    # The two are not comparable and deliberately never share a cell. `val_loss` is gone
+    # as a cross-model column: a model with no link head optimizes a strictly smaller
+    # objective, so its total loss looked "best" while being the worst model. link_loss
+    # and clf_loss are per-task and can be compared.
+    cols = ["model", "link_loss", "clf_loss", "auroc", "auprc", "auroc_transd",
+            "cell_acc", "cell_f1"]
     tsv_path = os.path.join(out_dir, "comparison_table.tsv")
-    header = "model\tval_loss\tauroc\tauprc\tcell_acc\tcell_f1\n"
     with open(tsv_path, "w") as fh:
-        fh.write(header)
+        fh.write("\t".join(cols) + "\n")
         for r in all_results:
-            fh.write(
-                f"{r['model']}\t{r['val_loss']:.4f}\t{r['auroc']:.4f}\t"
-                f"{r['auprc']:.4f}\t{r['cell_acc']:.4f}\t{r['cell_f1']:.4f}\n"
-            )
+            fh.write(r["model"] + "\t" + "\t".join(f"{r[c]:.4f}" for c in cols[1:]) + "\n")
 
     log.info(f"\nComparison table saved to: {tsv_path}")
-    log.info("\n" + header.strip())
+    log.info("  auroc = held-out edges + degree-matched negatives (honest)")
+    log.info("  auroc_transd = all edges + uniform negatives (published protocol)")
+    log.info("\n" + "\t".join(cols))
     for r in all_results:
         log.info(
-            f"{r['model']:<30} val_loss={r['val_loss']:.4f}  "
+            f"{r['model']:<20} link={r['link_loss']:.4f}  clf={r['clf_loss']:.4f}  "
             f"auroc={r['auroc']:.4f}  auprc={r['auprc']:.4f}  "
+            f"auroc_transd={r['auroc_transd']:.4f}  "
             f"acc={r['cell_acc']:.4f}  f1={r['cell_f1']:.4f}"
         )
+    if sampler.hard:
+        log.info(f"\nDegree-matched negative fallback rate: {sampler.fallback_pct:.1f}%")
 
     # ── Also save as JSON for downstream plotting ──────────────────────────
     json_path = os.path.join(out_dir, "comparison_table.json")
