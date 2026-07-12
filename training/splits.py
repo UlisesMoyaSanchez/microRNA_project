@@ -357,10 +357,11 @@ class LinkSampler:
             return None, None, None
 
         if scored_pos.shape[1] > max_pairs:
-            perm = torch.randperm(
-                scored_pos.shape[1], generator=self.generator, device=device
-            )[:max_pairs]
-            scored_pos = scored_pos[:, perm]
+            # self.generator is CPU-seeded (so every DDP rank agrees on the split and the
+            # run is reproducible); draw on CPU and move, rather than asking a CPU
+            # generator for CUDA numbers.
+            perm = torch.randperm(scored_pos.shape[1], generator=self.generator)[:max_pairs]
+            scored_pos = scored_pos[:, perm.to(device)]
 
         n_mirna = batch["miRNA"].num_nodes
         n_gene  = batch["gene"].num_nodes
