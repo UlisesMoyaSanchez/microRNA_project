@@ -1,0 +1,27 @@
+{
+  "n_pairs_scored": 11264,
+  "n_positives": 5632,
+  "checkpoint": "checkpoints_v2/best_model.pt",
+  "conditions": {
+    "a_intact": {
+      "auroc": 0.9852642343063986,
+      "auprc": 0.9828328532063457,
+      "cell_acc": 0.9943494054456828,
+      "cell_f1": 0.9889523740658752
+    },
+    "c_self_masked": {
+      "auroc": 0.9765618379451027,
+      "auprc": 0.9735265715919537,
+      "cell_acc": 0.9943494054456828,
+      "cell_f1": 0.9889890250370944
+    },
+    "b_relation_off": {
+      "auroc": 0.5551277349803073,
+      "auprc": 0.5483936582110134,
+      "cell_acc": 0.9895370859076655,
+      "cell_f1": 0.979396681138475
+    }
+  },
+  "self_leak_auroc_drop": 0.008702396361295994,
+  "relation_off_auroc_drop": 0.4301364993260913
+}

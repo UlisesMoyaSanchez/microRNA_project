@@ -1,0 +1,31 @@
+{
+  "checkpoint": "checkpoints_v2/best_model.pt",
+  "n_batches": 22,
+  "degree_matched_fallback_pct": 0.0,
+  "results": {
+    "uniform": {
+      "model": {
+        "auroc": 0.9735377288061725,
+        "auprc": 0.9716006180518852,
+        "n_pairs": 11264
+      },
+      "degree": {
+        "auroc": 0.7650002723883006,
+        "auprc": 0.7249785536599124,
+        "n_pairs": 11264
+      }
+    },
+    "degree_matched": {
+      "model": {
+        "auroc": 0.8867892903729905,
+        "auprc": 0.8744619785384478,
+        "n_pairs": 11264
+      },
+      "degree": {
+        "auroc": 0.5145040149531088,
+        "auprc": 0.5167400240353328,
+        "n_pairs": 11264
+      }
+    }
+  }
+}
