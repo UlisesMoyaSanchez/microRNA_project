@@ -72,8 +72,8 @@ def all_local_pos_edges(
 ) -> torch.Tensor | None:
     """
     Every true (miRNA, gene) edge whose BOTH endpoints are in this batch, in local
-    indices. Unlike train.map_global_edges_to_local this does not subsample — the
-    full set is needed as the exclusion set for negative sampling, otherwise
+    indices. Unlike splits.map_to_local's use in LinkSampler this does not subsample —
+    the full set is needed as the exclusion set for negative sampling, otherwise
     "negatives" can be genuine positives.
     """
     mirna_g = batch["miRNA"].n_id.to(device)

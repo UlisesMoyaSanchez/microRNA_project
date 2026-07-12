@@ -66,79 +66,10 @@ from training.diagnose_leakage import (
     REL_FWD,
     REL_REV,
 )
-
-N_DEGREE_BINS = 8
-
-
-def degree_bins(gene_in_degree: torch.Tensor, n_bins: int = N_DEGREE_BINS) -> torch.Tensor:
-    """Assign each gene to a log-spaced in-degree bin. Bin 0 = never targeted."""
-    deg = gene_in_degree.float()
-    logd = torch.log1p(deg)
-    hi = float(logd.max()) if float(logd.max()) > 0 else 1.0
-    edges = torch.linspace(0, hi, n_bins + 1)[1:-1]
-    return torch.bucketize(logd, edges)
-
-
-def sample_degree_matched_negatives(
-    scored_pos: torch.Tensor,      # (2, k) local (miRNA, gene)
-    all_pos_local: torch.Tensor,   # (2, P) every true edge among batch nodes, local
-    gene_bins_local: torch.Tensor, # (n_gene_local,) degree bin per local gene
-    n_gene_local: int,
-    generator: torch.Generator,
-    device: torch.device,
-) -> tuple[torch.Tensor, int]:
-    """
-    For each positive (m, g), a negative (m, g') with g' in the same degree bin as g
-    and (m, g') not a true edge. Falls back to any non-target of m when the bin has no
-    valid candidate, so the returned tensor always has k columns.
-    """
-    k = scored_pos.shape[1]
-    # true-target lookup: key = m * n_gene_local + g
-    true_keys = (all_pos_local[0].long() * n_gene_local + all_pos_local[1].long())
-    true_set = set(true_keys.tolist())
-
-    bins_by_gene = gene_bins_local.tolist()
-    genes_in_bin: dict[int, list[int]] = {}
-    for g_idx, b in enumerate(bins_by_gene):
-        genes_in_bin.setdefault(int(b), []).append(g_idx)
-
-    rng = np.random.default_rng(int(torch.randint(0, 2**31 - 1, (1,), generator=generator)))
-
-    neg_m: list[int] = []
-    neg_g: list[int] = []
-    n_fallback = 0
-
-    m_list = scored_pos[0].tolist()
-    g_list = scored_pos[1].tolist()
-
-    for m, g in zip(m_list, g_list):
-        b = int(bins_by_gene[g])
-        candidates = genes_in_bin.get(b, [])
-        picked = -1
-        # try within-bin candidates first
-        for _ in range(20):
-            if not candidates:
-                break
-            gp = int(candidates[rng.integers(len(candidates))])
-            if (m * n_gene_local + gp) not in true_set:
-                picked = gp
-                break
-        if picked < 0:
-            # fall back: any gene that m does not target
-            for _ in range(50):
-                gp = int(rng.integers(n_gene_local))
-                if (m * n_gene_local + gp) not in true_set:
-                    picked = gp
-                    n_fallback += 1
-                    break
-        if picked < 0:
-            continue
-        neg_m.append(m)
-        neg_g.append(picked)
-
-    if not neg_m:
-        return torch.empty((2, 0), dtype=torch.long, device=device), 0
-    return torch.tensor([neg_m, neg_g], dtype=torch.long, device=device), n_fallback
+# One sampler shared with the training loop (training/splits.py) — if eval and training
+# disagreed about what a "hard negative" is, the reported number would not describe the
+# objective the model was trained against.
+from training.splits import degree_bins, sample_degree_matched_negatives
 
 
 def main() -> None:

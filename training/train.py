@@ -31,12 +31,18 @@ import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch_geometric.data import HeteroData
 from torch_geometric.loader import NeighborLoader
-from torch_geometric.utils import negative_sampling
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from models.hetero_gnn import miRNAGraphTransformer
 from models.losses import CombinedLoss
 from training.evaluate import evaluate, get_mirna_gene_edges
+from training.splits import (
+    LinkSampler,
+    REL_FWD,
+    assert_no_edge_leakage,
+    build_edge_split,
+    gene_in_degree,
+)
 
 
 # ── Setup ──────────────────────────────────────────────────────────────────────
@@ -115,77 +121,6 @@ def split_graph(
     return train_mask, val_mask, test_mask
 
 
-def sample_link_prediction_pairs(
-    pos_edge_index: torch.Tensor,
-    n_mirna: int,
-    n_gene: int,
-    device: torch.device,
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    """
-    Returns (mirna_idx, gene_idx, labels) with balanced pos/neg pairs.
-    """
-    n_pos = pos_edge_index.shape[1]
-    neg_edge_index = negative_sampling(
-        edge_index=pos_edge_index,
-        num_nodes=(n_mirna, n_gene),
-        num_neg_samples=n_pos,
-        method="sparse",
-    )
-    mirna_idx = torch.cat([pos_edge_index[0], neg_edge_index[0]], dim=0).to(device)
-    gene_idx  = torch.cat([pos_edge_index[1], neg_edge_index[1]], dim=0).to(device)
-    labels    = torch.cat([
-        torch.ones(n_pos, device=device),
-        torch.zeros(neg_edge_index.shape[1], device=device),
-    ])
-    return mirna_idx, gene_idx, labels
-
-
-# ── Index remapping helper ────────────────────────────────────────────────────
-
-def map_global_edges_to_local(
-    pos_edge_global: torch.Tensor,
-    batch,
-    device: torch.device,
-    max_pairs: int = 512,
-) -> torch.Tensor | None:
-    """
-    NeighborLoader mini-batches use *local* node indices (0..n_local-1).
-    pos_edge_global uses *global* indices (0..n_total_nodes-1).
-    This remaps global miRNA→gene edges to local batch indices using
-    batch["miRNA"].n_id and batch["gene"].n_id, then subsamples to max_pairs.
-    Returns (2, k) local edge index, or None if no valid edges in this batch.
-    """
-    mirna_g = batch["miRNA"].n_id.to(device)  # (n_local_mirna,) global IDs
-    gene_g  = batch["gene"].n_id.to(device)   # (n_local_gene,)  global IDs
-
-    # Size lookup tables to cover ALL global IDs seen in both the edge list
-    # and the current batch — not every miRNA/gene appears in pos_edge_full.
-    n_mirna_g = max(int(pos_edge_global[0].max().item()), int(mirna_g.max().item())) + 1
-    n_gene_g  = max(int(pos_edge_global[1].max().item()), int(gene_g.max().item())) + 1
-
-    mirna_g2l = torch.full((n_mirna_g,), -1, dtype=torch.long, device=device)
-    mirna_g2l[mirna_g] = torch.arange(len(mirna_g), device=device)
-
-    gene_g2l = torch.full((n_gene_g,), -1, dtype=torch.long, device=device)
-    gene_g2l[gene_g] = torch.arange(len(gene_g), device=device)
-
-    src_l = mirna_g2l[pos_edge_global[0].to(device)]
-    dst_l = gene_g2l[pos_edge_global[1].to(device)]
-
-    valid = (src_l >= 0) & (dst_l >= 0)
-    src_l, dst_l = src_l[valid], dst_l[valid]
-
-    if src_l.shape[0] == 0:
-        return None
-
-    batch_pos = torch.stack([src_l, dst_l])
-    if batch_pos.shape[1] > max_pairs:
-        perm = torch.randperm(batch_pos.shape[1], device=device)[:max_pairs]
-        batch_pos = batch_pos[:, perm]
-
-    return batch_pos
-
-
 # ── Training loop ───────────────────────────────────────────────────────────────
 
 def train_one_epoch(
@@ -194,27 +129,27 @@ def train_one_epoch(
     optimizer: torch.optim.Optimizer,
     criterion: CombinedLoss,
     device:    torch.device,
+    sampler:   LinkSampler | None = None,
+    sup_edges: torch.Tensor | None = None,
 ) -> dict[str, float]:
+    """
+    sampler + sup_edges supervise the link head on the training edge split only, with
+    degree-matched negatives. Without them the link head is not trained at all — which is
+    correct for the no_mirna ablation and a bug anywhere else, hence the check in main().
+    """
     model.train()
     totals: dict[str, float] = {"loss": 0.0, "link_loss": 0.0, "clf_loss": 0.0}
     n_batches = 0
 
-    # Positive edges for link prediction (absent in ablation_no_mirna)
-    pos_edge_full = get_mirna_gene_edges(loader.data)
-
     for batch in loader:
         batch = batch.to(device)
 
-        if pos_edge_full is not None:
-            # Remap global pos edges to local batch indices (NeighborLoader uses local IDs)
-            batch_pos = map_global_edges_to_local(pos_edge_full, batch, device, max_pairs=512)
-            if batch_pos is None:
-                continue  # batch has no miRNA/gene overlap — skip
-            n_mirna = batch["miRNA"].num_nodes
-            n_gene  = batch["gene"].num_nodes
-            mirna_idx, gene_idx, labels = sample_link_prediction_pairs(
-                batch_pos, n_mirna, n_gene, device
+        if sampler is not None and sup_edges is not None:
+            mirna_idx, gene_idx, labels = sampler.sample(
+                batch, sup_edges, device, max_pairs=512
             )
+            if mirna_idx is None:
+                continue  # no training supervision edge landed in this batch
         else:
             # Ablation: no miRNA→gene edges — classification only
             mirna_idx, gene_idx, labels = None, None, None
@@ -317,14 +252,55 @@ def main() -> None:
     else:
         log.info(f"Link prediction ACTIVE — {_pos.shape[1]:,} positive miRNA→gene edges")
 
-    # ── Data splits ───────────────────────────────────────────────────────────
+    # ── Cell-node split (unchanged: the classification task is unaffected) ────
     tcfg = cfg["training"]
+    seed = cfg["project"]["seed"]
     train_mask, val_mask, test_mask = split_graph(
-        graph, tcfg["val_ratio"], tcfg["test_ratio"], cfg["project"]["seed"]
+        graph, tcfg["val_ratio"], tcfg["test_ratio"], seed
     )
     graph["cell"].train_mask = train_mask
     graph["cell"].val_mask   = val_mask
     graph["cell"].test_mask  = test_mask
+
+    # ── Edge-level split ──────────────────────────────────────────────────────
+    # Without this the encoder is handed the very edges the link head is asked to
+    # predict, and the AUROC is a reconstruction score rather than a prediction.
+    sampler:   LinkSampler | None   = None
+    train_sup: torch.Tensor | None  = None
+    val_sup:   torch.Tensor | None  = None
+
+    if _pos is not None:
+        edge_split = build_edge_split(
+            graph,
+            val_ratio=tcfg["val_ratio"],
+            test_ratio=tcfg["test_ratio"],
+            seed=seed,
+            disjoint_train_ratio=tcfg.get("disjoint_train_ratio", 0.3),
+        )
+        assert_no_edge_leakage(edge_split)
+
+        # From here on the encoder only ever sees training message-passing edges.
+        graph     = edge_split.mp_graph
+        train_sup = edge_split.train_sup
+        val_sup   = edge_split.val_sup
+
+        # Bin genes by in-degree over TRAINING edges only — binning on the full edge
+        # set would leak held-out structure into the choice of negatives.
+        train_edges = torch.cat([graph[REL_FWD].edge_index, train_sup], dim=1)
+        deg = gene_in_degree(train_edges, graph["gene"].num_nodes)
+        sampler = LinkSampler(
+            all_pos_global=edge_split.all_pos,
+            deg=deg,
+            seed=seed,
+            hard=tcfg.get("hard_negatives", True),
+        )
+        log.info(
+            f"Negatives: {'degree-matched (hard)' if sampler.hard else 'uniform'}"
+        )
+
+        # build_edge_split reseeds the global RNG so every DDP rank derives the same
+        # split; restore this rank's own seed so the ranks do not train in lockstep.
+        set_seed(seed, local_rank)
 
     # ── DataLoaders ───────────────────────────────────────────────────────────
     num_workers = max(0, int(os.environ.get("SLURM_CPUS_PER_TASK", 4)) // world_size() - 1)
@@ -385,11 +361,19 @@ def main() -> None:
     # ── Training ──────────────────────────────────────────────────────────────
     log.info(f"Starting training (epochs={tcfg['num_epochs']}, patience={tcfg['patience']})")
     for epoch in range(start_epoch, tcfg["num_epochs"]):
-        train_metrics = train_one_epoch(model, train_loader, optimizer, criterion, device)
+        train_metrics = train_one_epoch(
+            model, train_loader, optimizer, criterion, device,
+            sampler=sampler, sup_edges=train_sup,
+        )
         scheduler.step()
 
         if rank() == 0:
-            val_metrics = evaluate(model, val_loader, criterion, device, graph)
+            # val_auroc is now a held-out-edge number: val_sup edges were never message-
+            # passed and never supervised, and the negatives are degree-matched.
+            val_metrics = evaluate(
+                model, val_loader, criterion, device, graph,
+                sampler=sampler, sup_edges=val_sup,
+            )
             log.info(
                 f"Epoch {epoch + 1:03d} | "
                 f"train_loss={train_metrics['loss']:.4f} | "
@@ -416,6 +400,10 @@ def main() -> None:
     if rank() == 0:
         log.info(f"Training complete. Best val_loss={best_val:.4f}")
         log.info(f"Best checkpoint: {best_ck}")
+        if sampler is not None and sampler.hard:
+            # A high rate means many negatives could not be degree-matched and fell back
+            # to uniform, which drags the metric back toward the inflated one.
+            log.info(f"Degree-matched negative fallback rate: {sampler.fallback_pct:.1f}%")
 
     if is_dist():
         dist.destroy_process_group()
