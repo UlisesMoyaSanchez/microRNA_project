@@ -351,12 +351,25 @@ def main() -> None:
     # ── Resume ───────────────────────────────────────────────────────────────
     best_ck  = os.path.join(cfg["training"]["checkpoint_dir"], "best_model.pt")
     start_epoch = 0
-    best_val = float("inf")
     patience_counter = 0
+
+    # Select the checkpoint on the metric the model is *for*. Selecting on val_loss
+    # picked epoch 1 in job 5603 — the link head overfits from the very first epoch, so
+    # val_loss rises monotonically while val_auroc keeps climbing to a peak at epoch 16.
+    # The result was a saved "best model" scoring at chance (0.5324) while the model
+    # could actually reach 0.6268.
+    monitor = "auroc" if sampler is not None else "loss"
+    maximize = monitor == "auroc"
+    best_val = -float("inf") if maximize else float("inf")
+
+    def improved(current: float) -> bool:
+        return current > best_val if maximize else current < best_val
+
+    log.info(f"Model selection on val_{monitor} ({'max' if maximize else 'min'})")
 
     if args.resume and os.path.exists(best_ck):
         start_epoch, best_val = load_checkpoint(model, optimizer, best_ck)
-        log.info(f"Resumed from epoch {start_epoch}, val_loss={best_val:.4f}")
+        log.info(f"Resumed from epoch {start_epoch}, best={best_val:.4f}")
 
     # ── Training ──────────────────────────────────────────────────────────────
     log.info(f"Starting training (epochs={tcfg['num_epochs']}, patience={tcfg['patience']})")
@@ -367,8 +380,9 @@ def main() -> None:
         )
         scheduler.step()
 
+        stop = False
         if rank() == 0:
-            # val_auroc is now a held-out-edge number: val_sup edges were never message-
+            # val_auroc is a held-out-edge number: val_sup edges were never message-
             # passed and never supervised, and the negatives are degree-matched.
             val_metrics = evaluate(
                 model, val_loader, criterion, device, graph,
@@ -382,23 +396,31 @@ def main() -> None:
                 f"val_acc={val_metrics.get('cell_acc', 0):.4f}"
             )
 
-            if val_metrics["loss"] < best_val:
-                best_val = val_metrics["loss"]
+            current = val_metrics.get(monitor, float("nan"))
+            if improved(current):
+                best_val = current
                 patience_counter = 0
                 raw = model.module if hasattr(model, "module") else model
                 save_checkpoint(raw, optimizer, epoch + 1, best_val, best_ck)
-                log.info(f"  → New best model saved (val_loss={best_val:.4f})")
+                log.info(f"  → New best model saved (val_{monitor}={best_val:.4f})")
             else:
                 patience_counter += 1
                 if patience_counter >= tcfg["patience"]:
                     log.info(f"Early stopping at epoch {epoch + 1}")
-                    break
+                    stop = True
 
+        # The stop decision is made on rank 0 only, so it has to be broadcast: a bare
+        # `break` here left ranks 1-3 spinning into the next epoch and hanging on the
+        # barrier, which is the SIGABRT that ended job 5603.
         if is_dist():
-            dist.barrier()
+            stop_flag = torch.tensor([int(stop)], device=device)
+            dist.broadcast(stop_flag, src=0)
+            stop = bool(stop_flag.item())
+        if stop:
+            break
 
     if rank() == 0:
-        log.info(f"Training complete. Best val_loss={best_val:.4f}")
+        log.info(f"Training complete. Best val_{monitor}={best_val:.4f}")
         log.info(f"Best checkpoint: {best_ck}")
         if sampler is not None and sampler.hard:
             # A high rate means many negatives could not be degree-matched and fell back
