@@ -18,6 +18,59 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Evaluaci\'on t\'ecnica independiente --- fortalezas}
+  \small
+  \begin{itemize}
+    \item Pipeline reproducible y documentado de punta a punta: descarga $\to$ preprocesamiento $\to$ grafo $\to$ entrenamiento $\to$ interpretaci\'on, con artefactos versionables en cada etapa.
+    \item El dise\~no de ablaciones ya distingue correctamente entre la tarea f\'acil (clasificaci\'on celular) y la tarea dif\'icil (link prediction) --- no es el error com\'un de sobrevender un `accuracy` alto.
+    \item Los hallazgos biol\'ogicos destacados (hsa-miR-146a-3p en Th17, hsa-miR-140-5p en oligodendrocitos) son consistentes con literatura publicada --- una se\~nal de validez externa preliminar, aunque no sustituye validaci\'on formal.
+    \item Arquitectura correctamente implementada sobre `HGTConv` de PyG (Hu et al. 2020), con residual + norm por tipo de nodo y p\'erdida multi-tarea ponderada.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Evaluaci\'on t\'ecnica independiente --- riesgo metodol\'ogico principal}
+  \begin{block}{No hay partici\'on train/test a nivel de arista miRNA$\rightarrow$gen}
+    \small
+    El split actual (`train.py::split\_graph`) solo particiona nodos `cell`. Las aristas miRNA$\rightarrow$gen usadas en `evaluate.py` son el \textbf{mismo conjunto completo} visto durante entrenamiento (`pos\_edge\_full`), solo remuestreadas dentro de los vecindarios de las c\'elulas de test, con nuevos negativos aleatorios.
+  \end{block}
+
+  \vspace{0.5em}
+  \begin{itemize}
+    \item Consecuencia: el AUROC/AUPRC actual (\textasciitilde 0.98) mide qu\'e tan bien el modelo \textbf{reconstruye} interacciones ya vistas en un contexto celular distinto, no si generaliza a pares miRNA-gen no vistos.
+    \item Antes de reclamar ``predicci\'on'' en un manuscrito, se necesita un \textbf{holdout expl\'icito de aristas} (un \% de pares miRNA-gen nunca visto en entrenamiento, en ning\'un split de c\'elulas).
+    \item Esto no invalida el trabajo hecho --- indica qu\'e experimento falta antes de someterlo a revisi\'on por pares.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Evaluaci\'on t\'ecnica independiente --- riesgos secundarios y precisiones}
+  \small
+  \begin{itemize}
+    \item \textbf{Negative sampling uniforme, no ``hard negatives''}: en un grafo disperso (44,186 positivos sobre \textasciitilde 7.4M pares miRNA$\times$gen posibles, densidad $\approx 0.6\%$), distinguir positivos de aleatorios es m\'as f\'acil que distinguir positivos de negativos biol\'ogicamente plausibles. El AUROC actual probablemente sobreestima la especificidad regulatoria real.
+    \item \textbf{Features de nodo `gene` son 1-D} (expresi\'on media log-normalizada): la capacidad de diferenciar genes en link-prediction depende casi enteramente de la topolog\'ia del grafo, no de features intr\'insecas ricas.
+    \item \textbf{La ablaci\'on ``no coexpr'' remueve solo 1,130 de \textasciitilde 16M aristas totales} ($\approx 0.007\%$): que la accuracy casi no cambie no es evidencia fuerte de que la co-expresi\'on sea irrelevante, es una fracci\'on demasiado peque\~na del grafo para notarse en clasificaci\'on.
+    \item \textbf{Correcci\'on}: el scheduler coseno (`CosineAnnealingLR`, `T\_max=200`) \textbf{ya est\'a activo} --- no es una recomendaci\'on pendiente. Si se extiende a 300 \'epocas hay que ajustar `T\_max` o usar warm restarts; si no, el LR ya habr\'a decaido a \textasciitilde 0 antes de la \'epoca 300.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Mi valoraci\'on general del estado del proyecto}
+  \begin{block}{En conjunto}
+    \small
+    Trabajo t\'ecnicamente s\'olido y con buena disciplina de reproducibilidad para un proyecto de tesis de maestr\'ia. El pipeline multi-fuente, la arquitectura HGT y el dise\~no de ablaciones est\'an bien pensados y correctamente ejecutados.
+  \end{block}
+
+  \vspace{0.5em}
+  \begin{itemize}
+    \item Los resultados de \textbf{clasificaci\'on celular} (`acc` 0.994--0.996) son confiables y est\'an evaluados con un split real a nivel de c\'elula.
+    \item Los resultados de \textbf{link-prediction} (AUROC \textasciitilde 0.98), aunque prometedores y con hallazgos biol\'ogicos plausibles, \textbf{no est\'an listos para publicarse como ``predicci\'on''} hasta resolver el split a nivel de arista --- en mi opini\'on, este es el gap t\'ecnico m\'as importante a cerrar, incluso antes que la validaci\'on externa ya listada en `goal.md`.
+  \end{itemize}
+
+  \vspace{0.4em}
+  \begin{block}{Recomendaci\'on concreta}
+    \small
+    Agregar un holdout de aristas, re-evaluar V2 con ese split, y reportar el AUROC/AUPRC ``honesto'' junto al actual (transductivo) para mostrar la diferencia. Esto fortalece la narrativa cient\'ifica y anticipa la objeci\'on m\'as probable de un revisor.
+  \end{block}
+\end{frame}
+
 \begin{frame}{Roadmap para la siguiente iteraci\'on de esta presentaci\'on}
   \small
   \begin{tabularx}{\textwidth}{>{\bfseries}p{3.2cm}X}
