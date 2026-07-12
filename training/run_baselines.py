@@ -310,6 +310,16 @@ def main() -> None:
     experiments = [
         # (label, model_class, graph_to_use, ckpt_path)
         (
+            # The headline row: the same V2 architecture retrained under the held-out-edge
+            # split with degree-matched negatives. Loads the checkpoint produced by
+            #   sbatch --export=ALL,CONFIG=configs/config_v2_edgesplit.yaml training/slurm_train.sh
+            # when it exists, so this does not silently duplicate that run.
+            "hgt_v2_edgesplit",
+            lambda: miRNAGraphTransformer.from_config(cfg, metadata, num_cell_types),
+            graph,
+            os.path.join(tcfg["checkpoint_dir"], "best_model.pt"),
+        ),
+        (
             "random",
             lambda: RandomBaseline.from_config(cfg, metadata, num_cell_types),
             graph,
