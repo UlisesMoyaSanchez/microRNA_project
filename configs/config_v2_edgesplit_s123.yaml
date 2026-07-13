@@ -1,0 +1,98 @@
+# =============================================================================
+# Protocol variant of v2: identical architecture, corrected evaluation protocol.
+# Changes vs config_v2.yaml (model and optimizer deliberately untouched, so any
+# drop against the published V2 numbers is attributable to the protocol alone):
+#   held-out miRNA→gene edge split + degree-matched hard negatives.
+# Not a config_vN slot on purpose — v3/v4 are hyperparameter variants, this
+# is the same model measured honestly.
+# =============================================================================
+
+project:
+  name: mirna_ms_v2_edgesplit_s123
+  seed: 123
+  output_dir: /raid/home/umoya/scripts/microRNA_project/results
+
+data:
+  raw_dir:       /raid/home/umoya/scripts/microRNA_project/data/raw
+  processed_dir: /raid/home/umoya/scripts/microRNA_project/data/processed
+  graphs_dir:    /raid/home/umoya/scripts/microRNA_project/data/graphs
+
+  cellxgene:
+    organism: "Homo sapiens"
+    disease:  "multiple sclerosis"
+    tissue:
+      - "blood"
+      - "brain"
+      - "cerebrospinal fluid"
+    n_top_genes: 3000
+    min_cells:   3
+    min_genes:   200
+    max_pct_mito: 20.0
+    max_obs_ms:   150000
+    max_obs_ctrl: 100000
+
+  mirna:
+    mirdb_url: "https://mirdb.org/download/miRDB_v6.0_prediction_result.txt.gz"
+    mirdb_score_threshold: 80
+    min_interactions: 5
+
+  geo:
+    accessions:
+      GSE289530: "miRNA CD14+ monocytes, CD8+ T cells, neutrophils; MS vs HC (GPL19117, 166 samples, 2026)"
+
+  graph:
+    coexpression_threshold:          0.60
+    coexpression_top_n_genes:        1000
+    cell_gene_expression_threshold:  0.10
+    min_mirna_gene_interactions:     2
+
+cell_type_markers:
+  T_cell:        ["CD3D", "CD3E", "CD3G"]
+  CD4_T:         ["CD4", "IL7R"]
+  CD8_T:         ["CD8A", "CD8B"]
+  Th17:          ["IL17A", "RORC", "IL23R", "CCR6"]
+  Treg:          ["FOXP3", "IL2RA", "CTLA4"]
+  B_cell:        ["MS4A1", "CD19", "CD79A"]
+  NK_cell:       ["GNLY", "NKG7", "NCAM1"]
+  Monocyte:      ["CD14", "LYZ", "CST3"]
+  Microglia:     ["CX3CR1", "P2RY12", "TMEM119", "SLC2A5"]
+  Oligodendrocyte: ["MBP", "PLP1", "MOG", "CNP"]
+  Astrocyte:     ["GFAP", "S100B", "AQP4", "ALDH1L1"]
+
+model:
+  hidden_channels: 512        # wider: 256→512
+  num_heads:       8
+  num_layers:      4          # deeper: 3→4
+  dropout:         0.3        # more regularization: 0.2→0.3
+  mirna_init_dim:  64
+
+training:
+  batch_size:   512
+  num_epochs:   200
+  lr:           5.0e-4        # slower: 1e-3→5e-4
+  weight_decay: 1.0e-5
+  patience:     25            # more patience for slower lr
+  loss_reconstruction_weight: 1.0
+  loss_classification_weight: 0.5
+  loss_sparsity_weight:       0.01
+  val_ratio:    0.10
+  test_ratio:   0.10
+  num_neighbors: [10, 5]
+
+  # Edge-level split: val_ratio/test_ratio above also govern the miRNA→gene edge
+  # holdout. disjoint_train_ratio further splits the training edges so the ones
+  # used as supervision targets are not also fed to the encoder.
+  disjoint_train_ratio: 0.3
+  hard_negatives: true          # degree-matched negatives, not uniform
+
+  checkpoint_dir: /raid/home/umoya/scripts/microRNA_project/checkpoints_v2_edgesplit_s123
+  log_dir:        /raid/home/umoya/scripts/microRNA_project/logs
+
+slurm:
+  partition:    dgx_large
+  nodelist:     dgxa100jal
+  gpus_train:   4
+  cpus_per_task: 16
+  mem:          128gb
+  conda_env:    mirna_ms
+  conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
