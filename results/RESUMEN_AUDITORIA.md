@@ -1,7 +1,8 @@
 # Resumen de la auditoría de resultados — Proyecto miRNA-MS
 
 **Para:** colaboradores clínicos del proyecto.
-**Fecha:** 13 de julio de 2026.
+**Fecha:** 13 de julio de 2026. **Todas las cifras son del conjunto de PRUEBA**
+(4,418 interacciones que el modelo nunca vio, ni para entrenar ni para elegir el mejor modelo).
 **Documento técnico completo (inglés):** [`EVALUATION_AUDIT.md`](EVALUATION_AUDIT.md)
 
 ---
@@ -10,8 +11,8 @@
 
 1. **El resultado principal que les presentamos era un artefacto.** El AUROC de **0.9836**
    para la predicción de regulación miRNA→gen no sobrevive a una evaluación correcta. El
-   número honesto es **0.6467**.
-2. **La clasificación de tipos celulares sí es real** y no cambia: exactitud **0.9950**. Esa
+   número honesto es **0.6271**.
+2. **La clasificación de tipos celulares sí es real** y no cambia: exactitud **0.9916**. Esa
    parte del trabajo está intacta.
 3. **Lo encontramos nosotros, no un revisor.** Esa es la razón de ser de esta auditoría, y
    es la diferencia entre corregir un análisis y retractar un artículo.
@@ -32,7 +33,7 @@ en esa misma cohorte. El desempeño sale inflado por construcción.
 
 Al apartar el **20% de las interacciones** (8,836 pares que el modelo no ve nunca: ni como
 respuesta, ni dibujadas en el grafo de entrada, ni en dirección inversa) y reentrenar, el
-AUROC cae de **0.9836 a 0.6467**.
+AUROC cae de **0.9836 a 0.6271**.
 
 ---
 
@@ -53,17 +54,17 @@ por completo al miRNA** y solo pregunta: *¿qué tan popular es este gen?*
 
 | "Prueba diagnóstica" | Controles al azar | Controles **pareados** por popularidad |
 |---|:--:|:--:|
-| Marcador tonto (solo popularidad, sin modelo) | **0.8723** | 0.5123 |
-| Adamic-Adar (topología, sin aprendizaje) | 0.8616 | **0.5911** |
-| **Nuestro modelo HGT** | 0.9836 | **0.6467** |
+| Marcador tonto (solo popularidad, sin modelo) | **0.8712** | 0.5126 |
+| Adamic-Adar (topología, sin aprendizaje) | 0.8616 | **0.5912** |
+| **Nuestro modelo HGT** | 0.8056 | **0.6271** |
 
 Léanlo así:
 
-- **Con controles al azar, un marcador que ni siquiera mira el miRNA alcanza 0.8723.** Casi
+- **Con controles al azar, un marcador que ni siquiera mira el miRNA alcanza 0.8712.** Casi
   el nivel que presentábamos como logro del modelo. Es decir: **el protocolo de evaluación,
   no el modelo, hacía la mayor parte del trabajo.**
-- **Con controles pareados, ese marcador tonto se desploma al azar (0.5123)**, como debe.
-- Nuestro modelo aguanta en **0.6467** — por encima del azar, sí, pero apenas **5.6 puntos
+- **Con controles pareados, ese marcador tonto se desploma al azar (0.5126)**, como debe.
+- Nuestro modelo aguanta en **0.6271** — por encima del azar, sí, pero apenas **3.6 puntos
   por encima de Adamic-Adar**, una fórmula de dos líneas de 1999 que no aprende nada.
 
 **Conclusión:** el modelo no está infiriendo regulación biológica. Está haciendo un
@@ -77,13 +78,40 @@ condiciones:
 
 | Sobre aristas apartadas, con controles al azar | AUROC |
 |---|:--:|
-| Popularidad del gen — **sin modelo, sin aprender, ignora el miRNA** | **0.8723** |
-| **Nuestro HGT entrenado de punta a punta** | **0.8132** |
+| Popularidad del gen — **sin modelo, sin aprender, ignora el miRNA** | **0.8712** |
+| **Nuestro HGT entrenado de punta a punta** | **0.8056** |
 
-**La heurística de una línea le gana al transformer por 6 puntos.**
+**La heurística de una línea le gana al transformer por 6.6 puntos.**
 
 Bajo el protocolo de evaluación que usábamos, el modelo profundo no solo era innecesario:
 era **peor** que contar cuántos miRNAs ya apuntan a ese gen.
+
+### Y el mecanismo, atrapado en el acto
+
+A ese mismo modelo (entrenado con controles al azar) le pusimos **controles pareados**.
+Resultado: **0.5118** — azar puro, y prácticamente idéntico al 0.5126 del marcador tonto.
+
+**El modelo entrenado con controles al azar se *convirtió* en la heurística de popularidad.**
+No aprendió nada más. Los controles mal elegidos no solo halagan al modelo: **seleccionan un
+modelo que no ha aprendido nada transferible.**
+
+---
+
+## Un cuarto hallazgo: el modelo nunca fue específico de tipo celular
+
+Esto no es estadístico, es **arquitectónico**, y no se arregla reentrenando.
+
+El cabezal que puntúa las interacciones (`TargetPredictor`) recibe **solo** el miRNA y el gen.
+**No recibe la célula.** Y el análisis puntúa cada par miRNA→gen **una sola vez, globalmente**,
+y después filtra esa lista única por los miRNAs más salientes de cada tipo celular.
+
+Consecuencia: **`miR-23a-3p → CCL7` tiene exactamente el mismo score en todos los tipos
+celulares.** La "especificidad de tipo celular" venía **solo** del filtro de saliencia sobre el
+miRNA, nunca del score de la interacción.
+
+Es decir: **la premisa central del proyecto — regulación específica de tipo celular — nunca
+llegó a implementarse**, y con esta arquitectura no podía. Es, probablemente, el hallazgo más
+generalizable de toda la auditoría.
 
 ---
 
@@ -98,7 +126,7 @@ gen son 1-D (expresión media) y las del miRNA son un vector aprendido sin conte
 biológico. Para un par que el modelo nunca ha visto, **no hay señal de la que pueda
 generalizar** salvo la topología de la red.
 
-Por eso ~0.62–0.65 parece ser el **techo de información de la tarea tal como está planteada**,
+Por eso ~0.63 parece ser el **techo de información de la tarea tal como está planteada**,
 y no un defecto de la arquitectura. Cambiar el modelo no lo va a mover.
 
 ---
@@ -118,7 +146,7 @@ y eso gasta la credibilidad de los colaboradores, no solo horas de GPU.
 
 ### Se mantiene
 
-- **La clasificación de tipos celulares (0.9950)**, evaluada con una partición correcta a
+- **La clasificación de tipos celulares (0.9916)**, evaluada con una partición correcta a
   nivel de célula. Es sólida.
 - **Toda la infraestructura de auditoría**, que es ahora el activo principal del proyecto: la
   partición correcta de aristas, la prueba automática de fuga, y los tres controles
@@ -129,7 +157,7 @@ y eso gasta la credibilidad de los colaboradores, no solo horas de GPU.
 **El error es el resultado.** Podemos demostrar, de forma limpia, cuantificada y reproducible,
 que:
 
-> *la evaluación transductiva infla la predicción de blancos de miRNA de 0.62 a 0.98, y los
+> *la evaluación transductiva infla la predicción de blancos de miRNA de 0.63 a 0.98, y los
 > controles no pareados la inflan aún más — hasta el punto de que una heurística de una línea
 > alcanza 0.87.*
 
@@ -154,7 +182,7 @@ grafo no contiene la señal (secuencia) que determina esas interacciones. La ví
 **añadir características de secuencia** (semilla del miRNA, 3'UTR del gen), lo que es
 esencialmente un proyecto distinto.
 
-**¿Cómo sabemos que 0.6467 es el número correcto y no otro artefacto?**
+**¿Cómo sabemos que 0.6271 es el número correcto y no otro artefacto?**
 Porque está verificado por una prueba automática que comprueba que ninguna arista apartada
 aparece en la entrada del modelo, en ninguna de las dos direcciones — y porque tres controles
 independientes (fuga de mensajes, sesgo de popularidad, heurísticas topológicas) coinciden en
