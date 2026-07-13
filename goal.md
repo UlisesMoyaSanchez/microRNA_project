@@ -33,22 +33,30 @@ in MS — not just a cell-type classifier.
 
 ## 2. Current Status & Key Results
 
-> **READ THIS FIRST (2026-07-11).** The headline link-prediction result did not
-> survive a correct evaluation. AUROC fell from **0.9836 → 0.6268** once the
-> miRNA→gene edges were genuinely held out. The original framing of this project
-> is no longer supportable. See §2.1 and §2.2. The cell-type classification
-> result is unaffected and remains genuine.
+> **READ THIS FIRST (updated 2026-07-13).** The headline link-prediction result did
+> not survive a correct evaluation. AUROC fell from **0.9836 → 0.6467** once the
+> miRNA→gene edges were genuinely held out — and a **no-learning heuristic scores
+> 0.5911** on the same edges. The original framing of this project is no longer
+> supportable. See §2.1–§2.2. Cell-type classification is unaffected and remains
+> genuine (**0.9950**).
+>
+> **Full evidence base: [`results/EVALUATION_AUDIT.md`](results/EVALUATION_AUDIT.md)**
+> · Spanish summary for collaborators: [`results/RESUMEN_AUDITORIA.md`](results/RESUMEN_AUDITORIA.md)
 
 ### 2.1 The decision gate: what an honest protocol gives
 
-Three DGX runs, in order. Each one narrows the question.
+Four DGX runs, in order. Each one narrows the question.
 
 | Protocol | AUROC | Job |
 |---|:--:|---|
 | Published: all edges scorable, uniform negatives | **0.9836** | 5594 |
 | Same checkpoint, but scored pair masked from message passing | 0.9766 | 5593 |
 | Same checkpoint, degree-matched (hard) negatives — edges *still seen* | 0.8828 | 5595/5596 |
-| **Retrained on a real held-out edge split + hard negatives** | **0.6268** | **5603** |
+| **Retrained on a real held-out edge split + hard negatives** | **0.6467** | **5605** |
+
+*(Job 5603 was the first attempt at this run and reported 0.6268; it early-stopped on
+`val_loss`, which peaks at epoch 1. Job 5605 selects on `val_auroc`, converged at epoch
+144, and supersedes it. Both agree on the conclusion.)*
 
 What each step established:
 
@@ -60,36 +68,89 @@ What each step established:
 - **It was weight-level memorization.** This is what neither diagnostic could
   rule out, and it is what the retrain exposed. Once the pairs are genuinely
   unseen — absent from supervision *and* from the encoder's input, in both
-  directions — the model retains only **0.6268**. Above chance (0.5), but not a
+  directions — the model retains only **0.6467**. Above chance (0.5), but not a
   useful predictor of novel regulatory interactions.
 
-Training curve (job 5603) — the two tasks separate cleanly:
+Training curve (job 5605) — the two tasks separate cleanly:
 
 ```
-Epoch 001  train 1.1605  val 1.1136  AUROC 0.5324  cell_acc 0.7046
-Epoch 016  train 0.3279  val 1.9532  AUROC 0.6268  cell_acc 0.9307   <- peak AUROC
-Epoch 026  train 0.2087  val 2.7011  AUROC 0.6197  cell_acc 0.9556   <- early stop
+Epoch 001  train 1.1605  val 1.1135  AUROC 0.5343  cell_acc 0.7049
+Epoch 119  ...                       AUROC 0.6467  ...              <- best (saved)
+Epoch 144  train 0.0384  val 6.9147  AUROC 0.6395  cell_acc 0.9950  <- early stop
 ```
 
-Training loss falls while validation loss rises **monotonically from epoch 1** —
-immediate overfitting on the link task. Meanwhile cell accuracy climbs to 0.9556
-and is still climbing when the run stops. **Cell typing is real; the regulatory
-link head was an artifact of the evaluation protocol.**
+Training loss falls to 0.038 while validation loss climbs to 6.9 — **the link head
+overfits from epoch 1**. Meanwhile cell accuracy rises monotonically to **0.9950**.
+**Cell typing is real; the regulatory link head was an artifact of the protocol.**
 
-### 2.2 Why 0.62 may be a ceiling, not a bug
+### 2.2 It is close to a ceiling — and the protocol was doing the work (job 5604)
 
-Worth settling before spending more GPU time. **miRDB edges are derived from
-seed-sequence complementarity, and the graph contains no sequence information at
-all.** Gene features are 1-D (mean expression); miRNA features are a learnable
-embedding with no biological content. For a *held-out* pair, the only available
-route to a prediction is topology — co-targeting structure among the remaining
-edges. It is entirely plausible that ~0.62 is near the information ceiling of the
-task *as currently posed*, and that no architecture change moves it.
+**miRDB edges are derived from seed-sequence complementarity, and the graph contains
+no sequence information at all.** Gene features are 1-D (mean expression); miRNA
+features are a learnable embedding with no biological content. For a *held-out* pair
+there is no sequence signal to generalize from — only topology.
 
-**Decisive test (cheap, pending):** a topology-only heuristic baseline
-(common-neighbour / co-targeting Jaccard, no learning) on the same held-out
-edges. If it also lands near 0.62, the HGT adds nothing over trivial graph
-structure and the ceiling is in the data, not the model.
+The decisive test has now been run. `training/eval_topology_baseline.py` scores
+**model-free** heuristics on the *same* 4,418 held-out edges, from training edges only:
+
+| Scorer | Uniform neg | Degree-matched neg |
+|---|:--:|:--:|
+| `gene_degree` — **ignores the miRNA entirely** | **0.8723** | 0.5123 |
+| `pref_attach` | 0.8371 | 0.5071 |
+| `common_neigh` | 0.8582 | 0.5836 |
+| `adamic_adar` — best heuristic | 0.8616 | **0.5911** |
+| **HGT V2, retrained** | — | **0.6467** |
+
+**(a) The HGT beats trivial topology by 5.6 points** (0.6467 vs 0.5911). Real, but a
+4-layer/512-channel transformer buying ~5 AUROC points over a two-line formula from
+1999 is not regulatory inference — it is slightly-better-than-trivial graph completion.
+**This rules out Path B:** no architecture change bridges 0.65 → 0.9 without a sequence
+signal in the graph.
+
+**(b) The strongest number in the project: under uniform negatives, a scorer that
+ignores the miRNA entirely reaches 0.8723.** Gene popularity alone.
+
+| Protocol | Popularity heuristic | Deep model |
+|---|:--:|:--:|
+| **Sloppy** (uniform negatives) | **0.8723** | 0.9836 |
+| **Honest** (held-out + matched neg.) | **0.5123** | 0.6467 |
+
+Under the published protocol, the gap between a one-line heuristic and a graph
+transformer is ~11 points. **The evaluation protocol, not the model, was doing most of
+the work.** That is a model-free control no reviewer can argue with, and it is what
+Path A rests on.
+
+### 2.2b Attribution — which sin cost what? (jobs 5605 + 5607)
+
+Both trained *and* evaluated with the same negative distribution, so nothing is confounded:
+
+| | Uniform neg | Degree-matched neg |
+|---|:--:|:--:|
+| **Edges seen** (published) | **0.9836** | 0.8828 |
+| **Edges held out** (honest) | 0.8132 | **0.6467** |
+
+- Honest **split** alone: **−0.170**
+- Honest **negatives** alone: **−0.101**
+- Both: **−0.337** — *super-additive* (−0.170 + −0.101 = −0.271). Fixing only one of the
+  two problems substantially understates the damage.
+
+**The sharpest fact in the audit.** On the same held-out edges under the same sloppy
+protocol (uniform negatives):
+
+| Held-out edges + uniform negatives | AUROC |
+|---|:--:|
+| `gene_degree` — no learning, no model, **ignores the miRNA** | **0.8723** |
+| HGT V2 trained end-to-end with uniform negatives (job 5607) | **0.8132** |
+
+**The one-line popularity heuristic beats the graph transformer by 6 points.** Under the
+published evaluation protocol the deep model was not merely unnecessary — it was *worse*
+than counting how many miRNAs already target the gene.
+
+*(An earlier attempt, job 5606, scored the matched-negative checkpoint against uniform
+negatives and got 0.5533 — lower than against matched negatives, which is nonsense on its
+face. That is a **train/eval mismatch, not a difficulty measure**: a model trained on
+matched negatives learns to ignore gene degree and then cannot exploit it. Not reported as
+a result; it is why job 5607 exists.)*
 
 ### 2.3 What still stands
 
@@ -138,17 +199,26 @@ link prediction from 0.62 to 0.98, and uniform negatives inflate it further.*
   review.
 - Cost: low. The experiments are largely done.
 
-### Path B — Fix the model (rejected for now)
+### Path B — Fix the model (REJECTED — the condition was tested and failed)
 
 The honest lever is **features, not architecture**: add miRNA seed sequence and
 gene 3′UTR sequence so held-out pairs have something to generalize *from*;
-enrich gene features beyond 1-D mean expression. Cheaper intermediate attempts
-(lower `disjoint_train_ratio`, shrink the model, regularize harder, early-stop
-on AUROC) are worth one run but would not plausibly take 0.62 near 0.9.
+enrich gene features beyond 1-D mean expression.
 
-**Rejected because** it is a substantially different project, and §2.2 suggests
-the ceiling may be in the data. Revisit only if the topology baseline shows the
-HGT genuinely beats trivial structure.
+**The stated condition for revisiting this was:** *"only if the topology baseline
+shows the HGT genuinely beats trivial structure."* **That test has now run (job
+5604), and the answer does not clear the bar:**
+
+- The HGT beats the best model-free heuristic by **5.6 points** (0.6467 vs 0.5911).
+  Non-zero, but a 4-layer/512-channel transformer buying ~5 AUROC points over a
+  two-line 1999 formula is not evidence that the architecture is doing real work.
+- Worse, under uniform negatives the model (0.8132) is **beaten by a heuristic that
+  ignores the miRNA entirely** (0.8723) — see §2.2b.
+
+So the marginal value of the model over trivial topology is small and, under the
+sloppy protocol, *negative*. Combined with the fact that the graph carries no
+sequence signal, there is no plausible route from 0.65 to a usable number without
+rebuilding the feature space — which is a different project. **Path B is closed.**
 
 ### Path C — Drop link prediction, keep cell-type + interpretability (rejected)
 
@@ -187,7 +257,7 @@ Ordered roughly by importance / reviewer visibility:
       44,186 positives → 24,745 message-passing / 10,605 train-supervision /
       4,418 val / 4,418 test, verified leak-free by `training/test_edge_split.py`.
 
-      **CLOSED (job 5603): held-out AUROC = 0.6268, not 0.98.** The leak was
+      **CLOSED (job 5605): held-out AUROC = 0.6467, not 0.98.** The leak was
       weight-level memorization after all — exactly what the diagnostic warned
       it could not rule out. See §2.1. This gap is resolved *as a gap*, but the
       answer invalidates the original paper (§2.5).
@@ -213,8 +283,9 @@ Ordered roughly by importance / reviewer visibility:
       **CLOSED, with a correction (job 5603).** The 0.8828 did *not* survive.
       It was measured on a checkpoint that had those pairs as training targets,
       so it still carried memorization. On genuinely held-out edges the model
-      gets **0.6268**. Uniform negatives were inflating the number, but that was
-      the *smaller* of the two problems.
+      gets **0.6467**. Uniform negatives were inflating the number (−0.101), but
+      the missing split cost more (−0.170), and together they cost −0.337. See
+      §2.2b.
 - [ ] **Data provenance in the manuscript text.** The interaction table is
       miRDB v6.0 predictions, not miRTarBase (miRTarBase's server was
       unavailable during data collection). This is already disclosed inside
@@ -281,7 +352,7 @@ paper (RNA Biology/Scientific Reports-style).
 
 ## 5. Next Steps — executing Path A
 
-**The gate closed (job 5603): held-out AUROC = 0.6268.** See §2.1. The project
+**The gate closed (job 5605): held-out AUROC = 0.6467.** See §2.1. The project
 is now a **methods-critique paper** (§2.5, Path A). The steps below serve that
 paper, not the original one.
 

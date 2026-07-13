@@ -1,3 +1,32 @@
+> # ⚠️ SUPERSEDED — DO NOT CITE
+>
+> **Archived 2026-07-12.** This document is kept as the historical record, not as a
+> result. It is preserved deliberately: a paper about honest evaluation should not
+> quietly delete its own wrong numbers.
+>
+> **What it claims:** link-prediction AUROC **0.9836**, presented as evidence that the
+> model predicts miRNA→gene regulation, plus the derived regulatory circuits
+> (`hsa-miR-23a-3p → CCL7` at 0.986, etc.).
+>
+> **Why it is wrong:** the miRNA→gene edges scored at evaluation were the *same edges
+> supervised during training*. There was no edge-level train/test split. Retrained under
+> a verified leak-free split with degree-matched negatives, the same architecture scores
+> **AUROC 0.6467** (job 5605) — against **0.5911** for Adamic-Adar, a no-learning
+> heuristic. The 0.98 was an artifact of the evaluation protocol.
+>
+> **A second error, specific to this document:** it describes the interactions as
+> *"44,186 interacciones validadas experimentalmente (miRTarBase, miRDB)"*. They are
+> **miRDB v6.0 sequence-based predictions (score ≥ 80)**, not experimentally validated,
+> and not miRTarBase. This matters: the graph contains no sequence information, which is
+> precisely why the model cannot generalize to unseen pairs.
+>
+> **Cell-type classification is unaffected** and remains genuine (0.9950).
+>
+> **Correct numbers:** [`results/EVALUATION_AUDIT.md`](../EVALUATION_AUDIT.md) ·
+> Spanish summary: [`results/RESUMEN_AUDITORIA.md`](../RESUMEN_AUDITORIA.md)
+
+---
+
 # Reporte de Resultados — miRNA-MS Project
 **Fecha:** 30 de mayo de 2026  
 **Modelo:** `miRNAGraphTransformer` V2 — `checkpoints_v2/best_model.pt` (epoch 191)  

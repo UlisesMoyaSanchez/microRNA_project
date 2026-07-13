@@ -1,3 +1,26 @@
+> # ⚠️ SUPERSEDED — DO NOT CITE
+>
+> **Archived 2026-07-12.** Kept as the historical record, not as a result.
+>
+> **What it claims:** *"rendimiento fuerte de link prediction"* — AUROC **0.9836**, with
+> `nan` for every baseline.
+>
+> **Why it is wrong, twice:**
+> 1. The **0.9836** came from an evaluation with no edge-level train/test split: the
+>    scored miRNA→gene edges were the same ones supervised during training. Retrained
+>    honestly, the same model scores **0.6467** (job 5605).
+> 2. The **`nan` baselines were a bug**, not a result (`HeteroData.get()` silently
+>    returned `None` for the tuple edge-type key and disabled link prediction). Once
+>    fixed, `homo_gcn` reaches 0.9170 and `ablation_no_coexpr` 0.9374 — so the claim
+>    that V2 was the *only* model doing link prediction was never true.
+>
+> **Cell-type classification is unaffected** and remains genuine (0.9950).
+>
+> **Correct numbers:** [`results/EVALUATION_AUDIT.md`](../EVALUATION_AUDIT.md) ·
+> Spanish summary: [`results/RESUMEN_AUDITORIA.md`](../RESUMEN_AUDITORIA.md)
+
+---
+
 # Resumen Ejecutivo — miRNA-MS Project
 
 **Fecha:** 30 de mayo de 2026  

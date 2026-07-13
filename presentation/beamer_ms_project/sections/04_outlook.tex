@@ -2,10 +2,11 @@
 
 \begin{frame}{Conclusiones hasta ahora}
   \begin{enumerate}
-    \item El pipeline de datos y el grafo heterog\'eneo ya est\'an operativos y producen artefactos reutilizables.
-    \item La variante V2 es, hasta ahora, la mejor configuraci\'on para combinar clasificaci\'on celular y predicci\'on de enlaces miRNA-gen.
-    \item El proyecto ya genera resultados interpretables: saliencia por tipo celular, circuitos regulatorios y enriquecimiento funcional.
-    \item Existen candidatos con inter\'es biol\'ogico directo para EM, pero necesitan validaci\'on externa y contraste con literatura/experimento.
+    \item El pipeline de datos y el grafo heterog\'eneo est\'an operativos y producen artefactos reutilizables.
+    \item \textbf{La clasificaci\'on celular es s\'olida y real} (0.9950), evaluada con una partici\'on correcta a nivel de c\'elula.
+    \item \textbf{La predicci\'on de regulaci\'on miRNA$\to$gen \emph{no} sobrevive a una evaluaci\'on correcta}: cae de 0.9836 a \textbf{0.6467} --- apenas 5.6 puntos por encima de una heur\'istica sin aprendizaje. Ver Experimentos 3 y 4.
+    \item En consecuencia, los circuitos regulatorios concretos \textbf{no son hallazgos validados} y su validaci\'on externa queda \textbf{suspendida}.
+    \item El aporte publicable pasa a ser \textbf{la auditor\'ia misma} y el protocolo corregido.
   \end{enumerate}
 \end{frame}
 
@@ -122,9 +123,77 @@
       \item \textbf{Columna 2 (controles pareados):} el marcador tonto se desploma al azar (0.515), como debe. \textbf{Y nuestro modelo aguanta en 0.8828.}
     \end{itemize}
     \vspace{0.2em}
-    \textbf{Conclusi\'on:} el modelo aprendi\'o \textbf{especificidad regulatoria real}, no popularidad. Pero el n\'umero honesto es \textbf{0.88, no 0.98}.
+    \textbf{Lectura \emph{en ese momento}:} parec\'ia especificidad regulatoria real, no popularidad --- con el n\'umero honesto en 0.88 y no 0.98.
+
+    \vspace{0.2em}
+    \textbf{Pero este experimento tampoco pod\'ia cerrar el caso}, y aqu\'i est\'a la trampa: se mide sobre un modelo que \emph{ya vio esos pares en el entrenamiento}. El 0.8828 a\'un pod\'ia ser memorizaci\'on. \textbf{El Experimento 3 lo desmiente.}
   \end{block}
 \end{frame}
+
+\begin{frame}{Experimento 3 --- El reentrenamiento honesto (el resultado)}
+  \begin{block}{Lo que los dos experimentos anteriores no pod\'ian descartar}
+    \scriptsize
+    Ambos usan el modelo \textbf{ya entrenado}, y ese modelo vio las 44,186 interacciones como respuestas. Aunque no las lea del grafo, \textbf{pudo haberlas memorizado en sus par\'ametros}. Ning\'un an\'alisis \emph{post hoc} resuelve eso: solo se resuelve \textbf{reentrenando} sobre una cohorte de validaci\'on real.
+  \end{block}
+
+  \vspace{0.3em}
+  \centering
+  \small
+  \begin{tabular}{lc}
+    \toprule
+    \textbf{Protocolo} & \textbf{AUROC} \\
+    \midrule
+    Publicado (aristas vistas, controles al azar) & 0.9836 \\
+    \textbf{Reentrenado: aristas apartadas + controles pareados} & \textbf{0.6467} \\
+    \midrule
+    Clasificaci\'on celular (mismo modelo) & \textbf{0.9950} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.5em}
+  \raggedright
+  \begin{block}{Lectura}
+    \scriptsize
+    \textbf{Era memorizaci\'on en los pesos} --- exactamente lo \'unico que los dos experimentos anteriores no pod\'ian excluir. Se apartaron 8,836 interacciones (20\%) que el modelo \textbf{nunca vio}: ni como respuesta, ni en el grafo, ni en direcci\'on inversa (verificado con una prueba autom\'atica de fuga).
+
+    \vspace{0.2em}
+    \textbf{La clasificaci\'on celular no se ve afectada (0.9950).} Las dos tareas se separan limpiamente: el tipado celular es real; el cabezal de regulaci\'on era un artefacto del protocolo.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Experimento 4 --- \textquestiondown{}Es logro del modelo, o techo de la tarea?}
+  \begin{block}{Control sin modelo}
+    \scriptsize
+    Heur\'isticas \textbf{sin aprendizaje} sobre las \emph{mismas} 4,418 aristas apartadas, usando solo aristas de entrenamiento. Si una f\'ormula trivial iguala al modelo, el HGT no aporta nada.
+  \end{block}
+
+  \vspace{0.2em}
+  \centering
+  \scriptsize
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Puntuador} & \textbf{Controles al azar} & \textbf{Controles pareados} \\
+    \midrule
+    Popularidad del gen --- \emph{ignora al miRNA} & \textbf{0.8723} & 0.5123 \\
+    Adamic-Adar (topolog\'ia, sin aprender) & 0.8616 & \textbf{0.5911} \\
+    \textbf{HGT V2 reentrenado} & --- & \textbf{0.6467} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.4em}
+  \raggedright
+  \begin{block}{Las dos conclusiones}
+    \scriptsize
+    \textbf{(a)} El HGT supera a la topolog\'ia trivial por \textbf{5.6 puntos} (0.6467 vs 0.5911). Un transformer de 4 capas y 512 canales rinde $\approx$5 puntos m\'as que una f\'ormula de dos l\'ineas de 1999. Es completado de grafo, no inferencia regulatoria.
+
+    \vspace{0.2em}
+    \textbf{(b) El n\'umero m\'as importante del proyecto:} con controles al azar, un puntuador que \textbf{ignora por completo al miRNA} alcanza \textbf{0.8723}. Es decir: \textbf{el protocolo de evaluaci\'on, no el modelo, hac\'ia la mayor parte del trabajo.}
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
 
 \begin{frame}{Evaluaci\'on t\'ecnica independiente --- riesgos secundarios y precisiones}
   \small
@@ -136,39 +205,63 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Lo que falta: el \'ultimo experimento pendiente}
-  \begin{block}{Lo que los dos experimentos \emph{no} pueden descartar}
+\begin{frame}{Experimento 5 --- \textquestiondown{}Cu\'anto cost\'o cada error?}
+  \begin{block}{Dise\~no}
     \scriptsize
-    Ambos usan el modelo \textbf{ya entrenado}, y ese modelo vio las 44,186 interacciones como respuestas durante el entrenamiento. Aunque no las lea del grafo (Experimento 1), \textbf{pudo haberlas memorizado en sus par\'ametros}. Ning\'un an\'alisis \emph{post hoc} resuelve esto: solo se resuelve \textbf{reentrenando} sobre una cohorte de validaci\'on real.
+    El reentrenamiento cambi\'o \textbf{dos cosas a la vez}. Para separarlas, reentrenamos tambi\'en con \textbf{controles al azar} sobre la misma partici\'on.
   \end{block}
 
   \vspace{0.2em}
-  \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      \begin{block}{Ya construido y verificado}
-        \scriptsize
-        Se apartaron \textbf{8,836 interacciones} (20\%) que el modelo \textbf{nunca ver\'a}: ni como respuesta, ni dibujadas en el grafo, ni en direcci\'on inversa. Comprobado con una prueba autom\'atica de fuga.
+  \centering
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+     & \textbf{Controles al azar} & \textbf{Controles pareados} \\
+    \midrule
+    Aristas \textbf{vistas} (publicado) & \textbf{0.9836} & 0.8828 \\
+    Aristas \textbf{apartadas} (honesto) & 0.8132 & \textbf{0.6467} \\
+    \bottomrule
+  \end{tabular}
 
-        \vspace{0.2em}
-        44,186 = 24,745 (grafo) + 10,605 (entrenar) + 4,418 (validar) + 4,418 (probar)
+  \vspace{0.4em}
+  \raggedright
+  \begin{block}{Los dos errores se \emph{potencian}}
+    \scriptsize
+    Partici\'on honesta sola: \textbf{$-$0.170}. Controles honestos solos: \textbf{$-$0.101}. Los dos juntos: \textbf{$-$0.337} --- \emph{m\'as} que la suma ($-$0.271). \textbf{Corregir solo uno de los dos subestima el da\~no.}
+
+    \vspace{0.3em}
+    \textbf{Y el dato m\'as contundente:} sobre aristas apartadas con controles al azar, la \textbf{popularidad del gen sin modelo alcanza 0.8723} y \textbf{nuestro HGT entrenado alcanza 0.8132}. \textbf{La heur\'istica de una l\'inea le gana al transformer por 6 puntos.} Bajo el protocolo publicado, el modelo profundo era \emph{peor} que contar cu\'antos miRNAs ya apuntan a ese gen.
+  \end{block}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+
+\begin{frame}{Qu\'e art\'iculo escribimos ahora}
+  \begin{block}{El error \emph{es} el resultado}
+    \small
+    \emph{La evaluaci\'on transductiva infla la predicci\'on de blancos de miRNA de 0.65 a 0.98, y los controles no pareados la inflan a\'un m\'as --- hasta que una heur\'istica de una l\'inea alcanza 0.87.}
+  \end{block}
+
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Se suspende}
+        \scriptsize
+        Todos los circuitos concretos (miR-23a-3p$\to$CCL7, miR-146a-3p/Th17, miR-140-5p/oligo) est\'an ordenados por ese cabezal. \textbf{No son hallazgos validados.} Se suspende la validaci\'on externa: contrastarlos ahora arriesgar\'ia validar un artefacto.
       \end{block}
     \end{column}
-    \begin{column}{0.45\textwidth}
-      \begin{block}{Qu\'e esperamos}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{Se mantiene}
         \scriptsize
-        El AUROC honesto deber\'ia caer \textbf{en o por debajo de 0.88}.
-        \begin{itemize}
-          \item $\gtrsim$0.80 $\Rightarrow$ generaliza. Publicable como \emph{predicci\'on}.
-          \item $\to$0.55 $\Rightarrow$ hab\'ia memorizado. Replantear.
-        \end{itemize}
+        La \textbf{clasificaci\'on celular (0.9950)}, con partici\'on correcta. Y toda la \textbf{infraestructura de auditor\'ia}, que es ahora el activo principal: partici\'on de aristas, prueba de fuga, y tres controles independientes.
       \end{block}
     \end{column}
   \end{columns}
 
-  \vspace{0.2em}
-  \begin{block}{Postura ante la audiencia}
+  \vspace{0.3em}
+  \begin{block}{}
     \scriptsize
-    \textbf{Preferimos encontrar esto nosotros que un revisor.} Hasta que ese n\'umero exista, \textbf{no} presentamos los circuitos concretos como hallazgos validados: todos derivan del modelo que a\'un no ha pasado esta prueba.
+    Este defecto es \textbf{muy com\'un} en la literatura de GNN en biolog\'ia. Tenemos la demostraci\'on completa sobre un grafo biom\'edico real m\'as el protocolo corregido. \textbf{No es el art\'iculo que plane\'abamos, pero es defendible y nadie lo puede desmontar.}
   \end{block}
 \end{frame}
 

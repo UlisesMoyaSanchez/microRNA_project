@@ -188,31 +188,35 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{M\'etricas principales en test y lectura para audiencia biom\'edica}
+\begin{frame}{M\'etricas en test --- y por qu\'e hay que leerlas con cuidado}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
       \small
-      \begin{tabular}{lc}
+      \begin{tabular}{lcc}
         \toprule
-        \textbf{M\'etrica} & \textbf{Valor} \\
+        \textbf{M\'etrica} & \textbf{Protocolo} & \textbf{Protocolo} \\
+                           & \textbf{publicado} & \textbf{honesto} \\
         \midrule
-        AUROC & 0.9776--0.9794 \\
-        AUPRC & 0.9673--0.9728 \\
-        Cell accuracy & 0.9941--0.9943 \\
-        Cell F1-macro & 0.9890--0.9892 \\
+        AUROC   & 0.9836 & \textbf{0.6467} \\
+        AUPRC   & 0.9731 & --- \\
+        Cell acc & 0.9961 & \textbf{0.9950} \\
         \bottomrule
       \end{tabular}
 
       \vspace{0.6em}
       \begin{itemize}
-        \item El modelo clasifica casi perfectamente los tipos celulares en test.
-        \item Tambi\'en mantiene buen poder para priorizar enlaces regulatorios plausibles.
+        \scriptsize
+        \item La clasificaci\'on celular \textbf{no cambia}: es real bajo ambos protocolos.
+        \item El AUROC de regulaci\'on \textbf{s\'i} cambia, y mucho. Ver Experimentos 3 y 4.
       \end{itemize}
     \end{column}
     \begin{column}{0.45\textwidth}
-      \begin{block}{Interpretaci\'on sencilla}
-        \small
-        La red no solo ``dice qu\'e c\'elula es'', sino qu\'e tambi\'en asigna una probabilidad a pares miRNA-gen con relevancia para EM. Eso acerca el proyecto a hip\'otesis mecan\'isticas y no solo descriptivas.
+      \begin{block}{Advertencia}
+        \scriptsize
+        La columna ``publicado'' mide qu\'e tan bien el modelo \textbf{reconstruye} interacciones que ya vio, contra controles no pareados. \textbf{No mide predicci\'on.}
+
+        \vspace{0.2em}
+        Las diapositivas siguientes (saliencia, circuitos, enriquecimiento) derivan \emph{todas} del modelo evaluado con el protocolo publicado. Se presentan como \textbf{hip\'otesis preliminares}, no como hallazgos.
       \end{block}
     \end{column}
   \end{columns}
