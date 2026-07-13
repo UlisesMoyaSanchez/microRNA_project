@@ -279,16 +279,53 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
 
 1. **~~Test-set numbers~~ — DONE (2026-07-13).** Was the most urgent: the headline was a
    model-selected validation number.
-2. **Multi-seed (n=1 → 5).** Every number above is a single seed. A quantitative claim about
-   inflation *magnitude* requires variance. **Non-negotiable.**
+2. **~~Multi-seed~~ — HELD-OUT ROW DONE (2026-07-13); seen-edges row BLOCKED.**
+   4 seeds {123, 777, 2024, 7} × 2 training samplers, scored on the untouched **test** split
+   (`training/aggregate_seeds.py` → [`multiseed_auroc_test.json`](comparison/multiseed_auroc_test.json)).
+   **Every claim in this audit survives, with small spread** — the single-seed numbers were
+   representative, not lucky.
+
+   Held-out test AUROC, mean ± std, n=4:
+
+   | trained with | eval: uniform neg | eval: degree-matched neg |
+   |---|---|---|
+   | degree-matched (hard) | 0.5594 ± 0.0073 | **0.6262 ± 0.0071** |
+   | uniform | **0.8056 ± 0.0063** | 0.5395 ± 0.0249 |
+   | *gene-degree heuristic (n=1)* | *0.8712* | *0.5126* |
+
+   The honest headline is **0.6262 ± 0.0071** (single-seed 0.6271 sat inside 0.2 σ). And the
+   central claim is now measured, not asserted: a model **trained with uniform negatives**
+   reaches 0.8056 ± 0.0063 under uniform evaluation — **below the 0.8712 one-line gene-degree
+   heuristic** — and **falls to 0.5395 ± 0.0249 (chance)** the moment the negatives are
+   degree-matched. *It learned gene popularity and nothing else.* Trained with hard negatives
+   instead, it clears the heuristic by **+0.1136**. AUPRC agrees throughout.
+
+   **Still blocked — the seen-edges row has no error bar, and cannot get one by re-running.**
+   The published **0.9836 / 0.8828** are **constants hardcoded at `eval_heldout_grid.py:166`**,
+   not recomputed per seed, so *"cost of an honest split = +0.4282"* remains n=1. Worse,
+   `train.py:271` now builds the edge split **unconditionally** (`hard_negatives` defaults to
+   `True`, no off switch), and `config_v2.yaml` sets neither key — so retraining it today
+   silently reproduces the *edge-split* run, not the transductive one. The leaky path was
+   removed in `8a12ce3`. Either re-add the leak behind an explicit `edge_split: false` flag and
+   retrain 4 seeds, or **report the attribution as single-seed and say so** — recommended, since
+   the ~0.43 inflation dwarfs the σ ≈ 0.007–0.025 we measure everywhere else.
 3. **The finding must be about the *protocol*, not about our model.** Right now we have only
    shown that *our* HGT was evaluated badly. Run `random`, `mlp`, `homo_gcn`,
    `ablation_no_coexpr` and `hgt_v2` through **both** protocols. If the inflation appears for
    *every* architecture, the claim becomes structural rather than anecdotal.
-4. **Support the premise.** The paper's motivating claim — *"this flaw is widespread in
-   GNN-for-biology"* — is currently **asserted and never shown**, which is a strawman a
-   reviewer will name. Needs a survey of ~20–30 recent papers classifying their evaluation
-   protocol (edge split? reverse relation? negatives? model-free baseline?).
+4. **~~Support the premise~~ — PILOT DONE (n=7):** [`LITERATURE_SURVEY.md`](LITERATURE_SURVEY.md).
+   It **corrected the claim we were about to make.** The field does *not* routinely leak test
+   edges — 2/7 strip them correctly, and our own original split (cells only) was **worse than
+   the norm**. What *is* universal: **0/7 papers report any model-free baseline**, unlabeled
+   pairs are treated as uniform negatives in the majority, and 3/7 methods sections do not let
+   the reader determine whether held-out edges reached the encoder at all.
+
+   **This is the motivation section, and it is stronger than the strawman would have been:**
+   published AUROCs in this literature sit at **0.91–0.99**; under that same protocol, on a
+   real biomedical graph, a one-line popularity heuristic reaches **0.8712** — inside that band
+   — and beats a trained graph transformer. *A field that never reports a model-free control
+   cannot know whether its 0.97 is a result or a popularity effect.*
+   **Still needed:** expand to 20–30 papers, two independent raters for the "unclear" calls.
 5. **Generalize past our own graph.** One dataset and one interaction database is not a claim
    about a field. Repeat the audit on a second, independent interaction source — **miRTarBase**
    (experimentally validated, and independent *in kind* from miRDB), with TargetScan as a

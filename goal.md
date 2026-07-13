@@ -93,10 +93,14 @@ trained with uniform negatives learns nothing but gene popularity.*
 - We have the full decomposition and the instrumentation to prove it: the
   message-passing leakage diagnostic, the popularity-bias 2×2 (hard negatives ×
   degree heuristic), and the honest retrain.
-- This flaw is widespread in GNN-for-biology link-prediction papers. A clean,
-  quantified, reproducible demonstration on a real biomedical graph — plus the
-  corrected protocol (`training/splits.py`) as a reusable contribution — is a
-  genuine paper.
+- **The premise is now evidenced** (`results/LITERATURE_SURVEY.md`, pilot n=7) — but it
+  is **not** the premise we assumed. The field does *not* routinely leak test edges
+  (2/7 strip them correctly; our own split was *worse* than the norm). What is universal
+  is that **0/7 papers report any model-free baseline**, while unlabeled pairs are treated
+  as uniform negatives in the majority. Published AUROCs sit at 0.91–0.99 — and under that
+  same protocol a one-line popularity heuristic reaches 0.8712 on our graph. **A field with
+  no model-free control cannot know whether its 0.97 is a result or a popularity effect.**
+  That claim is supported and requires accusing nobody of leakage.
 - **It is not the paper we set out to write, but it is defensible, and nobody
   can take it apart.** That is worth more than a headline that collapses under
   review.
@@ -264,24 +268,64 @@ Full detail in [`results/EVALUATION_AUDIT.md`](results/EVALUATION_AUDIT.md).
       model-*selected* `val_auroc`. Reporting it would have inflated our own result by
       +0.020 in a paper about optimistically-biased evaluation. Now 0.6271 (test).
 
+- [x] **Multi-seed, held-out row (2026-07-13).** 4 seeds {123, 777, 2024, 7} × 2 training
+      samplers, all scored on the untouched **test** split
+      (`training/aggregate_seeds.py`, `results/comparison/multiseed_auroc_test.json`).
+      **Every headline claim survives, and the spread is small** — the single-seed numbers
+      were representative, not lucky.
+
+      Held-out test AUROC, mean ± std over n=4:
+
+      | trained with | eval: uniform neg | eval: degree-matched neg |
+      |---|---|---|
+      | degree-matched (hard) | 0.5594 ± 0.0073 | **0.6262 ± 0.0071** |
+      | uniform | **0.8056 ± 0.0063** | 0.5395 ± 0.0249 |
+      | *gene-degree heuristic (n=1)* | *0.8712* | *0.5126* |
+
+      Three things are now quantified rather than asserted:
+      1. The honest headline **0.6262 ± 0.0071** (single-seed was 0.6271 — inside 0.2 σ).
+      2. **Uniform negatives buy a model that cannot beat counting edges.** Trained *and*
+         evaluated on uniform negatives it scores 0.8056 ± 0.0063 — which **loses to the
+         one-line gene-degree heuristic (0.8712) by −0.066**. Swap in degree-matched
+         negatives at eval and the same model **collapses to 0.5395 ± 0.0249, i.e. chance.**
+         It learned popularity and nothing else. AUPRC agrees (0.7948 ± 0.0089 → 0.5466).
+      3. **Hard negatives are what make the model non-trivial:** trained hard and evaluated
+         hard, it beats the heuristic **+0.1136** (0.6262 vs 0.5126). *A lower number that
+         means something, versus a higher number that doesn't* — the paper in one row.
+
 ### 5.2 Blocking submission
 
-- [ ] **Multi-seed (n=1 → 5).** Every number is a single seed. A quantitative claim about
-      inflation *magnitude* needs variance. **Non-negotiable.** Clone
-      `configs/config_v2_edgesplit{,_uniform}.yaml` for seeds {123, 777, 2024, 7}; report
-      mean ± std for every cell of the 2×2.
+- [ ] **Multi-seed, the *seen-edges* row — BLOCKED, needs a decision.** The held-out row is
+      done (§5.1), but the top row of the 2×2 — the published **0.9836 / 0.8828** — is a
+      pair of **constants hardcoded at `training/eval_heldout_grid.py:166`** from the
+      original single-seed transductive run. It is *not* recomputed per seed, so every
+      attribution that subtracts from it (*"cost of an honest split = +0.4282"*) still
+      carries **n=1 and no error bar.**
+
+      **It cannot simply be re-run.** `train.py:271` now builds the edge split
+      *unconditionally* (`if _pos is not None`), with `hard_negatives` defaulting to `True`
+      and no flag to disable either. `config_v2.yaml` sets neither key — so training it
+      today reproduces `config_v2_edgesplit.yaml`, **not** the transductive protocol. The
+      leaky code path was deleted in `8a12ce3` and no longer exists. Choose one:
+      - **(a) Re-add the leak behind an explicit `edge_split: false` flag**, retrain 4 seeds,
+        get a real error bar on the inflation magnitude. Honest, and the flag is arguably a
+        *feature* of a paper about this exact bug — but it means reintroducing a bug on purpose.
+      - **(b) Report the attribution as single-seed and say so**, with the ± only on the
+        held-out row. Cheap and defensible; the inflation is ~0.43, far larger than any
+        plausible seed noise (σ ≈ 0.007–0.025 everywhere we *can* measure it).
+      - Recommend **(b)** — the effect dwarfs the variance — unless a reviewer demands (a).
 - [ ] **Make the finding about the *protocol*, not about our model.** We have so far only
       shown that *our* HGT was evaluated badly — a reviewer will say exactly that. Run
       `random`, `mlp`, `homo_gcn`, `ablation_no_coexpr`, `hgt_v2` through **both**
       protocols. `run_baselines.py` already emits two of the three cells; add
       held-out × uniform via `LinkSampler(hard=False)`. If the inflation appears for
       *every* architecture, the claim becomes structural rather than anecdotal.
-- [ ] **Support the premise.** *"This flaw is widespread in GNN-for-biology"* is currently
-      **asserted and never shown** — a strawman a reviewer will name. Survey ~20–30 recent
-      papers (miRNA-target, drug-target, gene-disease link prediction, 2021–2026) and
-      classify each: edge-level split? reverse relation stripped? negative sampler?
-      model-free baseline reported? Output `results/LITERATURE_SURVEY.md`. **The
-      distribution of "no / unclear" *is* the paper's motivation section.**
+- [~] **Support the premise — PILOT DONE (n=7), needs expansion.**
+      `results/LITERATURE_SURVEY.md`. It **corrected our claim**: the leak is *not*
+      universal (2/7 strip test edges correctly), but **0/7 report a model-free baseline**
+      and 3/7 methods sections do not even permit the reader to tell whether held-out edges
+      reached the encoder. Expand to 20–30 papers, add a second independent rater for the
+      "unclear" calls, and record the supporting quote per cell.
 - [ ] **Generalize past our own graph.** One dataset + one interaction database is not a
       claim about a field. Repeat the audit on a second, independent interaction source:
       **miRTarBase** (experimentally validated — independent *in kind*, not just in content;

@@ -1,0 +1,27 @@
+{
+  "checkpoint": "checkpoints_v2_edgesplit_uniform_s123/best_model.pt",
+  "epoch": 15,
+  "split": "test",
+  "n_held_out_edges": 4418,
+  "held_out": {
+    "uniform": {
+      "auroc": 0.8107217205457452,
+      "auprc": 0.8055080225787647,
+      "cell_acc": 0.9121393780442113
+    },
+    "degree_matched": {
+      "auroc": 0.5666234828223867,
+      "auprc": 0.5823317660539031,
+      "cell_acc": 0.9127272727272727
+    }
+  },
+  "reference_seen_edges": {
+    "uniform": 0.9836,
+    "degree_matched": 0.8828
+  },
+  "attribution": {
+    "negatives_only": 0.1008,
+    "split_only": 0.17287827945425482,
+    "total": 0.4169765171776133
+  }
+}
