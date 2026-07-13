@@ -161,7 +161,7 @@ Ordered roughly by importance / reviewer visibility:
       44,186 positives → 24,745 message-passing / 10,605 train-supervision /
       4,418 val / 4,418 test, verified leak-free by `training/test_edge_split.py`.
 
-      **CLOSED (job 5605): held-out AUROC = 0.6467, not 0.98.** The leak was
+      **CLOSED (job 5605): held-out test AUROC = 0.6271, not 0.98.** The leak was
       weight-level memorization after all — exactly what the diagnostic warned
       it could not rule out. See §2.1. This gap is resolved *as a gap*, but the
       answer invalidates the original paper (§2.5).
