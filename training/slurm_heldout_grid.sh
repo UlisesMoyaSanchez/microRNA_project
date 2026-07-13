@@ -56,10 +56,12 @@ python training/eval_heldout_grid.py \
     --checkpoint "${CKPT}" \
     --split "${SPLIT}"
 
+CKPT_TAG="$(basename "$(dirname "${CKPT}")")"
+
 echo ""
 echo "========================================"
 echo "Results:"
-cat results/comparison/heldout_grid.json
+cat "results/comparison/heldout_grid_${CKPT_TAG}_${SPLIT}.json"
 echo ""
 echo "Done: $(date)"
 echo "========================================"

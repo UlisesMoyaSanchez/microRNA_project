@@ -54,7 +54,7 @@ python training/eval_topology_baseline.py \
 echo ""
 echo "========================================"
 echo "Results:"
-cat results/comparison/topology_baseline.json
+cat "results/comparison/topology_baseline_${SPLIT}.json"
 echo ""
 echo "Done: $(date)"
 echo "========================================"

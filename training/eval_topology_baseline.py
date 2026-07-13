@@ -123,8 +123,12 @@ def main() -> None:
     p.add_argument("--config", default="configs/config_v2_edgesplit.yaml")
     p.add_argument("--split", default="val", choices=["val", "test"],
                    help="Which held-out edges to score (model selection used val).")
-    p.add_argument("--out", default="results/comparison/topology_baseline.json")
+    # Split-suffixed: a --split test run must not silently clobber the val artifact.
+    p.add_argument("--out", default=None,
+                   help="Default: results/comparison/topology_baseline_<split>.json")
     args = p.parse_args()
+    if args.out is None:
+        args.out = f"results/comparison/topology_baseline_{args.split}.json"
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     log = logging.getLogger(__name__)

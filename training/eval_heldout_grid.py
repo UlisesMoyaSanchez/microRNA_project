@@ -57,7 +57,11 @@ def main() -> None:
     p.add_argument("--config", default="configs/config_v2_edgesplit.yaml")
     p.add_argument("--checkpoint", default=None)
     p.add_argument("--split", default="val", choices=["val", "test"])
-    p.add_argument("--out", default="results/comparison/heldout_grid.json")
+    # Suffixed by split AND checkpoint: this script is run against two different models
+    # (matched-negative and uniform-negative) on two splits, and a fixed path would have
+    # each run silently clobber the last.
+    p.add_argument("--out", default=None,
+                   help="Default: results/comparison/heldout_grid_<ckptdir>_<split>.json")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -111,6 +115,10 @@ def main() -> None:
     model.load_state_dict(ck["model"])
     model.eval()
     log.info(f"Loaded {ckpt} (epoch {ck.get('epoch', '?')})")
+
+    if args.out is None:
+        tag = Path(ckpt).parent.name
+        args.out = f"results/comparison/heldout_grid_{tag}_{args.split}.json"
 
     criterion = CombinedLoss(
         reconstruction_weight=tcfg["loss_reconstruction_weight"],
