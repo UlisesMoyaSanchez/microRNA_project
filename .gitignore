@@ -39,6 +39,15 @@ notebooks/.ipynb_checkpoints/
 data/raw/
 data/processed/
 data/graphs/
+# Alternate-interaction-source arms (processed_mirtarbase/, graphs_mirtarbase/, ...).
+# Same rule as above — these hold multi-hundred-MB graphs and a symlink to a 4.5 GB
+# h5ad — but ignore the CONTENTS rather than the directory, so the README explaining
+# each arm stays tracked. (A bare `data/processed_*/` would ignore the dir itself and
+# git cannot un-ignore a file inside an ignored directory.)
+data/processed_*/*
+data/graphs_*/*
+!data/processed_*/README.md
+!data/graphs_*/README.md
 checkpoints/
 checkpoints_v2/
 checkpoints_v3/

@@ -27,8 +27,13 @@ Output:
 """
 
 import os
+import json
 import pickle
+import hashlib
 import argparse
+import subprocess
+from datetime import datetime, timezone
+
 import yaml
 import numpy as np
 import pandas as pd
@@ -41,7 +46,77 @@ import anndata as ad
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--config", default="configs/config.yaml")
+    p.add_argument("--force", action="store_true",
+                   help="Rebuild even if a graph exists at graphs_dir.")
     return p.parse_args()
+
+
+# ── Build fingerprint ─────────────────────────────────────────────────────────
+
+def config_fingerprint(cfg: dict) -> str:
+    """Hash of the config subtrees that determine the graph's contents.
+
+    Deliberately narrow: seeds, SLURM settings and training hyperparameters do not
+    change the graph, so including them would make every unrelated edit look like a
+    stale graph and train people to pass --force reflexively.
+    """
+    material = {
+        "interactions_file": cfg["data"].get("mirna", {}).get("interactions_file",
+                                                              "mirtarbase_hsa.tsv"),
+        "graph":          cfg["data"]["graph"],
+        "processed_dir":  cfg["data"]["processed_dir"],
+        "raw_dir":        cfg["data"]["raw_dir"],
+        "mirna_init_dim": cfg["model"]["mirna_init_dim"],
+    }
+    blob = json.dumps(material, sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode()).hexdigest()
+
+
+def check_existing_graph(graphs_dir: str, cfg: dict, force: bool) -> bool:
+    """Return True if an existing graph may be reused; raise if it is stale.
+
+    The old behaviour was an unconditional early return: change the config, re-run,
+    and the previous graph came back while every log said success — then you train on
+    it believing it matched the config you just edited. A skip is only safe when the
+    graph on disk was built from a config that produces the same graph.
+    """
+    graph_out    = os.path.join(graphs_dir, "hetero_graph.pt")
+    index_out    = os.path.join(graphs_dir, "index_maps.pkl")
+    manifest_out = os.path.join(graphs_dir, "graph_manifest.json")
+
+    if not (os.path.exists(graph_out) and os.path.exists(index_out)):
+        return False
+    if force:
+        print(f"--force: rebuilding {graph_out}")
+        return False
+
+    want = config_fingerprint(cfg)
+    if not os.path.exists(manifest_out):
+        # Graphs built before manifests existed (including the miRDB graph every
+        # published number comes from). Reusing them is what keeps Path A
+        # reproducible, so do not refuse — but do not pretend it was verified.
+        print(f"Graph already exists: {graph_out}")
+        print(f"  WARNING: no {os.path.basename(manifest_out)} beside it, so it predates "
+              f"build fingerprinting and CANNOT be verified against {want[:12]}.")
+        print( "  If you changed anything under data.graph / data.mirna.interactions_file, "
+               "this graph is stale — re-run with --force or point graphs_dir elsewhere.")
+        return True
+
+    with open(manifest_out) as fh:
+        have = json.load(fh).get("config_fingerprint")
+    if have == want:
+        print(f"Graph already exists and matches this config: {graph_out}")
+        return True
+
+    raise SystemExit(
+        f"\nRefusing to reuse a stale graph.\n"
+        f"  graph:            {graph_out}\n"
+        f"  built from config fingerprint: {have}\n"
+        f"  this config's fingerprint:     {want}\n"
+        f"They differ, so the graph on disk is NOT what this config describes. Either\n"
+        f"re-run with --force to rebuild in place, or set data.graphs_dir to a new\n"
+        f"directory so both graphs survive."
+    )
 
 
 # ── Index builders ─────────────────────────────────────────────────────────────
@@ -177,11 +252,11 @@ def main() -> None:
     graphs_dir = cfg["data"]["graphs_dir"]
     os.makedirs(graphs_dir, exist_ok=True)
 
-    graph_out = os.path.join(graphs_dir, "hetero_graph.pt")
-    index_out = os.path.join(graphs_dir, "index_maps.pkl")
+    graph_out    = os.path.join(graphs_dir, "hetero_graph.pt")
+    index_out    = os.path.join(graphs_dir, "index_maps.pkl")
+    manifest_out = os.path.join(graphs_dir, "graph_manifest.json")
 
-    if os.path.exists(graph_out) and os.path.exists(index_out):
-        print(f"Graph already exists: {graph_out}")
+    if check_existing_graph(graphs_dir, cfg, args.force):
         return
 
     gcfg = cfg["data"]["graph"]
@@ -263,6 +338,27 @@ def main() -> None:
     with open(index_out, "wb") as fh:
         pickle.dump(index_maps, fh)
     print(f"Saved index maps: {index_out}")
+
+    # The manifest is what makes a future skip verifiable instead of hopeful.
+    try:
+        git_sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                                 text=True, check=True).stdout.strip()
+    except Exception:
+        git_sha = "unknown"
+    manifest = {
+        "config_path":        os.path.abspath(args.config),
+        "config_fingerprint": config_fingerprint(cfg),
+        "interactions_file":  interactions_file,
+        "git_sha":            git_sha,
+        "slurm_job_id":       os.environ.get("SLURM_JOB_ID", "local"),
+        "built":              datetime.now(timezone.utc).isoformat(),
+        "n_nodes":            {nt: int(data[nt].num_nodes) for nt in data.node_types},
+        "n_edges":            {str(et): int(data[et].edge_index.shape[1])
+                               for et in data.edge_types},
+    }
+    with open(manifest_out, "w") as fh:
+        json.dump(manifest, fh, indent=2)
+    print(f"Saved manifest:   {manifest_out}  (fingerprint {manifest['config_fingerprint'][:12]})")
 
     print("\nGraph summary:")
     print(data)

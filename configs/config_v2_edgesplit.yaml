@@ -96,3 +96,19 @@ slurm:
   mem:          128gb
   conda_env:    mirna_ms
   conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
+
+# The transductive ("edges seen in training, uniform negatives") reference row for
+# THIS graph — the miRDB v6.0 build. eval_heldout_grid.py subtracts the held-out
+# numbers from these to attribute the collapse; it used to carry them hardcoded, which
+# meant pointing it at any other interaction source produced an attribution against a
+# graph the run had nothing to do with. Declared here so the numbers travel with the
+# graph that owns them, and so a config without this block simply gets no attribution.
+#
+# CAVEAT (goal.md §3.2, still open): these are n=1, hardcoded from the original
+# single-seed run at training/eval_heldout_grid.py before this move, and NOT
+# recomputable today — train.py builds the edge split unconditionally and the leaky
+# path was deleted in 8a12ce3. Do not report them with an error bar.
+evaluation:
+  reference_seen_edges:
+    uniform:        0.9836
+    degree_matched: 0.8828

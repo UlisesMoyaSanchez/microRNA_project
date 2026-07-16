@@ -62,6 +62,17 @@ def main() -> None:
     # each run silently clobber the last.
     p.add_argument("--out", default=None,
                    help="Default: results/comparison/heldout_grid_<ckptdir>_<split>.json")
+    # The seen-edges reference row belongs to the GRAPH, not to this script. It used to
+    # be hardcoded to miRDB's 0.9836/0.8828, which meant running against any other
+    # interaction source emitted an attribution of that graph's held-out numbers against
+    # miRDB's constants — well-formed, plausible, and meaningless. Default None: with no
+    # reference declared, the attribution is omitted rather than computed from someone
+    # else's graph. Only the config that owns those numbers may supply them.
+    p.add_argument("--reference-uniform", type=float, default=None,
+                   help="AUROC of the transductive/uniform protocol on THIS graph. "
+                        "Omit unless it was measured on this graph.")
+    p.add_argument("--reference-matched", type=float, default=None,
+                   help="AUROC of the transductive/degree-matched protocol on THIS graph.")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -147,14 +158,29 @@ def main() -> None:
     log.info("=" * 76)
     log.info("HELD-OUT EDGES — attributing the collapse")
     log.info("=" * 76)
+    # Reference row: CLI wins, else whatever THIS graph's config declares. Absent for any
+    # graph on which the transductive protocol was never measured.
+    ref_cfg = (cfg.get("evaluation") or {}).get("reference_seen_edges") or {}
+    ref_u = args.reference_uniform if args.reference_uniform is not None else ref_cfg.get("uniform")
+    ref_d = args.reference_matched if args.reference_matched is not None else ref_cfg.get("degree_matched")
+    has_reference = ref_u is not None and ref_d is not None
+
     log.info(f"{'':<26}{'uniform neg':>16}{'degree-matched neg':>22}")
     log.info("-" * 76)
-    log.info(f"{'edges seen (original)':<26}{0.9836:>16.4f}{0.8828:>22.4f}")
+    if has_reference:
+        log.info(f"{'edges seen (original)':<26}{ref_u:>16.4f}{ref_d:>22.4f}")
+    else:
+        log.info(f"{'edges seen (original)':<26}{'n/a':>16}{'n/a':>22}")
     log.info(f"{'edges held out (honest)':<26}{u:>16.4f}{d:>22.4f}")
     log.info("-" * 76)
-    log.info(f"Cost of honest negatives alone : {0.9836 - 0.8828:+.4f}")
-    log.info(f"Cost of an honest split alone  : {0.9836 - u:+.4f}")
-    log.info(f"Total, original -> honest      : {0.9836 - d:+.4f}")
+    if has_reference:
+        log.info(f"Cost of honest negatives alone : {ref_u - ref_d:+.4f}")
+        log.info(f"Cost of an honest split alone  : {ref_u - u:+.4f}")
+        log.info(f"Total, original -> honest      : {ref_u - d:+.4f}")
+    else:
+        log.info("Seen-edges reference not declared for this graph — attribution NOT computed.")
+        log.info("Held-out numbers above stand on their own; do not subtract them from")
+        log.info("another graph's constants.")
     log.info("=" * 76)
 
     summary = {
@@ -163,13 +189,22 @@ def main() -> None:
         "split": args.split,
         "n_held_out_edges": int(sup.shape[1]),
         "held_out": results,
-        "reference_seen_edges": {"uniform": 0.9836, "degree_matched": 0.8828},
-        "attribution": {
-            "negatives_only": 0.9836 - 0.8828,
-            "split_only": 0.9836 - u,
-            "total": 0.9836 - d,
-        },
     }
+    if has_reference:
+        summary["reference_seen_edges"] = {"uniform": ref_u, "degree_matched": ref_d}
+        summary["attribution"] = {
+            "negatives_only": ref_u - ref_d,
+            "split_only": ref_u - u,
+            "total": ref_u - d,
+        }
+    else:
+        # Explicit, so a consumer can tell "not measured" from "forgot to record it".
+        summary["reference_seen_edges"] = None
+        summary["attribution"] = None
+        summary["reference_note"] = (
+            "No transductive reference declared for this graph. The attribution is omitted "
+            "rather than computed against another graph's constants."
+        )
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w") as fh:
         json.dump(summary, fh, indent=2)

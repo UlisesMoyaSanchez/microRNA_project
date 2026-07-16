@@ -212,7 +212,8 @@ done and the second is suspended). Full detail in
       and 3/7 methods sections do not even permit the reader to tell whether held-out edges
       reached the encoder. Expand to 20–30 papers, add a second independent rater for the
       "unclear" calls, and record the supporting quote per cell.
-- [~] **Generalize past our own graph — DATA IN HAND (2026-07-16), needs a density decision.**
+- [~] **Generalize past our own graph — DATA IN HAND, PIPELINE UNBLOCKED (2026-07-16).
+      Next gate: pre-register the subsample, then build.**
       One dataset + one interaction database is not a claim about a field. The second,
       independent source is downloaded: **miRTarBase release 10.0**, human, experimentally
       validated → `data/raw/mirtarbase_real_hsa10_all.tsv` (**1,730,376** pairs, 2,983 miRNAs,
@@ -237,10 +238,50 @@ done and the second is suspended). Full detail in
       - **(c) subsample miRTarBase to match miRDB's density/degree distribution** — the cleanest
         controlled contrast; costs an arbitrary sampling choice that must be pre-registered here.
 
+      **Decision taken 2026-07-16: run BOTH arms as a sensitivity analysis** — (b) at real
+      scale, plus (c) density-matched. (a) is rejected. Arm 1 shows the effect where the data
+      actually is; arm 2 shows it is not an artifact of density. If they disagree, that
+      disagreement is itself the finding. The subsample procedure must be **pre-registered
+      here before a single miRTarBase model is trained**, or arm 2 is worthless.
+
       **Provenance caveat (verified 2026-07-16):** the miRTarBase site is headed *"Release 11.0"*
       (cite: miRTarBase 2025, NAR) but serves every file from `/files/10.0/`; `/files/11.0/` 404s
       and nothing states 11.0 content was published. We pin and report **10.0** — the only release
       whose bytes we can verify. Do not cite this as 11.0.
+
+      **Blockers cleared 2026-07-16 — five ways this arm would have produced a green job and a
+      wrong number.** Every one of them is the bug class this paper is about: a default standing
+      in for a computation that never ran. None was hypothetical; each was verified against the
+      live cluster before being fixed.
+      1. `slurm_build_graph.sh` hardcoded `--config configs/config.yaml` and `mkdir -p data/graphs`.
+         Submitting it for miRTarBase would have built (or skipped) the **miRDB** graph and
+         exited 0. Now takes `CONFIG=`/`FORCE=` and derives the output dir from the config.
+      2. `build_heterograph.py` early-returned on any existing graph file. Change the source,
+         re-run, and the old graph came back with every log green — then you train on it. Now
+         writes a `graph_manifest.json` carrying a **config fingerprint** and refuses to reuse a
+         graph whose fingerprint differs; `--force` rebuilds. Verified the miRDB and miRTarBase
+         fingerprints differ (`f5de0079` vs `4ea194e3`). Graphs predating manifests — including
+         the one every published number comes from — are still reused, with a loud warning that
+         they cannot be verified. **Path A's graph is untouched: sha256 `c5d98d15…`, unchanged
+         and matching the hash recorded in `ms_specificity_audit.json`.**
+      3. `eval_heldout_grid.py` hardcoded miRDB's `0.9836 / 0.8828` as the reference row and
+         wrote it into **every** JSON. Run against miRTarBase it would have emitted an
+         attribution of miRTarBase's held-out numbers against miRDB's constants — well-formed,
+         plausible, meaningless. The reference now lives in `evaluation.reference_seen_edges` in
+         the config of the graph that **owns** those numbers (the 10 `config_v2_edgesplit*`
+         files); a config without it gets `attribution: null` and an explicit note, never a
+         borrowed constant.
+      4. `aggregate_seeds.py` hardcoded the `checkpoints_v2_*` stems and the miRDB
+         `topology_baseline_<split>.json`, so a miRTarBase sweep would have been invisible to it
+         or compared against miRDB's `gene_degree`. Now `--checkpoint-prefix` and
+         `--topology-baseline`. It also refuses `n=1`, which used to print a confident
+         `+/- 0.0000` that is indistinguishable from a real zero-variance result.
+      5. `data/processed_mirtarbase/` did not exist, though the config points `processed_dir`
+         there for a 4.5 GB `scrna_processed.h5ad`. Symlinked to `../processed/`, not copied —
+         see `data/processed_mirtarbase/README.md`. The arms' `cellxgene` and `graph` config
+         blocks are byte-identical, so the scRNA side is the same computation; two real copies
+         could drift and turn "miRDB vs miRTarBase" into "one gene vocabulary vs another" while
+         every filename still said interaction source.
 
 ### 3.3 Housekeeping for the manuscript
 

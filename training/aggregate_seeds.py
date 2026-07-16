@@ -31,11 +31,17 @@ from pathlib import Path
 
 COMPARISON_DIR = Path("results/comparison")
 
-# checkpoint-dir stem -> how that run was TRAINED
-TRAIN_CONDITIONS = {
-    "checkpoints_v2_edgesplit": "degree_matched",
-    "checkpoints_v2_edgesplit_uniform": "uniform",
-}
+# checkpoint-dir stem -> how that run was TRAINED. Derived from a prefix rather than
+# hardcoded to checkpoints_v2_*: with the stems fixed, this script silently aggregated
+# the miRDB runs no matter which graph the caller meant, so a miRTarBase sweep would
+# either report miRDB's numbers or claim its own outputs were missing.
+def train_conditions(prefix: str = "checkpoints_v2") -> dict:
+    return {
+        f"{prefix}_edgesplit": "degree_matched",
+        f"{prefix}_edgesplit_uniform": "uniform",
+    }
+
+
 EVAL_CONDITIONS = ("uniform", "degree_matched")
 
 PRETTY = {
@@ -53,12 +59,13 @@ def mean_std(xs: list[float]) -> tuple[float, float]:
     return statistics.mean(xs), statistics.stdev(xs)
 
 
-def collect(split: str, seeds: list[int]) -> dict:
+def collect(split: str, seeds: list[int], prefix: str = "checkpoints_v2") -> dict:
     """Load every per-seed grid JSON, keyed by (train condition, seed)."""
-    runs: dict[str, dict[int, dict]] = {c: {} for c in TRAIN_CONDITIONS.values()}
+    conds = train_conditions(prefix)
+    runs: dict[str, dict[int, dict]] = {c: {} for c in conds.values()}
     missing: list[str] = []
 
-    for stem, train_cond in TRAIN_CONDITIONS.items():
+    for stem, train_cond in conds.items():
         for seed in seeds:
             path = COMPARISON_DIR / f"heldout_grid_{stem}_s{seed}_{split}.json"
             if not path.exists():
@@ -76,9 +83,14 @@ def collect(split: str, seeds: list[int]) -> dict:
     return runs
 
 
-def topology_reference(split: str, metric: str) -> dict | None:
-    """The model-free heuristic this whole paper is about beating."""
-    path = COMPARISON_DIR / f"topology_baseline_{split}.json"
+def topology_reference(split: str, metric: str, path: Path | None = None) -> dict | None:
+    """The model-free heuristic this whole paper is about beating.
+
+    `path` is explicit because the default filename carries no graph identity: an
+    aggregate over a different interaction source would otherwise compare its models
+    against miRDB's gene_degree and call it a margin.
+    """
+    path = path or COMPARISON_DIR / f"topology_baseline_{split}.json"
     if not path.exists():
         return None
     with open(path) as fh:
@@ -94,10 +106,27 @@ def main() -> None:
     p.add_argument("--seeds", type=int, nargs="+", default=[123, 777, 2024, 7])
     p.add_argument("--metric", default="auroc", choices=["auroc", "auprc"])
     p.add_argument("--out", default=None)
+    p.add_argument("--checkpoint-prefix", default="checkpoints_v2",
+                   help="Checkpoint-dir stem to aggregate, e.g. checkpoints_mirtarbase. "
+                        "Default reproduces the miRDB sweep.")
+    p.add_argument("--topology-baseline", default=None,
+                   help="Path to the topology_baseline JSON for THIS graph. Default: "
+                        "results/comparison/topology_baseline_<split>.json (the miRDB one) "
+                        "— pass explicitly for any other interaction source.")
     args = p.parse_args()
 
-    runs = collect(args.split, args.seeds)
-    topo = topology_reference(args.split, args.metric)
+    if len(args.seeds) < 2:
+        # mean_std reports std 0.0 for a single observation, which renders as a
+        # confident '+/- 0.0000' — indistinguishable from a real zero-variance result.
+        raise SystemExit(
+            f"--seeds got {args.seeds}: n={len(args.seeds)} cannot carry an error bar, "
+            f"and the report would print '+/- 0.0000' as if it could. Pass >=2 seeds."
+        )
+
+    runs = collect(args.split, args.seeds, args.checkpoint_prefix)
+    topo = topology_reference(
+        args.split, args.metric,
+        Path(args.topology_baseline) if args.topology_baseline else None)
 
     # cells[train_cond][eval_cond] = (mean, std, [per-seed values])
     cells: dict[str, dict[str, tuple[float, float, list[float]]]] = {}
@@ -110,9 +139,12 @@ def main() -> None:
             m, sd = mean_std(vals)
             cells[train_cond][eval_cond] = (m, sd, vals)
 
-    # The seen-edges row is a hardcoded single-seed constant; carry it through as such.
+    # The seen-edges row is a single-seed constant declared by the graph's own config;
+    # carry it through as such. None for any graph on which the transductive protocol
+    # was never measured (e.g. miRTarBase) — that row is then simply absent, rather
+    # than borrowed from miRDB.
     any_run = next(iter(runs["degree_matched"].values()))
-    seen = any_run["reference_seen_edges"]
+    seen = any_run.get("reference_seen_edges")
 
     n = len(args.seeds)
     width = 78
@@ -138,11 +170,16 @@ def main() -> None:
         row += f"{topo['uniform']:>17.4f}          "
         row += f"{topo['degree_matched']:>9.4f}"
         lines.append(row)
-    if args.metric == "auroc":
-        # The hardcoded reference constants are AUROC; there is no AUPRC equivalent.
+    if args.metric == "auroc" and seen:
+        # The reference constants are AUROC; there is no AUPRC equivalent.
         lines.append(
             f"{'edges seen in training':<28}{seen['uniform']:>17.4f}          "
-            f"{seen['degree_matched']:>9.4f}   <- n=1, hardcoded"
+            f"{seen['degree_matched']:>9.4f}   <- n=1, from config"
+        )
+    elif args.metric == "auroc":
+        lines.append(
+            f"{'edges seen in training':<28}{'n/a':>17}          {'n/a':>9}"
+            f"   <- not measured on this graph"
         )
     lines.append("=" * width)
 
@@ -159,12 +196,20 @@ def main() -> None:
                 f"{verdict} heuristic {topo[eval_cond]:.4f}  ({margin:+.4f})"
             )
         lines.append("=" * width)
-    lines.append(
-        "NOTE: 'edges seen in training' is a single-seed constant hardcoded in\n"
-        "eval_heldout_grid.py. Every attribution derived from it (cost of an honest\n"
-        "split, cost of honest negatives) therefore has NO variance and must not be\n"
-        "reported as mean +/- std."
-    )
+    if seen:
+        lines.append(
+            "NOTE: 'edges seen in training' is a single-seed constant, declared by this\n"
+            "graph's config under evaluation.reference_seen_edges. Every attribution\n"
+            "derived from it (cost of an honest split, cost of honest negatives) therefore\n"
+            "has NO variance and must not be reported as mean +/- std."
+        )
+    else:
+        lines.append(
+            "NOTE: this graph declares no evaluation.reference_seen_edges, so the\n"
+            "transductive row and every attribution derived from it are absent. Do not\n"
+            "fill them in from another graph's constants — the held-out numbers above\n"
+            "stand on their own."
+        )
     lines.append("=" * width)
 
     report = "\n".join(lines)
