@@ -1,0 +1,139 @@
+{
+  "_provenance": {
+    "git_sha": "b790659af88fa67eebd9ebcdfc1af597cade8ed8",
+    "git_dirty": false,
+    "git_untracked_files": 1,
+    "slurm_job_id": "5716",
+    "timestamp": "2026-07-16T13:01:50.423151+00:00",
+    "graph_sha256": "c5d98d15ad3d5402738bebaa3ed2f2d3ff87644e715e3597e6790db3ffe5b729",
+    "index_maps_sha256": "e66c775dc8026ffa2ddfd71c6b4bfcb8f5bf6a1e048828d63db73f5f3b940167",
+    "mirna_expr_sha256": "e16984b4c6070c11b8cbedf027ced42ada5db1a59f5fdcc121c1412cc6907126",
+    "mirna_meta_sha256": "f790b8ecec31f260efeb1fb5b78d042aa2769b0adba9b9930271040545dfd7fc",
+    "interactions_sha256": "9e68ee6d03705660ef37117f4455d64e4a97aecdc48d2e6cce4331bed42f5322"
+  },
+  "_claim": "The disease label is provenance, not signal: the graph is called an MS graph because of where the bytes came from, not because MS is represented in it.",
+  "graph_shape": {
+    "n_gene": 3000,
+    "n_cell": 110798,
+    "n_miRNA": 2460,
+    "('miRNA', 'regulates', 'gene')": 44186,
+    "('gene', 'regulated_by', 'miRNA')": 44186,
+    "('cell', 'expresses', 'gene')": 15978902,
+    "('gene', 'expressed_in', 'cell')": 15978902,
+    "('gene', 'coexpressed_with', 'gene')": 1130
+  },
+  "mirna_features_are_noise": {
+    "n_mirna": 2460,
+    "feature_dim": 64,
+    "reproduced_from_seed_42_alone": true,
+    "max_abs_diff_vs_replay": 0.0,
+    "interpretation": "miRNA node features are torch.randn(seed=42). They contain no biological information, MS-related or otherwise."
+  },
+  "name_join": {
+    "n_graph_mirna_nodes": 2460,
+    "n_geo_mirnas": 2531,
+    "exact_overlap": 16,
+    "exact_overlap_pct": 0.65,
+    "casefold_overlap": 2342,
+    "casefold_overlap_pct": 95.2,
+    "n_graph_nodes_without_expression": 118,
+    "exact_matches_are_all_let7": true,
+    "geo_names_lowercase_mir": 2513,
+    "graph_names_camel_mir": 2444,
+    "arm_strip_collisions_in_geo": 823,
+    "interpretation": "Self-inflicted: preprocess_mirna.harmonize_mirna_names lowercases names that the SOFT probe map had already resolved to proper mature form. Only let-7* survives an exact join because it has no 'mir' substring to mangle. Case-normalization alone recovers the join; arm-stripping must NOT be used for it \u2014 it merges distinct mature miRNAs (see collisions above)."
+  },
+  "condition_labels": {
+    "stored_condition_value_counts": {
+      "Control": 166
+    },
+    "recovered_group_counts": {
+      "Control": 78,
+      "MS": 51,
+      "T1D": 37
+    },
+    "n_unmatched": 0,
+    "recovered_celltype_x_group": {
+      "Control": {
+        "lymphocyte": 26,
+        "monocyte": 25,
+        "neutrophil": 27
+      },
+      "MS": {
+        "lymphocyte": 17,
+        "monocyte": 17,
+        "neutrophil": 17
+      },
+      "T1D": {
+        "lymphocyte": 12,
+        "monocyte": 13,
+        "neutrophil": 12
+      }
+    },
+    "recovered_sex_x_group": {
+      "Control": {
+        "Female": 53,
+        "Male": 25,
+        "unknown": 0
+      },
+      "MS": {
+        "Female": 36,
+        "Male": 15,
+        "unknown": 0
+      },
+      "T1D": {
+        "Female": 17,
+        "Male": 18,
+        "unknown": 2
+      }
+    },
+    "cohort_contains_t1d": true,
+    "interpretation": "infer_condition (preprocess_mirna.py:122-133) matches 'rrms' and ' ms ' but the data says 'RR-MS' (hyphen), so nothing matches and _label() returns 'Control' as a SILENT DEFAULT (line 132). Every sample, including the T1D patients, is labelled Control. The cohort is NOT MS-vs-HC as the config claims: it contains Type 1 Diabetes patients, who are currently indistinguishable from healthy controls. Note 'healty control' is misspelled in the source data."
+  },
+  "cell_condition": {
+    "cell_has_condition_attr": false,
+    "cell_node_attrs": [
+      "x",
+      "y"
+    ],
+    "interpretation": "preprocess_scrna.py sets adata.obs['condition'], but build_heterograph never copies it onto the graph. The MS/control UMAP panel in visualize.py cannot render from the saved graph \u2014 it is dead code."
+  },
+  "expression_vs_degree": {
+    "n_mirnas_with_degree_and_expression": 2342,
+    "spearman_rho_degree_vs_mean_expression": -0.0838,
+    "p_value": 4.940080314208848e-05,
+    "abs_rho_exceeds_0_2": false,
+    "interpretation": "Pre-registered threshold: |rho| > 0.2 would mean expression proxies out-degree, and no 'MS features help' claim could be made without a degree-matched control. Below it, expression is not popularity in disguise."
+  },
+  "coexpr_gene_selection": {
+    "top_n": 1000,
+    "n_genes": 3000,
+    "variance_column_used": "dispersions_norm",
+    "overlap_first_n_vs_most_variable": 454,
+    "jaccard": 0.2937,
+    "interpretation": "build_heterograph.py:151 slices X[:, :n_genes] \u2014 the first n columns in var order, which scanpy preserves from the original annotation, not by variance. The docstring at :149 ('top_n most variable') is false; co-expression edges live in an arbitrary subset of the gene nodes."
+  },
+  "dead_config_keys": {
+    "min_mirna_gene_interactions": {
+      "read_by": [],
+      "is_dead": true
+    },
+    "min_interactions": {
+      "read_by": [],
+      "is_dead": true
+    },
+    "interpretation": "These keys are set in every config and documented as filters, but nothing reads them. They cannot thin the denser miRTarBase graph \u2014 which matters for the density-matched arm."
+  },
+  "ms_entry_points": {
+    "preprocess_scrna_condition_lines": [
+      5,
+      85,
+      132,
+      133
+    ],
+    "build_heterograph_condition_lines": [],
+    "build_heterograph_reads_mirna_expr": false,
+    "mirna_expr_readers": [],
+    "interpretation": "MS enters exactly twice, and neither is the graph: (1) which cells were downloaded (the cellxgene disease filter), and (2) batch_key='condition' in HVG selection, which shapes the gene vocabulary. It is never a node feature, never a label, and never an input to any head. The GEO miRNA arm \u2014 the only modality carrying an MS/HC contrast \u2014 is written to mirna_expr.tsv and never read."
+  }
+}
