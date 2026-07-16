@@ -54,7 +54,13 @@ def git(*args: str, cwd: str) -> str:
 def provenance(root: str, paths: dict) -> dict:
     out = {
         "git_sha":    git("rev-parse", "HEAD", cwd=root),
-        "git_dirty":  bool(git("status", "--porcelain", cwd=root)),
+        # Tracked files only: this field answers "was the code the code at git_sha?",
+        # and an untracked scratch file in the working tree cannot change that. Counted
+        # separately so the distinction stays visible rather than being swept away.
+        "git_dirty":  bool(git("status", "--porcelain", "--untracked-files=no", cwd=root)),
+        "git_untracked_files": len(
+            [ln for ln in git("status", "--porcelain", cwd=root).splitlines()
+             if ln.startswith("??")]),
         "slurm_job_id": os.environ.get("SLURM_JOB_ID", "local"),
         "timestamp":  datetime.now(timezone.utc).isoformat(),
     }
