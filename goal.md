@@ -181,12 +181,87 @@ done and the second is suspended). Full detail in
 
 ### 3.2 Blocking submission
 
+- [ ] **The MS framing is not supported by the pipeline — FIVE DECISIONS OPEN, all yours.**
+      Evidence is in hand and reproducible: `analysis/audit_ms_specificity.py` →
+      `results/comparison/ms_specificity_audit.json` (SLURM job **5716**, clean tree at
+      `b790659`, graph `c5d98d15…`). Nothing below is decided; the audit only establishes
+      the facts. **This blocks the manuscript: the paper cannot keep using the word "MS"
+      until D1 is answered.**
+
+      **The facts, none of them disputed.** MS enters this pipeline exactly twice — the
+      cellxgene `disease` filter (which cells were downloaded) and `batch_key="condition"` in
+      HVG selection (`preprocess_scrna.py:85`, which shapes the 3,000-gene vocabulary). It is
+      never a node feature, never a label, never an input to any head. Specifically:
+      `torch.randn` replay matches the shipped miRNA features with **max|diff| = 0.0** — they
+      are reproducible from a seed alone and therefore provably carry no data; `mirna_expr.tsv`
+      (166 samples, the only modality with an MS/HC contrast) has **zero readers**;
+      `condition` is `{Control: 166}` from a silent default while the truth recoverable from
+      `Sample_description` is **{Control: 78, MS: 51, T1D: 37}**; and `TargetPredictor` takes
+      no condition input, so it could not have used the label anyway.
+
+      - **D1 — Does the paper claim MS at all?** The only honest answer today is "the cells
+        came from MS patients and controls, and nothing downstream knows which is which."
+        - **(a) Retitle and de-scope.** The paper is about link-prediction evaluation on a
+          biomedical graph; MS is dataset provenance; say so in one sentence and move on.
+        - **(b) Keep the framing and wire MS in** (Track B) before submitting.
+        - **(c) De-scope the headline, add Track B as a supplementary sensitivity row** —
+          *"we gave the miRNAs real biology and the inflation did not move"*, which would show
+          the inflation is protocol-driven rather than feature-poverty-driven.
+        - Note (b) delays submission and §2.5 already **rejected Path B** as a rescue for this
+          paper, moving its ingredients to §3.5 as a different paper. (c) is consistent with
+          that; (b) reopens a closed decision.
+      - **D2 — Is this a contribution or a limitation?** As a contribution it becomes a new
+        `## Contribution 4` section in `EVALUATION_AUDIT.md` (after the Contribution 3 prose
+        at `:170-187`), renumbering the list item 4 ("a corrected, reusable protocol") → 5. The
+        case for contribution: Contribution 3 already asks *"does the scoring head take context
+        as input?"*; this generalizes it to a three-question checklist — is the context variable
+        **present in the artifact**, does the **head take it**, does the **evaluation vary with
+        it** — and we fail all three on the variable the project is named after. The case
+        against: it invites "so what else didn't you check?"
+      - **D3 — Do we publish the T1D mislabelling?** It is an error we found in our own repo:
+        37 diabetics filed as healthy controls by a default return. Publishing it costs nothing
+        factually (no reported number moves — `EVALUATION_AUDIT.md:164-165` already documents
+        the miRNA features as content-free) and a methods-critique paper that audits its own
+        provenance has standing that one which doesn't, lacks. But it is an admission, and it
+        is your call whether it reads as rigour or as sloppiness.
+      - **D4 — The two construction bugs: fix, or document and freeze?** Co-expression edges
+        use `X[:, :1000]` — the **first** 1,000 genes in `var` order, not the most variable as
+        the docstring claims (measured overlap: **jaccard 0.294**). And the `cell→gene`
+        threshold `0.10` is applied to **z-scaled** data (`preprocess_scrna.py:87`), so it means
+        0.1 σ above each gene's mean, not the log-norm level the config implies — all 15,978,902
+        `expresses` edges mean something other than documented. **Fixing either one changes the
+        graph and invalidates every number in the paper.** Default recommendation:
+        **document as known deviations, fix only in the Track B branch.** Fixing them quietly
+        before submission would be the worst of the three options.
+      - **D5 — Does `RESUMEN_AUDITORIA.md` get this?** It is declared the collaborator-facing
+        summary. A cohort documented as MS-vs-HC that silently contains diabetics is exactly
+        what a clinical collaborator should hear directly — and they may know something about
+        GSE289530 that we don't. Recommend yes, in the same commit as the English text so the
+        two cannot drift (§3 already deleted one duplicate checklist for drifting).
+
+      **Ordering constraint, already satisfied:** Track A documents the *pre-fix* state, so the
+      audit ran and was committed before any Track B change. `graph_sha256` in the JSON is what
+      identifies that state once the graph is rebuilt. Tag the commit `audit-ms-specificity`
+      once D1–D5 are answered and the prose lands.
+
+      **Also fix regardless of D1–D5** (§3.3): the `data.geo.accessions` description of
+      GSE289530 asserts *"CD14+ monocytes, CD8+ T cells, neutrophils; MS vs HC"*. Both halves
+      are false — the samples are generic lymphocytes/monocytes/neutrophils and the cohort
+      includes T1D. Same species of error as the `mirtarbase_hsa.tsv`-holds-miRDB filename.
+
 - [ ] **Multi-seed, the *seen-edges* row — BLOCKED, needs a decision.** The held-out row is
       done (§3.1), but the top row of the 2×2 — the original **0.9836 / 0.8828** — is a
-      pair of **constants hardcoded at `training/eval_heldout_grid.py:166`** from the
-      original single-seed transductive run. It is *not* recomputed per seed, so every
-      attribution that subtracts from it (*"cost of an honest split = +0.4282"*) still
-      carries **n=1 and no error bar.**
+      pair of **single-seed constants** from the original transductive run. It is *not*
+      recomputed per seed, so every attribution that subtracts from it (*"cost of an honest
+      split = +0.4282"*) still carries **n=1 and no error bar.**
+
+      *Location changed 2026-07-16, nothing else did:* they were hardcoded in
+      `training/eval_heldout_grid.py:166` and are now declared in
+      `evaluation.reference_seen_edges` in the 10 `config_v2_edgesplit*.yaml` files — because
+      hardcoding them in the script meant any *other* graph's run inherited miRDB's constants
+      and emitted a meaningless attribution. **This did not make them reproducible.** They are
+      still n=1, still not re-derivable, and this item is still open; the numbers merely now
+      travel with the graph that owns them, and a config without them gets `attribution: null`.
 
       **It cannot simply be re-run.** `train.py:271` now builds the edge split
       *unconditionally* (`if _pos is not None`), with `hard_negatives` defaulting to `True`
@@ -241,8 +316,96 @@ done and the second is suspended). Full detail in
       **Decision taken 2026-07-16: run BOTH arms as a sensitivity analysis** — (b) at real
       scale, plus (c) density-matched. (a) is rejected. Arm 1 shows the effect where the data
       actually is; arm 2 shows it is not an artifact of density. If they disagree, that
-      disagreement is itself the finding. The subsample procedure must be **pre-registered
-      here before a single miRTarBase model is trained**, or arm 2 is worthless.
+      disagreement is itself the finding.
+
+      ---
+
+      #### PRE-REGISTRATION — committed 2026-07-16, before any miRTarBase graph was built
+
+      Nothing below has been run. No miRTarBase model exists, no subsample TSV exists. The
+      commit timestamp of this block is the evidence, and it is the only thing that separates
+      a sensitivity analysis from running two arms and keeping the flattering one. **If any
+      part of this turns out to be unworkable, amend it in a commit of its own that says so —
+      do not silently edit it once numbers exist.**
+
+      **What is fixed across both arms.** Model, optimizer, splits and protocol are identical
+      to `config_v2_edgesplit.yaml`. **Nothing is tuned on miRTarBase** — any hyperparameter
+      change makes the source contrast uninterpretable. Both arms use `mirna_features: random`
+      (Track B's features must not enter, or the contrast confounds source with features).
+
+      **Arm 1 — strong+weak.** As downloaded: 155,120 edges / 2,920 miRNAs post-HVG-filter,
+      density 0.0177, median degree/miRNA 33. Confounded by density *by construction*. Stated,
+      not hidden.
+
+      **Arm 2 — density-matched.** Subsample miRTarBase to the built miRDB graph's **per-gene
+      in-degree**, gene by gene (identity-matched, not merely distribution-matched).
+
+      *Why per-gene in-degree, and not something else.* The confound is that a denser graph
+      makes the degree shortcut more exploitable. The shortcut is `gene_degree` — 0.8712,
+      which **ignores the miRNA entirely** — and it is also what `sample_degree_matched_negatives`
+      bins on (`splits.py:194-199`). Matching gene in-degree *per gene* makes the two graphs
+      indistinguishable **to the confounder itself**: `gene_degree` assigns a near-identical
+      score vector on both, so any AUROC difference is attributable to *which pairs are
+      positive*, not to how popular the genes are. Distribution-matching would only equalize
+      the histogram. Joint (gene × miRNA) matching is **not attempted**: realizing two degree
+      marginals simultaneously as a subgraph of a *given* bipartite graph is generally
+      infeasible, and chasing it is exactly the arbitrary tuning this block exists to prevent.
+      The cost is stated plainly: this makes gene degree a *fixed covariate by construction*
+      rather than a free variable — which is what a matched control is for.
+
+      *Algorithm (fixed now).* Reference degrees and the 3,000-gene vocabulary come from
+      `data/graphs/index_maps.pkl`; miRDB degrees are recomputed from `mirtarbase_hsa.tsv`.
+      **Matching happens POST-HVG-filter** — the 155,120 and 44,186 figures already are, and
+      matching pre-filter would match the wrong distribution. Gate: `assert reference total ==
+      44,186` before sampling, so the reference reproduces the paper's own headline first.
+      1. `t[g]` := gene `g`'s in-degree in the miRDB graph.
+      2. Process genes in **ascending** order of available incident miRTarBase edges (scarce
+         genes commit first, so a greedy quota cannot strand them). Ties broken by gene name.
+      3. For each `g`, sample `k = min(t[g], |E_g|)` edges without replacement, weighted toward
+         miRNAs under their miRDB out-degree quota. `numpy.random.default_rng(seed)` only —
+         never the global RNG.
+      4. **Deficits are NOT redistributed.** Where miRTarBase has fewer edges on a gene than
+         miRDB does, that gene under-shoots and stays under-shot. Topping up elsewhere to hit
+         44,186 would break the identity match to make a total look tidy.
+      5. Seed **101** for the headline; **202/303** as a sampling-variance check on the
+         held-out×matched cell only.
+
+      *Pre-registered expectations — recorded so they cannot be reframed as results.*
+      - Total edges **will undershoot 44,186**. Expected, not a failure. Do not tune to hit it.
+      - Median miRNA out-degree will land near miRDB's 11 but is **reported as a covariate,
+        not matched**. Do not tune it.
+      - miRNA node count will fall from 2,920 toward miRDB's 2,460 as a *consequence* of
+        per-gene matching. That is a sanity signal, **not a target**.
+
+      **Criterion — "the inflation reproduces" on an arm iff ALL THREE hold**, each on the
+      held-out test split. (The transductive row is deliberately absent: it cannot be measured
+      on miRTarBase — `train.py:271` builds the edge split unconditionally and the leaky path
+      was deleted in `8a12ce3` — so every criterion here is held-out only, and no attribution
+      against miRDB's 0.9836 may be computed. `eval_heldout_grid.py` now enforces that.)
+      - **(a)** uniform-trained × uniform-eval **loses to** `gene_degree`(uniform): margin ≤ 0.
+        *miRDB: −0.0656.*
+      - **(b)** uniform-trained × matched-eval sits within **0.03** of `gene_degree`(matched) —
+        i.e. it learned popularity and nothing transferable. *miRDB: |0.5395 − 0.5126| = 0.027.*
+        The threshold is calibrated to miRDB's own result and is stated as such, not chosen later.
+      - **(c)** hard-trained × matched-eval **beats** `gene_degree`(matched): margin > 0.
+        *miRDB: +0.1136.*
+      **FAILS TO REPRODUCE** if any of (a)–(c) breaks.
+
+      **Pre-registered reading of the four outcomes:**
+
+      | arm 1 (strong+weak) | arm 2 (density-matched) | what we will write |
+      |---|---|---|
+      | reproduces | reproduces | The inflation **generalizes**; density is not the driver. Strongest outcome. |
+      | reproduces | does not | The effect is **density-dependent**. Weaken the claim to "on graphs of miRDB-like density". This is why arm 2 exists. |
+      | does not | reproduces | Density **masks** the effect at high density (plausible: at 0.0177 nearly every gene is popular, so `gene_degree` loses resolution). Report; do not spin. |
+      | does not | does not | The effect is **miRDB-specific**. The generalization claim does not survive and §2.5 Path A needs re-scoping. **We commit now to reporting this.** |
+
+      **Tie-break, fixed in advance:** if the arms disagree, **arm 2 is primary** (arm 1 is
+      confounded by density) and the disagreement is itself reported.
+      **Expected direction, stated in advance:** inflation should be *larger* on arm 1 than
+      arm 2, because a denser, higher-degree graph makes the degree shortcut more exploitable.
+      **If it is not, that is informative and gets reported as such.**
+      **Both arms are reported regardless of outcome.**
 
       **Provenance caveat (verified 2026-07-16):** the miRTarBase site is headed *"Release 11.0"*
       (cite: miRTarBase 2025, NAR) but serves every file from `/files/10.0/`; `/files/11.0/` 404s

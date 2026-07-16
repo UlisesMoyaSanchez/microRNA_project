@@ -1,10 +1,10 @@
 """
 audit_ms_specificity.py — Evidence that the MS label never enters the graph.
 
-Read-only. Regenerates every number behind EVALUATION_AUDIT.md "Contribution 4"
-from the artifacts themselves, so none of them has to be typed into a document by
-hand. (Hardcoded constants are what goal.md §3.2 is already blocked on — see
-eval_heldout_grid.py:166. Do not add more.)
+Read-only. Regenerates every number behind the MS-provenance finding from the
+artifacts themselves, so none of them has to be typed into a document by hand.
+(goal.md §3.2 is already blocked on a pair of constants nobody can re-derive —
+the 0.9836/0.8828 seen-edges row. Do not add more.)
 
 The claim under test: *the disease label is provenance, not signal.* The graph is
 called an MS graph because of where the bytes came from, not because MS is

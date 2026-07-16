@@ -307,8 +307,13 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    instead, it clears the heuristic by **+0.1136**. AUPRC agrees throughout.
 
    **Still blocked — the seen-edges row has no error bar, and cannot get one by re-running.**
-   The original **0.9836 / 0.8828** are **constants hardcoded at `eval_heldout_grid.py:166`**,
-   not recomputed per seed, so *"cost of an honest split = +0.4282"* remains n=1. Worse,
+   The original **0.9836 / 0.8828** are **single-seed constants**, not recomputed per seed, so
+   *"cost of an honest split = +0.4282"* remains n=1. (They were hardcoded in
+   `eval_heldout_grid.py:166` until 2026-07-16 and now live in `evaluation.reference_seen_edges`
+   in the `config_v2_edgesplit*.yaml` files — because a constant baked into the *script* was
+   inherited by runs on other graphs, which then emitted an attribution against a graph they
+   had nothing to do with. **The move did not make them reproducible**; this row is still n=1.)
+   Worse,
    `train.py:271` now builds the edge split **unconditionally** (`hard_negatives` defaults to
    `True`, no off switch), and `config_v2.yaml` sets neither key — so retraining it today
    silently reproduces the *edge-split* run, not the transductive one. The leaky path was
