@@ -1,0 +1,113 @@
+# =============================================================================
+# miRTarBase audit variant. IDENTICAL model/optimizer/protocol to
+# config_v2_edgesplit.yaml (held-out edge split + degree-matched hard negatives)
+# — the ONLY change is the interaction source: real, experimentally validated
+# miRTarBase 10.0 (strong + weak support) instead of miRDB v6.0 sequence
+# predictions. Purpose: test whether the transductive/uniform-negative inflation
+# found on miRDB reappears on an interaction source that is independent IN KIND
+# (not sequence-derived). See goal.md §3.2.4, EVALUATION_AUDIT.md:335-337.
+#
+# Output dirs are all distinct from the miRDB pipeline, so nothing is overwritten
+# and both graphs can be compared side by side.
+# =============================================================================
+
+project:
+  name: mirna_ms_mirtarbase_edgesplit
+  seed: 42
+  output_dir: /raid/home/umoya/scripts/microRNA_project/results
+
+data:
+  raw_dir:       /raid/home/umoya/scripts/microRNA_project/data/raw
+  processed_dir: /raid/home/umoya/scripts/microRNA_project/data/processed_mirtarbase
+  graphs_dir:    /raid/home/umoya/scripts/microRNA_project/data/graphs_mirtarbase
+
+  cellxgene:
+    organism: "Homo sapiens"
+    disease:  "multiple sclerosis"
+    tissue:
+      - "blood"
+      - "brain"
+      - "cerebrospinal fluid"
+    n_top_genes: 3000
+    min_cells:   3
+    min_genes:   200
+    max_pct_mito: 20.0
+    max_obs_ms:   150000
+    max_obs_ctrl: 100000
+
+  mirna:
+    # Real miRTarBase (experimentally validated). Downloaded via:
+    #   python data/01_download/download_mirtarbase.py --source mirtarbase \
+    #          --config configs/config_mirtarbase_edgesplit.yaml
+    #
+    # PROVENANCE (verified 2026-07-16): the miRTarBase download page is headed
+    # "Release 11.0" (cite: miRTarBase 2025, NAR) but every file it links to is
+    # served from /files/10.0/, and the site never states that 11.0 content was
+    # published; /files/11.0/ 404s. 10.0 is the only release we can verify, so
+    # we pin it explicitly and report it as 10.0. Do not bump this to 11.0
+    # without confirming the bytes actually change.
+    mirtarbase_url:   "https://awi.cuhk.edu.cn/miRTarBase/downloads/files/10.0/hsa_MTI.csv"
+    interactions_file: mirtarbase_real_hsa10_all.tsv   # read by preprocess + build_heterograph
+    # miRDB keys retained for schema compatibility but INAPPLICABLE to miRTarBase
+    # (experimentally validated, so no sequence score to threshold on):
+    mirdb_url: "https://mirdb.org/download/miRDB_v6.0_prediction_result.txt.gz"
+    mirdb_score_threshold: 80
+    min_interactions: 5
+
+  geo:
+    accessions:
+      GSE289530: "miRNA CD14+ monocytes, CD8+ T cells, neutrophils; MS vs HC (GPL19117, 166 samples, 2026)"
+
+  graph:
+    coexpression_threshold:          0.60
+    coexpression_top_n_genes:        1000
+    cell_gene_expression_threshold:  0.10
+    min_mirna_gene_interactions:     2
+
+cell_type_markers:
+  T_cell:        ["CD3D", "CD3E", "CD3G"]
+  CD4_T:         ["CD4", "IL7R"]
+  CD8_T:         ["CD8A", "CD8B"]
+  Th17:          ["IL17A", "RORC", "IL23R", "CCR6"]
+  Treg:          ["FOXP3", "IL2RA", "CTLA4"]
+  B_cell:        ["MS4A1", "CD19", "CD79A"]
+  NK_cell:       ["GNLY", "NKG7", "NCAM1"]
+  Monocyte:      ["CD14", "LYZ", "CST3"]
+  Microglia:     ["CX3CR1", "P2RY12", "TMEM119", "SLC2A5"]
+  Oligodendrocyte: ["MBP", "PLP1", "MOG", "CNP"]
+  Astrocyte:     ["GFAP", "S100B", "AQP4", "ALDH1L1"]
+
+model:
+  hidden_channels: 512
+  num_heads:       8
+  num_layers:      4
+  dropout:         0.3
+  mirna_init_dim:  64
+
+training:
+  batch_size:   512
+  num_epochs:   200
+  lr:           5.0e-4
+  weight_decay: 1.0e-5
+  patience:     25
+  loss_reconstruction_weight: 1.0
+  loss_classification_weight: 0.5
+  loss_sparsity_weight:       0.01
+  val_ratio:    0.10
+  test_ratio:   0.10
+  num_neighbors: [10, 5]
+
+  disjoint_train_ratio: 0.3
+  hard_negatives: true          # degree-matched negatives, not uniform
+
+  checkpoint_dir: /raid/home/umoya/scripts/microRNA_project/checkpoints_mirtarbase_edgesplit
+  log_dir:        /raid/home/umoya/scripts/microRNA_project/logs
+
+slurm:
+  partition:    dgx_large
+  nodelist:     dgxa100jal
+  gpus_train:   4
+  cpus_per_task: 16
+  mem:          128gb
+  conda_env:    mirna_ms
+  conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

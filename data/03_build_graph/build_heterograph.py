@@ -189,7 +189,11 @@ def main() -> None:
 
     # ── Load processed data ──────────────────────────────────────────────────
     scrna_path   = os.path.join(proc_dir, "scrna_processed.h5ad")
-    mirtarbase_p = os.path.join(cfg["data"]["raw_dir"], "mirtarbase_hsa.tsv")
+    # Interaction-source filename is configurable so an alternate source (e.g. a
+    # real miRTarBase pull) can be built into its own graph without overwriting
+    # the miRDB one. Defaults to the legacy miRDB file for backward compatibility.
+    interactions_file = cfg["data"].get("mirna", {}).get("interactions_file", "mirtarbase_hsa.tsv")
+    mirtarbase_p = os.path.join(cfg["data"]["raw_dir"], interactions_file)
 
     print(f"Loading scRNA-seq: {scrna_path}")
     adata = ad.read_h5ad(scrna_path)

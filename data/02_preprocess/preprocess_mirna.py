@@ -196,7 +196,10 @@ def main() -> None:
 
     accessions: dict = cfg["data"]["geo"]["accessions"]
     geo_dir = os.path.join(raw_dir, "geo")
-    mirtarbase_tsv = os.path.join(raw_dir, "mirtarbase_hsa.tsv")
+    # Configurable interaction-source filename (see build_heterograph.py); defaults
+    # to the legacy miRDB file so existing configs are unaffected.
+    interactions_file = cfg["data"].get("mirna", {}).get("interactions_file", "mirtarbase_hsa.tsv")
+    mirtarbase_tsv = os.path.join(raw_dir, interactions_file)
 
     all_expr:  list[pd.DataFrame] = []
     all_meta:  list[pd.DataFrame] = []
