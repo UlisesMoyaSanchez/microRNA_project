@@ -65,7 +65,7 @@ def evaluate(
 
     Without them the old transductive path runs — every miRNA→gene edge in the graph is
     fair game as a positive, negatives are uniform. That number is kept deliberately: it
-    is what was published, so the comparison table can show both side by side.
+    is the original protocol, so the comparison table can show both side by side.
     """
     from torch_geometric.utils import negative_sampling
 
@@ -116,7 +116,7 @@ def evaluate(
                 if mirna_idx is None:
                     continue  # no supervision edge landed in this batch
             elif pos_edge_full is not None:
-                # Transductive path (the published number).
+                # Transductive path (the original number).
                 batch_pos = _map_global_to_local(batch, max_pairs=256)
                 if batch_pos is None:
                     continue  # batch has no miRNA/gene overlap — skip

@@ -52,3 +52,6 @@ logs/
 *.toc
 *.vrb
 *.out.tex
+# Compiled slides: regenerated from main.tex. Scoped to presentation/ so the
+# figure PDFs under results/figures/ stay tracked.
+presentation/**/*.pdf

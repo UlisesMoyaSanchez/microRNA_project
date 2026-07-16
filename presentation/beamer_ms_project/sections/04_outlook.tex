@@ -119,7 +119,7 @@
   \begin{block}{Lectura --- las dos columnas cuentan la historia}
     \scriptsize
     \begin{itemize}
-      \item \textbf{Columna 1 (controles al azar):} el marcador \emph{tonto} ya alcanza 0.776 --- \textbf{con controles mal elegidos hasta una regla trivial parece buena.} Por eso el 0.98 publicado es evidencia d\'ebil por s\'i solo.
+      \item \textbf{Columna 1 (controles al azar):} el marcador \emph{tonto} ya alcanza 0.776 --- \textbf{con controles mal elegidos hasta una regla trivial parece buena.} Por eso el 0.98 original es evidencia d\'ebil por s\'i solo.
       \item \textbf{Columna 2 (controles pareados):} el marcador tonto se desploma al azar (0.515), como debe. \textbf{Y nuestro modelo aguanta en 0.8828.}
     \end{itemize}
     \vspace{0.2em}
@@ -143,7 +143,7 @@
     \toprule
     \textbf{Protocolo} & \textbf{AUROC} \\
     \midrule
-    Publicado (aristas vistas, controles al azar) & 0.9836 \\
+    Original (aristas vistas, controles al azar) & 0.9836 \\
     \textbf{Reentrenado: aristas apartadas + controles pareados} & \textbf{0.6467} \\
     \midrule
     Clasificaci\'on celular (mismo modelo) & \textbf{0.9950} \\
@@ -218,7 +218,7 @@
     \toprule
      & \textbf{Controles al azar} & \textbf{Controles pareados} \\
     \midrule
-    Aristas \textbf{vistas} (publicado) & \textbf{0.9836} & 0.8828 \\
+    Aristas \textbf{vistas} (original) & \textbf{0.9836} & 0.8828 \\
     Aristas \textbf{apartadas} (honesto) & 0.8132 & \textbf{0.6467} \\
     \bottomrule
   \end{tabular}
@@ -230,7 +230,7 @@
     Partici\'on honesta sola: \textbf{$-$0.170}. Controles honestos solos: \textbf{$-$0.101}. Los dos juntos: \textbf{$-$0.337} --- \emph{m\'as} que la suma ($-$0.271). \textbf{Corregir solo uno de los dos subestima el da\~no.}
 
     \vspace{0.3em}
-    \textbf{Y el dato m\'as contundente:} sobre aristas apartadas con controles al azar, la \textbf{popularidad del gen sin modelo alcanza 0.8723} y \textbf{nuestro HGT entrenado alcanza 0.8132}. \textbf{La heur\'istica de una l\'inea le gana al transformer por 6 puntos.} Bajo el protocolo publicado, el modelo profundo era \emph{peor} que contar cu\'antos miRNAs ya apuntan a ese gen.
+    \textbf{Y el dato m\'as contundente:} sobre aristas apartadas con controles al azar, la \textbf{popularidad del gen sin modelo alcanza 0.8723} y \textbf{nuestro HGT entrenado alcanza 0.8132}. \textbf{La heur\'istica de una l\'inea le gana al transformer por 6 puntos.} Bajo el protocolo original, el modelo profundo era \emph{peor} que contar cu\'antos miRNAs ya apuntan a ese gen.
   \end{block}
 \end{frame}
 

@@ -6,7 +6,7 @@
 #
 # Scores the same (miRNA, gene) pairs with the same V2 checkpoint under three
 # encoder views of the graph:
-#   (a) intact       — reproduces the published AUROC (~0.984)
+#   (a) intact       — reproduces the original AUROC (~0.984)
 #   (c) self-masked  — the scored pairs removed from message passing
 #   (b) relation-off — the whole miRNA<->gene relation removed
 #

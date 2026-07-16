@@ -2,7 +2,7 @@
 eval_topology_baseline.py — Is 0.62 the model's achievement, or the task's ceiling?
 
 The retrain under a real held-out edge split (job 5603) scored AUROC 0.6268 on unseen
-miRNA→gene pairs, down from a published 0.9836. Before concluding anything about the
+miRNA→gene pairs, down from an original 0.9836. Before concluding anything about the
 model, we need to know what a *model-free* scorer gets on the identical pairs.
 
 The stakes: the graph carries no sequence information, and miRDB edges are derived from

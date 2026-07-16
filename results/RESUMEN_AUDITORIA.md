@@ -55,7 +55,7 @@ por completo al miRNA** y solo pregunta: *¿qué tan popular es este gen?*
 | "Prueba diagnóstica" | Controles al azar | Controles **pareados** por popularidad |
 |---|:--:|:--:|
 | Marcador tonto (solo popularidad, sin modelo) | **0.8712** | 0.5126 |
-| Adamic-Adar (topología, sin aprendizaje) | 0.8616 | **0.5912** |
+| Adamic-Adar (topología, sin aprendizaje) | 0.8630 | **0.5912** |
 | **Nuestro modelo HGT** | 0.8056 | **0.6271** |
 
 Léanlo así:

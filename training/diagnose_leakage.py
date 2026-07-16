@@ -12,7 +12,7 @@ very edge being predicted.
 This script scores the SAME pairs with the SAME checkpoint under three encoder
 conditions, and reports the metrics side by side:
 
-  (a) intact      — edge_index_dict unchanged. Should reproduce the published number.
+  (a) intact      — edge_index_dict unchanged. Should reproduce the original number.
   (c) self-masked — only the scored positive pairs (and their reverses) are removed
                     from message passing. Other miRNA->gene edges stay. This isolates
                     the self-leak, and mirrors what a correct disjoint-supervision

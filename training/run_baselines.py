@@ -185,7 +185,7 @@ def evaluate_both(
 
       auroc            — held-out edges, degree-matched negatives. The honest number.
       auroc_transd     — every miRNA→gene edge is fair game, uniform negatives. This is
-                         the protocol that produced the published 0.9836, kept so the
+                         the protocol that produced the original 0.9836, kept so the
                          table shows the drop rather than quietly replacing the number.
 
     Both come from the *best* checkpoint, not whatever was last in memory after training.
@@ -274,7 +274,7 @@ def main() -> None:
     )
     assert_no_edge_leakage(edge_split)
 
-    # The pre-split graph, kept only to reproduce the *published* V2 number under the
+    # The pre-split graph, kept only to reproduce the *original* V2 number under the
     # protocol that produced it. Nothing else may be evaluated on it.
     intact_graph = graph
 
@@ -359,19 +359,19 @@ def main() -> None:
         ),
     ]
 
-    # ── V2 (the published model) — transductive reference row only ─────────
+    # ── V2 (the original model) — transductive reference row only ──────────
     # This checkpoint was trained with every miRNA→gene edge as a supervision target,
     # so the "held-out" edges of the split above are not held out *for it*. Scoring it
     # on them would report a memorized number in the honest column. Its held-out cells
     # are left nan on purpose, and it is evaluated on the intact graph — the protocol
-    # that actually produced the published 0.9836.
+    # that actually produced the original 0.9836.
     v2_metrics_path = os.path.join(out_dir, "v2_metrics.json")
     if os.path.exists(v2_metrics_path):
         with open(v2_metrics_path) as fh:
             v2_metrics = json.load(fh)
         log.info(f"Loaded V2 metrics from {v2_metrics_path}")
     else:
-        log.info("Evaluating V2 (published) from checkpoint on the INTACT graph...")
+        log.info("Evaluating V2 (original) from checkpoint on the INTACT graph...")
         v2_ckpt = str(project_dir / "checkpoints_v2" / "best_model.pt")
         v2_model = miRNAGraphTransformer.from_config(
             cfg, intact_graph.metadata(), num_cell_types
@@ -393,7 +393,7 @@ def main() -> None:
         torch.cuda.empty_cache()
 
     all_results: list[dict] = [{
-        "model":        "hgt_v2_published",
+        "model":        "hgt_v2_transductive",
         "link_loss":    v2_metrics.get("link_loss", float("nan")),
         "clf_loss":     v2_metrics.get("clf_loss", float("nan")),
         "auroc":        float("nan"),   # no honest held-out number exists for this ckpt
@@ -492,7 +492,7 @@ def main() -> None:
 
     # ── Save comparison table ──────────────────────────────────────────────
     # auroc       = held-out edges, degree-matched negatives  ← the number to quote
-    # auroc_transd= all edges scorable, uniform negatives     ← the published protocol
+    # auroc_transd= all edges scorable, uniform negatives     ← the original protocol
     # The two are not comparable and deliberately never share a cell. `val_loss` is gone
     # as a cross-model column: a model with no link head optimizes a strictly smaller
     # objective, so its total loss looked "best" while being the worst model. link_loss
@@ -507,7 +507,7 @@ def main() -> None:
 
     log.info(f"\nComparison table saved to: {tsv_path}")
     log.info("  auroc = held-out edges + degree-matched negatives (honest)")
-    log.info("  auroc_transd = all edges + uniform negatives (published protocol)")
+    log.info("  auroc_transd = all edges + uniform negatives (original protocol)")
     log.info("\n" + "\t".join(cols))
     for r in all_results:
         log.info(

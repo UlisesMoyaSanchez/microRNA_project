@@ -62,8 +62,8 @@
   \small
   \begin{itemize}
     \item \textbf{Mini-batching}: el grafo completo vive en CPU; `NeighborLoader` muestrea vecindarios por batch (`num\_neighbors=[10, 5]`, uno por capa HGT; `batch\_size=512`).
-    \item \textbf{Negative sampling}: \emph{(versi\'on publicada)} un negativo \emph{uniforme} al azar por cada arista positiva. \textbf{Corregido:} ahora negativos \textbf{pareados por grado} (`splits.LinkSampler`) --- ver Experimento 2.
-    \item \textbf{Partici\'on de datos}: split 80/10/10 \textbf{sobre nodos `cell`}. \emph{(versi\'on publicada:} no hab\'ia partici\'on a nivel de arista miRNA-gen\emph{)}. \textbf{Corregido:} holdout expl\'icito de aristas (`splits.build\_edge\_split`, `RandomLinkSplit` con `rev\_edge\_types`).
+    \item \textbf{Negative sampling}: \emph{(versi\'on original)} un negativo \emph{uniforme} al azar por cada arista positiva. \textbf{Corregido:} ahora negativos \textbf{pareados por grado} (`splits.LinkSampler`) --- ver Experimento 2.
+    \item \textbf{Partici\'on de datos}: split 80/10/10 \textbf{sobre nodos `cell`}. \emph{(versi\'on original:} no hab\'ia partici\'on a nivel de arista miRNA-gen\emph{)}. \textbf{Corregido:} holdout expl\'icito de aristas (`splits.build\_edge\_split`, `RandomLinkSplit` con `rev\_edge\_types`).
     \item \textbf{Optimizaci\'on}: AdamW + `CosineAnnealingLR` (`T\_max = num\_epochs`, 200 en V2); gradient clipping (`max\_norm=1.0`); early stopping por `val\_loss` (patience configurable).
     \item \textbf{Multi-GPU}: DDP con backend NCCL, `torchrun --nproc\_per\_node=4` sobre 4$\times$ A100; desbalance de clases en link prediction compensable v\'ia `pos\_weight` en la BCE (`CombinedLoss`, actualmente no fijado en los configs revisados).
   \end{itemize}
@@ -195,7 +195,7 @@
       \begin{tabular}{lcc}
         \toprule
         \textbf{M\'etrica} & \textbf{Protocolo} & \textbf{Protocolo} \\
-                           & \textbf{publicado} & \textbf{honesto} \\
+                           & \textbf{original} & \textbf{honesto} \\
         \midrule
         AUROC   & 0.9836 & \textbf{0.6467} \\
         AUPRC   & 0.9731 & --- \\
@@ -213,10 +213,10 @@
     \begin{column}{0.45\textwidth}
       \begin{block}{Advertencia}
         \scriptsize
-        La columna ``publicado'' mide qu\'e tan bien el modelo \textbf{reconstruye} interacciones que ya vio, contra controles no pareados. \textbf{No mide predicci\'on.}
+        La columna ``original'' mide qu\'e tan bien el modelo \textbf{reconstruye} interacciones que ya vio, contra controles no pareados. \textbf{No mide predicci\'on.}
 
         \vspace{0.2em}
-        Las diapositivas siguientes (saliencia, circuitos, enriquecimiento) derivan \emph{todas} del modelo evaluado con el protocolo publicado. Se presentan como \textbf{hip\'otesis preliminares}, no como hallazgos.
+        Las diapositivas siguientes (saliencia, circuitos, enriquecimiento) derivan \emph{todas} del modelo evaluado con el protocolo original. Se presentan como \textbf{hip\'otesis preliminares}, no como hallazgos.
       \end{block}
     \end{column}
   \end{columns}

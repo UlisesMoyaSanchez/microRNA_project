@@ -7,7 +7,7 @@ thing a reviewer will ask. This fills in the 2x2:
 
                         | uniform negatives | degree-matched negatives
   ----------------------+-------------------+-------------------------
-  edges seen in training|   0.9836 (pub.)   |   0.8828  (jobs 5594/5596)
+  edges seen in training|   0.9836 (orig.)  |   0.8828  (jobs 5594/5596)
   edges held out        |        ???        |   0.6268  (job 5603)
 
 The bottom-left cell is the missing one. With it:
@@ -149,12 +149,12 @@ def main() -> None:
     log.info("=" * 76)
     log.info(f"{'':<26}{'uniform neg':>16}{'degree-matched neg':>22}")
     log.info("-" * 76)
-    log.info(f"{'edges seen (published)':<26}{0.9836:>16.4f}{0.8828:>22.4f}")
+    log.info(f"{'edges seen (original)':<26}{0.9836:>16.4f}{0.8828:>22.4f}")
     log.info(f"{'edges held out (honest)':<26}{u:>16.4f}{d:>22.4f}")
     log.info("-" * 76)
     log.info(f"Cost of honest negatives alone : {0.9836 - 0.8828:+.4f}")
     log.info(f"Cost of an honest split alone  : {0.9836 - u:+.4f}")
-    log.info(f"Total, published -> honest     : {0.9836 - d:+.4f}")
+    log.info(f"Total, original -> honest      : {0.9836 - d:+.4f}")
     log.info("=" * 76)
 
     summary = {

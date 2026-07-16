@@ -21,7 +21,7 @@ crossing two negative samplers with two scorers:
 
   A = how far a model-free "score the gene by how many miRNAs target it" heuristic
       gets. If A is already high, uniform negatives are trivially separable and the
-      published metric is weak evidence no matter what the model does.
+      original metric is weak evidence no matter what the model does.
   D = the model against negatives that are popularity-matched to the positives. If D
       holds up, the model has specificity beyond degree. If D falls toward A's floor,
       the headline number was mostly popularity.
@@ -234,7 +234,7 @@ def main() -> None:
     log.info(f"degree-matched fallback rate: {fb_pct:.1f}% (lower is a cleaner match)")
     log.info("")
     log.info("Read: if the degree heuristic already scores high under uniform negatives,")
-    log.info("the published metric is weak evidence. If HGT falls to that same floor")
+    log.info("the original metric is weak evidence. If HGT falls to that same floor")
     log.info("under degree-matched negatives, the result was popularity, not regulation.")
     log.info("=" * 74)
 

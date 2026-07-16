@@ -12,11 +12,17 @@ and `results/archive_pre_audit/EXEC_SUMMARY.md`, which report numbers we now kno
 > model-selected validation number. Selecting on `val_auroc` and reporting it cost us
 > **+0.020** of illusory AUROC (0.6467 val → 0.6271 test).
 
+> **A note on the word "original".** Throughout this document, *the original protocol* means
+> the one used in the **thesis-defense version** of this work: miRNA→gene edges seen during
+> training, uniform random negatives. **Nothing from this project has been published.** The
+> 0.9836 was never in print — it was corrected *before* submission, not after. Where this
+> document says *published*, it refers to **other groups' papers**.
+
 ---
 
 ## The headline
 
-The published link-prediction result — **AUROC 0.9836** — does not survive a correct
+The original link-prediction result — **AUROC 0.9836** — does not survive a correct
 evaluation. Retrained under a verified leak-free edge split with popularity-matched
 negatives, the same architecture scores **AUROC 0.6271 on the test set**.
 
@@ -51,7 +57,7 @@ only (35,350) are visible to any scorer.
 **1. The deep model barely beats a formula from 1999.** 0.6271 vs 0.5912 — **+3.6 points**
 for a 175 MB transformer over two lines of arithmetic.
 
-**2. Under the published protocol, the model is beaten by a scorer that ignores the miRNA.**
+**2. Under the original protocol, the model is beaten by a scorer that ignores the miRNA.**
 `gene_degree` reaches **0.8712**; the HGT trained under that same protocol reaches **0.8056**.
 The deep model is not merely unnecessary — it is **6.6 points worse than counting how many
 miRNAs already target the gene**.
@@ -72,14 +78,14 @@ distribution**, so nothing is confounded:
 
 | | Uniform negatives | Degree-matched negatives |
 |---|:--:|:--:|
-| **Edges seen in training** (published) | **0.9836** | 0.8828 |
+| **Edges seen in training** (original) | **0.9836** | 0.8828 |
 | **Edges held out** (honest, test) | 0.8056 | **0.6271** |
 
 | Effect | Cost |
 |---|:--:|
 | An honest **split** alone (negatives held uniform) | **−0.178** |
 | Honest **negatives** alone (edges held seen) | **−0.101** |
-| Both — published → honest | **−0.357** |
+| Both — original → honest | **−0.357** |
 
 The effects are **super-additive**: −0.178 + −0.101 = −0.279, but the true total is −0.357.
 **Fixing only one of the two problems substantially understates the damage** — a paper that
@@ -108,7 +114,7 @@ Four experiments, each narrowing the question. The order is the method.
 
 | Encoder view | AUROC |
 |---|:--:|
-| (a) Graph intact — as published | 0.9853 |
+| (a) Graph intact — as originally evaluated | 0.9853 |
 | (c) **Scored pair masked out of message passing** | **0.9766** (−0.009) |
 | (b) miRNA↔gene relation removed entirely | 0.5551 (−0.430) |
 
@@ -186,7 +192,7 @@ scoring head takes context as input at all.**
 1. **Quantified inflation, decomposed.** 0.9836 → 0.6271. Split costs −0.178, negatives cost
    −0.101, together −0.357 — *super-additive*, so fixing one understates the damage.
 2. **A model-free control that indicts the protocol, not the model.** `gene_degree` (0.8712)
-   beats the trained transformer (0.8056) under the published protocol. And a uniform-negative
+   beats the trained transformer (0.8056) under the original protocol. And a uniform-negative
    model, tested against matched negatives, *is* the popularity heuristic (0.5118 ≈ 0.5126).
 3. **Context-specific claims may not be architecturally supported** (above).
 4. **A corrected, reusable protocol**: `training/splits.py`, `training/test_edge_split.py`,
@@ -301,7 +307,7 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    instead, it clears the heuristic by **+0.1136**. AUPRC agrees throughout.
 
    **Still blocked — the seen-edges row has no error bar, and cannot get one by re-running.**
-   The published **0.9836 / 0.8828** are **constants hardcoded at `eval_heldout_grid.py:166`**,
+   The original **0.9836 / 0.8828** are **constants hardcoded at `eval_heldout_grid.py:166`**,
    not recomputed per seed, so *"cost of an honest split = +0.4282"* remains n=1. Worse,
    `train.py:271` now builds the edge split **unconditionally** (`hard_negatives` defaults to
    `True`, no off switch), and `config_v2.yaml` sets neither key — so retraining it today
