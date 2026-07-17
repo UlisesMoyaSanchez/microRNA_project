@@ -12,6 +12,13 @@
 #
 # Usage: sbatch analysis/slurm_audit_ms_specificity.sh
 #        CONFIG=configs/config_v2.yaml sbatch analysis/slurm_audit_ms_specificity.sh
+#        CONFIG=configs/config_v3fixed_edgesplit.yaml \
+#          OUT=results/comparison/ms_specificity_audit_v3fixed.json \
+#          sbatch analysis/slurm_audit_ms_specificity.sh
+#
+# OUT is overridable so auditing a rebuilt graph does not clobber the pre-fix audit
+# JSON (results/comparison/ms_specificity_audit.json), which pins sha c5d98d15 and is
+# the documented pre-fix record.
 # =============================================================================
 #SBATCH --job-name=ms_audit
 #SBATCH --cpus-per-task=8
@@ -29,6 +36,7 @@ mkdir -p logs results/comparison
 # Config is overridable rather than hardcoded — the bug in slurm_build_graph.sh
 # that would silently audit the wrong graph.
 CONFIG="${CONFIG:-configs/config_v2.yaml}"
+OUT="${OUT:-results/comparison/ms_specificity_audit.json}"
 
 set +u
 source /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
@@ -43,10 +51,10 @@ echo "Config: ${CONFIG}"
 echo "Git:    $(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 echo "========================================"
 
-python analysis/audit_ms_specificity.py --config "${CONFIG}"
+python analysis/audit_ms_specificity.py --config "${CONFIG}" --out "${OUT}"
 
 echo ""
 echo "========================================"
 echo "MS-specificity audit complete: $(date)"
-ls -lh "${PROJECT_DIR}/results/comparison/ms_specificity_audit.json"
+ls -lh "${PROJECT_DIR}/${OUT}"
 echo "========================================"
