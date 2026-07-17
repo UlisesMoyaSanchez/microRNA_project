@@ -93,22 +93,38 @@ def main() -> None:
     graph["cell"].val_mask = val_mask
     graph["cell"].test_mask = test_mask
 
-    split = build_edge_split(
-        graph,
-        val_ratio=tcfg["val_ratio"],
-        test_ratio=tcfg["test_ratio"],
-        seed=seed,
-        disjoint_train_ratio=tcfg.get("disjoint_train_ratio", 0.3),
-    )
-    assert_no_edge_leakage(split)
+    # edge_split=false scores the SEEN edges on the full graph — the transductive
+    # reference row — reusing the identical sampler/scoring below. It IS the reference,
+    # so no attribution is computed against another number.
+    is_transductive = not tcfg.get("edge_split", True)
+    if is_transductive:
+        mp_graph = graph
+        all_pos = graph[REL_FWD].edge_index
+        sup = all_pos
+        eval_mask = val_mask if args.split == "val" else test_mask
+        deg = gene_in_degree(all_pos, mp_graph["gene"].num_nodes)
+        log.info(
+            f"TRANSDUCTIVE (edge_split=false): scoring {sup.shape[1]:,} SEEN edges over "
+            f"the {args.split} cell batches on the full graph — the 'edges seen' row."
+        )
+    else:
+        split = build_edge_split(
+            graph,
+            val_ratio=tcfg["val_ratio"],
+            test_ratio=tcfg["test_ratio"],
+            seed=seed,
+            disjoint_train_ratio=tcfg.get("disjoint_train_ratio", 0.3),
+        )
+        assert_no_edge_leakage(split)
 
-    mp_graph = split.mp_graph
-    sup = split.val_sup if args.split == "val" else split.test_sup
-    eval_mask = val_mask if args.split == "val" else test_mask
-    log.info(f"Scoring {sup.shape[1]:,} held-out {args.split} edges")
+        mp_graph = split.mp_graph
+        all_pos = split.all_pos
+        sup = split.val_sup if args.split == "val" else split.test_sup
+        eval_mask = val_mask if args.split == "val" else test_mask
+        log.info(f"Scoring {sup.shape[1]:,} held-out {args.split} edges")
 
-    train_edges = torch.cat([mp_graph[REL_FWD].edge_index, split.train_sup], dim=1)
-    deg = gene_in_degree(train_edges, mp_graph["gene"].num_nodes)
+        train_edges = torch.cat([mp_graph[REL_FWD].edge_index, split.train_sup], dim=1)
+        deg = gene_in_degree(train_edges, mp_graph["gene"].num_nodes)
 
     loader = NeighborLoader(
         mp_graph,
@@ -129,7 +145,8 @@ def main() -> None:
 
     if args.out is None:
         tag = Path(ckpt).parent.name
-        args.out = f"results/comparison/heldout_grid_{tag}_{args.split}.json"
+        kind = "seen_grid" if is_transductive else "heldout_grid"
+        args.out = f"results/comparison/{kind}_{tag}_{args.split}.json"
 
     criterion = CombinedLoss(
         reconstruction_weight=tcfg["loss_reconstruction_weight"],
@@ -141,7 +158,7 @@ def main() -> None:
     for name, hard in (("uniform", False), ("degree_matched", True)):
         # Fresh sampler per condition, same seed: identical positives, identical encoder
         # view, only the negatives differ.
-        sampler = LinkSampler(split.all_pos, deg, seed, hard=hard)
+        sampler = LinkSampler(all_pos, deg, seed, hard=hard)
         m = evaluate(model, loader, criterion, device, mp_graph,
                      sampler=sampler, sup_edges=sup)
         results[name] = {
@@ -156,22 +173,25 @@ def main() -> None:
     d = results["degree_matched"]["auroc"]
 
     log.info("=" * 76)
-    log.info("HELD-OUT EDGES — attributing the collapse")
+    log.info("SEEN EDGES (transductive reference row)" if is_transductive
+             else "HELD-OUT EDGES — attributing the collapse")
     log.info("=" * 76)
     # Reference row: CLI wins, else whatever THIS graph's config declares. Absent for any
-    # graph on which the transductive protocol was never measured.
+    # graph on which the transductive protocol was never measured. A transductive run is
+    # itself the reference, so it never subtracts against one.
     ref_cfg = (cfg.get("evaluation") or {}).get("reference_seen_edges") or {}
     ref_u = args.reference_uniform if args.reference_uniform is not None else ref_cfg.get("uniform")
     ref_d = args.reference_matched if args.reference_matched is not None else ref_cfg.get("degree_matched")
-    has_reference = ref_u is not None and ref_d is not None
+    has_reference = (ref_u is not None and ref_d is not None) and not is_transductive
 
     log.info(f"{'':<26}{'uniform neg':>16}{'degree-matched neg':>22}")
     log.info("-" * 76)
     if has_reference:
         log.info(f"{'edges seen (original)':<26}{ref_u:>16.4f}{ref_d:>22.4f}")
-    else:
+    elif not is_transductive:
         log.info(f"{'edges seen (original)':<26}{'n/a':>16}{'n/a':>22}")
-    log.info(f"{'edges held out (honest)':<26}{u:>16.4f}{d:>22.4f}")
+    row_label = "edges seen (this graph)" if is_transductive else "edges held out (honest)"
+    log.info(f"{row_label:<26}{u:>16.4f}{d:>22.4f}")
     log.info("-" * 76)
     if has_reference:
         log.info(f"Cost of honest negatives alone : {ref_u - ref_d:+.4f}")
@@ -187,24 +207,37 @@ def main() -> None:
         "checkpoint": str(ckpt),
         "epoch": ck.get("epoch"),
         "split": args.split,
-        "n_held_out_edges": int(sup.shape[1]),
-        "held_out": results,
     }
-    if has_reference:
-        summary["reference_seen_edges"] = {"uniform": ref_u, "degree_matched": ref_d}
-        summary["attribution"] = {
-            "negatives_only": ref_u - ref_d,
-            "split_only": ref_u - u,
-            "total": ref_u - d,
-        }
-    else:
-        # Explicit, so a consumer can tell "not measured" from "forgot to record it".
+    if is_transductive:
+        # This run IS the seen-edges reference other configs cite; it never attributes.
+        summary["protocol"] = "transductive_seen"
+        summary["n_seen_edges"] = int(sup.shape[1])
+        summary["seen_edges"] = results
         summary["reference_seen_edges"] = None
         summary["attribution"] = None
-        summary["reference_note"] = (
-            "No transductive reference declared for this graph. The attribution is omitted "
-            "rather than computed against another graph's constants."
+        summary["note"] = (
+            "Transductive reference row (edges seen in training). These ARE the seen-edges "
+            "numbers other configs cite as reference_seen_edges; no attribution is computed."
         )
+    else:
+        summary["protocol"] = "held_out"
+        summary["n_held_out_edges"] = int(sup.shape[1])
+        summary["held_out"] = results
+        if has_reference:
+            summary["reference_seen_edges"] = {"uniform": ref_u, "degree_matched": ref_d}
+            summary["attribution"] = {
+                "negatives_only": ref_u - ref_d,
+                "split_only": ref_u - u,
+                "total": ref_u - d,
+            }
+        else:
+            # Explicit, so a consumer can tell "not measured" from "forgot to record it".
+            summary["reference_seen_edges"] = None
+            summary["attribution"] = None
+            summary["reference_note"] = (
+                "No transductive reference declared for this graph. The attribution is omitted "
+                "rather than computed against another graph's constants."
+            )
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w") as fh:
         json.dump(summary, fh, indent=2)

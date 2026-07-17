@@ -265,11 +265,21 @@ def main() -> None:
     # ── Edge-level split ──────────────────────────────────────────────────────
     # Without this the encoder is handed the very edges the link head is asked to
     # predict, and the AUROC is a reconstruction score rather than a prediction.
+    #
+    # edge_split=false reintroduces exactly that leak, ON PURPOSE and behind an explicit
+    # flag: the encoder sees every miRNA→gene edge and the link head is supervised on the
+    # same edges. It exists so the transductive ("edges seen in training") reference row
+    # can be re-measured on THIS graph — otherwise the 0.98 endpoint lives on a different
+    # graph than the 0.63 one. The leaky path deleted in 8a12ce3 is NOT restored verbatim;
+    # the leak is expressed as a no-holdout split feeding the same LinkSampler, so uniform
+    # vs degree-matched negatives behave identically in both protocols and only the split
+    # varies — which is exactly what the attribution isolates.
+    do_edge_split = tcfg.get("edge_split", True)
     sampler:   LinkSampler | None   = None
     train_sup: torch.Tensor | None  = None
     val_sup:   torch.Tensor | None  = None
 
-    if _pos is not None:
+    if _pos is not None and do_edge_split:
         edge_split = build_edge_split(
             graph,
             val_ratio=tcfg["val_ratio"],
@@ -301,6 +311,29 @@ def main() -> None:
         # build_edge_split reseeds the global RNG so every DDP rank derives the same
         # split; restore this rank's own seed so the ranks do not train in lockstep.
         set_seed(seed, local_rank)
+
+    elif _pos is not None and not do_edge_split:
+        # TRANSDUCTIVE (leak on purpose): no holdout. The full graph stays the encoder
+        # view, and every positive edge is also a supervision target, so the head is
+        # scored on edges the encoder message-passed. Degrees are binned on ALL edges
+        # (there is nothing held out to protect), and the same LinkSampler draws uniform
+        # or degree-matched negatives per training.hard_negatives.
+        all_pos   = _pos.clone()
+        train_sup = all_pos
+        val_sup   = all_pos
+        deg = gene_in_degree(all_pos, graph["gene"].num_nodes)
+        sampler = LinkSampler(
+            all_pos_global=all_pos,
+            deg=deg,
+            seed=seed,
+            hard=tcfg.get("hard_negatives", True),
+        )
+        log.warning(
+            "TRANSDUCTIVE protocol (edge_split=false): miRNA→gene edges are NOT held out. "
+            f"Negatives: {'degree-matched (hard)' if sampler.hard else 'uniform'}. This "
+            "measures the 'edges seen in training' reference row — the leak the paper is "
+            "about, reintroduced deliberately behind this flag."
+        )
 
     # ── DataLoaders ───────────────────────────────────────────────────────────
     num_workers = max(0, int(os.environ.get("SLURM_CPUS_PER_TASK", 4)) // world_size() - 1)
