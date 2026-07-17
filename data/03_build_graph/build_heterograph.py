@@ -53,12 +53,32 @@ def parse_args() -> argparse.Namespace:
 
 # ── Build fingerprint ─────────────────────────────────────────────────────────
 
-def config_fingerprint(cfg: dict) -> str:
-    """Hash of the config subtrees that determine the graph's contents.
+def _build_code_hash() -> str:
+    """Hash of this module's source.
 
-    Deliberately narrow: seeds, SLURM settings and training hyperparameters do not
-    change the graph, so including them would make every unrelated edit look like a
-    stale graph and train people to pass --force reflexively.
+    config_fingerprint deliberately excludes training hyperparameters, but the
+    graph-*building* code is exactly what a stale-graph guard must track: the config
+    can be byte-identical while an edge-builder edit silently changes every edge (the
+    :1000-slice and z-scale-threshold fixes did exactly that, with no config change).
+    A paper about undocumented state corrupting results cannot have its own reuse
+    guard blind to that. Conservative on purpose — a comment-only edit also
+    invalidates reuse, which is the safe direction to err.
+    """
+    try:
+        with open(os.path.abspath(__file__), "rb") as fh:
+            return hashlib.sha256(fh.read()).hexdigest()
+    except OSError:
+        return "unknown"
+
+
+def config_fingerprint(cfg: dict) -> str:
+    """Hash of the config subtrees + build code that determine the graph's contents.
+
+    Deliberately narrow on the config side: seeds, SLURM settings and training
+    hyperparameters do not change the graph, so including them would make every
+    unrelated edit look like a stale graph and train people to pass --force
+    reflexively. The build-code hash is included because construction code *does*
+    change the graph while leaving the config untouched.
     """
     material = {
         "interactions_file": cfg["data"].get("mirna", {}).get("interactions_file",
@@ -67,6 +87,7 @@ def config_fingerprint(cfg: dict) -> str:
         "processed_dir":  cfg["data"]["processed_dir"],
         "raw_dir":        cfg["data"]["raw_dir"],
         "mirna_init_dim": cfg["model"]["mirna_init_dim"],
+        "build_code":     _build_code_hash(),
     }
     blob = json.dumps(material, sort_keys=True, default=str)
     return hashlib.sha256(blob.encode()).hexdigest()
@@ -202,8 +223,21 @@ def build_mirtarbase_edges(
 def build_expression_edges(
     adata: ad.AnnData, threshold: float
 ) -> torch.Tensor:
-    """Sparse edges where log-normalized expression > threshold."""
-    X = adata.X
+    """Sparse cell→gene edges where LOG-NORMALIZED expression > threshold.
+
+    The threshold is defined on log-normalized expression — the level the config
+    documents. But adata.X here has been z-scaled (sc.pp.scale in preprocessing),
+    so thresholding it means "threshold sigma above each gene's mean", not a
+    log-norm level: 0.10 becomes 0.1σ. Read the frozen log-normalized values from
+    adata.raw and subset to the HVG columns in HVG order, so column j == gene j in
+    gene2idx (same pattern as build_gene_features)."""
+    if adata.raw is not None and adata.raw.X is not None:
+        raw_var_names = list(adata.raw.var_names)
+        hvg_names = list(adata.var_names)
+        col_idx = [raw_var_names.index(g) for g in hvg_names if g in raw_var_names]
+        X = adata.raw.X[:, col_idx]
+    else:
+        X = adata.X
     if not sp.issparse(X):
         X = sp.csr_matrix(X)
     X_coo = X.tocoo()
@@ -216,14 +250,34 @@ def build_expression_edges(
 def build_coexpression_edges(
     adata: ad.AnnData, threshold: float, top_n: int
 ) -> torch.Tensor:
-    """Gene-gene co-expression edges based on PCC > threshold."""
+    """Gene-gene co-expression edges based on PCC > threshold.
+
+    Restricts to the top_n most variable genes to keep the O(g^2) correlation
+    tractable. "Most variable" means ranked by the normalized dispersion recorded
+    during HVG selection (pre-scaling) — NOT the first top_n columns in var order,
+    which is an arbitrary subset (measured jaccard 0.294 vs. the intended set).
+    Column preference matches analysis/audit_ms_specificity.py. Pearson correlation
+    is invariant to scanpy's per-gene z-scaling, so the scaled adata.X is fine for
+    the correlation itself; only gene selection needs the variability ranking. Edge
+    indices are remapped from subset positions back to the global gene index space."""
     X = adata.X
     if sp.issparse(X):
         X = X.toarray()
 
-    # Use top_n most variable genes to keep computation tractable
     n_genes = min(top_n, X.shape[1])
-    X_sub = X[:, :n_genes].astype(np.float32)
+
+    # Rank genes by the variability metric HVG selection recorded, not column order.
+    var_col = next((c for c in ("dispersions_norm", "dispersions", "variances_norm")
+                    if c in adata.var.columns), None)
+    if var_col is None:
+        raise KeyError(
+            "No HVG variability column (dispersions_norm/dispersions/variances_norm) "
+            f"in adata.var; have {list(adata.var.columns)[:8]}. Cannot rank most-variable genes."
+        )
+    top_idx = np.argsort(adata.var[var_col].values)[::-1][:n_genes]
+    top_idx = np.sort(top_idx).astype(np.int64)  # global gene indices, ascending
+
+    X_sub = X[:, top_idx].astype(np.float32)
 
     # Zero-center per gene before computing correlation
     X_sub -= X_sub.mean(axis=0, keepdims=True)
@@ -236,8 +290,9 @@ def build_coexpression_edges(
     corr = X_sub.T @ X_sub  # (n_genes, n_genes), values in [-1, 1]
 
     src, dst = np.where((corr > threshold) & (np.eye(n_genes) == 0))
-    src = src.astype(np.int64)
-    dst = dst.astype(np.int64)
+    # Map subset positions (0..n_genes) back to global gene indices.
+    src = top_idx[src].astype(np.int64)
+    dst = top_idx[dst].astype(np.int64)
     return torch.tensor(np.stack([src, dst]), dtype=torch.long)
 
 
