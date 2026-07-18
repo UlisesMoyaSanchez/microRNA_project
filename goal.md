@@ -43,6 +43,14 @@ in MS — not just a cell-type classifier.
 **The headline link-prediction result did not survive a correct evaluation.**
 All figures below are on the untouched **test** split.
 
+> **Graph lineage — read before quoting any number here (2026-07-18).** Every figure in this
+> section was measured on the **pre-fix graph** (`data/graphs/`, sha `c5d98d15…`). D4 was
+> answered *fix-first*, so `data/graphs_v3fixed/` now exists, is independently verified, and
+> is the graph the paper will report on — but **only the leaky endpoint has been re-measured
+> on it.** The honest endpoint (0.6271 / 0.6262 ± 0.0071) and the topology floor (0.5912)
+> are still v2 numbers. Until `config_v3fixed_edgesplit` trains, the attribution above spans
+> **two different graphs** and must not be presented as a single-graph result. Status in §3.2.
+
 > **Nothing from this project has been published.** *The original protocol* below means the
 > one used in the **thesis-defense version**: edges seen in training, uniform negatives. The
 > 0.9836 was never in print — it was corrected *before* submission, not after. Where these
@@ -181,12 +189,14 @@ done and the second is suspended). Full detail in
 
 ### 3.2 Blocking submission
 
-- [ ] **The MS framing is not supported by the pipeline — FIVE DECISIONS OPEN, all yours.**
+- [ ] **The MS framing is not supported by the pipeline — D4 ANSWERED, D1/D2/D3/D5 OPEN.**
       Evidence is in hand and reproducible: `analysis/audit_ms_specificity.py` →
       `results/comparison/ms_specificity_audit.json` (SLURM job **5716**, clean tree at
-      `b790659`, graph `c5d98d15…`). Nothing below is decided; the audit only establishes
-      the facts. **This blocks the manuscript: the paper cannot keep using the word "MS"
-      until D1 is answered.**
+      `b790659`, graph `c5d98d15…`) — the **pre-fix** record, deliberately preserved. The
+      audit only establishes facts; the four remaining decisions are still yours.
+      **This blocks the manuscript: the paper cannot keep using the word "MS"
+      until D1 is answered.** D4 was taken *fix-first* on 2026-07-17 and is tracked below;
+      it is engineering, and it does not answer D1.
 
       **The facts, none of them disputed.** MS enters this pipeline exactly twice — the
       cellxgene `disease` filter (which cells were downloaded) and `batch_key="condition"` in
@@ -224,7 +234,45 @@ done and the second is suspended). Full detail in
         the miRNA features as content-free) and a methods-critique paper that audits its own
         provenance has standing that one which doesn't, lacks. But it is an admission, and it
         is your call whether it reads as rigour or as sloppiness.
-      - **D4 — The two construction bugs: fix, or document and freeze?** Co-expression edges
+      - **D4 — ANSWERED 2026-07-17: FIX, fix-first. Graph rebuilt and verified; re-measurement
+        HALF DONE.** The decision reversed the default recommendation below, which is left
+        intact as the record of what was weighed. Progress, all on `graphs_v3fixed`
+        (sha `84329f70…`, manifest `data/graphs_v3fixed/graph_manifest.json`):
+        - [x] Both bugs fixed (`7ac3319`); `config_fingerprint` now hashes the build code, so
+              a graph-changing edit can no longer silently reuse a cached graph.
+        - [x] Graph rebuilt — job **5717**, 2026-07-17.
+        - [x] Transductive protocol restored behind `training.edge_split` (`ca2e7f3`), the leak
+              reintroduced deliberately and only behind that flag. This also takes option **(a)**
+              on the *seen-edges row* item below, which was previously open.
+        - [x] Leaky endpoint retrained on the fixed graph — job **5718**, best `val_auroc`
+              **0.9946**. **This is a control, not a result**: `train.py:315-336` assigns
+              `val_sup = train_sup = all_pos`, so it is a reconstruction score on memorized
+              edges against uniform negatives. Never report it in a results table unlabelled.
+        - [x] Graph independently verified — job **5728**, 2026-07-18, `9dc22ed`, **all three
+              edge types PASS**. Co-expression endpoints are **all** within the top-1000 most
+              variable genes, and the pre-fix counterfactual yields **1,130** edges vs the
+              emitted **828** — so the fix demonstrably moved the artifact rather than
+              reproducing it. `expresses` 16,682,321 (spot-check min 0.1023 > 0.10 threshold);
+              `regulates` 44,186.
+        - [ ] **Honest endpoint NOT retrained.** `checkpoints_v3fixed_edgesplit/` does not
+              exist. This is the gap that keeps §2's table spanning two graphs, and it is the
+              next job that should run.
+        - [ ] **Topology baseline NOT regenerated** on the fixed graph — so 0.5912 is still the
+              v2 floor. Must move with the honest endpoint or the comparison is mismatched.
+        - [ ] **`ms_specificity_audit_v3fixed.json` (job 5720) carries one false verdict.** It
+              reports the co-expression bug as live on a graph where `7ac3319` had already
+              fixed it. Cause: `check_coexpr_gene_selection` was passed only `adata.var` and
+              compared "first n in var order" against "top n by dispersion" *within the
+              annotation* — an overlap that is a property of scanpy's column ordering and
+              **identical whether the bug is present or fixed.** It could not fail. Patched in
+              `9dc22ed` to read the graph's endpoints and report
+              `most_variable`/`first_n`/`neither`; job 5728 independently confirms the answer
+              is `most_variable`. **The JSON on disk is still the old one — re-run before
+              citing it as the post-fix provenance record.**
+              *This is the paper's own thesis landing on our own repo, and §3.2/D2 should
+              decide whether it belongs in the manuscript as a second instance of the pattern.*
+
+        *Original framing, preserved:* **fix, or document and freeze?** Co-expression edges
         use `X[:, :1000]` — the **first** 1,000 genes in `var` order, not the most variable as
         the docstring claims (measured overlap: **jaccard 0.294**). And the `cell→gene`
         threshold `0.10` is applied to **z-scaled** data (`preprocess_scrna.py:87`), so it means
@@ -249,7 +297,15 @@ done and the second is suspended). Full detail in
       are false — the samples are generic lymphocytes/monocytes/neutrophils and the cohort
       includes T1D. Same species of error as the `mirtarbase_hsa.tsv`-holds-miRDB filename.
 
-- [ ] **Multi-seed, the *seen-edges* row — BLOCKED, needs a decision.** The held-out row is
+- [ ] **Multi-seed, the *seen-edges* row — UNBLOCKED 2026-07-17, option (a) taken; the seeds
+      have not been run.** `ca2e7f3` restored the transductive protocol behind
+      `training.edge_split`, so the row *can* now be recomputed per seed on the fixed graph —
+      which is what (a) below asks for. One seed has run (job 5718, `val_auroc` 0.9946, a
+      control — see D4); the 4-seed fan-out has not, so **this row is still n=1 and still
+      carries no error bar.** Note the reference constants named below (0.9836/0.8828) are
+      *pre-fix-graph* numbers and do not describe `graphs_v3fixed`; `config_v3fixed_edgesplit`
+      correctly drops `reference_seen_edges` and will emit `attribution: null` until the fixed
+      graph has its own reference row. Original framing follows. The held-out row is
       done (§3.1), but the top row of the 2×2 — the original **0.9836 / 0.8828** — is a
       pair of **single-seed constants** from the original transductive run. It is *not*
       recomputed per seed, so every attribution that subtracts from it (*"cost of an honest
