@@ -88,7 +88,9 @@ def check_expresses(graph, adata, threshold: float) -> bool:
     ei = graph[REL_EXPR].edge_index
     n = min(2000, ei.shape[1])
     sel = torch.randperm(ei.shape[1])[:n]
-    rows = ei[0, sel].numpy(); cols = ei[1, sel].numpy()
+    # .copy(): torch->numpy views are non-writeable, and scipy's sparse fancy-indexing
+    # insists on setting the writeable flag on its index arrays.
+    rows = ei[0, sel].numpy().copy(); cols = ei[1, sel].numpy().copy()
     vals = np.asarray(raw[rows, cols]).ravel()
     n_bad = int((vals <= threshold).sum())
     print(f"  spot-check {n} emitted edges: {n_bad} with log-norm ≤ {threshold} "

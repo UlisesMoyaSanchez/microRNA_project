@@ -32,6 +32,8 @@ import pandas as pd
 import torch
 import yaml
 
+REL_COEXPR = ("gene", "coexpressed_with", "gene")
+
 
 # ── Provenance ────────────────────────────────────────────────────────────────
 
@@ -219,29 +221,64 @@ def check_mirna_expression_vs_degree(graph_mirna_names, expr: pd.DataFrame,
     }
 
 
-def check_coexpr_gene_selection(adata_var: pd.DataFrame, top_n: int) -> dict:
-    """build_coexpression_edges says 'top_n most variable'; it slices X[:, :top_n]."""
+def check_coexpr_gene_selection(graph, adata_var: pd.DataFrame, top_n: int) -> dict:
+    """Which gene set do the graph's co-expression edges actually live in?
+
+    The claim under test is about the GRAPH, so it must be measured on the graph. An
+    earlier version of this check compared 'first n in var order' against 'top n by
+    dispersion' using adata.var alone — but that overlap is a property of scanpy's
+    column ordering and is identical whether build_heterograph slices X[:, :n] or
+    ranks by variance. It reported the same jaccard, and the same verdict, on a fixed
+    graph as on a broken one. It could not fail.
+    """
     n = min(top_n, len(adata_var))
-    first_n = set(adata_var.index[:n])
+    first_n_idx = np.arange(n)
     out = {"top_n": n, "n_genes": len(adata_var)}
     col = next((c for c in ("dispersions_norm", "dispersions", "variances_norm")
                 if c in adata_var.columns), None)
     if col is None:
         out["error"] = f"no variance column in var; have {list(adata_var.columns)[:8]}"
         return out
-    most_var = set(adata_var[col].sort_values(ascending=False).index[:n])
+
+    most_var_idx = np.argsort(adata_var[col].values)[::-1][:n]
+    first_n, most_var = set(int(i) for i in first_n_idx), set(int(i) for i in most_var_idx)
     inter = len(first_n & most_var)
     out.update({
         "variance_column_used": col,
         "overlap_first_n_vs_most_variable": inter,
         "jaccard": round(inter / len(first_n | most_var), 4),
-        "interpretation": (
-            "build_heterograph.py:151 slices X[:, :n_genes] — the first n columns in var "
-            "order, which scanpy preserves from the original annotation, not by variance. "
-            "The docstring at :149 ('top_n most variable') is false; co-expression edges live "
-            "in an arbitrary subset of the gene nodes."
-        ),
     })
+
+    # The falsifiable part: where do the emitted endpoints actually sit?
+    if REL_COEXPR not in graph.edge_types:
+        out["error"] = f"graph has no {REL_COEXPR} edges"
+        return out
+    ep = set(int(g) for g in np.unique(graph[REL_COEXPR].edge_index.numpy()))
+    out["n_distinct_endpoints"] = len(ep)
+    out["endpoints_outside_most_variable"] = len(ep - most_var)
+    out["endpoints_outside_first_n"] = len(ep - first_n)
+
+    if not (ep - most_var):
+        selection, interp = "most_variable", (
+            "Every co-expression endpoint is among the top_n most-variable genes, and "
+            "the jaccard above is how far that differs from the first-n set the pre-fix "
+            "code used. The docstring and the artifact agree."
+        )
+    elif not (ep - first_n):
+        selection, interp = "first_n", (
+            "Every co-expression endpoint is among the FIRST n genes in var order, not "
+            "the most variable — build_coexpression_edges is slicing X[:, :n_genes]. The "
+            "docstring ('top_n most variable') is false and co-expression edges live in "
+            "an arbitrary subset of the gene nodes."
+        )
+    else:
+        selection, interp = "neither", (
+            "Co-expression endpoints match neither the most-variable nor the first-n gene "
+            "set — the index remap is wrong in a third way. Investigate before using this "
+            "graph."
+        )
+    out["selection_used"] = selection
+    out["interpretation"] = interp
     return out
 
 
@@ -375,7 +412,7 @@ def main() -> None:
         import anndata as ad
         adata = ad.read_h5ad(scrna_p, backed="r")   # var only; do not load X
         results["coexpr_gene_selection"] = check_coexpr_gene_selection(
-            adata.var, cfg["data"]["graph"]["coexpression_top_n_genes"])
+            graph, adata.var, cfg["data"]["graph"]["coexpression_top_n_genes"])
         adata.file.close()
     else:
         results["coexpr_gene_selection"] = {"error": f"missing {scrna_p}"}
