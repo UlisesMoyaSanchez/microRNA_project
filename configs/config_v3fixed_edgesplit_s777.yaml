@@ -1,0 +1,112 @@
+# =============================================================================
+# v3fixed: config_v2_edgesplit rebuilt on the CORRECTED graph construction.
+# Identical architecture, optimizer, and protocol to config_v2_edgesplit.yaml —
+# the ONLY differences are graph routing (a new graphs_dir so the pre-fix graph
+# at data/graphs, sha c5d98d15, survives untouched) and the removal of the stale
+# reference_seen_edges block.
+#
+# Two graph-construction bugs are fixed in build_heterograph.py (not here — the
+# thresholds below are deliberately UNCHANGED; tuning them would be a new
+# undocumented deviation, the exact failure this project is about):
+#   1. co-expression edges now rank genes by HVG dispersion, not var order
+#      (was X[:, :1000]; measured jaccard 0.294 vs. the documented "most variable").
+#   2. cell→gene 'expresses' edges now threshold LOG-NORM expression from
+#      adata.raw, not z-scaled adata.X (0.10 meant 0.1σ, not a log-norm level).
+# Both change the graph, so every number here is recomputed from scratch.
+#
+# reference_seen_edges is intentionally ABSENT: the old 0.9836/0.8828 were on the
+# pre-fix graph via the leaky path deleted in 8a12ce3, so they do not describe this
+# graph. Once the transductive protocol is re-measured on THIS graph (edge_split:
+# false lineage), its numbers get declared here; until then eval_heldout_grid.py
+# emits attribution: null rather than borrowing a constant that isn't this graph's.
+# =============================================================================
+
+project:
+  name: mirna_ms_v3fixed_edgesplit_s777
+  seed: 777
+  output_dir: /raid/home/umoya/scripts/microRNA_project/results
+
+data:
+  raw_dir:       /raid/home/umoya/scripts/microRNA_project/data/raw
+  processed_dir: /raid/home/umoya/scripts/microRNA_project/data/processed
+  graphs_dir:    /raid/home/umoya/scripts/microRNA_project/data/graphs_v3fixed
+
+  cellxgene:
+    organism: "Homo sapiens"
+    disease:  "multiple sclerosis"
+    tissue:
+      - "blood"
+      - "brain"
+      - "cerebrospinal fluid"
+    n_top_genes: 3000
+    min_cells:   3
+    min_genes:   200
+    max_pct_mito: 20.0
+    max_obs_ms:   150000
+    max_obs_ctrl: 100000
+
+  mirna:
+    mirdb_url: "https://mirdb.org/download/miRDB_v6.0_prediction_result.txt.gz"
+    mirdb_score_threshold: 80
+    min_interactions: 5
+
+  geo:
+    accessions:
+      GSE289530: "miRNA microarray (GPL19117); lymphocytes, monocytes, neutrophils; mixed cohort per Sample_description (Control/MS/T1D), 166 samples, 2026. NOTE: not used downstream (mirna_expr.tsv has zero readers)."
+
+  graph:
+    coexpression_threshold:          0.60
+    coexpression_top_n_genes:        1000
+    cell_gene_expression_threshold:  0.10
+    min_mirna_gene_interactions:     2
+
+cell_type_markers:
+  T_cell:        ["CD3D", "CD3E", "CD3G"]
+  CD4_T:         ["CD4", "IL7R"]
+  CD8_T:         ["CD8A", "CD8B"]
+  Th17:          ["IL17A", "RORC", "IL23R", "CCR6"]
+  Treg:          ["FOXP3", "IL2RA", "CTLA4"]
+  B_cell:        ["MS4A1", "CD19", "CD79A"]
+  NK_cell:       ["GNLY", "NKG7", "NCAM1"]
+  Monocyte:      ["CD14", "LYZ", "CST3"]
+  Microglia:     ["CX3CR1", "P2RY12", "TMEM119", "SLC2A5"]
+  Oligodendrocyte: ["MBP", "PLP1", "MOG", "CNP"]
+  Astrocyte:     ["GFAP", "S100B", "AQP4", "ALDH1L1"]
+
+model:
+  hidden_channels: 512        # wider: 256→512
+  num_heads:       8
+  num_layers:      4          # deeper: 3→4
+  dropout:         0.3        # more regularization: 0.2→0.3
+  mirna_init_dim:  64
+
+training:
+  batch_size:   512
+  num_epochs:   200
+  lr:           5.0e-4        # slower: 1e-3→5e-4
+  weight_decay: 1.0e-5
+  patience:     25            # more patience for slower lr
+  loss_reconstruction_weight: 1.0
+  loss_classification_weight: 0.5
+  loss_sparsity_weight:       0.01
+  val_ratio:    0.10
+  test_ratio:   0.10
+  num_neighbors: [10, 5]
+
+  # Edge-level split: val_ratio/test_ratio above also govern the miRNA→gene edge
+  # holdout. disjoint_train_ratio further splits the training edges so the ones
+  # used as supervision targets are not also fed to the encoder.
+  disjoint_train_ratio: 0.3
+  hard_negatives: true          # degree-matched negatives, not uniform
+
+  checkpoint_dir: /raid/home/umoya/scripts/microRNA_project/checkpoints_v3fixed_edgesplit_s777
+  log_dir:        /raid/home/umoya/scripts/microRNA_project/logs
+
+slurm:
+  partition:    dgx_large
+  nodelist:     dgxa100jal
+  gpus_train:   4
+  cpus_per_task: 16
+  mem:          128gb
+  conda_env:    mirna_ms
+  conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
