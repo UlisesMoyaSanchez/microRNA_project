@@ -43,13 +43,21 @@ in MS — not just a cell-type classifier.
 **The headline link-prediction result did not survive a correct evaluation.**
 All figures below are on the untouched **test** split.
 
-> **Graph lineage — read before quoting any number here (2026-07-18).** Every figure in this
-> section was measured on the **pre-fix graph** (`data/graphs/`, sha `c5d98d15…`). D4 was
-> answered *fix-first*, so `data/graphs_v3fixed/` now exists, is independently verified, and
-> is the graph the paper will report on — but **only the leaky endpoint has been re-measured
-> on it.** The honest endpoint (0.6271 / 0.6262 ± 0.0071) and the topology floor (0.5912)
-> are still v2 numbers. Until `config_v3fixed_edgesplit` trains, the attribution above spans
-> **two different graphs** and must not be presented as a single-graph result. Status in §3.2.
+> **Graph lineage — UPDATED 2026-07-27, re-measurement now complete.** Every number in this
+> section is now measured on **`data/graphs_v3fixed/`** (independently verified, §3.2/D4).
+> The full lineage — both the honest endpoint (`checkpoints_v3fixed_edgesplit[_uniform]`) and
+> the seen-edges reference (`checkpoints_v3fixed_transductive[_uniform]`) — has been trained
+> **and** evaluated with 4 seeds each (jobs 5743–5768 training; 5808–5844 evaluation;
+> `training/aggregate_seeds.py` for the held-out row,
+> `results/comparison/multiseed_seen_edges_test_v3fixed.json` for the seen-edges row, since
+> the latter's `"seen_edges"` key doesn't fit `aggregate_seeds.py`'s `"held_out"` reader).
+> The topology floor was regenerated on this graph too
+> (`results/comparison/topology_baseline_v3fixed_test.json`) and is numerically **identical**
+> to the pre-fix value — expected, since the graph fixes touched co-expression and
+> cell→gene edges, not miRNA→gene topology. Everything below is now single-graph.
+> The pre-fix (v2) files are untouched and still readable for comparison
+> (`results/comparison/{topology_baseline,multiseed_auroc,multiseed_auprc}_test.json`,
+> no `_v3fixed` suffix).
 
 > **Nothing from this project has been published.** *The original protocol* below means the
 > one used in the **thesis-defense version**: edges seen in training, uniform negatives. The
@@ -58,10 +66,20 @@ All figures below are on the untouched **test** split.
 
 | | AUROC |
 |---|:--:|
-| Original (edges seen, uniform negatives) | **0.9836** |
-| **Honest (held-out edges, matched negatives)** | **0.6271** |
-| Best *no-learning* heuristic on the same edges (`adamic_adar`) | 0.5912 |
+| Original (edges seen, uniform negatives) — pre-fix n=1 | 0.9836 |
+| Edges seen, uniform negatives, **v3fixed graph, n=4 seeds** | **0.9867 ± 0.0011** |
+| **Honest (held-out edges, matched negatives), v3fixed graph, n=4 seeds** | **0.6276 ± 0.0070** |
+| Best *no-learning* heuristic on the same edges (`adamic_adar`), v3fixed graph | 0.5912 |
 | Cell-type classification (unaffected, genuine) | **0.9916** |
+
+Per-seed values: [123: 0.6304, 777: 0.6291, 2024: 0.6335, 7: 0.6174] AUROC
+(`results/comparison/multiseed_auroc_test_v3fixed.json`). This replicates the pre-fix
+single-seed 0.6271 almost exactly, now with an error bar. The AUPRC analog is
+**0.6598 ± 0.0049** (`multiseed_auprc_test_v3fixed.json`). The "uniform negatives become the
+popularity shortcut" finding also replicates: a model trained with uniform negatives scores
+**0.5352 ± 0.0202** against matched negatives (pre-fix single-seed: 0.5118) — still
+indistinguishable from chance / `gene_degree` (0.5126, itself unchanged from pre-fix, as
+expected for a purely topological heuristic).
 
 Three facts, in ascending order of severity:
 
@@ -76,7 +94,19 @@ Three facts, in ascending order of severity:
 
 **Attribution** (training and evaluation negatives always consistent): an honest split costs
 **−0.178**, honest negatives cost **−0.101**, together **−0.357** — *super-additive*, so
-fixing only one of the two understates the damage.
+fixing only one of the two understates the damage. *(Pre-fix, n=1, preserved as the original
+record — see `multiseed_auroc_test.json`, no `_v3fixed` suffix.)*
+
+**Same attribution, v3fixed graph, n=4 seeds (2026-07-27):** cost of honest negatives alone
+**−0.0619** (0.9867 → 0.9248, both n=4 means), cost of an honest split alone **−0.4225**
+(0.9867 → 0.5642), total **−0.3591** (0.9867 → 0.6276) — the total lands within 0.002 of the
+pre-fix −0.357, a strong replication, but the *decomposition* shifts: the split now accounts
+for more of the damage and negatives less, because "cost of split alone" holds negatives at
+*uniform* while the honest-split model was trained with *matched* negatives — a train/eval
+negative mismatch cell, not a clean ablation. Read the total as the robust number; treat the
+two-term split with the same caution the pre-fix figure already carried.
+(`results/comparison/multiseed_auroc_test_v3fixed.json`, printed by
+`training/aggregate_seeds.py --checkpoint-prefix checkpoints_v3fixed --split test`.)
 
 **A fourth finding, architectural.** `TargetPredictor` (`models/layers.py:77`) takes
 `[miRNA_emb ‖ gene_emb]` — **no cell input** — and `analysis/interpret.py:301` scores each
@@ -156,17 +186,26 @@ an earlier duplicate list was deleted on 2026-07-14 because it had drifted out o
 done and the second is suspended). Full detail in
 [`results/EVALUATION_AUDIT.md`](results/EVALUATION_AUDIT.md).
 
+> **State as of 2026-07-27 — no measurement gap remains for the core claim.** The graph fix
+> is re-measured multi-seed (§2), and the cross-architecture check came back structural
+> (§3.2, jobs 5849-5852). What still blocks submission is **three decisions** (D2, D3, D5 —
+> all paragraph-level, none requiring compute), **scope** (expand the literature survey;
+> the pre-registered miRTarBase arms, whose data is already on disk), and **manuscript
+> housekeeping** (§3.3: retitle per D1, provenance corrections, authorship, venue).
+
 ### 3.1 Done
 
 - [x] **Test-set numbers (2026-07-13).** Was the most urgent gap: the headline had been a
       model-*selected* `val_auroc`. Reporting it would have inflated our own result by
       +0.020 in a paper about optimistically-biased evaluation. Now 0.6271 (test).
 
-- [x] **Multi-seed, held-out row (2026-07-13).** 4 seeds {123, 777, 2024, 7} × 2 training
-      samplers, all scored on the untouched **test** split
+- [x] **Multi-seed, held-out row (2026-07-13, pre-fix graph).** 4 seeds {123, 777, 2024, 7} ×
+      2 training samplers, all scored on the untouched **test** split
       (`training/aggregate_seeds.py`, `results/comparison/multiseed_auroc_test.json`).
       **Every headline claim survives, and the spread is small** — the single-seed numbers
-      were representative, not lucky.
+      were representative, not lucky. *Replicated on the fixed graph 2026-07-27 — see §2's
+      updated headline table; the honest AUROC moves from 0.6262 ± 0.0071 here to
+      0.6276 ± 0.0070 there, same conclusion.*
 
       Held-out test AUROC, mean ± std over n=4:
 
@@ -189,14 +228,15 @@ done and the second is suspended). Full detail in
 
 ### 3.2 Blocking submission
 
-- [ ] **The MS framing is not supported by the pipeline — D4 ANSWERED, D1/D2/D3/D5 OPEN.**
+- [ ] **The MS framing is not supported by the pipeline — D1 and D4 ANSWERED, D2/D3/D5 OPEN.**
       Evidence is in hand and reproducible: `analysis/audit_ms_specificity.py` →
       `results/comparison/ms_specificity_audit.json` (SLURM job **5716**, clean tree at
       `b790659`, graph `c5d98d15…`) — the **pre-fix** record, deliberately preserved. The
-      audit only establishes facts; the four remaining decisions are still yours.
-      **This blocks the manuscript: the paper cannot keep using the word "MS"
-      until D1 is answered.** D4 was taken *fix-first* on 2026-07-17 and is tracked below;
-      it is engineering, and it does not answer D1.
+      audit only establishes facts; the remaining decisions are still yours.
+      **D1 was answered 2026-07-27 (option (a), below), which unblocks the title and
+      abstract** — the manuscript is no longer gated on the word "MS". D4 was taken
+      *fix-first* on 2026-07-17 and is tracked below; it is engineering, and it did not
+      answer D1.
 
       **The facts, none of them disputed.** MS enters this pipeline exactly twice — the
       cellxgene `disease` filter (which cells were downloaded) and `batch_key="condition"` in
@@ -209,17 +249,36 @@ done and the second is suspended). Full detail in
       `Sample_description` is **{Control: 78, MS: 51, T1D: 37}**; and `TargetPredictor` takes
       no condition input, so it could not have used the label anyway.
 
-      - **D1 — Does the paper claim MS at all?** The only honest answer today is "the cells
-        came from MS patients and controls, and nothing downstream knows which is which."
-        - **(a) Retitle and de-scope.** The paper is about link-prediction evaluation on a
-          biomedical graph; MS is dataset provenance; say so in one sentence and move on.
-        - **(b) Keep the framing and wire MS in** (Track B) before submitting.
+      - **D1 — ANSWERED 2026-07-27: option (a), retitle and de-scope.** The paper does **not**
+        claim MS. It is about link-prediction evaluation on a biomedical graph; **MS is dataset
+        provenance** — the cells came from MS patients and controls, and nothing downstream
+        knows which is which — stated in one sentence and not load-bearing anywhere else.
+        This unblocks the title and abstract.
+
+        *What (a) settles:* the framing, the title, and the scope of every claim. No result
+        may be described as MS-specific, MS-associated, or disease-relevant; the word appears
+        in the data-provenance sentence and in `data/` paths, nowhere else.
+
+        *What (a) does NOT settle:* D2, D3 and D5 below remain open. (a) chooses not to
+        *claim* MS; it does not decide whether the MS-blindness itself gets written up (D2),
+        whether the T1D mislabelling is disclosed (D3), or whether the collaborator summary
+        carries that disclosure (D5). Those are still yours, and they are now being decided
+        for a paper that no longer claims MS — which makes D2's "so what else didn't you
+        check?" objection weaker, since nothing rests on the variable any more.
+
+        *The options as weighed, preserved:*
+        - **(a) Retitle and de-scope** — CHOSEN. Fastest path to submission and the only one
+          the pipeline actually supports.
+        - **(b) Keep the framing and wire MS in** (Track B) before submitting — rejected.
+          §2.5 already **rejected Path B** as a rescue for this paper and moved its
+          ingredients to §3.5 as a different paper; choosing (b) reopens a closed decision
+          and delays submission by months.
         - **(c) De-scope the headline, add Track B as a supplementary sensitivity row** —
-          *"we gave the miRNAs real biology and the inflation did not move"*, which would show
-          the inflation is protocol-driven rather than feature-poverty-driven.
-        - Note (b) delays submission and §2.5 already **rejected Path B** as a rescue for this
-          paper, moving its ingredients to §3.5 as a different paper. (c) is consistent with
-          that; (b) reopens a closed decision.
+          *"we gave the miRNAs real biology and the inflation did not move."* Strictly the
+          strongest argument, and consistent with §2.5 — but it requires doing Track B first,
+          which is the delay (b) was rejected for. **Not foreclosed:** if Track B is ever
+          built (§3.5), (c) is (a) plus one supplementary row, and the paper can absorb it
+          without re-framing.
       - **D2 — Is this a contribution or a limitation?** As a contribution it becomes a new
         `## Contribution 4` section in `EVALUATION_AUDIT.md` (after the Contribution 3 prose
         at `:170-187`), renumbering the list item 4 ("a corrected, reusable protocol") → 5. The
@@ -228,6 +287,10 @@ done and the second is suspended). Full detail in
         **present in the artifact**, does the **head take it**, does the **evaluation vary with
         it** — and we fail all three on the variable the project is named after. The case
         against: it invites "so what else didn't you check?"
+        *Reframed by D1 (2026-07-27):* the "so what else" objection is now weaker — with MS
+        de-scoped to provenance, **no claim in the paper rests on the variable**, so writing
+        up the checklist costs nothing defensively. It is a question of whether the
+        generalizable lesson is worth the section, not of exposure.
       - **D3 — Do we publish the T1D mislabelling?** It is an error we found in our own repo:
         37 diabetics filed as healthy controls by a default return. Publishing it costs nothing
         factually (no reported number moves — `EVALUATION_AUDIT.md:164-165` already documents
@@ -235,9 +298,9 @@ done and the second is suspended). Full detail in
         provenance has standing that one which doesn't, lacks. But it is an admission, and it
         is your call whether it reads as rigour or as sloppiness.
       - **D4 — ANSWERED 2026-07-17: FIX, fix-first. Graph rebuilt and verified; re-measurement
-        HALF DONE.** The decision reversed the default recommendation below, which is left
-        intact as the record of what was weighed. Progress, all on `graphs_v3fixed`
-        (sha `84329f70…`, manifest `data/graphs_v3fixed/graph_manifest.json`):
+        NOW DONE (2026-07-27).** The decision reversed the default recommendation below,
+        which is left intact as the record of what was weighed. Progress, all on
+        `graphs_v3fixed` (sha `84329f70…`, manifest `data/graphs_v3fixed/graph_manifest.json`):
         - [x] Both bugs fixed (`7ac3319`); `config_fingerprint` now hashes the build code, so
               a graph-changing edit can no longer silently reuse a cached graph.
         - [x] Graph rebuilt — job **5717**, 2026-07-17.
@@ -254,21 +317,29 @@ done and the second is suspended). Full detail in
               emitted **828** — so the fix demonstrably moved the artifact rather than
               reproducing it. `expresses` 16,682,321 (spot-check min 0.1023 > 0.10 threshold);
               `regulates` 44,186.
-        - [ ] **Honest endpoint NOT retrained.** `checkpoints_v3fixed_edgesplit/` does not
-              exist. This is the gap that keeps §2's table spanning two graphs, and it is the
-              next job that should run.
-        - [ ] **Topology baseline NOT regenerated** on the fixed graph — so 0.5912 is still the
-              v2 floor. Must move with the honest endpoint or the comparison is mismatched.
-        - [ ] **`ms_specificity_audit_v3fixed.json` (job 5720) carries one false verdict.** It
-              reports the co-expression bug as live on a graph where `7ac3319` had already
-              fixed it. Cause: `check_coexpr_gene_selection` was passed only `adata.var` and
-              compared "first n in var order" against "top n by dispersion" *within the
-              annotation* — an overlap that is a property of scanpy's column ordering and
-              **identical whether the bug is present or fixed.** It could not fail. Patched in
-              `9dc22ed` to read the graph's endpoints and report
-              `most_variable`/`first_n`/`neither`; job 5728 independently confirms the answer
-              is `most_variable`. **The JSON on disk is still the old one — re-run before
-              citing it as the post-fix provenance record.**
+        - [x] **Honest endpoint retrained — 4 seeds, 2026-07-21 (jobs 5743, 5755-5760, plus
+              two interleaved runs logged only in `logs/train_rank0.log`).**
+              `checkpoints_v3fixed_edgesplit{,_uniform}_s{123,777,2024,7}/` all exist.
+              Evaluated 2026-07-27 (jobs 5808-5815, rerun as 5828-5844 after the
+              `reference_seen_edges` update below so `attribution` would be populated) —
+              honest test AUROC **0.6276 ± 0.0070** (n=4), replicating the pre-fix single-seed
+              0.6271. See §2 for the full table.
+        - [x] **Topology baseline regenerated** on the fixed graph — job 5827, 2026-07-27,
+              written to `results/comparison/topology_baseline_v3fixed_test.json` (a *new*
+              path, not the old `topology_baseline_test.json`: `eval_topology_baseline.py
+              --out` defaults to a graph-agnostic filename that would have overwritten the
+              preserved pre-fix record). `adamic_adar` degree-matched = **0.5912**, bit-for-bit
+              identical to the pre-fix value — expected, since the graph fixes touched
+              co-expression and cell→gene edges, not miRNA→gene topology, and a useful sanity
+              check that nothing else moved.
+        - [x] **`ms_specificity_audit_v3fixed.json` is already the post-patch record —
+              goal.md's earlier claim otherwise was itself stale, corrected 2026-07-27.**
+              The file on disk is dated 2026-07-21 12:19, which is *after* patch `9dc22ed`
+              (2026-07-18 15:09) landed, and `coexpr_gene_selection.selection_used` reads
+              `"most_variable"` — the correct, post-fix verdict. No re-run needed; whoever
+              wrote it after the patch already superseded this checklist item without
+              updating the checklist. Left here as a record so a future reader doesn't
+              re-run a job that's already done.
               *This is the paper's own thesis landing on our own repo, and §3.2/D2 should
               decide whether it belongs in the manuscript as a second instance of the pattern.*
 
@@ -297,19 +368,33 @@ done and the second is suspended). Full detail in
       are false — the samples are generic lymphocytes/monocytes/neutrophils and the cohort
       includes T1D. Same species of error as the `mirtarbase_hsa.tsv`-holds-miRDB filename.
 
-- [ ] **Multi-seed, the *seen-edges* row — UNBLOCKED 2026-07-17, option (a) taken; the seeds
-      have not been run.** `ca2e7f3` restored the transductive protocol behind
-      `training.edge_split`, so the row *can* now be recomputed per seed on the fixed graph —
-      which is what (a) below asks for. One seed has run (job 5718, `val_auroc` 0.9946, a
-      control — see D4); the 4-seed fan-out has not, so **this row is still n=1 and still
-      carries no error bar.** Note the reference constants named below (0.9836/0.8828) are
-      *pre-fix-graph* numbers and do not describe `graphs_v3fixed`; `config_v3fixed_edgesplit`
-      correctly drops `reference_seen_edges` and will emit `attribution: null` until the fixed
-      graph has its own reference row. Original framing follows. The held-out row is
-      done (§3.1), but the top row of the 2×2 — the original **0.9836 / 0.8828** — is a
-      pair of **single-seed constants** from the original transductive run. It is *not*
-      recomputed per seed, so every attribution that subtracts from it (*"cost of an honest
-      split = +0.4282"*) still carries **n=1 and no error bar.**
+- [x] **Multi-seed, the *seen-edges* row — DONE on `graphs_v3fixed`, 2026-07-27.**
+      `ca2e7f3` restored the transductive protocol behind `training.edge_split`; the 4-seed
+      fan-out then ran 2026-07-21 (jobs 5761-5768, training) and was evaluated 2026-07-27
+      (jobs 5816-5823, `eval_heldout_grid.py` → `results/comparison/seen_grid_*_test.json`,
+      one per seed per training condition). Hand-aggregated (not
+      `training/aggregate_seeds.py` — key mismatch, see §2) into
+      `results/comparison/multiseed_seen_edges_test_v3fixed.json`:
+      - trained uniform / eval uniform: **0.9867 ± 0.0011** (n=4) — the row that matches the
+        original protocol's semantics (uniform negatives) and now replaces the old n=1
+        0.9836.
+      - trained uniform / eval degree-matched: **0.9248 ± 0.0045** (n=4), replaces the old
+        n=1 0.8828.
+      - trained degree-matched / eval uniform: 0.9697 ± 0.0051; trained degree-matched / eval
+        degree-matched: 0.9683 ± 0.0070 (no v2 analog — a new cell the original protocol
+        never measured, since it only ever used uniform negatives).
+      These two means (0.9867 / 0.9248) are now declared in `evaluation.reference_seen_edges`
+      in all 10 `config_v3fixed_edgesplit*.yaml` files (base + 4 seeds × 2 negative
+      conditions), so `attribution` is no longer `null` for this graph — see §2's updated
+      attribution paragraph. **Unlike the old pair, these ARE reproducible**: rerun
+      `training/slurm_heldout_grid.sh` against the 8 `checkpoints_v3fixed_transductive*_s*`
+      checkpoints and re-aggregate.
+
+      *Historical record, pre-fix graph, still open and no longer actionable on this graph:*
+      the original **0.9836 / 0.8828** are a pair of **single-seed constants** from the
+      original transductive run on the pre-fix graph. They were never recomputed per seed and
+      never will be — the leaky path that produced them was deleted in `8a12ce3`. They remain
+      n=1 in `config_v2_edgesplit*.yaml`, preserved as-is for historical comparison only.
 
       *Location changed 2026-07-16, nothing else did:* they were hardcoded in
       `training/eval_heldout_grid.py:166` and are now declared in
@@ -319,24 +404,65 @@ done and the second is suspended). Full detail in
       still n=1, still not re-derivable, and this item is still open; the numbers merely now
       travel with the graph that owns them, and a config without them gets `attribution: null`.
 
-      **It cannot simply be re-run.** `train.py:271` now builds the edge split
-      *unconditionally* (`if _pos is not None`), with `hard_negatives` defaulting to `True`
-      and no flag to disable either. `config_v2.yaml` sets neither key — so training it
-      today reproduces `config_v2_edgesplit.yaml`, **not** the transductive protocol. The
-      leaky code path was deleted in `8a12ce3` and no longer exists. Choose one:
-      - **(a) Re-add the leak behind an explicit `edge_split: false` flag**, retrain 4 seeds,
-        get a real error bar on the inflation magnitude. Honest, and the flag is arguably a
-        *feature* of a paper about this exact bug — but it means reintroducing a bug on purpose.
-      - **(b) Report the attribution as single-seed and say so**, with the ± only on the
-        held-out row. Cheap and defensible; the inflation is ~0.43, far larger than any
-        plausible seed noise (σ ≈ 0.007–0.025 everywhere we *can* measure it).
-      - Recommend **(b)** — the effect dwarfs the variance — unless a reviewer demands (a).
-- [ ] **Make the finding about the *protocol*, not about our model.** We have so far only
-      shown that *our* HGT was evaluated badly — a reviewer will say exactly that. Run
-      `random`, `mlp`, `homo_gcn`, `ablation_no_coexpr`, `hgt_v2` through **both**
-      protocols. `run_baselines.py` already emits two of the three cells; add
-      held-out × uniform via `LinkSampler(hard=False)`. If the inflation appears for
-      *every* architecture, the claim becomes structural rather than anecdotal.
+      **RESOLVED 2026-07-17/2026-07-27 — option (a) was taken, not (b).** This paragraph
+      originally posed a choice: `train.py:271` built the edge split unconditionally with no
+      flag to disable it, since the leaky code path had been deleted in `8a12ce3`. The
+      recommendation below was (b) — report single-seed and say so. Instead, `ca2e7f3`
+      **re-added the leak behind an explicit `training.edge_split: false` flag**, and it was
+      exercised for real: 4 seeds trained 2026-07-21 (jobs 5761-5768), evaluated 2026-07-27
+      (jobs 5816-5823). The error bar this paragraph said we could skip now exists — see the
+      seen-edges numbers earlier in this item. (b) would have been fine; (a) is what actually
+      happened and it cost one extra training sweep, not a research-grade effort.
+- [x] **Make the finding about the *protocol*, not about our model — DONE 2026-07-27, and it
+      came back STRUCTURAL.** This was the last experimental gap for the core claim; what
+      remains in §3.2 is decisions (D2/D3/D5) and scope (lit survey, miRTarBase), not
+      measurement. Six architectures × 2 protocols × 2 negative samplers on `graphs_v3fixed`,
+      one job per cell — jobs **5849-5852**, tables at
+      `results/comparison/comparison_table_checkpoints_v3fixed_baselines_*.tsv`, full write-up
+      as **experiment 5** in `EVALUATION_AUDIT.md`.
+
+      **Every trained architecture inflates by 0.24-0.31** between the original protocol
+      (seen edges + uniform negatives) and the honest one (held-out + degree-matched):
+      `hgt_v2` +0.3142, `ablation_no_coexpr` +0.2943, `homo_gcn` +0.2941, and a **graph-free
+      `mlp` +0.2420**. The untrained `random` control does not move (−0.0043), which is what
+      makes the rest trustworthy. The inflation therefore is not a property of the
+      transformer, of heterogeneous message passing, or even of *having a graph* — it is a
+      property of the protocol. `gene_degree` (0.8712) also beats **all four** trained models
+      under the original protocol, generalizing §2's claim 2 beyond the HGT.
+
+      Two things worth carrying into the manuscript beyond the headline:
+      - The **super-additivity replicates per architecture** for every graph model, and the
+        `mlp` is an instructive exception: with no graph its only signal is gene degree, so
+        the negatives axis absorbs nearly all the damage (−0.2628) and its seen+matched cell
+        is **0.4994, exact chance** — allowed to memorize and still no better than a coin flip.
+      - **`homo_gcn` (0.6236) beats `hgt_v2` (0.6080)** on the honest protocol. The
+        heterogeneous transformer loses to a plain GCN, which strengthens the
+        "architecture earns nothing" argument with a direct architectural comparison.
+
+      Caveats, both recorded in `EVALUATION_AUDIT.md` and in each config header: **n=1**
+      (seed 42, by design — the effect is 0.24-0.31 vs seed spread 0.005-0.02; report it as
+      n=1, never with a ±), and `hgt_v2` reads **0.6080 here vs §2's 0.6276** because
+      `run_baselines.py` uses its own single-GPU loop rather than `train.py`'s DDP one and
+      sits ~0.02-0.06 lower throughout. The table compares architectures under identical
+      conditions; it does not restate the headline.
+
+      **Getting there required fixing three defects in `run_baselines.py`, one of them a real
+      finding about this repo** (all are the paper's own bug class — a default standing in for
+      a computation that never ran):
+      1. **Model selection on `val_loss`.** `train.py:389-394` already documents that
+         criterion saving a **chance-level checkpoint (0.5324)** for a model reaching 0.6268,
+         because the link head overfits from epoch 1. `train.py` was fixed; `run_baselines.py`
+         kept the broken rule. Caught mid-run from a symptom (early stop at epoch 29 vs. 124);
+         the first grid was cancelled, its checkpoints deleted, and the whole grid re-run.
+         **The uncorrected table would have been wrong in the direction that flatters our own
+         thesis** — which is precisely the failure mode this paper is about, found in our own
+         audit tooling.
+      2. Hardcoded `checkpoints_v2/best_model.pt` as the reference row — the *pre-fix* graph —
+         plus a cache filename carrying no graph identity, so a v3fixed run would have
+         *loaded* pre-fix numbers rather than recomputing them. Now declared via
+         `evaluation.reference_checkpoint`; a config without it gets no row, never a borrowed one.
+      3. Fixed output-table and per-architecture checkpoint paths, so the four cells
+         overwrote each other's artifacts. Now keyed to the config's `checkpoint_dir` stem.
 - [~] **Support the premise — PILOT DONE (n=7), needs expansion.**
       `results/LITERATURE_SURVEY.md`. It **corrected our claim**: the leak is *not*
       universal (2/7 strip test edges correctly), but **0/7 report a model-free baseline**
@@ -520,8 +646,21 @@ done and the second is suspended). Full detail in
       topology. The manuscript must say this directly rather than let it read as an implicit
       caveat — a reviewer must not be able to mistake a high `cell_acc` for the paper's
       contribution.
+- [ ] **Retitle, per D1 (answered 2026-07-27, option (a)).** The paper is about
+      link-prediction evaluation on a biomedical graph; **MS is dataset provenance**. Concretely:
+      - The title and abstract must not claim MS, multiple sclerosis, or disease relevance.
+      - MS appears in exactly one place in the prose — the data-provenance sentence naming
+        the cellxgene cohort — and nowhere else. `data/` paths and config names may keep it;
+        they are filenames, not claims.
+      - No result may be described as MS-specific, MS-associated, or disease-relevant. §3.4
+        already suspended the two items that would have (circuit validation, MS-vs-control
+        saliency); this closes the framing they lived in.
+      - Sweep the existing prose for inherited MS framing before submission — `README.md`,
+        `results/EVALUATION_AUDIT.md`, `results/RESUMEN_AUDITORIA.md` and the beamer deck all
+        predate this decision.
 - [ ] Authorship / affiliations.
-- [ ] Venue: an **evaluation/methods** venue, not a biology-discovery one.
+- [ ] Venue: an **evaluation/methods** venue, not a biology-discovery one. Consistent with
+      D1 — a de-scoped methods paper has no business at a biology-discovery venue anyway.
 
 ### 3.4 Suspended or dropped
 

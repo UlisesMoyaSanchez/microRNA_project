@@ -1,9 +1,17 @@
 # Resumen de la auditoría de resultados — Proyecto miRNA-MS
 
 **Para:** colaboradores clínicos del proyecto.
-**Fecha:** 13 de julio de 2026. **Todas las cifras son del conjunto de PRUEBA**
-(4,418 interacciones que el modelo nunca vio, ni para entrenar ni para elegir el mejor modelo).
+**Fecha:** 13 de julio de 2026, actualizado el 27 de julio de 2026. **Todas las cifras son del
+conjunto de PRUEBA** (4,418 interacciones que el modelo nunca vio, ni para entrenar ni para
+elegir el mejor modelo).
 **Documento técnico completo (inglés):** [`EVALUATION_AUDIT.md`](EVALUATION_AUDIT.md)
+
+> **Nota sobre el grafo (27 de julio de 2026).** Después de la versión original de este
+> documento se encontraron y corrigieron dos errores en la construcción del grafo
+> (independientes del hallazgo principal). Se repitió toda la medición sobre el grafo
+> corregido, con 4 semillas aleatorias en vez de una. **El resultado se replica casi
+> exactamente**: el AUROC honesto pasa de 0.6271 (una sola corrida) a **0.6276 ± 0.0070**
+> (promedio de 4 corridas independientes) — la misma conclusión, ahora con margen de error.
 
 ---
 
@@ -11,7 +19,9 @@
 
 1. **El resultado principal que les presentamos era un artefacto.** El AUROC de **0.9836**
    para la predicción de regulación miRNA→gen no sobrevive a una evaluación correcta. El
-   número honesto es **0.6271**.
+   número honesto es **0.6271** en la primera corrida, y **0.6276 ± 0.0070** al repetir la
+   medición 4 veces sobre el grafo ya corregido — se confirma, no fue casualidad de una sola
+   corrida.
 2. **La clasificación de tipos celulares sí es real** y no cambia: exactitud **0.9916**. Esa
    parte del trabajo está intacta.
 3. **Lo encontramos nosotros, no un revisor.** Esa es la razón de ser de esta auditoría, y
@@ -186,4 +196,8 @@ esencialmente un proyecto distinto.
 Porque está verificado por una prueba automática que comprueba que ninguna arista apartada
 aparece en la entrada del modelo, en ninguna de las dos direcciones — y porque tres controles
 independientes (fuga de mensajes, sesgo de popularidad, heurísticas topológicas) coinciden en
-la misma historia.
+la misma historia. Y ahora, además, porque **se repitió de manera independiente**: se
+corrigieron dos errores distintos en la construcción del grafo (no relacionados con este
+hallazgo) y, al repetir toda la medición 4 veces sobre el grafo corregido, el resultado
+volvió a salir prácticamente igual (0.6276 ± 0.0070). Un artefacto de una sola corrida no
+sobrevive a que se cambie el grafo y se repita el experimento; este resultado sí.
