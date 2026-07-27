@@ -1,0 +1,22 @@
+{
+  "checkpoint": "checkpoints_v3fixed_transductive_s123/best_model.pt",
+  "epoch": 188,
+  "split": "test",
+  "protocol": "transductive_seen",
+  "n_seen_edges": 44186,
+  "seen_edges": {
+    "uniform": {
+      "auroc": 0.9751010926301814,
+      "auprc": 0.9745842826823417,
+      "cell_acc": 0.9928328198475758
+    },
+    "degree_matched": {
+      "auroc": 0.9728955040293293,
+      "auprc": 0.9747473432434479,
+      "cell_acc": 0.9926010430247718
+    }
+  },
+  "reference_seen_edges": null,
+  "attribution": null,
+  "note": "Transductive reference row (edges seen in training). These ARE the seen-edges numbers other configs cite as reference_seen_edges; no attribution is computed."
+}

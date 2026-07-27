@@ -1,0 +1,120 @@
+{
+  "split": "test",
+  "protocol": "transductive_seen",
+  "seeds": [
+    123,
+    777,
+    2024,
+    7
+  ],
+  "n_seeds": 4,
+  "cells": {
+    "degree_matched": {
+      "uniform": {
+        "auroc": {
+          "mean": 0.9696799625049938,
+          "std": 0.005121008159089771,
+          "per_seed": {
+            "123": 0.9751010926301814,
+            "777": 0.9708749755354953,
+            "2024": 0.9627683655289578,
+            "7": 0.9699754163253407
+          }
+        },
+        "auprc": {
+          "mean": 0.9680619081535875,
+          "std": 0.006194992781847451,
+          "per_seed": {
+            "123": 0.9745842826823417,
+            "777": 0.9696714713200923,
+            "2024": 0.9596984087196021,
+            "7": 0.9682934698923138
+          }
+        }
+      },
+      "degree_matched": {
+        "auroc": {
+          "mean": 0.9683439238997531,
+          "std": 0.00701003836737126,
+          "per_seed": {
+            "123": 0.9728955040293293,
+            "777": 0.9736759721740218,
+            "2024": 0.9584306291312227,
+            "7": 0.9683735902644388
+          }
+        },
+        "auprc": {
+          "mean": 0.96915717063526,
+          "std": 0.007017200021290652,
+          "per_seed": {
+            "123": 0.9747473432434479,
+            "777": 0.9735983064452589,
+            "2024": 0.9593230105864989,
+            "7": 0.9689600222658343
+          }
+        }
+      }
+    },
+    "uniform": {
+      "uniform": {
+        "auroc": {
+          "mean": 0.986739481776214,
+          "std": 0.0010961140673096943,
+          "per_seed": {
+            "123": 0.9858162462218735,
+            "777": 0.9882507324218751,
+            "2024": 0.9860612380603129,
+            "7": 0.9868297104007943
+          }
+        },
+        "auprc": {
+          "mean": 0.9849831255074605,
+          "std": 0.0013463810886384618,
+          "per_seed": {
+            "123": 0.9838611253725942,
+            "777": 0.9868699759131427,
+            "2024": 0.9841965720613126,
+            "7": 0.9850048286827924
+          }
+        }
+      },
+      "degree_matched": {
+        "auroc": {
+          "mean": 0.924774753160713,
+          "std": 0.0045341939125952075,
+          "per_seed": {
+            "123": 0.9304376712515333,
+            "777": 0.9264193921049764,
+            "2024": 0.9214396200889398,
+            "7": 0.9208023291974026
+          }
+        },
+        "auprc": {
+          "mean": 0.9177525753660467,
+          "std": 0.005567801692212224,
+          "per_seed": {
+            "123": 0.9248427831995026,
+            "777": 0.9195419691078796,
+            "2024": 0.9135414751452545,
+            "7": 0.91308407401155
+          }
+        }
+      }
+    }
+  },
+  "source_files": {
+    "degree_matched": [
+      "seen_grid_checkpoints_v3fixed_transductive_s123_test.json",
+      "seen_grid_checkpoints_v3fixed_transductive_s777_test.json",
+      "seen_grid_checkpoints_v3fixed_transductive_s2024_test.json",
+      "seen_grid_checkpoints_v3fixed_transductive_s7_test.json"
+    ],
+    "uniform": [
+      "seen_grid_checkpoints_v3fixed_transductive_uniform_s123_test.json",
+      "seen_grid_checkpoints_v3fixed_transductive_uniform_s777_test.json",
+      "seen_grid_checkpoints_v3fixed_transductive_uniform_s2024_test.json",
+      "seen_grid_checkpoints_v3fixed_transductive_uniform_s7_test.json"
+    ]
+  },
+  "note": "Hand aggregation, not training/aggregate_seeds.py (key mismatch: that script expects 'held_out', these files have 'seen_edges'). These are the multi-seed replacement for the old single-seed 0.9836/0.8828 constants (job 5718 base run: uniform=0.9946)."
+}

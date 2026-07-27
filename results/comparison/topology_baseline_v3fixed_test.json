@@ -1,0 +1,53 @@
+{
+  "split": "test",
+  "n_held_out_edges": 4418,
+  "train_edges_visible": 35350,
+  "hgt_v2_edgesplit_auroc_reference": 0.6268,
+  "best_model_free_degree_matched": 0.5912118794240853,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8712035171971283,
+        "auprc": 0.8334779421719644,
+        "n_pairs": 8836
+      },
+      "pref_attach": {
+        "auroc": 0.8380651061001734,
+        "auprc": 0.7999018762768639,
+        "n_pairs": 8836
+      },
+      "common_neigh": {
+        "auroc": 0.8597156760862033,
+        "auprc": 0.8428037630985079,
+        "n_pairs": 8836
+      },
+      "adamic_adar": {
+        "auroc": 0.8629856900481816,
+        "auprc": 0.8483513656499864,
+        "n_pairs": 8836
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.512619344379274,
+        "auprc": 0.5163070734881015,
+        "n_pairs": 8836
+      },
+      "pref_attach": {
+        "auroc": 0.5073932086954045,
+        "auprc": 0.5082913389984063,
+        "n_pairs": 8836
+      },
+      "common_neigh": {
+        "auroc": 0.5839580753332032,
+        "auprc": 0.6118703412713141,
+        "n_pairs": 8836
+      },
+      "adamic_adar": {
+        "auroc": 0.5912118794240853,
+        "auprc": 0.6208523475494074,
+        "n_pairs": 8836
+      }
+    }
+  }
+}
