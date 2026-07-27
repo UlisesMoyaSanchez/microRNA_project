@@ -93,3 +93,13 @@ slurm:
   mem:          128gb
   conda_env:    mirna_ms
   conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
+
+# Added 2026-07-27 — v2's counterpart (config_v2_edgesplit_uniform.yaml) declares this
+# block too; v3fixed's copy was never added. Same values as config_v3fixed_edgesplit.yaml,
+# see that file's header comment for provenance (multi-seed, n=4, replaces the old n=1
+# 0.9836/0.8828 pair). Full per-seed values in
+# results/comparison/multiseed_seen_edges_test_v3fixed.json.
+evaluation:
+  reference_seen_edges:
+    uniform:        0.9867
+    degree_matched: 0.9248

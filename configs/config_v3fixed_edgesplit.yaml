@@ -14,11 +14,18 @@
 #      adata.raw, not z-scaled adata.X (0.10 meant 0.1σ, not a log-norm level).
 # Both change the graph, so every number here is recomputed from scratch.
 #
-# reference_seen_edges is intentionally ABSENT: the old 0.9836/0.8828 were on the
-# pre-fix graph via the leaky path deleted in 8a12ce3, so they do not describe this
-# graph. Once the transductive protocol is re-measured on THIS graph (edge_split:
-# false lineage), its numbers get declared here; until then eval_heldout_grid.py
-# emits attribution: null rather than borrowing a constant that isn't this graph's.
+# reference_seen_edges — UPDATED 2026-07-27: the transductive protocol has now been
+# re-measured on THIS graph, 4 seeds each side (checkpoints_v3fixed_transductive*,
+# jobs 5761-5768 + 5718 base). Values below are the "trained with uniform negatives"
+# row — the analog of the original protocol, which always used uniform negatives —
+# mean over seeds [123, 777, 2024, 7], full per-seed values and the degree-matched-
+# trained row in results/comparison/multiseed_seen_edges_test_v3fixed.json:
+#   uniform:        0.9867 +/- 0.0011 (n=4)   [was 0.9836, n=1, pre-fix graph]
+#   degree_matched: 0.9248 +/- 0.0045 (n=4)   [was 0.8828, n=1, pre-fix graph]
+# Unlike the old pair, these ARE recomputable (rerun slurm_heldout_grid.sh against
+# checkpoints_v3fixed_transductive_uniform_s{7,123,777,2024}, SPLIT=test). The scalars
+# below are means only — eval_heldout_grid.py's reference_seen_edges reader expects
+# plain floats, so the std lives in the JSON above, not here.
 # =============================================================================
 
 project:
@@ -110,3 +117,9 @@ slurm:
   mem:          128gb
   conda_env:    mirna_ms
   conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
+
+# See header comment: multi-seed replacement for the old n=1 0.9836/0.8828 pair.
+evaluation:
+  reference_seen_edges:
+    uniform:        0.9867
+    degree_matched: 0.9248

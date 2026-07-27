@@ -93,3 +93,12 @@ slurm:
   mem:          128gb
   conda_env:    mirna_ms
   conda_init:   /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
+
+# Added 2026-07-27 — multi-seed reference_seen_edges, same values/provenance as
+# config_v3fixed_edgesplit.yaml's header comment (n=4, replaces the old n=1
+# 0.9836/0.8828 pair). Per-seed values in
+# results/comparison/multiseed_seen_edges_test_v3fixed.json.
+evaluation:
+  reference_seen_edges:
+    uniform:        0.9867
+    degree_matched: 0.9248
