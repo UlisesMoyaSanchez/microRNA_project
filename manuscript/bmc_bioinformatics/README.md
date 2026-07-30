@@ -28,17 +28,10 @@ under `results/comparison/` again, the same rule the audit doc and the deck alre
 
 ## Compiling
 
-```bash
-cd manuscript/bmc_bioinformatics
-pdflatex manuscript.tex
-bibtex manuscript
-pdflatex manuscript.tex
-pdflatex manuscript.tex
-```
-
-Verified clean (no undefined references/citations, exit 0 on all four steps) on
-TeX Live 2021, 2026-07-29 — output is 6 pages at outline stage. `*.aux`/`*.log`/`*.bbl`/
-`*.blg` and the compiled PDF are gitignored; only the source files are tracked.
+See [`COMPILE.md`](COMPILE.md) — four-step `pdflatex`/`bibtex` cycle, expected warnings,
+and what to check if a step fails. Verified clean 2026-07-29, TeX Live 2021, 6 pages at
+outline stage. `*.aux`/`*.log`/`*.bbl`/`*.blg` and the compiled PDF are gitignored; only
+the source files are tracked.
 
 ## Before this leaves draft status
 
