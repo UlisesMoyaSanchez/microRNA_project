@@ -1,0 +1,345 @@
+%% BMC Bioinformatics manuscript -- DRAFT (outline + abstract stage, 2026-07-29)
+%%
+%% Status: this is NOT a submission-ready file. Per BMC's own instructions (see the
+%% comment block copied from the official template below), the FINAL submission must be
+%% a single .tex file with no \input. This draft is already a single file for that
+%% reason, but most body sections are still outline bullets, not prose -- see the
+%% "STAGE" markers throughout.
+%%
+%% Source of every claim below: results/EVALUATION_AUDIT.md (canonical, English),
+%% results/PROTOCOLO_Y_CIFRAS_VIGENTES.md (Spanish quick-reference, same numbers),
+%% presentation/beamer_ms_project/sections/05_estado_actual.tex (the current-status
+%% deck this manuscript is derived from). Every number here must trace to an artifact
+%% under results/comparison/ -- do not hand-edit a figure here without regenerating it
+%% from that artifact first (same rule the audit doc enforces on the deck).
+%%
+%% bmcart.cls / bmcart-biblio.sty / bmc-mathphys.bst in this directory are vendored,
+%% unmodified, from BioMed Central's official LaTeX template (LPPL license -- see the
+%% header comment in bmcart.cls for the license and the "do not modify, rename if you
+%% do" clause). See README.md in this directory for provenance and compile instructions.
+
+\documentclass{bmcart}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\def\includegraphic{}
+\def\includegraphics{}
+
+\startlocaldefs
+\endlocaldefs
+
+\begin{document}
+
+\begin{frontmatter}
+
+\begin{fmbox}
+\dochead{Research}
+
+\title{Transductive Evaluation and Popularity-Biased Negative Sampling Substantially
+Inflate microRNA--Target Link Prediction}
+%% STAGE: draft title. Alternatives considered and rejected: a title naming multiple
+%% sclerosis (rejected per decision D1, 2026-07-17 -- see goal.md \S3.2 and
+%% results/PROTOCOLO_Y_CIFRAS_VIGENTES.md rule 5: the disease label is data provenance,
+%% never a claim). Keep the methods framing; do not let a later co-author drift it back
+%% toward a disease-discovery title without revisiting that decision explicitly.
+
+\author[
+   addressref={aff1},
+   corref={aff1},
+   email={dr.ulisesmoya@gmail.com}
+]{\inits{UM}\fnm{Ulises} \snm{Moya S\'anchez}}
+%% TODO: add remaining authors (advisor, any collaborators) with \author[...]{...},
+%% repeating the block above. Order and inclusion criteria are an authorship decision,
+%% not a technical one -- do not guess at names.
+
+\address[id=aff1]{%
+  \orgname{TODO -- institution/department},
+  \city{TODO},
+  \cny{TODO}
+}
+%% TODO: fill in the real affiliation before submission.
+
+\end{fmbox}
+
+\begin{abstractbox}
+
+\begin{abstract}
+\parttitle{Background}
+Graph neural network (GNN) papers predicting microRNA--target (or, more broadly,
+drug--target and biomolecule--biomolecule) interactions routinely report AUROC in the
+0.91--0.99 range. A pilot audit of seven such papers in this literature found that none
+report a model-free (no-learning) baseline, and that four of seven treat every unlabeled
+pair as a uniformly-sampled negative by default. Neither convention is unique to this
+literature: transductive train/message-passing leakage and popularity-biased negative
+sampling are independently documented pitfalls in the broader knowledge-graph and
+link-prediction literature \cite{toutanova2015observed,zhu2023pitfalls,li2023evaluating,
+kotnis2017analysis,aiyappa2024implicit}, but their combined, quantified impact had not
+been measured on a real biomedical interaction graph, and the fix that the broader ML
+literature already knows had not reached this subfield's own reporting practice.
+
+\parttitle{Results}
+On a heterogeneous graph built from a public single-cell RNA-seq cohort and miRDB v6.0
+miRNA--target interactions, we show that the conventional protocol -- evaluating on
+edges visible during message passing, against uniformly-sampled negative pairs --
+reports AUROC 0.9867 $\pm$ 0.0011 (4 seeds, test set). Correcting both flaws
+simultaneously -- holding out edges from the message-passing graph and degree-matching
+negatives to positives -- drops this to 0.6276 $\pm$ 0.0070, within 3.6 points of a
+one-line, no-learning topological heuristic (Adamic--Adar, 0.5912). The $\approx$0.36
+AUROC inflation is super-additive: correcting either flaw alone understates the total.
+Re-running the full protocol grid across six architectures, including a graph-free MLP,
+shows every trained model inflates by 0.24--0.31 under the conventional protocol while
+an untrained control does not move -- the inflation is a property of the evaluation
+protocol, not of any one architecture. A genuinely unaffected task in the same pipeline
+(cell-type classification from the same graph, 0.9916 test accuracy) survives an
+analogous no-learning control by a wide margin (best graph-free baseline 0.6692),
+demonstrating the audit does not simply indict every number in the project.
+
+\parttitle{Conclusions}
+[STAGE: one to two sentences once Discussion/Conclusions are drafted in full -- the
+methodological takeaway (a reusable, automatically-verified leak-free split + a minimum
+model-free-baseline reporting standard) plus the concrete recommendation for the field.]
+\end{abstract}
+
+\begin{keyword}
+\kwd{link prediction}
+\kwd{microRNA target prediction}
+\kwd{graph neural networks}
+\kwd{evaluation methodology}
+\kwd{negative sampling}
+\kwd{heterogeneous graphs}
+\kwd{network biology}
+\kwd{benchmarking}
+\end{keyword}
+
+\end{abstractbox}
+
+\end{frontmatter}
+
+%% =========================================================================
+%% STAGE: everything below is OUTLINE, not prose. Each \section*/\subsection*
+%% carries 2-4 lines stating what will be argued and which artifact backs it,
+%% not the final wording. Expand in place; do not restructure section order
+%% without updating this comment.
+%% =========================================================================
+
+\section*{Background}
+\begin{itemize}
+\item The claim in this literature: GNN-based miRNA-target / DTI link prediction papers
+routinely report AUROC 0.91--0.99. A pilot literature audit (n=7, methods sections read
+in full, protocol in Methods below) found 0/7 report any model-free baseline and 4/7
+default to uniformly-sampled negatives for unlabeled pairs -- source:
+\texttt{results/LITERATURE\_SURVEY.md}.
+\item Neither failure mode is novel to ML in general: transductive/seen-edge leakage
+traces at least to the FB15k inverse-relation leak \cite{toutanova2015observed} and is
+actively being re-examined \cite{zhu2023pitfalls,li2023evaluating}; popularity-biased
+negative sampling is a known, quantified bias in link prediction generally
+\cite{kotnis2017analysis,aiyappa2024implicit} and specifically in network biology
+\cite{yilmaz2025biasaware}, with likely historical roots in recommender-systems
+evaluation practice \cite{krichene2020sampled}.
+\item The gap this paper fills: the general-ML literature knows the fix; this
+subfield's own papers do not apply it. We quantify what that gap costs on a real
+biomedical graph, and show the cost generalizes across architectures rather than
+being one model's failure.
+\end{itemize}
+
+\section*{Results}
+
+\subsection*{Quantifying the inflation}
+\begin{itemize}
+\item Conventional protocol (edges seen during message passing, uniform negatives):
+AUROC 0.9867 $\pm$ 0.0011, test set, 4 seeds \{123, 777, 2024, 7\},
+\texttt{graphs\_v3fixed} (independently verified graph construction).
+\item Honest protocol (held-out edges verified leak-free by an automated 8-check test,
+degree-matched negatives): AUROC 0.6276 $\pm$ 0.0070. AUPRC 0.6598 $\pm$ 0.0049.
+\item The two corrections are super-additive: fixing either one alone leaves a
+substantially inflated number; only fixing both reaches the honest figure. (Exact
+per-term attribution is convention-sensitive -- see Methods -- report the total, not
+the split.)
+\item Result replicates across an independent graph-construction bug fix: pre-fix and
+post-fix graphs agree within 0.1$\sigma$, and the topology-only floor (below) is
+bit-for-bit identical between the two, since the fix touched co-expression/expression
+edges, not miRNA$\to$gene topology.
+\end{itemize}
+
+\subsection*{Model-free controls}
+\begin{itemize}
+\item Best no-learning topological heuristic (Adamic--Adar) reaches 0.5912 under the
+honest protocol -- within 3.6 points of the trained heterogeneous graph transformer
+(0.6276).
+\item Under the conventional protocol, a heuristic that ignores the miRNA entirely
+(gene in-degree, 0.8712) beats the trained model (0.8056).
+\item A model trained with uniform negatives and then scored against degree-matched
+negatives collapses to chance (0.5118, indistinguishable from the gene-degree
+heuristic's 0.5126) -- direct mechanistic evidence that uniform-negative training
+teaches a popularity shortcut, not target specificity.
+\end{itemize}
+
+\subsection*{The inflation generalizes across architectures}
+\begin{itemize}
+\item Six architectures (heterogeneous graph transformer, homogeneous GCN, a
+co-expression ablation, a graph-free MLP, an untrained random-weight control, and a
+no-miRNA-input ablation) run through the full 2$\times$2 protocol grid.
+\item Every trained architecture inflates 0.24--0.31 between the conventional and
+honest protocols, including the graph-free MLP. The untrained control does not move
+($-0.004$). Reported as $n=1$ (seed 42) by design -- inflation magnitude dwarfs the
+0.005--0.02 seed spread measured elsewhere, but this is not a claim requiring error
+bars to be legible.
+\item Secondary finding: a plain homogeneous GCN (0.6236) outperforms the heterogeneous
+transformer (0.6080) under the honest protocol -- the architecture the project was
+built around is not earning its added complexity even against the simplest graph
+baseline.
+\end{itemize}
+
+\subsection*{The literature does not check for this}
+\begin{itemize}
+\item Pilot survey, n=7 papers, methods sections read in full (not inferred from
+abstracts): 0/7 report a model-free baseline; 4/7 treat unlabeled pairs as uniform
+negatives by default (two of the remaining three make better negative selection their
+own headline contribution); split-leakage status is unclear in 3/7 papers because the
+methods section does not say whether held-out edges reach the encoder.
+\item We deliberately do \emph{not} claim the field routinely leaks edges -- 2/7 papers
+in the pilot get the split right, and our own original split was worse than the norm.
+The universal, defensible claim is narrower and, we argue, more damaging: no paper
+checks itself against a model-free control.
+\end{itemize}
+
+\subsection*{A control task that survives its own audit}
+\begin{itemize}
+\item Cell-type classification, from the same graph and pipeline: 0.9916 test accuracy.
+Labels are the argmax of marker-gene scores computed on expression; the model's only
+cell feature is a PCA of that same expression matrix -- a structurally similar
+circularity risk to the miRNA-target task's own dependence on miRDB.
+\item Two no-graph controls on the raw PCA features (nearest-centroid, logistic
+regression) reach 0.4654 and 0.6692 respectively -- a 32-point gap to 0.9916, an order
+of magnitude larger than the 3.6-point gap in the link-prediction task. This result is
+not circular; the graph is doing substantial, non-trivial work here.
+\item Included specifically to demonstrate the audit is not indiscriminate: the same
+methodology that collapsed the link-prediction headline leaves this one standing.
+\end{itemize}
+
+\subsection*{[STAGE, optional] Architectural limits on context-specific claims}
+\begin{itemize}
+\item Brief, generalizable methodological note (not a headline result): any claim of
+context-specific interaction prediction (e.g., cell-type-specific regulation) should be
+checked against three questions -- is the context variable in the training artifact, does
+the scoring head receive it, and does the reported evaluation vary with it. Framed
+generically per decision D2 (goal.md \S3.2); no disease-specific narrative attached.
+\end{itemize}
+
+\section*{Discussion}
+\begin{itemize}
+\item [STAGE] Situate the quantified result against the external-precedent literature:
+this is not a new failure mode, it is a known one, newly quantified and shown to be
+unapplied in a specific, actively-publishing subfield.
+\item [STAGE] Limitations: $n=1$ for the cross-architecture grid (justify via effect
+size vs. seed noise, already established); the task's information ceiling is bounded by
+the graph carrying no sequence information while the label source (miRDB) is itself a
+seed-complementarity model -- discuss what would and would not fix this (predicting
+\emph{experimentally validated} interactions, e.g. miRTarBase, instead of another
+predictor's output).
+\item [STAGE] Actionable recommendation for reviewers/editors in this subfield: require
+(a) an automated leak-free split check, (b) at least one model-free baseline, (c)
+matched train/eval negative distributions, as a minimum reporting bar.
+\end{itemize}
+
+\section*{Conclusions}
+\begin{itemize}
+\item [STAGE] One paragraph restating the headline finding and the reusable artifact
+(open-sourced audit scripts: leak-free split verification, model-free baselines for
+both link prediction and node classification, cross-architecture protocol grid).
+\end{itemize}
+
+\section*{Methods}
+
+\subsection*{Data and graph construction}
+\begin{itemize}
+\item [STAGE] Public single-cell RNA-seq cohort (cellxgene) + miRDB v6.0 miRNA--target
+interactions. Heterogeneous graph: miRNA, gene, cell node types; miRNA$\to$gene,
+cell$\to$gene (\texttt{expresses}), gene--gene (\texttt{coexpressed\_with}) edges.
+\item [STAGE] Disease/cohort label (MS vs. control) is data provenance only and never
+enters the graph, model input, objective, or any scoring head (decision D1).
+\item [STAGE] Two graph-construction bugs (co-expression gene selection, cell$\to$gene
+expression threshold) identified and fixed; all headline numbers re-measured on the
+corrected graph (\texttt{graphs\_v3fixed}), independently verified, and shown to
+replicate the pre-fix figures within 1$\sigma$.
+\end{itemize}
+
+\subsection*{Evaluation protocol}
+\begin{itemize}
+\item [STAGE] Edge split: \texttt{RandomLinkSplit} with reverse-relation stripping
+(held-out edges removed from message passing in both directions), verified leak-free by
+an automated 8-check test (\texttt{training/test\_edge\_split.py}) before any number is
+trusted.
+\item [STAGE] Negative sampling: uniform-random vs. degree-matched, with the same
+sampler enforced at training and evaluation time -- report the "mismatch trap" finding
+(evaluating a matched-negative-trained model against uniform negatives produces an
+artifact, not a difficulty measurement) as a methodological warning in its own right.
+\item [STAGE] Metrics: AUROC, AUPRC for link prediction; accuracy and macro-F1 for cell
+typing. Statistical protocol: 4 seeds \{123, 777, 2024, 7\} where feasible; $n=1$ (seed
+42) explicitly flagged for the six-architecture grid, justified by effect size.
+\end{itemize}
+
+\subsection*{Baselines}
+\begin{itemize}
+\item [STAGE] Link prediction, no-learning: gene in-degree, preferential attachment,
+common neighbours, Adamic--Adar (topology only, computed on training-visible edges).
+\item [STAGE] Cell typing, no-learning/simple: nearest-centroid, logistic regression on
+raw PCA features (no message passing).
+\item [STAGE] Trained architectures: heterogeneous graph transformer (HGT), homogeneous
+GCN, co-expression-ablation HGT, graph-free MLP, untrained random-weight control,
+no-miRNA-input ablation (link-prediction-incapable by construction, retained as a
+smoke test).
+\end{itemize}
+
+\subsection*{Literature survey protocol}
+\begin{itemize}
+\item [STAGE] Pilot, n=7, each methods section read in full and classified by whether
+it (a) cross-validates over edges, (b) removes held-out edges from the encoder's input,
+(c) how negatives are chosen, (d) whether any model-free baseline is reported. Planned
+expansion to 20--30 papers with two independent raters before submission --
+\texttt{results/LITERATURE\_SURVEY.md} \S``Still to do''.
+\end{itemize}
+
+\subsection*{Availability of data and materials}
+\begin{itemize}
+\item [STAGE] Code: this repository. Large data/checkpoints intentionally untracked --
+document the public source (cellxgene accession, miRDB version) and the exact build
+scripts so the graph is reconstructible, rather than distributing large binaries
+in-repo.
+\end{itemize}
+
+\begin{backmatter}
+
+\section*{Declarations}
+
+\subsection*{Ethics approval and consent to participate}
+[STAGE / TODO -- confirm: public, de-identified cellxgene data; verify whether a
+statement is required at all for secondary analysis of public data, or whether this
+subsection should say "Not applicable."]
+
+\subsection*{Consent for publication}
+Not applicable.
+
+\subsection*{Availability of data and materials}
+See Methods, ``Availability of data and materials.'' [STAGE: finalize exact accession
+numbers / DOIs / repository URL before submission.]
+
+\subsection*{Competing interests}
+The authors declare that they have no competing interests.
+
+\subsection*{Funding}
+[STAGE / TODO -- fill in funding source(s), or ``Not applicable'' if none.]
+
+\subsection*{Authors' contributions}
+[STAGE / TODO -- fill in once the final author list is set.]
+
+\subsection*{Acknowledgements}
+[STAGE / TODO]
+
+\bibliographystyle{bmc-mathphys}
+\bibliography{references}
+
+\end{backmatter}
+
+\end{document}

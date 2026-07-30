@@ -69,3 +69,9 @@ presentation/**/*.pdf
 # result before shipping. The PDFs are the deliverable and stay tracked; these are
 # regenerable and would only duplicate them in the history.
 results/figures/*.png
+
+# LaTeX build artifacts (manuscript/) -- bmcart.cls/.sty/.bst are vendored template
+# files and DO stay tracked; only the compile output is ignored.
+manuscript/**/*.pdf
+*.bbl
+*.blg
