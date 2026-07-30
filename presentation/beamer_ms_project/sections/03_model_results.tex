@@ -1,5 +1,38 @@
 \section{Modelo, resultados y an\'alisis}
 
+% Aviso a\~nadido el 2026-07-27. Las cifras del protocolo con fuga se retiraron de las
+% tablas de esta secci\'on el mismo d\'ia (ver comentarios en cada tabla); queda el aviso
+% porque la narrativa de la secci\'on sigue siendo la de la defensa y conviene decirlo.
+% El t\'itulo va en blanco, no en msorange: naranja sobre el azul de la barra da 2.58:1,
+% por debajo del 4.5:1 exigible para texto. El \'enfasis lo carga el contenido.
+\begin{frame}{Aviso antes de esta secci\'on}
+  \vspace{0.6em}
+  \begin{block}{Las tablas de esta secci\'on ya son las honestas}
+    \small
+    Esta secci\'on presentaba originalmente los AUROC del \textbf{protocolo con fuga} como
+    logros del modelo. \textbf{Esas cifras se retiraron:} las tablas que siguen contienen
+    las mediciones bajo evaluaci\'on correcta, sobre el grafo corregido.
+
+    \vspace{0.4em}
+    Lo que se conserva de la versi\'on de la defensa es la \textbf{narrativa} --- el orden
+    en que se plante\'o el problema y se compararon arquitecturas --- porque el art\'iculo
+    que salga de aqu\'i trata precisamente de c\'omo se produce y se cree un n\'umero
+    inflado.
+  \end{block}
+
+  \vspace{0.3em}
+  \begin{block}{D\'onde est\'a cada cosa}
+    \scriptsize
+    \begin{itemize}
+      \item \textbf{Secci\'on 4} --- los cuatro experimentos que desarmaron el resultado
+            original, y la atribuci\'on de la ca\'ida a sus dos causas.
+      \item \textbf{Secci\'on 5} --- el estado actual: grafo corregido, 4 semillas, y la
+            evidencia de que la inflaci\'on es \textbf{del protocolo} y no de este modelo.
+            \emph{Esa secci\'on tiene la \'ultima palabra sobre cualquier cifra de aqu\'i.}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
 \begin{frame}{Arquitectura del modelo}
   \begin{columns}[T]
     \begin{column}{0.56\textwidth}
@@ -95,45 +128,60 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Comparativa corregida: baselines y ablaciones}
+% Tabla reemplazada el 2026-07-27. Antes conten\'ia los AUROC del protocolo con fuga
+% (HGT 0.9836, ablaci\'on 0.9374, GCN 0.9170...), presentados como logros. Ahora contiene
+% los del protocolo honesto medidos el mismo d\'ia sobre el grafo corregido (job 5849,
+% results/comparison/comparison_table_checkpoints_v3fixed_baselines_edgesplit.tsv).
+% Cambiar la tabla invierte su conclusi\'on, y eso es correcto: el GCN simple le gana.
+\begin{frame}{Comparativa entre modelos --- protocolo honesto}
   \small
-  \begin{tabular}{lccccc}
+  \begin{tabular}{lcccc}
     \toprule
     \textbf{Modelo} & \textbf{AUROC} & \textbf{AUPRC} & \textbf{acc} & \textbf{F1} \\
     \midrule
-    \textbf{HGT V2} & \textbf{0.9836} & \textbf{0.9731} & \textbf{0.9961} & \textbf{0.9935} \\
-    Ablation no coexpr & 0.9374 & 0.9223 & 0.9896 & 0.9821 \\
-    Homo GCN & 0.9170 & 0.9039 & 0.8940 & 0.8617 \\
-    MLP & 0.7899 & 0.7702 & 0.9231 & 0.8840 \\
-    Random & 0.5126 & 0.5086 & 0.0910 & 0.0797 \\
-    Ablation no miRNA & --- & --- & 0.9903 & 0.9837 \\
+    \textbf{GCN homog\'eneo} & \textbf{0.6236} & \textbf{0.6466} & 0.8498 & 0.8114 \\
+    HGT sin co-expresi\'on & 0.6185 & 0.6452 & 0.9675 & 0.9468 \\
+    HGT V2 \emph{(el modelo del proyecto)} & 0.6080 & 0.6371 & 0.9565 & 0.9301 \\
+    MLP \emph{(sin grafo)} & 0.5202 & 0.5202 & 0.8948 & 0.8559 \\
+    Random \emph{(control)} & 0.4938 & 0.4932 & 0.0891 & 0.0784 \\
+    Ablation no miRNA & --- & --- & \textbf{0.9923} & \textbf{0.9868} \\
     \bottomrule
   \end{tabular}
 
   \vspace{0.4em}
-  \begin{block}{Advertencia: esta tabla \emph{cambi\'o} respecto a la versi\'on anterior}
+  \begin{block}{Lo que dice esta tabla}
     \scriptsize
-    Antes, todos los AUROC de baselines sal\'ian vac\'ios. \textbf{No era un resultado: era un bug} que desactivaba silenciosamente la predicci\'on de enlaces. Corregido, `random` cae en 0.5126 --- justo donde debe caer el azar, lo que confirma que la m\'etrica ya se calcula bien.
+    Aristas retenidas y controles pareados por popularidad, todos los modelos en
+    condiciones id\'enticas. \textbf{El GCN homog\'eneo (0.6236) le gana al HGT (0.6080)}:
+    la arquitectura heterog\'enea no est\'a pagando su costo. El MLP sin grafo (0.5202) no
+    llega ni a la heur\'istica Adamic--Adar (0.5912), y `random' cae en 0.4938 --- justo
+    donde debe caer el azar, que es la prueba de que la m\'etrica se calcula bien.
 
     \vspace{0.2em}
-    \textbf{El gui\'on anterior dec\'ia que V2 era el \emph{\'unico} modelo con link prediction. Ya no es cierto: no debe decirse.}
+    \textbf{`no\_miRNA' no tiene AUROC porque se le quitaron esas aristas:} la tarea no
+    existe para \'el. Y aun as\'i tiene la mejor exactitud celular (0.9923) --- por eso
+    comparar p\'erdidas totales entre modelos con objetivos distintos no significa nada.
   \end{block}
-
-  \vspace{0.1em}
-  \scriptsize
-  `no_miRNA` no tiene AUROC porque se le quitaron esas aristas: la tarea \emph{no existe} para \'el. Es un gui\'on correcto, no un dato faltante.
 \end{frame}
 
 \begin{frame}{C\'omo defender la comparativa (versi\'on corregida)}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}
+      % Este bloque afirmaba que la ventaja del HGT en regulaci\'on era ``real pero
+      % moderada''. Era falso por dos v\'ias: el n\'umero que la sosten\'ia era inflaci\'on
+      % del protocolo, y bajo evaluaci\'on honesta el GCN simple le gana. Reescrito.
       \begin{block}{Lo que la tabla \emph{s\'i} sostiene}
         \small
-        V2 es el mejor en ambas tareas, y su ventaja en regulaci\'on es \textbf{real pero moderada}: 0.9836 frente a 0.9374 de la mejor ablaci\'on y 0.9170 del GCN homog\'eneo.
+        Que la \textbf{clasificaci\'on de tipo celular es s\'olida} en todos los modelos que
+        la hacen (0.85--0.99), y que el control aleatorio cae en el azar --- se\~nal de que
+        la m\'etrica est\'a bien calculada.
       \end{block}
       \begin{block}{Lo que \textbf{no} sostiene}
         \small
-        No sostiene que la arquitectura heterog\'enea sea \emph{imprescindible}. Un GCN que ignora los tipos de nodo ya llega a 0.917. \textbf{Reclamar m\'as que eso es invitar a que un revisor lo desmonte.}
+        \textbf{No sostiene que el HGT sea el mejor en regulaci\'on: no lo es.} Bajo
+        evaluaci\'on honesta el GCN homog\'eneo (0.6236) le gana al HGT (0.6080), y ninguno
+        de los dos se despega de una heur\'istica de 1999 (0.5912). \textbf{Reclamar
+        superioridad arquitect\'onica aqu\'i es invitar a que un revisor lo desmonte.}
       \end{block}
     \end{column}
     \begin{column}{0.47\textwidth}
@@ -141,7 +189,7 @@
         \small
         \begin{itemize}
           \item \textbf{Clasificaci\'on celular}: casi todos los modelos superan 0.89. La identidad celular est\'a \emph{muy} marcada en los datos; distingue poco entre arquitecturas.
-          \item \textbf{Link prediction}: aqu\'i s\'i se separan (0.51 $\to$ 0.98). Es la tarea que \textbf{discrimina} entre modelos, y la \'unica cercana a mecanismo.
+          \item \textbf{Link prediction}: es la tarea cercana a mecanismo, y la que \emph{deber\'ia} discriminar entre modelos. Bajo evaluaci\'on honesta apenas lo hace: todos caen entre 0.49 y 0.62.
         \end{itemize}
       \end{block}
       \vspace{0.2em}
@@ -175,8 +223,8 @@
       \begin{itemize}
         \item M\'etricas: AUROC, AUPRC
         \item Problema m\'as dif\'icil y m\'as cercano a mecanismo
-        \item Es la tarea que \textbf{s\'i} discrimina entre arquitecturas (0.51 a 0.98)
-        \item Es el valor cient\'ifico diferencial de HGT V2 --- con la magnitud real, no inflada
+        \item Es la tarea que \emph{deber\'ia} discriminar entre arquitecturas --- y honestamente casi no lo hace (0.49 a 0.62)
+        \item \textbf{No} es el valor diferencial del HGT: honestamente el GCN simple le gana (0.6236 vs 0.6080)
       \end{itemize}
     \end{column}
   \end{columns}
@@ -197,9 +245,14 @@
         \textbf{M\'etrica} & \textbf{Protocolo} & \textbf{Protocolo} \\
                            & \textbf{original} & \textbf{honesto} \\
         \midrule
-        AUROC   & 0.9836 & \textbf{0.6467} \\
-        AUPRC   & 0.9731 & --- \\
-        Cell acc & 0.9961 & \textbf{0.9950} \\
+        % El protocolo original se cita ahora con su medici\'on multi-semilla sobre el
+        % grafo corregido (0.9867 +/- 0.0011, n=4) en lugar del 0.9836 de una sola semilla
+        % sobre el grafo con errores: mismo protocolo, medido bien y reproducible.
+        AUROC   & 0.9867 & \textbf{0.6276} \\
+        AUPRC   & 0.9850 & \textbf{0.6598} \\
+        % La clasificaci\'on celular no se ve afectada por la fuga de aristas, as\'i que no
+        % tiene dos versiones: se reporta una sola vez, la de prueba.
+        Cell acc & \multicolumn{2}{c}{\textbf{0.9916} \emph{(no afectada)}} \\
         \bottomrule
       \end{tabular}
 
@@ -222,106 +275,53 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Figura ya generada: UMAP de las c\'elulas}
-  \centering
-  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/01_umap_embeddings.pdf}
+% ---------------------------------------------------------------------------
+% Bloque retirado el 2026-07-27. Aqui habia 7 marcos de interpretabilidad:
+%   - 3 figuras de la PRIMERA version (mayo 2026): 01_umap_embeddings,
+%     02_mirna_heatmap y 05_auroc_auprc. Las dos ultimas son insostenibles:
+%     05_auroc_auprc son las curvas ROC del modelo CON FUGA, con pie que hablaba
+%     de "la robustez del modelo"; 02_mirna_heatmap es saliencia de features que
+%     la auditoria probo reproducibles con torch.randn (max|diff| = 0.0), es decir
+%     sin contenido -- una imagen de ruido con pie biologico.
+%   - "Hallazgos interpretables" y "Circuitos reguladores de alta confianza"
+%     (scores 0.9699, 0.9558...): son los no-hallazgos suspendidos, ordenados por
+%     un cabezal que supera a una heuristica sin aprendizaje por 3.6 puntos, y que
+%     ademas no puede ser especifico de tipo celular (ver marco siguiente).
+%   - Un marco hablaba de "reguladores transversales del fenotipo EM", claim que
+%     la decision D1 retira.
+% Si algun dia se quiere una figura del espacio celular (la clasificacion celular
+% SI es real), se regenera desde un checkpoint v3fixed; no se reutiliza la de mayo.
+% ---------------------------------------------------------------------------
 
-  \vspace{0.3em}
-  \scriptsize
-  La figura resume la organizaci\'on del espacio celular y sirve para inspeccionar separaci\'on entre clases y distribuci\'on por condici\'on.
-\end{frame}
-
-\begin{frame}{Figura ya generada: heatmap de saliencia de miRNAs}
-  \centering
-  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/02_mirna_heatmap.pdf}
-
-  \vspace{0.3em}
-  \scriptsize
-  La saliencia cuantifica qu\'e tan influyente es cada miRNA para la identidad de un tipo celular seg\'un el gradiente del modelo.
-\end{frame}
-
-\begin{frame}{Hallazgos interpretables: miRNAs destacados por tipo celular}
-  \scriptsize
-  \begin{tabularx}{\textwidth}{>{\bfseries}p{2.3cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.4cm}}
-    \toprule
-    Tipo celular & miRNAs destacados & Lectura biol\'ogica \\
-    \midrule
-    Th17 & hsa-miR-4659b-3p, hsa-miR-140-5p, hsa-miR-146a-3p & miR-146a-3p aparece como se\~nal compatible con regulaci\'on inmune/NF-$\kappa$B \\
-    Microglia & hsa-miR-3680-3p, hsa-miR-6745, hsa-miR-202-3p & Priorizaci\'on de reguladores gliales e inmunes \\
-    Oligodendrocyte & hsa-miR-4659b-3p, hsa-miR-140-5p & miR-140-5p destaca como candidato con posible relaci\'on con diferenciaci\'on/mantenimiento \\
-    Pan-celular & hsa-miR-140-5p, hsa-miR-4659b-3p, hsa-miR-6745 & Candidatos a reguladores transversales del fenotipo EM \\
-    \bottomrule
-  \end{tabularx}
-
-  \vspace{0.4em}
-  \begin{itemize}
-    \scriptsize
-    \item Estos resultados no sustituyen validaci\'on experimental, pero s\'i priorizan hip\'otesis con mejor fundamento que un ranking por expresi\'on aislada.
-    \item \textbf{Nota:} derivan del modelo \emph{previo} a la correcci\'on del split. Se re-derivar\'an tras el reentrenamiento.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Circuitos reguladores de alta confianza}
-  \small
-  \begin{tabular}{lllc}
-    \toprule
-    \textbf{miRNA} & \textbf{Gen} & \textbf{Tipo celular} & \textbf{Score} \\
-    \midrule
-    hsa-miR-3680-3p & SOX6 & Astrocyte & 0.9699 \\
-    hsa-miR-3680-3p & RBMS3 & Astrocyte & 0.9558 \\
-    hsa-miR-3180-5p & PCSK6 & Astrocyte & 0.9527 \\
-    hsa-miR-4659b-3p & IGDCC4 & Astrocyte & 0.9430 \\
-    hsa-miR-140-5p & TGFBR1 & Astrocyte & 0.9079 \\
-    hsa-miR-146a-3p & MASP1 & Astrocyte & 0.9004 \\
-    \bottomrule
-  \end{tabular}
-
-  \vspace{0.5em}
-  \begin{block}{Interpretaci\'on --- y una advertencia importante}
-    \scriptsize
-    Los scores permiten pasar de ``miRNAs influyentes'' a \textbf{pares regulatorios concretos}, contrastables contra literatura o bases experimentales.
-
-    \vspace{0.2em}
-    \textbf{Pero estos scores provienen del modelo \emph{anterior} a la correcci\'on del split.} Hasta reentrenar, se presentan como \textbf{hip\'otesis preliminares}, no como hallazgos validados --- validarlos ahora contra la literatura arriesgar\'ia validar un artefacto.
+\begin{frame}{Por qu\'e no hay diapositivas de circuitos}
+  \begin{block}{No es prudencia: es que la arquitectura no pod\'ia producirlos}
+    \small
+    `TargetPredictor' recibe \textbf{solo} el miRNA y el gen. \textbf{No recibe la
+    c\'elula.} Y el an\'alisis puntuaba cada par miRNA$\to$gen \textbf{una sola vez, de
+    forma global}, para luego filtrar esa lista \'unica por los miRNAs m\'as salientes de
+    cada tipo celular.
   \end{block}
-\end{frame}
-
-\begin{frame}{Figura ya generada: red regulatoria por tipo celular}
-  \centering
-  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/03_network_Th17.pdf}
 
   \vspace{0.3em}
-  \scriptsize
-  Ejemplo de visualizaci\'on de circuito regulatorio en Th17; esta slide se puede duplicar para Microglia, CD4\_T o Monocyte seg\'un la audiencia.
-\end{frame}
-
-\begin{frame}{Enriquecimiento funcional: ejemplo en Th17}
-  \scriptsize
-  \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{5.2cm} >{\centering\arraybackslash}p{1.8cm} >{\centering\arraybackslash}p{2.0cm} X}
-    \toprule
-    \textbf{Termino KEGG} & \textbf{Overlap} & \textbf{Adj. p} & \textbf{Genes} \\
-    \midrule
-    Relaxin signaling pathway & 4/129 & 0.0239 & COL1A1, COL4A1, ADCY2, TGFBR1 \\
-    AGE-RAGE signaling pathway & 3/100 & 0.0479 & COL1A1, COL4A1, TGFBR1 \\
-    Maturity onset diabetes of the young & 2/26 & 0.0479 & NEUROD1, NR5A2 \\
-    Protein digestion and absorption & 3/103 & 0.0479 & COL1A1, COL4A1, ATP1B2 \\
-    Growth hormone synthesis and action & 3/119 & 0.0578 & MAP3K1, IGFBP3, ADCY2 \\
-    \bottomrule
-  \end{tabularx}
-
-  \vspace{0.4em}
-  \normalsize
-  \begin{itemize}
-    \item El enriquecimiento organiza los genes diana en v\'ias, ayudando a traducir scores de red a mecanismos interpretables.
-    \item En futuras versiones conviene a\~nadir comparaci\'on directa MS vs control y priorizaci\'on por significancia/consistencia entre tipos celulares.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Figura ya generada: curvas ROC y PR}
-  \centering
-  \includegraphics[height=0.68\textheight,width=0.88\textwidth,keepaspectratio]{../../results/figures/05_auroc_auprc.pdf}
+  \onslide<2->{%
+  \begin{block}{La consecuencia}
+    \small
+    \textbf{`miR-23a-3p $\to$ CCL7' ten\'ia exactamente el mismo score en todos los tipos
+    celulares.} La ``especificidad de tipo celular'' viv\'ia \emph{solo} en el filtro de
+    saliencia, nunca en el score de la interacci\'on. La premisa central ---
+    regulaci\'on espec\'ifica de tipo celular --- \textbf{no lleg\'o a implementarse}, y con
+    esta arquitectura no pod\'ia.
+  \end{block}}
 
   \vspace{0.3em}
-  \scriptsize
-  La curva resume el rendimiento de link prediction y hace visible la robustez del modelo bajo desbalance de clases.
+  \onslide<3->{%
+  \begin{block}{Y esto s\'i es un aporte, no solo una limitaci\'on}
+    \scriptsize
+    Es \textbf{arquitect\'onico, no estad\'istico}: no lo arregla reentrenar. Y generaliza
+    m\'as all\'a de este proyecto --- \emph{toda afirmaci\'on de predicci\'on
+    espec\'ifica de contexto deber\'ia comprobarse contra tres preguntas: \textbf{(1)}
+    \textquestiondown{}la variable de contexto est\'a en el artefacto? \textbf{(2)}
+    \textquestiondown{}la recibe el cabezal que puntua? \textbf{(3)}
+    \textquestiondown{}la evaluaci\'on var\'ia con ella?} Nosotros fallamos las tres.
+  \end{block}}
 \end{frame}

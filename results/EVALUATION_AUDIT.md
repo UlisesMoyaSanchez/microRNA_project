@@ -2,7 +2,7 @@
 
 **Status:** canonical results document. Supersedes `results/archive_pre_audit/REPORT.md`
 and `results/archive_pre_audit/EXEC_SUMMARY.md`, which report numbers we now know are artifacts.
-**Last updated:** 2026-07-27
+**Last updated:** 2026-07-29
 **Spanish summary for clinical collaborators:** [`RESUMEN_AUDITORIA.md`](RESUMEN_AUDITORIA.md)
 
 > **Graph lineage note (2026-07-27).** Two graph-construction bugs (co-expression gene
@@ -49,7 +49,7 @@ trivial graph structure**.
 
 **Cell-type classification is unaffected and genuine: test accuracy 0.9916.** The two tasks
 separated cleanly. Cell typing is real. The regulatory link head was an artifact of how it
-was measured.
+was measured. **Now with its own no-learning control (2026-07-29) — see below.**
 
 ---
 
@@ -340,6 +340,106 @@ number without these two controls is reporting nothing.
 
 ---
 
+## The cell-type control — is 0.9916 real, or a reconstruction of its own label?
+
+Rule 4 ("no result without a no-learning control") had been applied to every link-prediction
+number and never to cell typing, even though the headline (0.9916) had been repeatedly called
+"unaffected and genuine" throughout this document. There was a specific reason to check: the
+`cell_type` label is the per-cell argmax of `sc.tl.score_genes` marker scores
+(`data/02_preprocess/preprocess_scrna.py:34-58`), computed from expression, and the only cell
+feature the model sees is `X_pca` — a PCA of that same expression matrix
+(`data/03_build_graph/build_heterograph.py:184-191`). That is structurally the same
+circularity risk already flagged for miRDB-derived link labels (§"How the results could be
+improved," point 3).
+
+**Job 5853, 2026-07-29** (`training/eval_celltype_baseline.py`,
+`results/comparison/celltype_baseline_config_v2_edgesplit_test.json`, same split/config/seed
+as the 0.9916 headline — `config_v2_edgesplit.yaml`, test, n=11,079 held-out cells): two
+no-graph controls on `X_pca` alone, no message passing.
+
+| Control | Accuracy | Macro-F1 |
+|---|:--:|:--:|
+| `nearest_centroid` — zero-parameter, purely geometric | 0.4654 | 0.4612 |
+| `logistic_regression` — scaled, convex, graph-free | 0.6692 | 0.5737 |
+| **HGT (reference, degree-matched)** | **0.9916** | — |
+
+**Not circular.** The gap is **32 points** — an order of magnitude larger than the 3.6 points
+separating the HGT from `adamic_adar` in link prediction. If 0.9916 were mostly a
+reconstruction of `argmax(marker score)` via PCA, a simple classifier on the same `X_pca`
+would have closed most of that gap. It does not. Message passing over `expresses` and
+`coexpressed_with` gives the model access to information the 50-dimensional PCA compression
+does not carry.
+
+The script also directly checked the label-construction mechanism against the processed
+`.h5ad`: `argmax(score_<celltype>)` matches the stored `cell_type` label in **100% of cells**,
+including the test split — confirms the label is exactly what the preprocessing code says it
+is, not a leak, since the model never sees the marker scores themselves.
+
+**Caveat that travels with this result.** The control rules out "any trivial classifier
+reaches 0.99," not the deeper question of whether the marker-score argmax label agrees with an
+independently-validated cell-type annotation (FACS, reference atlas). That is a weaker,
+different limitation than the one this check was designed to rule out, and it remains open.
+
+---
+
+## External precedent for these pitfalls
+
+Two questions worth answering before calling this a field-wide claim rather than a bug report:
+is either failure mode documented outside this project, and where does the convention come
+from? Yes to both, on independent literature covering both subfields involved here.
+
+**(a) Seen-edge / transductive leakage.**
+- **Toutanova & Chen (2015)**, *"Observed versus Latent Features for Knowledge Base and Text
+  Inference,"* CVSC Workshop @ ACL 2015 — the canonical precedent. Showed WN18/FB15k test
+  triples are trivially derivable from training triples via inverse relations; this is *why*
+  FB15k-237 exists. A field-standard benchmark carried exactly our bug and had to be replaced.
+- **Zhu et al. (2023)**, *"Pitfalls in Link Prediction with Graph Neural Networks,"*
+  arXiv:2306.00899 — formalizes target-edge inclusion in the message-passing graph as *implicit
+  test leakage*, one of three named failure modes, with a proposed fix (SpotTarget). The closest
+  existing paper to our "seen vs. held-out" framing.
+- **Li, Shomer et al. (2023)**, *"Evaluating Graph Neural Networks for Link Prediction: Current
+  Pitfalls and New Benchmarking,"* NeurIPS 2023 Datasets & Benchmarks track, arXiv:2306.10453 —
+  broader pitfalls-genre benchmark critique; evidence this is an active, recognized concern in
+  the field rather than a one-off complaint.
+
+**(b) Uniform-random vs. degree-matched negatives.**
+- **Kotnis & Nastase (2017)**, arXiv:1708.06816, KBCOM Workshop 2018 — negative-sampling method
+  choice materially changes measured KG link-prediction performance.
+- **Aiyappa, Wang, Kim et al. (2024)**, *"Implicit degree bias in the link prediction task,"*
+  arXiv:2405.14985 — near-exact match to our protocol: shows the standard sampling procedure is
+  biased toward high-degree nodes (a degree-only predictor is near-optimal under it) and proposes
+  a degree-corrected benchmark — our "matched negatives," independently arrived at.
+- **Yilmaz et al. (2025)**, *"Bias-aware training and evaluation of link prediction algorithms in
+  network biology,"* PNAS 122, e2416646122 — **same domain as this project.** Documents that
+  uniform-random negative sampling biases evaluation toward high-degree ("rich") proteins/genes,
+  and connects it to the literature's own >95% concentration on ~5,000 well-studied proteins. The
+  strongest available citation for "documented as common specifically in biological network link
+  prediction," not a generic ML complaint.
+- **Krichene & Rendle (2020)**, KDD 2020 / *CACM* 65(7) 2022 — the likely historical origin:
+  sampled negative-based evaluation metrics are inherited from recommender-systems practice,
+  where they were already known to be statistically biased before graph ML adopted the
+  convention.
+
+**Not used as direct support.** Shchur et al. (2018), *"Pitfalls of Graph Neural Network
+Evaluation,"* arXiv:1811.05868, is real and well-cited but addresses node-classification split
+fairness, not link prediction or negative sampling — cite only as evidence that "evaluation
+pitfalls" is an established paper genre, not as support for (a) or (b) specifically. Hamilton's
+*Graph Representation Learning* (Synthesis Lectures on AI & ML, 2020) is widely understood to
+treat held-out edge splitting as standard methodology, which would make it the textbook reference
+for the *correct* protocol — not independently re-confirmed in this pass, verify chapter/edition
+before citing.
+
+**How this complements the internal survey.** [`LITERATURE_SURVEY.md`](LITERATURE_SURVEY.md)
+(pilot, n=7) found the field does *not* universally leak edges (2/7 strip them correctly) but
+*does* universally skip model-free baselines (0/7) and mostly treats unlabeled pairs as uniform
+negatives. The external citations above explain *why* the second failure is unsurprising —
+uniform negative sampling is inherited from recommender-systems evaluation convention (Krichene &
+Rendle) and is independently documented as a known bias in network biology specifically (Yilmaz
+et al.) — and give the seen-edge failure a field precedent (Toutanova & Chen) even though our own
+pilot found it less universal than the strawman would have predicted.
+
+---
+
 ## How the results could be improved
 
 In order of expected value. **These are a different paper — do not start before the methods
@@ -377,11 +477,12 @@ paper is submitted.**
 
 ## What does stand
 
-- **Cell-type classification: 0.9916 (test)**, on a real cell-level split.
+- **Cell-type classification: 0.9916 (test)**, on a real cell-level split, now with its own
+  no-learning control (best no-graph baseline 0.6692 — see "The cell-type control" above).
 - **The audit instrumentation**, now the project's main asset: `training/splits.py`,
   `training/test_edge_split.py`, `training/diagnose_leakage.py`,
   `training/eval_hard_negatives.py`, `training/eval_topology_baseline.py`,
-  `training/eval_heldout_grid.py`.
+  `training/eval_heldout_grid.py`, `training/eval_celltype_baseline.py`.
 
 ---
 

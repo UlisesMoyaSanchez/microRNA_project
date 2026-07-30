@@ -1,5 +1,60 @@
 \section{Problema y motivacion}
 
+% ---------------------------------------------------------------------------
+% Marco a\~nadido el 2026-07-27. Faltaba lo m\'as importante: una respuesta directa a
+% ``\textquestiondown{}aportamos algo?''. El deck contaba la historia del error durante
+% 40 diapositivas y el aporte quedaba impl\'icito al final. Va aqu\'i, al principio, en
+% positivo, y se cierra con lo mismo en la secci\'on 5.
+% ---------------------------------------------------------------------------
+\begin{frame}{\textquestiondown{}Qu\'e aportamos? --- la respuesta corta}
+  \begin{block}{S\'i, y no es el art\'iculo que planeamos}
+    \small
+    No aportamos un descubrimiento de circuitos de regulaci\'on. \textbf{Aportamos una
+    medici\'on de cu\'anto miente un protocolo de evaluaci\'on que este campo usa de
+    forma rutinaria}, sobre un grafo biom\'edico real, con el protocolo corregido incluido.
+  \end{block}
+
+  \vspace{0.35em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \onslide<2->{%
+      \begin{block}{Cuatro cosas concretas}
+        \scriptsize
+        \begin{enumerate}\setlength{\itemsep}{0.15em}
+          \item \textbf{La inflaci\'on, cuantificada y descompuesta:} 0.99 $\to$ 0.63,
+                y las dos causas se \textbf{potencian}.
+          \item \textbf{Es del protocolo, no del modelo:} \textbf{6 arquitecturas} se
+                inflan igual (0.24--0.31), \emph{una de ellas sin grafo}. El control sin
+                entrenar no se mueve.
+          \item \textbf{Un control que el campo no reporta:} 0/7 art\'iculos revisados
+                publican una l\'inea base sin aprendizaje. Aqu\'i una heur\'istica de una
+                l\'inea \textbf{le gana a todas}.
+          \item \textbf{Un protocolo reutilizable,} con prueba autom\'atica de fuga.
+        \end{enumerate}
+      \end{block}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \onslide<3->{%
+      \begin{block}{Por qu\'e le importa a alguien m\'as}
+        \scriptsize
+        Los AUROC publicados en esta literatura viven entre \textbf{0.91 y 0.99}. Bajo ese
+        mismo protocolo, una regla de una l\'inea que \textbf{ignora al miRNA} alcanza
+        \textbf{0.87} --- dentro de esa banda.
+
+        \vspace{0.25em}
+        \emph{Un campo que nunca reporta un control sin modelo no puede saber si su 0.97 es
+        un resultado o un efecto de popularidad.}
+      \end{block}}
+
+      \onslide<4->{%
+      \begin{block}{Y lo que \emph{s\'i} funciona}
+        \scriptsize
+        Clasificaci\'on de tipo celular: \textbf{0.9916}.
+      \end{block}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
 \begin{frame}{Problema biom\'edico y computacional}
   \begin{block}{Contexto cl\'inico}
     La esclerosis m\'ultiple (EM) es una enfermedad autoinmune y neurodegenerativa cr\'onica con heterogeneidad celular, inflamatoria y temporal.

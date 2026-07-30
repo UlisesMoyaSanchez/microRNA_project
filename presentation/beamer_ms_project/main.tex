@@ -21,6 +21,21 @@
 
 \pgfplotsset{compat=1.18}
 
+% ---------------------------------------------------------------------------
+% NOTAS DEL PRESENTADOR
+%
+% Las cifras del protocolo con fuga (el 0.9836 y los valores intermedios de los
+% Experimentos 1 y 2) NO se proyectan: viven en bloques \note{} como registro de
+% resultado intermedio. Por defecto beamer no las incluye en el PDF, asi que el deck
+% que se proyecta esta limpio.
+%
+% Para generar una copia CON las notas visibles (para preparar la exposicion):
+%   descomentar la linea siguiente y compilar a un nombre distinto, p.ej.
+%   pdflatex -jobname=main_con_notas "\PassOptionsToClass{}{beamer}\input{main}"
+%
+% \setbeameroption{show notes}
+% ---------------------------------------------------------------------------
+
 \definecolor{msblue}{RGB}{10,70,110}
 \definecolor{mscyan}{RGB}{30,135,160}
 \definecolor{msgray}{RGB}{70,70,70}
@@ -59,11 +74,17 @@
   backgroundcolor=\color{mslight}
 }
 
-\title{Descubrimiento de Redes de Regulaci\'on de miRNAs en Esclerosis M\'ultiple}
-\subtitle{Versi\'on evolutiva para defensa oral del proyecto miRNA-MS}
+% Retitulado el 2026-07-27 (decisi\'on D1, opci\'on (a)): el t\'itulo anterior era
+% ``Descubrimiento de Redes de Regulaci\'on de miRNAs en Esclerosis M\'ultiple''.
+% Afirmaba dos cosas que el pipeline no sostiene: que hubo descubrimiento de redes
+% reguladoras (la predicci\'on de enlaces no sobrevive a una evaluaci\'on correcta) y que
+% el trabajo es sobre EM (la etiqueta de enfermedad nunca entra al modelo). La EM pasa a
+% ser procedencia de los datos y se menciona una sola vez, en la diapositiva de datos.
+\title{Cu\'anto infla la evaluaci\'on transductiva la predicci\'on de blancos de miRNA}
+\subtitle{Auditor\'ia de un grafo biom\'edico heterog\'eneo, y el protocolo corregido}
 \author{Repositorio: microRNA\_project}
-\institute{Integraci\'on multi-\'omica con grafos heterog\'eneos y deep learning}
-\date{30 de mayo de 2026}
+\institute{Datos: c\'elulas de cohorte EM/control (cellxgene) $+$ interacciones miRDB v6.0}
+\date{27 de julio de 2026}
 
 \begin{document}
 
@@ -80,5 +101,9 @@
 \input{sections/02_data_graph.tex}
 \input{sections/03_model_results.tex}
 \input{sections/04_outlook.tex}
+% 05 es el estado actual y tiene la \'ultima palabra sobre cualquier cifra que
+% aparezca antes: la secci\'on 03 conserva la lectura de la defensa a prop\'osito,
+% como registro de lo que se cre\'ia entonces.
+\input{sections/05_estado_actual.tex}
 
 \end{document}

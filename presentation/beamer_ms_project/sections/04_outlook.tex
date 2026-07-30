@@ -3,8 +3,8 @@
 \begin{frame}{Conclusiones hasta ahora}
   \begin{enumerate}
     \item El pipeline de datos y el grafo heterog\'eneo est\'an operativos y producen artefactos reutilizables.
-    \item \textbf{La clasificaci\'on celular es s\'olida y real} (0.9950), evaluada con una partici\'on correcta a nivel de c\'elula.
-    \item \textbf{La predicci\'on de regulaci\'on miRNA$\to$gen \emph{no} sobrevive a una evaluaci\'on correcta}: cae de 0.9836 a \textbf{0.6467} --- apenas 5.6 puntos por encima de una heur\'istica sin aprendizaje. Ver Experimentos 3 y 4.
+    \item \textbf{La clasificaci\'on celular es s\'olida y real} (0.9916 en prueba), evaluada con una partici\'on correcta a nivel de c\'elula.
+    \item \textbf{La predicci\'on de regulaci\'on miRNA$\to$gen \emph{no} sobrevive a una evaluaci\'on correcta}: el n\'umero honesto es \textbf{0.6276} $\pm$ 0.0070 --- apenas 3.6 puntos por encima de una heur\'istica sin aprendizaje, y por debajo de un GCN simple. Ver Experimentos 3 y 4.
     \item En consecuencia, los circuitos regulatorios concretos \textbf{no son hallazgos validados} y su validaci\'on externa queda \textbf{suspendida}.
     \item El aporte publicable pasa a ser \textbf{la auditor\'ia misma} y el protocolo corregido.
   \end{enumerate}
@@ -19,12 +19,22 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Evaluaci\'on t\'ecnica independiente --- fortalezas}
+% Renombrada el 2026-07-27: se titulaba ``Evaluaci\'on t\'ecnica independiente'', que
+% daba a entender una revisi\'on externa. NUNCA hubo revisor externo --- esta cr\'itica
+% es nuestra. Atribuirla a un tercero es exactamente el tipo de afirmaci\'on sin
+% respaldo que este trabajo denuncia.
+\begin{frame}{Autocr\'itica t\'ecnica --- fortalezas}
+  \scriptsize\textit{Revisi\'on hecha por nosotros mismos sobre nuestro propio c\'odigo;
+  no hubo revisi\'on externa.}
+
   \small
   \begin{itemize}
     \item Pipeline reproducible y documentado de punta a punta: descarga $\to$ preprocesamiento $\to$ grafo $\to$ entrenamiento $\to$ interpretaci\'on, con artefactos versionables en cada etapa.
     \item El dise\~no de ablaciones ya distingue correctamente entre la tarea f\'acil (clasificaci\'on celular) y la tarea dif\'icil (link prediction) --- no es el error com\'un de sobrevender un `accuracy` alto.
-    \item Los hallazgos biol\'ogicos destacados (hsa-miR-146a-3p en Th17, hsa-miR-140-5p en oligodendrocitos) son consistentes con literatura publicada --- una se\~nal de validez externa preliminar, aunque no sustituye validaci\'on formal.
+    \item \textbf{La instrumentaci\'on de auditor\'ia es reutilizable:} partici\'on de
+          aristas con prueba autom\'atica de fuga, muestreo de negativos pareado por
+          grado, y tres controles sin aprendizaje. Es lo que permiti\'o detectar el
+          problema y es hoy el activo principal del proyecto.
     \item Arquitectura correctamente implementada sobre `HGTConv` de PyG (Hu et al. 2020), con residual + norm por tipo de nodo y p\'erdida multi-tarea ponderada.
   \end{itemize}
 \end{frame}
@@ -50,7 +60,7 @@
     \begin{column}{0.48\textwidth}
       \begin{block}{Sospecha 2: \textquestiondown{}los controles son v\'alidos?}
         \scriptsize
-        Los ``controles'' (pares falsos) se eleg\'ian \textbf{al azar}, sin parear por popularidad del gen. \textquestiondown{}El AUROC de 0.98 mide regulaci\'on, o mide \textbf{confusi\'on por popularidad}?
+        Los ``controles'' (pares falsos) se eleg\'ian \textbf{al azar}, sin parear por popularidad del gen. \textquestiondown{}El AUROC que report\'abamos med\'ia regulaci\'on, o med\'ia \textbf{confusi\'on por popularidad}?
       \end{block}
     \end{column}
   \end{columns}
@@ -73,13 +83,15 @@
   \vspace{0.4em}
   \centering
   \small
-  \begin{tabular}{lcc}
+  % Solo se muestran las CA\'IDAS, no los AUROC absolutos: los absolutos son del
+  % protocolo con fuga y no deben proyectarse. La ca\'ida es lo que responde la pregunta.
+  \begin{tabular}{lc}
     \toprule
-    \textbf{Qu\'e ve el modelo} & \textbf{AUROC} & \textbf{Ca\'ida} \\
+    \textbf{Qu\'e ve el modelo} & \textbf{Ca\'ida de AUROC} \\
     \midrule
-    (a) El grafo intacto --- \emph{como se public\'o} & 0.9853 & --- \\
-    (c) \textbf{Se tapa la arista que debe predecir} & \textbf{0.9766} & \textbf{$-$0.009} \\
-    (b) Se quitan \emph{todas} las aristas miRNA$\to$gen & 0.5551 & $-$0.430 \\
+    (a) El grafo intacto --- como se evalu\'o originalmente & referencia \\
+    (c) \textbf{Se tapa la arista que debe predecir} & \textbf{$-$0.009} \\
+    (b) Se quitan \emph{todas} las aristas miRNA$\to$gen & $-$0.430 (cae al azar) \\
     \bottomrule
   \end{tabular}
 
@@ -87,11 +99,27 @@
   \raggedright
   \begin{block}{Lectura}
     \scriptsize
-    \textbf{El modelo no estaba haciendo trampa.} Taparle la respuesta le cuesta 0.009 de AUROC --- pr\'acticamente nada.
+    \textbf{El modelo no estaba haciendo trampa.} Taparle la respuesta le cuesta 0.009 de
+    AUROC --- pr\'acticamente nada. Lo que se compara aqu\'i son \textbf{diferencias}, no
+    niveles: los niveles absolutos de este experimento son del protocolo con fuga y quedan
+    fuera de la presentaci\'on.
 
     \vspace{0.2em}
-    La tercera fila dice algo distinto y esperable: sin \emph{ninguna} arista miRNA$\to$gen el modelo cae a 0.55 (azar). Eso \textbf{no es un defecto}: significa que la se\~nal vive en la \textbf{topolog\'ia} de la red regulatoria, que es justo lo que este tipo de modelo debe explotar.
+    La tercera fila dice algo distinto y esperable: sin \emph{ninguna} arista
+    miRNA$\to$gen el modelo cae al azar. Eso \textbf{no es un defecto}: significa que la
+    se\~nal vive en la \textbf{topolog\'ia} de la red regulatoria, que es justo lo que este
+    tipo de modelo debe explotar.
   \end{block}
+
+  \note{%
+    \textbf{Resultado intermedio (protocolo con fuga --- no proyectar).}
+    Job 5593, `training/diagnose\_leakage.py', grafo pre-correcci\'on.
+    Niveles absolutos: (a) grafo intacto 0.9853; (c) arista tapada 0.9766;
+    (b) sin aristas miRNA$\to$gen 0.5551.
+    Se conservan solo como registro del paso intermedio: son transductivos, de una sola
+    semilla y sobre el grafo con los dos errores de construcci\'on. La conclusi\'on que
+    sobrevive es la diferencia ($-0.009$), no el nivel.%
+  }
 \end{frame}
 
 % ---------------------------------------------------------------------------
@@ -105,12 +133,15 @@
   \vspace{0.3em}
   \centering
   \small
+  % El marcador tonto se cita con su medici\'on VIGENTE sobre el grafo corregido
+  % (job 5827), que sustituye la del grafo anterior. La fila del modelo se retira: sus
+  % valores eran del protocolo con fuga. La conclusi\'on no depende de ellos.
   \begin{tabular}{lcc}
     \toprule
     \textbf{``Prueba diagn\'ostica''} & \textbf{Controles al azar} & \textbf{Controles pareados} \\
     \midrule
-    Marcador tonto (solo popularidad) & 0.7760 & \textbf{0.5150} \\
-    \textbf{Modelo HGT V2} & 0.9758 & \textbf{0.8828} \\
+    Marcador tonto (solo popularidad del gen) & \textbf{0.8712} & \textbf{0.5126} \\
+    Adamic--Adar (topolog\'ia, sin aprender) & 0.8630 & 0.5912 \\
     \bottomrule
   \end{tabular}
 
@@ -119,15 +150,31 @@
   \begin{block}{Lectura --- las dos columnas cuentan la historia}
     \scriptsize
     \begin{itemize}
-      \item \textbf{Columna 1 (controles al azar):} el marcador \emph{tonto} ya alcanza 0.776 --- \textbf{con controles mal elegidos hasta una regla trivial parece buena.} Por eso el 0.98 original es evidencia d\'ebil por s\'i solo.
-      \item \textbf{Columna 2 (controles pareados):} el marcador tonto se desploma al azar (0.515), como debe. \textbf{Y nuestro modelo aguanta en 0.8828.}
+      \item \textbf{Columna 1 (controles al azar):} un marcador que \emph{ignora al miRNA}
+            alcanza \textbf{0.8712}. \textbf{Con controles mal elegidos hasta una regla
+            trivial parece buena} --- por eso cualquier AUROC alto medido as\'i es
+            evidencia d\'ebil por s\'i solo.
+      \item \textbf{Columna 2 (controles pareados):} el mismo marcador se desploma al azar
+            (\textbf{0.5126}), como debe.
     \end{itemize}
     \vspace{0.2em}
-    \textbf{Lectura \emph{en ese momento}:} parec\'ia especificidad regulatoria real, no popularidad --- con el n\'umero honesto en 0.88 y no 0.98.
-
-    \vspace{0.2em}
-    \textbf{Pero este experimento tampoco pod\'ia cerrar el caso}, y aqu\'i est\'a la trampa: se mide sobre un modelo que \emph{ya vio esos pares en el entrenamiento}. El 0.8828 a\'un pod\'ia ser memorizaci\'on. \textbf{El Experimento 3 lo desmiente.}
+    \textbf{Este experimento no pod\'ia cerrar el caso}, y aqu\'i est\'a la trampa: el
+    modelo se med\'ia sobre pares que \emph{ya hab\'ia visto en el entrenamiento}, as\'i
+    que cualquier n\'umero suyo pod\'ia ser memorizaci\'on. \textbf{El Experimento 3 lo
+    resuelve.}
   \end{block}
+
+  \note{%
+    \textbf{Resultado intermedio (protocolo con fuga --- no proyectar).}
+    Jobs 5595/5596, `training/eval\_hard\_negatives.py', grafo pre-correcci\'on.
+    El modelo transductivo daba 0.9758 con controles al azar y 0.8828 con controles
+    pareados, y el marcador tonto 0.7760 / 0.5150 sobre ese grafo.
+    En ese momento se ley\'o como ``especificidad real, no popularidad''.
+    \emph{Esa lectura era prematura:} el 0.8828 se midi\'o sobre aristas ya vistas en
+    entrenamiento y por tanto pod\'ia ser memorizaci\'on --- que es exactamente lo que el
+    Experimento 3 demostr\'o. Las cifras del marcador tonto que s\'i se proyectan
+    (0.8712 / 0.5126) son la re-medici\'on sobre el grafo corregido, job 5827.%
+  }
 \end{frame}
 
 \begin{frame}{Experimento 3 --- El reentrenamiento honesto (el resultado)}
@@ -143,10 +190,10 @@
     \toprule
     \textbf{Protocolo} & \textbf{AUROC} \\
     \midrule
-    Original (aristas vistas, controles al azar) & 0.9836 \\
-    \textbf{Reentrenado: aristas apartadas + controles pareados} & \textbf{0.6467} \\
+    Original (aristas vistas, controles al azar) & 0.9867 \\
+    \textbf{Reentrenado: aristas apartadas + controles pareados} & \textbf{0.6276} \\
     \midrule
-    Clasificaci\'on celular (mismo modelo) & \textbf{0.9950} \\
+    Clasificaci\'on celular (mismo modelo) & \textbf{0.9916} \\
     \bottomrule
   \end{tabular}
 
@@ -157,7 +204,7 @@
     \textbf{Era memorizaci\'on en los pesos} --- exactamente lo \'unico que los dos experimentos anteriores no pod\'ian excluir. Se apartaron 8,836 interacciones (20\%) que el modelo \textbf{nunca vio}: ni como respuesta, ni en el grafo, ni en direcci\'on inversa (verificado con una prueba autom\'atica de fuga).
 
     \vspace{0.2em}
-    \textbf{La clasificaci\'on celular no se ve afectada (0.9950).} Las dos tareas se separan limpiamente: el tipado celular es real; el cabezal de regulaci\'on era un artefacto del protocolo.
+    \textbf{La clasificaci\'on celular no se ve afectada (0.9916 en prueba).} Las dos tareas se separan limpiamente: el tipado celular es real; el cabezal de regulaci\'on era un artefacto del protocolo.
   \end{block}
 \end{frame}
 
@@ -176,9 +223,12 @@
     \toprule
     \textbf{Puntuador} & \textbf{Controles al azar} & \textbf{Controles pareados} \\
     \midrule
-    Popularidad del gen --- \emph{ignora al miRNA} & \textbf{0.8723} & 0.5123 \\
-    Adamic-Adar (topolog\'ia, sin aprender) & 0.8616 & \textbf{0.5911} \\
-    \textbf{HGT V2 reentrenado} & --- & \textbf{0.6467} \\
+    % Cifras del piso topol\'ogico regeneradas sobre el grafo corregido (job 5827) y HGT
+    % con la medici\'on multi-semilla de prueba. Antes esta tabla mezclaba el piso del
+    % grafo anterior con un AUROC de VALIDACI\'ON (0.6467), que infla +0.020.
+    Popularidad del gen --- \emph{ignora al miRNA} & \textbf{0.8712} & 0.5126 \\
+    Adamic-Adar (topolog\'ia, sin aprender) & 0.8630 & \textbf{0.5912} \\
+    \textbf{HGT V2 reentrenado} & --- & \textbf{0.6276} \\
     \bottomrule
   \end{tabular}
 
@@ -186,19 +236,21 @@
   \raggedright
   \begin{block}{Las dos conclusiones}
     \scriptsize
-    \textbf{(a)} El HGT supera a la topolog\'ia trivial por \textbf{5.6 puntos} (0.6467 vs 0.5911). Un transformer de 4 capas y 512 canales rinde $\approx$5 puntos m\'as que una f\'ormula de dos l\'ineas de 1999. Es completado de grafo, no inferencia regulatoria.
+    \textbf{(a)} El HGT supera a la topolog\'ia trivial por \textbf{3.6 puntos} (0.6276 vs 0.5912). Un transformer de 4 capas y 512 canales rinde $\approx$4 puntos m\'as que una f\'ormula de dos l\'ineas de 1999 --- y \emph{menos} que un GCN homog\'eneo (0.6236 vs 0.6080, ver secci\'on 5). Es completado de grafo, no inferencia regulatoria.
 
     \vspace{0.2em}
-    \textbf{(b) El n\'umero m\'as importante del proyecto:} con controles al azar, un puntuador que \textbf{ignora por completo al miRNA} alcanza \textbf{0.8723}. Es decir: \textbf{el protocolo de evaluaci\'on, no el modelo, hac\'ia la mayor parte del trabajo.}
+    \textbf{(b) El n\'umero m\'as importante del proyecto:} con controles al azar, un puntuador que \textbf{ignora por completo al miRNA} alcanza \textbf{0.8712}. Es decir: \textbf{el protocolo de evaluaci\'on, no el modelo, hac\'ia la mayor parte del trabajo.}
   \end{block}
 \end{frame}
 
 % ---------------------------------------------------------------------------
 
-\begin{frame}{Evaluaci\'on t\'ecnica independiente --- riesgos secundarios y precisiones}
+\begin{frame}{Autocr\'itica t\'ecnica --- riesgos secundarios y precisiones}
+  \scriptsize\textit{Igual que la anterior: cr\'itica propia, sin revisi\'on externa.}
+
   \small
   \begin{itemize}
-    \item \textbf{Negative sampling uniforme} (\emph{ya medido, ver Experimento 2}): en un grafo disperso (44,186 positivos sobre \textasciitilde 7.4M pares posibles, densidad $\approx 0.6\%$), distinguir positivos de controles al azar es mucho m\'as f\'acil que distinguirlos de controles pareados. \textbf{Ya no es una sospecha: la sobreestimaci\'on es de $\approx$9 puntos de AUROC} (0.9758 $\to$ 0.8828). El entrenamiento ya usa controles pareados.
+    \item \textbf{Negative sampling uniforme} (\emph{ya medido, ver Experimento 2}): en un grafo disperso (44,186 positivos sobre \textasciitilde 7.4M pares posibles, densidad $\approx 0.6\%$), distinguir positivos de controles al azar es mucho m\'as f\'acil que distinguirlos de controles pareados. \textbf{Ya no es una sospecha: sobre el grafo corregido y con 4 semillas, cambiar solo los controles cuesta $\approx$6 puntos de AUROC} (0.9867 $\to$ 0.9248), y con la partici\'on tambi\'en honesta el total llega a $\approx$36. El entrenamiento ya usa controles pareados.
     \item \textbf{Features de nodo `gene` son 1-D} (expresi\'on media log-normalizada): la capacidad de diferenciar genes en link-prediction depende casi enteramente de la topolog\'ia del grafo, no de features intr\'insecas ricas.
     \item \textbf{La ablaci\'on ``no coexpr'' remueve solo 1,130 de \textasciitilde 16M aristas totales} ($\approx 0.007\%$): que la accuracy casi no cambie no es evidencia fuerte de que la co-expresi\'on sea irrelevante, es una fracci\'on demasiado peque\~na del grafo para notarse en clasificaci\'on.
     \item \textbf{Correcci\'on}: el scheduler coseno (`CosineAnnealingLR`, `T\_max=200`) \textbf{ya est\'a activo} --- no es una recomendaci\'on pendiente. Si se extiende a 300 \'epocas hay que ajustar `T\_max` o usar warm restarts; si no, el LR ya habr\'a decaido a \textasciitilde 0 antes de la \'epoca 300.
@@ -218,8 +270,11 @@
     \toprule
      & \textbf{Controles al azar} & \textbf{Controles pareados} \\
     \midrule
-    Aristas \textbf{vistas} (original) & \textbf{0.9836} & 0.8828 \\
-    Aristas \textbf{apartadas} (honesto) & 0.8132 & \textbf{0.6467} \\
+    % Las cuatro casillas son ahora la medici\'on multi-semilla (n=4) sobre el grafo
+    % corregido, con entrenamiento y evaluaci\'on siempre pareados. Sustituyen a los
+    % n\'umeros de una sola semilla del grafo anterior.
+    Aristas \textbf{vistas} (original) & \textbf{0.9867} & 0.9248 \\
+    Aristas \textbf{apartadas} (honesto) & 0.8096 & \textbf{0.6276} \\
     \bottomrule
   \end{tabular}
 
@@ -227,10 +282,10 @@
   \raggedright
   \begin{block}{Los dos errores se \emph{potencian}}
     \scriptsize
-    Partici\'on honesta sola: \textbf{$-$0.170}. Controles honestos solos: \textbf{$-$0.101}. Los dos juntos: \textbf{$-$0.337} --- \emph{m\'as} que la suma ($-$0.271). \textbf{Corregir solo uno de los dos subestima el da\~no.}
+    Partici\'on honesta sola: \textbf{$-$0.177}. Controles honestos solos: \textbf{$-$0.062}. Los dos juntos: \textbf{$-$0.359} --- \emph{m\'as} que la suma ($-$0.239). \textbf{Corregir solo uno de los dos subestima el da\~no.}
 
     \vspace{0.3em}
-    \textbf{Y el dato m\'as contundente:} sobre aristas apartadas con controles al azar, la \textbf{popularidad del gen sin modelo alcanza 0.8723} y \textbf{nuestro HGT entrenado alcanza 0.8132}. \textbf{La heur\'istica de una l\'inea le gana al transformer por 6 puntos.} Bajo el protocolo original, el modelo profundo era \emph{peor} que contar cu\'antos miRNAs ya apuntan a ese gen.
+    \textbf{Y el dato m\'as contundente:} sobre aristas apartadas con controles al azar, la \textbf{popularidad del gen sin modelo alcanza 0.8712} y \textbf{nuestro HGT entrenado alcanza 0.8096}. \textbf{La heur\'istica de una l\'inea le gana al transformer por 6 puntos.} Bajo el protocolo original, el modelo profundo era \emph{peor} que contar cu\'antos miRNAs ya apuntan a ese gen.
   \end{block}
 \end{frame}
 
@@ -239,7 +294,7 @@
 \begin{frame}{Qu\'e art\'iculo escribimos ahora}
   \begin{block}{El error \emph{es} el resultado}
     \small
-    \emph{La evaluaci\'on transductiva infla la predicci\'on de blancos de miRNA de 0.65 a 0.98, y los controles no pareados la inflan a\'un m\'as --- hasta que una heur\'istica de una l\'inea alcanza 0.87.}
+    \emph{La evaluaci\'on transductiva infla la predicci\'on de blancos de miRNA de 0.63 a 0.99, los controles no pareados la inflan a\'un m\'as --- hasta que una heur\'istica de una l\'inea alcanza 0.87 --- y la inflaci\'on aparece en \textbf{todas} las arquitecturas, incluida una sin grafo.}
   \end{block}
 
   \vspace{0.3em}
@@ -253,7 +308,7 @@
     \begin{column}{0.49\textwidth}
       \begin{block}{Se mantiene}
         \scriptsize
-        La \textbf{clasificaci\'on celular (0.9950)}, con partici\'on correcta. Y toda la \textbf{infraestructura de auditor\'ia}, que es ahora el activo principal: partici\'on de aristas, prueba de fuga, y tres controles independientes.
+        La \textbf{clasificaci\'on celular (0.9916 en prueba)}, con partici\'on correcta. Y toda la \textbf{infraestructura de auditor\'ia}, que es ahora el activo principal: partici\'on de aristas, prueba de fuga, y tres controles independientes.
       \end{block}
     \end{column}
   \end{columns}
