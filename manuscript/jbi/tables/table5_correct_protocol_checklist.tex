@@ -1,0 +1,30 @@
+\begin{table}[h!]
+\caption{Minimum reporting checklist for evaluating link-prediction models on
+biomedical interaction graphs. Each requirement targets one of the two failure modes
+quantified in this paper; satisfying only one still permits a substantially inflated
+headline number, since the two failure modes are independent (Results, Discussion).}
+\label{tab:correct_protocol}
+\small
+\begin{tabular}{p{3.1cm}p{4.7cm}p{5.4cm}}
+\hline
+Requirement & Failure mode it prevents & How this study implements it \\
+\hline
+Leak-free edge split & Target-link inclusion: the encoder can recover a test edge's
+label from its own neighborhood because that edge was never removed from message
+passing (Figure~\ref{fig:edge_split}). & Held-out edges and their automatically-added
+reverse relation are stripped from the message-passing graph before training; an
+automated multi-check test verifies no held-out edge is reachable before any downstream
+number is trusted. \\
+Matched train/eval negative distribution & The ``mismatch trap'': evaluating a model
+against a different negative distribution than it was trained on produces an artifact
+of the mismatch, not a difficulty measurement (Figure~\ref{fig:neg_sampling_mechanism}).
+& The same negative sampler (uniform-random or degree-matched) is enforced at both
+training and evaluation time for every reported number. \\
+Model-free baseline & Without a no-learning point of comparison, a model that has
+learned a trivial shortcut (e.g.\ gene popularity) is indistinguishable from one that
+has learned the task (Table~\ref{tab:model_free_baselines}). & At least one topological
+heuristic (for link prediction) or simple non-graph classifier (for node
+classification) is reported alongside every trained model, under the same protocol. \\
+\hline
+\end{tabular}
+\end{table}

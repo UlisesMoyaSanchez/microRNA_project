@@ -1,0 +1,637 @@
+%% Journal of Biomedical Informatics (Elsevier) manuscript -- DRAFT (outline stage, 2026-08-06)
+%%
+%% Status: NOT submission-ready. Derived from manuscript/bmc_bioinformatics/manuscript.tex
+%% (same claims, same numbers, same [STAGE] outline bullets) by porting from BMC's `bmcart`
+%% class to Elsevier's `elsarticle` class and adapting to JBI's structure/format.
+%%
+%% Source of every claim below: results/EVALUATION_AUDIT.md (canonical, English),
+%% results/PROTOCOLO_Y_CIFRAS_VIGENTES.md (Spanish quick-reference, same numbers). Every
+%% number here must trace to an artifact under results/comparison/ -- do not hand-edit a
+%% figure here without regenerating it from that artifact first.
+%%
+%% elsarticle.cls / elsarticle-num.bst in this directory are vendored, unmodified, from
+%% Elsevier's official LaTeX author template (LPPL license, Copyright 2007-2026 Elsevier
+%% Ltd -- see the header comment in elsarticle.cls). Identical copies already used
+%% successfully in ~/Documents/iieg/papers/AIgave-fepaj2025/agave_paper/ on this machine.
+%%
+%% Format verification against JBI's live guide-for-authors (last attempted 2026-08-06):
+%% that page (https://www.sciencedirect.com/journal/journal-of-biomedical-informatics/
+%% publish/guide-for-authors) blocks automated fetches with a CAPTCHA -- tried direct
+%% fetch, Wayback Machine, and a read-proxy, all blocked. Everything below is from
+%% search-result fragments (some directly attributed to this page's indexed text, some
+%% inferred from sibling Elsevier/ScienceDirect journals using the same author-guidelines
+%% template) plus standard `elsarticle` convention.
+%%
+%% CONFIRMED (direct quoted fragments attributed to JBI's own guide page):
+%%   - Structured abstract: Objective/Methods/Results/Conclusion, <=300 words.
+%%   - Body structure: Introduction/Related Work/Methods/Results/Discussion/Conclusion,
+%%     <=6000 words total.
+%%   - `elsarticle-num` (numeric, Vancouver-style) citation/reference style.
+%%   - Graphical abstract is OPTIONAL/encouraged, not mandatory (min 531x1328px, readable
+%%     at 5x13cm, TIFF/EPS/PDF/MS Office) -- none included here by design.
+%%   - Hybrid OA model, delayed access free route after 12 months (matches the earlier
+%%     no-mandatory-fee research for this journal).
+%% HIGH-CONFIDENCE INFERENCE (identical boilerplate text found verbatim on sibling
+%% Elsevier/ScienceDirect journals in the same informatics family -- International
+%% Journal of Medical Informatics, Computers in Biology and Medicine -- but not an
+%% independently quoted fragment from JBI's own page specifically):
+%%   - Highlights: 3-5 bullet points, <=85 characters each including spaces (applied
+%%     below: 5 bullets, all <85 chars).
+%%   - Keywords: "maximum of 6 keywords" (Elsevier's near-universal boilerplate across
+%%     essentially all their journals on this template) -- trimmed from 8 to 6 below on
+%%     this basis. STILL WORTH a final manual check before submission since this number
+%%     was never seen quoted specifically for JBI, only inferred from the template.
+%% NOT VERIFIED AT ALL: figure/table formatting rules beyond plain LaTeX
+%% `tabular`/`tikz` (none applied; no JBI-specific rule surfaced in any search attempt).
+
+\documentclass[review]{elsarticle}
+
+\usepackage{cmap}
+\usepackage{lmodern}
+\usepackage{lineno}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\modulolinenumbers[5]
+
+\journal{Journal of Biomedical Informatics}
+
+\bibliographystyle{elsarticle-num}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Transductive Evaluation and Popularity-Biased Negative Sampling Substantially
+Inflate microRNA--Target Link Prediction}
+%% STAGE: draft title. Alternatives considered and rejected: a title naming multiple
+%% sclerosis (rejected per decision D1, 2026-07-17 -- see goal.md \S3.2 and
+%% results/PROTOCOLO_Y_CIFRAS_VIGENTES.md rule 5: the disease label is data provenance,
+%% never a claim). Keep the methods framing; do not let a later co-author drift it back
+%% toward a disease-discovery title without revisiting that decision explicitly.
+
+\author[aff1]{Ulises Moya S\'anchez\corref{cor}}
+\ead{dr.ulisesmoya@gmail.com}
+\cortext[cor]{Corresponding author.}
+%% TODO: add remaining authors (advisor, any collaborators) with \author[aff...]{...},
+%% repeating the block above (add \eaad{} only for the corresponding author). Order and
+%% inclusion criteria are an authorship decision, not a technical one -- do not guess.
+
+\address[aff1]{TODO -- institution/department, TODO city, TODO country}
+%% TODO: fill in the real affiliation before submission.
+
+\begin{abstract}
+Graph neural network (GNN) papers predicting microRNA--target interactions routinely
+report AUROC in the 0.91--0.99 range. A pilot audit of seven such papers found that none
+report a model-free baseline and four of seven treat every unlabeled pair as a
+uniformly-sampled negative. We quantify the combined, previously unmeasured cost of
+these two evaluation pitfalls on a real biomedical interaction graph. We built a
+heterogeneous graph from a public single-cell RNA-seq cohort and miRDB v6.0
+miRNA--target interactions, trained a heterogeneous graph transformer to score
+miRNA--gene pairs, and compared a conventional evaluation protocol against one that
+corrects both message-passing edge leakage and negative-sampling bias, across six
+architectures and a set of model-free baselines. The conventional protocol (edges seen
+during message passing, uniform negatives) reports AUROC 0.9867 $\pm$ 0.0011 (four
+seeds, test set). Correcting both flaws simultaneously drops this to 0.6276 $\pm$
+0.0070, within 3.6 points of a one-line, no-learning topological heuristic
+(Adamic--Adar, 0.5912); the inflation is super-additive, so correcting either flaw
+alone understates the total. Across six architectures, including a graph-free MLP,
+every trained model inflates by 0.24--0.31 under the conventional protocol while an
+untrained control does not move. A genuinely unaffected task in the same pipeline
+(cell-type classification, 0.9916 test accuracy) survives an analogous no-learning
+control by a wide margin (best graph-free baseline 0.6692). The inflation is a property
+of the evaluation protocol, not of any one architecture, and this subfield's own
+reporting practice does not check for it. We propose a minimum reporting standard: an
+automated leak-free split check and at least one model-free baseline.
+\end{abstract}
+
+\begin{highlights}
+\item Conventional GNN evaluation reports AUROC 0.99 on a real miRNA--target graph.
+\item Fixing edge leakage and negative-sampling bias together drops it to 0.63.
+\item A no-learning topological heuristic nearly matches the corrected trained model.
+\item Inflation of 0.24--0.31 AUROC recurs across six independent architectures.
+\item A cell-typing control task shows the audit is not indiscriminate.
+\end{highlights}
+%% STAGE: verify highlight count/character limit against JBI's live guide before submission.
+
+\begin{keyword}
+link prediction \sep microRNA target prediction \sep graph neural networks \sep
+evaluation methodology \sep negative sampling \sep heterogeneous graphs
+\end{keyword}
+%% STAGE: trimmed from the BMC draft's 8 keywords to 6 (dropped "network biology" and
+%% "benchmarking" as the most generic/redundant) to match Elsevier's near-universal
+%% "maximum of 6 keywords" boilerplate -- see header note on confidence level.
+
+\end{frontmatter}
+
+\linenumbers
+
+%% =========================================================================
+%% STAGE: Introduction, Related Work, Methods, Results, Discussion, and Conclusion are
+%% now full prose (2026-08-06). Declarations (author/affiliation, CRediT, funding,
+%% ethics) are still TODO placeholders -- an authorship/administrative decision, not a
+%% technical one. Expand in place.
+%%
+%% Section order (matches JBI's required structure): Introduction -> Related Work ->
+%% Methods -> Results -> Discussion -> Conclusion -> Declarations.
+%% =========================================================================
+
+\section{Introduction}
+\label{sec:intro}
+Graph neural network papers predicting miRNA--target interactions, and drug--target or
+biomolecule--biomolecule interactions more broadly, routinely report AUROC in the
+0.91--0.99 range \cite{tian2024mgcnss,jin2022nimgsa,ahmad2026hybridgnn,yu2022hgdti,
+cao2024ngcn,zhang2024kmerpmtf,almusawi2023review}. A pilot literature audit for this
+paper, in which we read the methods
+section of seven such papers in full rather than relying on their abstracts, found that
+none report a model-free baseline, and that four of the seven default to
+uniformly-sampled negatives for unlabeled pairs without discussion (full protocol in
+Methods, full results in Related Work below). Neither omission is exotic: both are
+already documented pitfalls in the broader link-prediction and knowledge-graph
+literature, reviewed below. What is missing is the connection between that general
+literature and this subfield's own reporting practice -- the general-ML literature
+already knows how to check for these pitfalls, but this subfield's papers do not apply
+the check. This paper quantifies what that gap costs on a real biomedical interaction
+graph, shows that the two pitfalls compound rather than simply add, and shows the cost
+recurs across independently trained architectures rather than being an artifact of any
+single model.
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Known evaluation pitfalls in link prediction}
+Neither failure mode we quantify in this paper is novel to machine learning in general.
+Transductive, seen-edge leakage traces at least to the inverse-relation leak documented
+in the FB15k knowledge-graph benchmark \cite{toutanova2015observed}, and is actively
+being re-examined in the broader link-prediction literature
+\cite{zhu2023pitfalls,li2023evaluating}. Popularity-biased negative sampling is a
+known, quantified bias in link prediction generally \cite{kotnis2017analysis,
+aiyappa2024implicit}, and has been documented specifically in network biology
+\cite{yilmaz2025biasaware}, the domain this paper's graph is drawn from. Its likely
+historical root is recommender-systems evaluation practice, where sampling a small set
+of negatives per positive was adopted for computational convenience and only later
+shown to distort ranking metrics \cite{krichene2020sampled}.
+
+\subsection{How this subfield evaluates itself}
+Against that backdrop, we ran a pilot survey of seven papers in the miRNA-target and
+adjacent biomolecule-interaction link-prediction literature, reading each paper's
+methods section in full rather than inferring its evaluation protocol from the
+abstract. None of the seven report a model-free baseline. Four of the seven treat every
+unlabeled pair as a uniformly-sampled negative by default, without discussing the
+alternative; of the remaining three, two make a better negative-selection strategy
+their own headline contribution. Split-leakage status is unclear in three of the seven,
+because the methods section does not state whether held-out edges are removed from the
+encoder's input. Table~\ref{tab:literature_survey} summarizes the pilot.
+
+We deliberately do not claim that this subfield routinely leaks edges: two of the seven
+papers in the pilot get the split right, and our own project's original split was worse
+than the norm we observed. The claim we make is narrower, and we argue more damaging
+precisely because it is universal: no paper in the pilot checks itself against a
+model-free control. Getting the split right is not protective on its own -- the two
+papers that do strip held-out edges from the graph, HybridGNN and kmerPMTF, still draw
+negatives from unlabeled pairs, one uniformly at random and the other count-matched
+rather than degree-matched, and neither reports a model-free baseline
+(Table~\ref{tab:literature_survey}). The two
+failure modes are independent: fixing the split is not evidence against the popularity
+shortcut this paper identifies, which is precisely why, as Results shows, correcting
+both is super-additive rather than redundant.
+
+\input{tables/table3_literature_survey.tex}
+
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Data and graph construction}
+We build a heterogeneous graph from a public single-cell RNA-seq cohort combined with
+miRDB v6.0 miRNA--target interactions. The graph has three node types -- miRNA, gene,
+and cell -- connected by a miRNA-to-gene regulatory edge, a cell-to-gene expression
+edge, and a gene-to-gene co-expression edge, each with an automatically-added reverse
+relation for bidirectional message passing (Figure~\ref{fig:graph_schema}). The
+disease/cohort label attached to each cell (case vs.\ control) is retained purely as
+data provenance: it never enters the graph structure, the model input, the training
+objective, or any scoring head, so nothing in this paper's predictions can depend on
+it. During preparation of this study we identified and fixed two bugs in the
+graph-construction pipeline, in co-expression gene selection and in the cell-to-gene
+expression threshold; every headline number reported here was re-measured on the
+corrected graph, independently verified, and shown to replicate the pre-fix figures
+within one standard deviation.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+\node[draw, circle, fill=blue!10, minimum size=1.1cm] (m) at (0,0) {miRNA};
+\node[draw, circle, fill=green!10, minimum size=1.1cm] (g) at (3.8,1.9) {gene};
+\node[draw, circle, fill=orange!10, minimum size=1.1cm] (c) at (3.8,-1.9) {cell};
+\draw[-{Latex[length=2mm]}, thick, bend left=15] (m) to node[above, font=\scriptsize] {regulates} (g);
+\draw[-{Latex[length=2mm]}, thick, bend left=15] (g) to node[below, font=\scriptsize] {regulated\_by} (m);
+\draw[-{Latex[length=2mm]}, thick, bend left=25] (c) to node[left, font=\scriptsize] {expresses} (g);
+\draw[-{Latex[length=2mm]}, thick, bend left=25] (g) to node[right, font=\scriptsize] {expressed\_in} (c);
+\draw[-{Latex[length=2mm]}, thick, bend left=35] (g) to node[above, font=\scriptsize] {coexpressed\_with} +(2.4,0.5);
+\end{tikzpicture}
+\vspace{0.5em}
+
+\small
+\begin{tabular}{lr}
+\hline
+Entity / edge type & Count \\
+\hline
+genes & 3,000 \\
+cells & 110,798 \\
+miRNAs & 2,460 \\
+miRNA$\to$gene (\texttt{regulates}) & 44,186 \\
+cell$\to$gene (\texttt{expresses}) & 16,682,321 \\
+gene$\leftrightarrow$gene (\texttt{coexpressed\_with}) & 828 \\
+\hline
+\end{tabular}
+\caption{Heterogeneous graph schema. Three node types and three edge types, each with
+an automatic reverse relation added for bidirectional message passing. Node features:
+miRNA -- a learnable 64-dimensional embedding (no prior biological signal); gene --
+1-dimensional mean log-normalized expression; cell -- a 50-dimensional PCA projection
+of its expression profile. Counts are post-fix, i.e.\ from the corrected graph
+construction described above.}
+\label{fig:graph_schema}
+\end{figure}
+
+\subsection{Evaluation protocol}
+We split edges with \texttt{RandomLinkSplit} and strip each held-out edge, together
+with its automatically-added reverse relation, from the message-passing graph in both
+directions, so that no test edge is reachable to the encoder at evaluation time. This
+leak-free property is not assumed: it is verified by an automated battery of checks
+before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same
+hide-and-recover logic is also applied within the training set itself: a fraction of
+the training edges are reserved as supervision targets only and withheld from the
+encoder's own input, so the model cannot simply read a training edge off the graph
+while being asked to predict it. For negative
+sampling we compare two regimes, uniform-random and degree-matched, and enforce the
+same sampler at training and at evaluation time within any single reported number.
+Mixing the two -- training under one regime and evaluating under the other -- produces
+what we call the ``mismatch trap'': an apparent difficulty measurement that is in fact
+an artifact of the distribution mismatch, which we report as a methodological warning
+in its own right (Figure~\ref{fig:neg_sampling_mechanism}). Table~\ref{tab:correct_protocol}
+summarizes these two requirements, together with the model-free-baseline requirement
+described below, as a minimum reporting checklist. We report AUROC and AUPRC for link
+prediction, and accuracy and macro-F1 for cell typing. Headline numbers are averaged
+over four independent random seeds where feasible; the six-architecture grid is
+measured from a single training run per architecture, a choice we justify in Results by
+effect size against the seed-to-seed variability observed elsewhere.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+\node[font=\small] at (1.3,3.0) {\textbf{Conventional (edges seen)}};
+\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m1) at (0,1.5) {m};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1a) at (3.0,2.4) {g1};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1b) at (3.0,0.6) {g2};
+\draw[-{Latex[length=2mm]}, thick] (m1) -- (g1a);
+\draw[-{Latex[length=2mm]}, thick, red] (m1) -- (g1b);
+\node[font=\scriptsize, text=red] at (1.5,0.35) {test edge};
+\node[align=center, text width=3.6cm] at (1.3,-0.8) {message passing sees the test edge};
+
+\node[font=\small] at (9.3,3.0) {\textbf{Corrected (edges held out)}};
+\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m2) at (8,1.5) {m};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2a) at (11.0,2.4) {g1};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2b) at (11.0,0.6) {g2};
+\draw[-{Latex[length=2mm]}, thick] (m2) -- (g2a);
+\draw[dashed, thick, red] (m2) -- (g2b);
+\node[font=\scriptsize, text=red] at (9.5,0.35) {test edge};
+\node[align=center, text width=3.6cm] at (9.3,-0.8) {message passing never sees the test edge};
+\end{tikzpicture}
+\caption{The evaluation-protocol split. \emph{Left, conventional:} the miRNA$\to$gene
+edge later used for testing (m$\to$g2) remains in the graph the encoder aggregates over
+during message passing -- the model can, in effect, look up the answer through the
+node's own neighborhood before being asked to predict it. \emph{Right, corrected:} the same
+edge and its automatically-added reverse relation are stripped from the message-passing
+graph and used only to compute the loss/metric. \texttt{test\_edge\_split.py} verifies
+this leak-free property with eight automated checks before any downstream number is
+trusted.}
+\label{fig:edge_split}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+\node[draw, circle, fill=blue!10, minimum size=0.7cm] (mm1) at (0,0) {m1};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg1) at (4.4,2.1) {g1};
+\node[font=\tiny] at (5.3,2.1) {deg=3};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg2) at (4.4,0.2) {g2};
+\node[font=\tiny] at (5.3,0.2) {deg=1};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg5) at (4.4,-2.1) {g5};
+\node[font=\tiny] at (5.3,-2.1) {deg=3};
+\draw[-{Latex[length=2mm]}, thick, blue] (mm1) -- (gg1);
+\node[font=\scriptsize, text=blue] at (1.9,1.55) {positive};
+\draw[dashed, thick, orange] (mm1) -- (gg2);
+\node[font=\scriptsize, text=orange] at (2.3,-0.35) {uniform negative};
+\draw[dashed, thick, red!70!black] (mm1) -- (gg5);
+\node[font=\scriptsize, text=red!70!black] at (2.5,-1.75) {degree-matched negative};
+\end{tikzpicture}
+\vspace{0.3em}
+
+\small
+\begin{tabular}{lccl}
+\hline
+Negative type & score(pos) & score(neg) & outcome \\
+\hline
+uniform (m1,g2, deg=1) & $\deg(g1){=}3$ & $\deg(g2){=}1$ & positive wins almost for free \\
+degree-matched (m1,g5, deg=3) & $\deg(g1){=}3$ & $\deg(g5){=}3$ & tie -- AUROC contribution 0.5 \\
+\hline
+\end{tabular}
+\caption{Why uniform negative sampling inflates AUROC for a scorer as trivial as
+$\mathrm{score}(m,g)=\deg(g)$. Under uniform sampling the negative gene is drawn without
+regard to degree, and in a heavy-tailed biological graph it almost always has lower
+degree than the positive's gene -- the heuristic (and, mechanistically, a model that
+learns the same shortcut) wins nearly for free. Degree-matching the negative to the
+positive's degree bin removes this artifact by construction, forcing the discriminating
+signal back onto \emph{which} miRNA regulates the gene rather than \emph{how popular}
+the gene is. Toy numbers illustrate the mechanism; real-graph values are
+\texttt{gene\_degree} = 0.8712 (uniform) vs.\ 0.5126 (degree-matched), Table~\ref{tab:model_free_baselines}.}
+\label{fig:neg_sampling_mechanism}
+\end{figure}
+
+\input{tables/table5_correct_protocol_checklist.tex}
+
+\subsection{Baselines}
+For link prediction we report four no-learning topological heuristics -- gene
+in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
+computed purely from training-visible edge topology. For cell typing we report two
+no-learning or graph-free controls, nearest-centroid and logistic regression, both
+trained directly on the raw PCA features without any message passing. Against these
+controls we compare six trained architectures: a heterogeneous graph transformer, a
+homogeneous GCN, a co-expression-ablation variant of the transformer, a graph-free MLP,
+an untrained random-weight control, and a no-miRNA-input ablation that is
+link-prediction-incapable by construction and retained only as a smoke test.
+
+\subsection{Literature survey protocol}
+The pilot literature survey referenced throughout this paper covers seven papers, each
+read in full at the methods-section level rather than judged from its abstract, and
+classified along four dimensions: whether it cross-validates over edges, whether it
+removes held-out edges from the encoder's input, how it selects negative examples, and
+whether it reports any model-free baseline. We plan to expand this survey to 20--30
+papers with two independent raters before submission, to move the field-level claim in
+Related Work from a pilot estimate to a more representative one.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Quantifying the inflation}
+Under the conventional evaluation protocol -- edges visible to the encoder during
+message passing, negatives drawn uniformly at random -- the trained heterogeneous graph
+transformer reaches a test AUROC of 0.9867 $\pm$ 0.0011, averaged across four
+independent random seeds. Correcting both flaws simultaneously -- holding out test edges
+from message passing and degree-matching negatives to positives -- drops this to 0.6276
+$\pm$ 0.0070 (AUPRC 0.6598 $\pm$ 0.0049). Figure~\ref{fig:protocol_grid} and
+Table~\ref{tab:headline_grid} report the full 2$\times$2 grid crossing both corrections
+independently: fixing either flaw alone still leaves a substantially inflated number,
+and only correcting both reaches the lower figure, confirming that the two corrections
+are super-additive rather than redundant (the exact per-term attribution is
+convention-sensitive, as discussed in Methods, so we report the total rather than a
+decomposition). This result is not an artifact of a single snapshot of the graph: an
+independently applied fix to the graph-construction pipeline reproduces both the
+inflated and the corrected figures within 0.1 standard deviations, and the
+topology-only floor reported below is numerically identical before and after that fix,
+since it touched only co-expression and cell-expression edges, not the miRNA-to-gene
+topology the floor is computed from.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig1_protocol_grid.pdf}
+\caption{The headline protocol grid. AUROC (mean $\pm$ std, 4 seeds) crossing edge
+split (seen during message passing vs.\ held out) with negative-sampling regime
+(uniform-random vs.\ degree-matched). Correcting both flaws simultaneously costs 0.359
+AUROC points.}
+\label{fig:protocol_grid}
+\end{figure}
+
+\input{tables/table1_headline_grid.tex}
+
+\subsection{Model-free controls}
+Model-free controls place the corrected trained model close to a purely topological
+floor. The best no-learning heuristic, Adamic--Adar, reaches an AUROC of 0.5912 under
+the corrected protocol, within 3.6 points of the trained heterogeneous graph
+transformer (0.6276); Table~\ref{tab:model_free_baselines} reports all four topological
+heuristics against both negative-sampling regimes. The direction reverses under the
+conventional protocol: a heuristic that never looks at the miRNA at all, gene
+in-degree, reaches 0.8712 and outperforms the trained model (0.8056). The mechanism
+behind this reversal is directly testable: a model trained with uniform negatives and
+then evaluated against degree-matched negatives collapses toward chance, AUROC 0.5352
+$\pm$ 0.0202, indistinguishable from the gene-degree heuristic's floor -- direct
+evidence that uniform-negative training teaches the model to exploit gene popularity
+rather than miRNA-specific target information. Figure~\ref{fig:negative_sampler_collapse}
+shows this mismatch-induced collapse is not specific to the heterogeneous transformer:
+it recurs across every trained architecture in the grid.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
+\caption{The mismatch mechanism: every architecture trained with uniform negatives,
+evaluated under both negative regimes. Matched-negative evaluation collapses every
+trained model toward the gene-degree heuristic's floor; the untrained control does not
+move.}
+\label{fig:negative_sampler_collapse}
+\end{figure}
+
+\input{tables/table2_model_free_baselines.tex}
+
+\subsection{The inflation generalizes across architectures}
+Extending the protocol grid across six independently trained architectures -- the
+heterogeneous graph transformer, a homogeneous GCN, a co-expression ablation, a
+graph-free MLP, an untrained random-weight control, and a no-miRNA-input ablation
+retained as a smoke test -- shows the inflation is not a property of any single model.
+Every trained architecture inflates by 0.24--0.31 AUROC points between the conventional
+and corrected protocols, including the graph-free MLP, which never sees the graph
+topology at all; the untrained control, by contrast, does not move ($-0.004$). Each
+architecture here is measured from a single training run rather than averaged across
+seeds, but the inflation magnitude is an order of magnitude larger than the
+seed-to-seed spread measured elsewhere in this study (0.005--0.02 AUROC points), so the
+qualitative pattern does not depend on averaging away noise. Figure~\ref{fig:architecture_inflation}
+plots the full comparison, and Table~\ref{tab:architecture_grid} gives the numeric
+grid, including the no-miRNA-input smoke test. A secondary finding emerges from the
+same grid: under the corrected protocol, a plain homogeneous GCN (0.6236) outperforms
+the heterogeneous graph transformer (0.6080) -- the added architectural complexity this
+project was originally built around does not earn its keep even against the simplest
+graph-based baseline.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
+\caption{Inflation between the conventional and corrected protocols, across five
+architectures plus an untrained control. Single seed (42); the inflation magnitude
+(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). Full numeric
+grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}.}
+\label{fig:architecture_inflation}
+\end{figure}
+
+\input{tables/tableS1_architecture_grid.tex}
+
+\subsection{A control task that survives its own audit}
+To check that this audit methodology does not simply collapse every number in the
+project, we apply the same no-learning-control logic to a structurally different task
+trained on the same graph and pipeline: cell-type classification, which reaches 0.9916
+test accuracy. This task carries a circularity risk analogous to the miRNA-target
+task's own dependence on miRDB -- labels are the argmax of marker-gene scores computed
+from expression, and the model's only cell-level feature is a PCA projection of that
+same expression matrix. Two no-graph controls trained on the raw PCA features alone,
+nearest-centroid and logistic regression, reach 0.4654 and 0.6692 respectively, a
+32-point gap to the trained model's accuracy -- an order of magnitude larger than the
+3.6-point gap the corrected link-prediction protocol leaves between the trained model
+and its topological floor. Table~\ref{tab:celltype_control} reports both controls
+against the reference model. This task survives the audit: the graph and message
+passing are doing substantial, non-trivial work here, and the same methodology that
+collapses the link-prediction headline leaves this one intact, confirming that the
+audit is discriminating rather than indiscriminately deflating every reported number in
+the project.
+
+\input{tables/table4_celltype_control.tex}
+
+\subsection{Architectural limits on context-specific claims}
+A brief methodological note follows from the same audit logic, though it is not itself
+a headline result. Any claim that an interaction is predicted in a context-specific way
+-- for example, cell-type-specific regulation -- should be checked against three
+questions before it is trusted: whether the context variable is present in the
+training data at all, whether the scoring head receives it as an input, and whether the
+reported evaluation actually varies with it. Figure~\ref{fig:target_predictor} makes
+the point concrete for the scoring head used throughout this paper: it takes only the
+concatenated miRNA and gene embeddings and returns a single logit per pair, with no
+architectural path for a cell embedding to enter the computation. The score for a given
+miRNA--gene pair is therefore identical across every cell type by construction, and no
+amount of retraining changes that without a different head architecture. We do not
+attach any disease- or cell-type-specific narrative to this project's results; this
+note is included as a generalizable check for evaluating such claims, not as a claim of
+our own.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+\node[draw, rounded corners, fill=blue!10, minimum width=2.3cm, minimum height=0.8cm] (memb) at (0,1.2) {miRNA\_emb};
+\node[draw, rounded corners, fill=green!10, minimum width=2.3cm, minimum height=0.8cm] (gemb) at (0,-1.2) {gene\_emb};
+\node[draw, rounded corners, fill=gray!15, minimum width=2.0cm, minimum height=0.8cm] (concat) at (3.4,0) {concat};
+\node[draw, rounded corners, fill=orange!10, minimum width=3.4cm, minimum height=1.1cm, align=center] (mlp) at (7.1,0) {2-layer MLP\\\scriptsize (ReLU, dropout 0.1)};
+\node[draw, rounded corners, fill=red!10, minimum width=1.8cm, minimum height=0.8cm] (logit) at (10.4,0) {logit};
+\draw[-{Latex[length=2mm]}, thick] (memb) -- (concat);
+\draw[-{Latex[length=2mm]}, thick] (gemb) -- (concat);
+\draw[-{Latex[length=2mm]}, thick] (concat) -- (mlp);
+\draw[-{Latex[length=2mm]}, thick] (mlp) -- (logit);
+\node[draw=red, dashed, rounded corners, minimum width=2.3cm, minimum height=0.8cm, text=red] (cellslot) at (0,-3.0) {cell\_emb};
+\draw[red, dashed, -{Latex[length=2mm]}] (cellslot) -- (concat) node[midway, right, font=\scriptsize, text=red] {no such input};
+\end{tikzpicture}
+\caption{The scoring head used throughout this study takes only the concatenated miRNA
+and gene embeddings and returns one scalar logit per pair. There is no architectural
+path for a cell embedding to enter this computation (dashed, red): the score for a
+given (miRNA, gene) pair is therefore identical in every cell type by construction, and
+no amount of retraining changes that -- only a different head architecture, e.g.\
+$\mathrm{score}(m,g,c)$, could.}
+\label{fig:target_predictor}
+\end{figure}
+
+\section{Discussion}
+\label{sec:discussion}
+
+Each half of the inflation we measure already has a name in the broader link-prediction
+literature, and neither is specific to microRNAs. The edge-split half is an instance of
+what \cite{zhu2023pitfalls} call \emph{target-link inclusion} -- the target edge remains
+reachable to the encoder through message passing at evaluation time, so the model can, in
+effect, recover the label from the neighborhood it was never supposed to have. Its
+lineage traces to the WN18/FB15k inverse-relation leak documented by
+\cite{toutanova2015observed}, which was serious enough to motivate a replacement
+benchmark (FB15k-237) rather than a footnote; Figure~\ref{fig:edge_split} is the same
+mechanism restated for a bipartite miRNA--gene graph with explicit reverse relations
+in place of duplicated inverse triples. The negative-sampling half is \emph{degree bias}
+(also \emph{popularity bias}): \cite{aiyappa2024implicit} name and quantify it generally,
+and \cite{yilmaz2025biasaware} document the identical pattern in network biology
+specifically, the domain this graph is drawn from. Mechanistically, degree bias is a
+textbook case of \emph{shortcut learning} \cite{geirhos2020shortcut}: a model trained
+under uniform negatives has no incentive to learn miRNA-specific regulatory signal when
+gene in-degree alone -- a feature that does not even require knowing which miRNA is
+being scored -- separates positives from negatives almost for free
+(Figure~\ref{fig:neg_sampling_mechanism}); collapsing to chance the moment that shortcut
+is closed off (Table~\ref{tab:model_free_baselines}) is the signature of a model that
+learned the shortcut and nothing else, not of a harder evaluation. The historical root of
+treating unlabeled pairs as negatives at all traces to sampled-metric evaluation practice
+in recommender systems \cite{krichene2020sampled}, a convention that migrated into link
+prediction without a matching re-derivation of when it is and is not valid.
+
+What we have not found named in the literature is the interaction between the two: every
+prior treatment we are aware of studies target-link inclusion or degree bias in
+isolation. Table~\ref{tab:headline_grid} and Figure~\ref{fig:protocol_grid} show they are
+super-additive on this graph -- correcting either alone leaves the number substantially
+inflated, and the cross-architecture grid (Table~\ref{tab:architecture_grid},
+Figure~\ref{fig:architecture_inflation}) shows the same compounding recurs across six
+independently-trained architectures, including a graph-free MLP, with the untrained
+control the only one that does not move. We propose calling this \emph{compounded
+evaluation inflation} to distinguish it from either pitfall reported alone: the
+practical implication is that auditing a paper for target-link inclusion \emph{or} for a
+model-free baseline, but not both, can still miss a substantially inflated headline
+number.
+
+Three limitations qualify these results. First, the cross-architecture grid reports a
+single measurement per architecture rather than an average over multiple training
+runs; we consider this justified because the inflation effect size is far larger than
+the run-to-run variability established elsewhere in this study, but a fully repeated
+version of the grid would still strengthen the claim. Second, the task's information
+ceiling is bounded by what the graph and its labels can support: the graph itself
+carries no miRNA or gene sequence information, and the interaction label source, miRDB,
+is itself the output of a seed-complementarity prediction model rather than an
+experimentally confirmed interaction. This ceiling would not be resolved by a better
+architecture; it would require predicting \emph{experimentally validated} interactions
+-- for example, from miRTarBase -- instead of another predictor's output. Third, the
+model-free baselines reported here are local neighborhood-overlap heuristics -- gene
+degree, preferential attachment, common neighbours, and Adamic--Adar -- computed only
+from the miRNA-to-gene adjacency; we did not evaluate global, path-integrating
+heuristics such as the Katz index or rooted PageRank, which are known to outperform
+local heuristics on sparse graphs and which the trained model's multi-hop,
+multi-relation message passing more closely resembles. The 3.6-point gap between the
+best local heuristic and the trained model should therefore be read as an upper bound
+on how much the model exceeds a no-learning topological floor, not a tight one.
+
+Given how directly the inflation problem responds to a small set of checks, we propose
+these as a minimum reporting standard for evaluation methodology in this subfield: an
+automated, leak-free split check that verifies held-out edges are unreachable to the
+encoder during message passing; at least one model-free baseline reported alongside any
+trained model; and negative-sampling distributions that are matched between training
+and evaluation rather than assumed compatible (summarized as a checklist in
+Table~\ref{tab:correct_protocol}).
+
+\section{Conclusion}
+\label{sec:conclusion}
+On a real biomedical interaction graph, evaluating a heterogeneous graph transformer
+under conventions common in this subfield -- edges visible to the encoder during
+message passing, negatives sampled uniformly at random -- reports AUROC 0.9867.
+Correcting both conventions simultaneously drops this to 0.6276, within 3.6 points of a
+one-line, no-learning topological heuristic; the two corrections are super-additive, so
+auditing for either pitfall alone is not sufficient to catch the inflation. The same
+compounding recurs across six independently trained architectures, including a
+graph-free MLP, while an untrained control does not move, and a structurally similar
+but genuinely unaffected cell-typing control task survives the identical audit by a
+wide margin -- together showing that the inflation is a property of the evaluation
+protocol itself, not of any one architecture, and that the audit is discriminating
+rather than indiscriminate. Beyond this specific graph, we contribute a reusable
+methodology: an automated leak-free split check, model-free baselines for both link
+prediction and node classification, and a cross-architecture protocol grid, released
+alongside this paper so that other groups working on biomedical interaction graphs can
+run the same audit on their own models before reporting a headline number.
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial interests or personal
+relationships that could have appeared to influence the work reported in this paper.
+
+\section*{CRediT authorship contribution statement}
+[STAGE / TODO -- fill in once the final author list is set, using CRediT roles
+(Conceptualization, Methodology, Software, Validation, Writing, ...).]
+
+\section*{Data availability}
+Code: this repository. Large data/checkpoints are intentionally untracked -- the public
+source (cellxgene accession, miRDB version) and the exact build scripts are documented
+so the graph is reconstructible, rather than distributing large binaries in-repo.
+[STAGE: finalize exact accession numbers / DOIs / repository URL before submission.]
+
+\section*{Funding}
+[STAGE / TODO -- fill in funding source(s), or ``Not applicable'' if none.]
+
+\section*{Acknowledgements}
+[STAGE / TODO]
+
+\section*{Ethics statement}
+[STAGE / TODO -- confirm: public, de-identified cellxgene data; verify whether a
+statement is required at all for secondary analysis of public data, or whether this
+section should say "Not applicable."]
+
+\bibliography{references}
+
+\end{document}

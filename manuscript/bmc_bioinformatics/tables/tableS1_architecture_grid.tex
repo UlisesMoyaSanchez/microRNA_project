@@ -1,0 +1,19 @@
+\begin{table}[h!]
+\caption{Full six-architecture $\times$ four-condition AUROC grid backing Figure~\ref{fig:architecture_inflation} (single seed, 42, jobs 5849--5852, \texttt{graphs\_v3fixed}). \texttt{ablation\_no\_mirna} has no link-prediction head by construction and is retained only as a smoke test (cell classification accuracy unaffected). Inflation = seen+uniform $-$ held+matched.}
+\label{tab:architecture_grid}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\hline
+Architecture & Seen+uniform & Seen+matched & Held+uniform & Held+matched & Inflation \\
+\hline
+HGT (project model) & 0.9222 & 0.8335 & 0.8125 & 0.6080 & +0.3142 \\
+Homogeneous GCN & 0.9177 & 0.8296 & 0.7954 & 0.6236 & +0.2941 \\
+HGT, no co-expression edges & 0.9128 & 0.8323 & 0.8071 & 0.6185 & +0.2943 \\
+MLP (no graph) & 0.7622 & 0.4994 & 0.7269 & 0.5202 & +0.2420 \\
+HGT, no miRNA input (smoke test) & \multicolumn{4}{c}{no link head} & n/a \\
+Untrained (control) & 0.4895 & 0.5071 & 0.4984 & 0.4938 & -0.0043 \\
+\hline
+\end{tabular}
+}
+\end{table}

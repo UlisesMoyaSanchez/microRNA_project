@@ -1,0 +1,14 @@
+\begin{table}[h!]
+\caption{Cell-type classification: no-graph controls (nearest-centroid, logistic regression, both on \texttt{X\_pca} alone, no message passing) vs.\ the trained HGT, same split/config/seed, test set. Source: configs/config\_v2\_edgesplit.yaml, n=11079 held-out cells.}
+\label{tab:celltype_control}
+\small
+\begin{tabular}{lcc}
+\hline
+Classifier & Accuracy & Macro-F1 \\
+\hline
+Nearest-centroid (no-graph) & 0.4654 & 0.4612 \\
+Logistic regression (no-graph) & 0.6692 & 0.5737 \\
+HGT (reference, degree-matched) & 0.9916 & -- \\
+\hline
+\end{tabular}
+\end{table}

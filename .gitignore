@@ -75,3 +75,4 @@ results/figures/*.png
 manuscript/**/*.pdf
 *.bbl
 *.blg
+*.spl
