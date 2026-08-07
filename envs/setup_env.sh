@@ -102,6 +102,14 @@ pip install \
     tqdm \
     pyyaml
 
+# ogb: Open Graph Benchmark, for the ogbl-ddi/ogbl-ppa audit extension
+# (results/comparison/ogb_*.json). Depends on `outdated`, which does a
+# PyPI version-check network call at import time inside a try/except in ogb's
+# own code -- if that ever hangs on a compute node with restricted egress
+# instead of failing fast, pin `pip install "outdated<0.2.2"` here as a fix.
+echo "  Installing ogb (Open Graph Benchmark)..."
+pip install "ogb>=1.3.6"
+
 # ── Smoke test ───────────────────────────────────────────────────────────────
 echo "========================================"
 echo "Smoke test..."
@@ -112,12 +120,14 @@ import scanpy
 import anndata
 import cellxgene_census
 import gseapy
+import ogb
 print(f"  torch            {torch.__version__}")
 print(f"  torch_geometric  {torch_geometric.__version__}")
 print(f"  scanpy           {scanpy.__version__}")
 print(f"  anndata          {anndata.__version__}")
 print(f"  cellxgene_census OK")
 print(f"  gseapy           {gseapy.__version__}")
+print(f"  ogb              {ogb.__version__}")
 print("All imports OK.")
 EOF
 
