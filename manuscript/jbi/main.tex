@@ -560,6 +560,24 @@ practical implication is that auditing a paper for target-link inclusion \emph{o
 model-free baseline, but not both, can still miss a substantially inflated headline
 number.
 
+The weakness of model-free baselines relative to trained models is not unique to our
+own graph. On two independent, public link-prediction benchmarks from different
+biological domains -- ogbl-ddi (drug--drug interaction) and ogbl-ppa
+(protein--protein association), both verified leak-free at runtime by the same check
+used throughout this paper -- the model-free heuristics from Methods reproduce the
+Open Graph Benchmark's own published leaderboard numbers exactly. On ogbl-ppa,
+Resource Allocation, a zero-parameter formula, ranks 14th of 27 leaderboard entries
+(Hits@100 0.4933), essentially tied with the next-best entry, the trained model BUDDY
+(0.4934), and outperforms the eleven trained or learned methods ranked below it --
+including canonical graph neural network architectures such as GCN (0.1867) and
+GraphSAGE (0.1655), the same architecture family compared in our own cross-architecture
+grid. Unlike the papers in our pilot literature survey, OGB already reports these
+heuristics alongside trained submissions -- exactly the practice we recommend -- yet a
+formula with no learned parameters still holds its own against a substantial fraction
+of the trained methods evaluated against it, suggesting the gap is not only that
+model-free baselines go unreported, but that reporting one does not, by itself, raise
+the bar the field treats as meaningful progress.
+
 Three limitations qualify these results. First, the cross-architecture grid reports a
 single measurement per architecture rather than an average over multiple training
 runs; we consider this justified because the inflation effect size is far larger than
