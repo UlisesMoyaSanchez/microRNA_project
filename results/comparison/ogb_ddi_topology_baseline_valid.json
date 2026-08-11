@@ -1,0 +1,98 @@
+{
+  "dataset": "ogbl-ddi",
+  "split": "valid",
+  "n_nodes": 4267,
+  "n_mp_edges": 2135822,
+  "n_positives": 133489,
+  "n_negatives_official": 101882,
+  "n_negatives_degree_matched": 133489,
+  "degree_matched_fallback_pct": 2.155233764579853,
+  "official_metric": "hits@20",
+  "leaderboard_reference": {
+    "metric": "hits@20",
+    "adamic_adar": 0.1861,
+    "common_neighbor": 0.1773,
+    "source": "https://ogb.stanford.edu/docs/leader_linkprop/, checked 2026-08-06"
+  },
+  "results": {
+    "ogb_official": {
+      "node_degree": {
+        "auroc": 0.7848414927639078,
+        "auprc": 0.7913061740625575,
+        "n_pairs": 235371
+      },
+      "pref_attach": {
+        "auroc": 0.8592433336606945,
+        "auprc": 0.8799843447065233,
+        "n_pairs": 235371
+      },
+      "common_neigh": {
+        "auroc": 0.9468993988602736,
+        "auprc": 0.959856142962914,
+        "n_pairs": 235371
+      },
+      "adamic_adar": {
+        "auroc": 0.9498822477038147,
+        "auprc": 0.9624432099528851,
+        "n_pairs": 235371
+      },
+      "resource_alloc": {
+        "auroc": 0.9619372032172874,
+        "auprc": 0.9713909627298242,
+        "n_pairs": 235371
+      }
+    },
+    "degree_matched": {
+      "node_degree": {
+        "auroc": 0.5594529020735086,
+        "auprc": 0.5698409809576722,
+        "n_pairs": 266978
+      },
+      "pref_attach": {
+        "auroc": 0.5495267035270816,
+        "auprc": 0.5649440272068532,
+        "n_pairs": 266978
+      },
+      "common_neigh": {
+        "auroc": 0.7953202209179587,
+        "auprc": 0.8133279533156121,
+        "n_pairs": 266978
+      },
+      "adamic_adar": {
+        "auroc": 0.8057787596245024,
+        "auprc": 0.8221124320863269,
+        "n_pairs": 266978
+      },
+      "resource_alloc": {
+        "auroc": 0.8520729131588394,
+        "auprc": 0.8621310233391977,
+        "n_pairs": 266978
+      }
+    }
+  },
+  "official_hits": {
+    "node_degree": {
+      "hits@20": 0.001535707062005109
+    },
+    "pref_attach": {
+      "hits@20": 0.01885548621983834
+    },
+    "common_neigh": {
+      "hits@20": 0.09467446755912472
+    },
+    "adamic_adar": {
+      "hits@20": 0.09660721108106286
+    },
+    "resource_alloc": {
+      "hits@20": 0.07245540831079715
+    }
+  },
+  "peak_rss_mb": 2081.45703125,
+  "provenance": {
+    "git_sha": "27997ee1e0115429db402ace91872a46e1787444",
+    "git_dirty": false,
+    "git_untracked_files": 4,
+    "slurm_job_id": "5865",
+    "timestamp": "2026-08-07T00:29:30.207608+00:00"
+  }
+}

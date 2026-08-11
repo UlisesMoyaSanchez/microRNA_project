@@ -1,0 +1,39 @@
+# =============================================================================
+# Thin config for the "light" OGB audit extension: ogbl-ddi (drug-drug
+# interaction), 4,267 nodes / 1,334,889 training edges. No miRNA-project fields
+# here on purpose -- this is a public, standalone benchmark, not a variant of
+# the project's own graph. Consumed by training/eval_ogb_topology_baseline.py.
+#
+# ogbl-ddi is small enough to score with a dense adjacency matrix (see the
+# dispatch in eval_ogb_topology_baseline.py) -- no sparse/chunked path needed.
+# =============================================================================
+
+project:
+  name: ogb_ddi_topology_audit
+  seed: 42
+
+data:
+  ogb_name: ogbl-ddi
+  ogb_root: /raid/home/umoya/scripts/microRNA_project/data/raw/ogb
+
+evaluation:
+  # Official OGB leaderboard entries for model-free heuristics on this dataset
+  # (https://ogb.stanford.edu/docs/leader_linkprop/, checked 2026-08-06,
+  # submitter Muhan Zhang, SEAL_OGB, 2021-02-12). Methodology behind exactly how
+  # the shared negative pool was scored is not documented by OGB -- treat as a
+  # directional cross-check (order of magnitude, relative ranking), not a
+  # bit-for-bit reproduction target. See eval_ogb_topology_baseline.py step 8
+  # of the plan for the full sanity-check protocol.
+  leaderboard_reference:
+    metric: hits@20
+    adamic_adar: 0.1861
+    common_neighbor: 0.1773
+    source: "https://ogb.stanford.edu/docs/leader_linkprop/, checked 2026-08-06"
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 8
+  mem: 32gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

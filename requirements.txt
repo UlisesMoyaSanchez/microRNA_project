@@ -1,0 +1,50 @@
+# Pinned to the versions used to produce the paper's results (DGX cluster,
+# Python 3.10.13, CUDA 11.8). PyTorch Geometric extension wheels (pyg-lib,
+# torch-scatter, torch-sparse, torch-cluster, torch-spline-conv) are built
+# against a specific torch+CUDA combo; install torch first, then fetch the
+# matching PyG wheel index:
+#   pip install torch==2.1.1
+#   pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv \
+#       -f https://data.pyg.org/whl/torch-2.1.1+cu118.html
+#   pip install -r requirements.txt
+# See envs/setup_env.sh for the full cluster bootstrap (clones a base conda
+# env with torch+CUDA preinstalled, then layers these packages on top).
+
+torch==2.1.1
+torch-geometric==2.7.0
+pyg-lib==0.4.0+pt21cu118
+torch-scatter==2.1.2+pt21cu118
+torch-sparse==0.6.18+pt21cu118
+torch-cluster==1.6.3+pt21cu118
+torch-spline-conv==1.2.2+pt21cu118
+
+# bioinformatics / single-cell
+scanpy==1.11.5
+anndata==0.11.4
+cellxgene-census==1.17.0
+biopython==1.87
+gseapy==1.2.1
+leidenalg==0.12.0
+igraph==1.0.0
+
+# graph benchmark (OGB audit extension)
+ogb==1.3.6
+outdated==0.2.2
+
+# data / numerics
+numpy==1.26.0
+pandas==2.1.3
+scipy==1.11.3
+pyarrow==12.0.1
+networkx==3.1
+scikit-learn==1.7.2
+openpyxl==3.1.5
+
+# plotting
+matplotlib==3.10.9
+seaborn==0.13.2
+umap-learn==0.5.12
+
+# utilities
+pyyaml==6.0.1
+tqdm==4.66.1

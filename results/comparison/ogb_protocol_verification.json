@@ -1,0 +1,159 @@
+{
+  "findings": {
+    "ddi": {
+      "dataset": "ogbl-ddi",
+      "n_nodes": 4267,
+      "n_edges_dataset0": 2135822,
+      "n_self_loops": 0,
+      "fraction_sampled_edges_symmetric": 1.0,
+      "split_shapes": {
+        "train": {
+          "edge": [
+            1067911,
+            2
+          ]
+        },
+        "valid": {
+          "edge": [
+            133489,
+            2
+          ],
+          "edge_neg": [
+            101882,
+            2
+          ]
+        },
+        "test": {
+          "edge": [
+            133489,
+            2
+          ],
+          "edge_neg": [
+            95599,
+            2
+          ]
+        }
+      },
+      "leak_report": {
+        "valid": {
+          "n_positive_edges": 133489,
+          "overlap_with_mp_graph_forward": 0,
+          "overlap_with_mp_graph_reverse": 0,
+          "leak_free": true
+        },
+        "test": {
+          "n_positive_edges": 133489,
+          "overlap_with_mp_graph_forward": 0,
+          "overlap_with_mp_graph_reverse": 0,
+          "leak_free": true
+        }
+      },
+      "n_train_edges_official": 1067911,
+      "negative_pool_report": {
+        "valid": {
+          "shape": [
+            101882,
+            2
+          ],
+          "n_unique_source_nodes": 2486,
+          "n_rows": 101882,
+          "looks_fixed_source_scheme": true
+        },
+        "test": {
+          "shape": [
+            95599,
+            2
+          ],
+          "n_unique_source_nodes": 1726,
+          "n_rows": 95599,
+          "looks_fixed_source_scheme": true
+        }
+      },
+      "evaluator": {
+        "expected_input_format": "==== Expected input format of Evaluator for ogbl-ddi\n{'y_pred_pos': y_pred_pos, 'y_pred_neg': y_pred_neg}\n- y_pred_pos: numpy ndarray or torch tensor of shape (num_edges, ). Torch tensor on GPU is recommended for efficiency.\n- y_pred_neg: numpy ndarray or torch tensor of shape (num_edges, ). Torch tensor on GPU is recommended for efficiency.\ny_pred_pos is the predicted scores for positive edges.\ny_pred_neg is the predicted scores for negative edges.\nNote: As the evaluation metric is ranking-based, the predicted scores need to be different for different edges.",
+        "eval_metric": "hits@20"
+      }
+    },
+    "ppa": {
+      "dataset": "ogbl-ppa",
+      "n_nodes": 576289,
+      "n_edges_dataset0": 42463862,
+      "n_self_loops": 0,
+      "fraction_sampled_edges_symmetric": 1.0,
+      "split_shapes": {
+        "train": {
+          "edge": [
+            21231931,
+            2
+          ]
+        },
+        "valid": {
+          "edge": [
+            6062562,
+            2
+          ],
+          "edge_neg": [
+            3000000,
+            2
+          ]
+        },
+        "test": {
+          "edge": [
+            3031780,
+            2
+          ],
+          "edge_neg": [
+            3000000,
+            2
+          ]
+        }
+      },
+      "leak_report": {
+        "valid": {
+          "n_positive_edges": 6062562,
+          "overlap_with_mp_graph_forward": 0,
+          "overlap_with_mp_graph_reverse": 0,
+          "leak_free": true
+        },
+        "test": {
+          "n_positive_edges": 3031780,
+          "overlap_with_mp_graph_forward": 0,
+          "overlap_with_mp_graph_reverse": 0,
+          "leak_free": true
+        }
+      },
+      "n_train_edges_official": 21231931,
+      "negative_pool_report": {
+        "valid": {
+          "shape": [
+            3000000,
+            2
+          ],
+          "n_unique_source_nodes": 492641,
+          "n_rows": 3000000,
+          "looks_fixed_source_scheme": true
+        },
+        "test": {
+          "shape": [
+            3000000,
+            2
+          ],
+          "n_unique_source_nodes": 492870,
+          "n_rows": 3000000,
+          "looks_fixed_source_scheme": true
+        }
+      },
+      "evaluator": {
+        "expected_input_format": "==== Expected input format of Evaluator for ogbl-ppa\n{'y_pred_pos': y_pred_pos, 'y_pred_neg': y_pred_neg}\n- y_pred_pos: numpy ndarray or torch tensor of shape (num_edges, ). Torch tensor on GPU is recommended for efficiency.\n- y_pred_neg: numpy ndarray or torch tensor of shape (num_edges, ). Torch tensor on GPU is recommended for efficiency.\ny_pred_pos is the predicted scores for positive edges.\ny_pred_neg is the predicted scores for negative edges.\nNote: As the evaluation metric is ranking-based, the predicted scores need to be different for different edges.",
+        "eval_metric": "hits@100"
+      }
+    }
+  },
+  "provenance": {
+    "git_sha": "27997ee1e0115429db402ace91872a46e1787444",
+    "git_dirty": false,
+    "git_untracked_files": 1,
+    "slurm_job_id": "5862",
+    "timestamp": "2026-08-07T00:08:51.498012+00:00"
+  }
+}

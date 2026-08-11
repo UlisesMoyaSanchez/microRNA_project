@@ -1,0 +1,37 @@
+{
+  "split": "test",
+  "config": "configs/config_v2_edgesplit.yaml",
+  "n_train": 88640,
+  "n_eval": 11079,
+  "reference": {
+    "hgt_cell_acc_degree_matched": 0.9916477077944339,
+    "hgt_cell_acc_uniform": 0.9915879343356665,
+    "hgt_cell_f1": null,
+    "source_artifact": "results/comparison/heldout_grid_checkpoints_v2_edgesplit_test.json",
+    "source_checkpoint": "checkpoints_v2_edgesplit/best_model.pt"
+  },
+  "results": {
+    "nearest_centroid": {
+      "acc": 0.46538496254174566,
+      "f1_macro": 0.46116218049565433
+    },
+    "logistic_regression": {
+      "acc": 0.6691939705749617,
+      "f1_macro": 0.5736981865353862
+    }
+  },
+  "label_construction_check": {
+    "skipped": false,
+    "note": "cell_type = argmax(sc.tl.score_genes marker scores); see data/02_preprocess/preprocess_scrna.py:34-58",
+    "score_columns_found": 11,
+    "argmax_matches_stored_label_fraction_all_cells": 1.0,
+    "argmax_matches_stored_label_fraction_eval_split": 1.0
+  },
+  "provenance": {
+    "git_sha": "a031c14c61d4d86b13f004fe351ef349acff706f",
+    "git_dirty": false,
+    "git_untracked_files": 1,
+    "slurm_job_id": "5853",
+    "timestamp": "2026-07-30T00:25:13.251839+00:00"
+  }
+}

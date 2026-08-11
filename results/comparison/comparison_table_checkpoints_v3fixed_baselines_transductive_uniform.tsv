@@ -1,0 +1,7 @@
+model	protocol	trained_with	link_loss	clf_loss	auroc_matched	auprc_matched	auroc_uniform	auprc_uniform	auroc_transd	cell_acc	cell_f1
+hgt_v2	transductive_seen	uniform	0.7675	0.0440	0.7233	0.7165	0.9222	0.9118	0.9178	0.9851	0.9752
+random	transductive_seen	uniform	0.8009	2.8330	0.5038	0.5010	0.4895	0.4877	0.5055	0.0896	0.0775
+mlp	transductive_seen	uniform	0.7981	0.2561	0.5129	0.5083	0.7622	0.7494	0.7496	0.9044	0.8643
+homo_gcn	transductive_seen	uniform	0.8141	0.2748	0.7194	0.7279	0.9177	0.9096	0.9135	0.8930	0.8614
+ablation_no_mirna	transductive_seen	uniform	0.0000	0.0310	nan	nan	nan	nan	nan	0.9898	0.9827
+ablation_no_coexpr	transductive_seen	uniform	0.7509	0.0689	0.6931	0.6886	0.9128	0.8997	0.9054	0.9755	0.9583

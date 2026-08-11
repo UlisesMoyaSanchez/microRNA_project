@@ -1,0 +1,46 @@
+# =============================================================================
+# Thin config for the "light" OGB audit extension: ogbl-ppa (protein-protein
+# association), 576,289 nodes / 30,326,273 training edges -- OGB's largest
+# link-prediction dataset. No miRNA-project fields here on purpose -- this is a
+# public, standalone benchmark, not a variant of the project's own graph.
+# Consumed by training/eval_ogb_topology_baseline.py.
+#
+# A dense adjacency is infeasible at this scale (576,289^2 entries, ~1.3 TB).
+# eval_ogb_topology_baseline.py dispatches ppa to the sparse/pairwise scoring
+# path -- pairs are scored directly via chunked sparse row intersections,
+# never materializing an N x N matrix of any kind.
+# =============================================================================
+
+project:
+  name: ogb_ppa_topology_audit
+  seed: 42
+
+data:
+  ogb_name: ogbl-ppa
+  ogb_root: /raid/home/umoya/scripts/microRNA_project/data/raw/ogb
+
+scoring:
+  pair_chunk_size: 100000   # tune once on the DGX and adjust based on logged wall-time
+
+evaluation:
+  # Official OGB leaderboard entries for model-free heuristics on this dataset
+  # (https://ogb.stanford.edu/docs/leader_linkprop/, checked 2026-08-06,
+  # submitter Shen Fan, 2021-07-05). Resource Allocation is the strongest entry
+  # on this leaderboard, ahead of several trained GNNs -- the most important
+  # single cross-check value in this file. Methodology behind exactly how the
+  # shared negative pool was scored is not documented by OGB -- treat as a
+  # directional cross-check, not a bit-for-bit reproduction target.
+  leaderboard_reference:
+    metric: hits@100
+    adamic_adar: 0.3245
+    common_neighbor: 0.2765
+    resource_allocation: 0.4933
+    source: "https://ogb.stanford.edu/docs/leader_linkprop/, checked 2026-08-06"
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 16
+  mem: 192gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

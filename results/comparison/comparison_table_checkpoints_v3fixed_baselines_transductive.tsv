@@ -1,0 +1,7 @@
+model	protocol	trained_with	link_loss	clf_loss	auroc_matched	auprc_matched	auroc_uniform	auprc_uniform	auroc_transd	cell_acc	cell_f1
+hgt_v2	transductive_seen	degree_matched	0.4948	0.0403	0.8335	0.8409	0.8384	0.8423	0.8412	0.9867	0.9777
+random	transductive_seen	degree_matched	0.8001	2.8289	0.5071	0.5053	0.4924	0.4928	0.5049	0.0922	0.0803
+mlp	transductive_seen	degree_matched	0.6932	0.4847	0.4994	0.5007	0.5972	0.5642	0.6072	0.8228	0.7781
+homo_gcn	transductive_seen	degree_matched	0.5111	0.2743	0.8296	0.8362	0.8478	0.8498	0.8447	0.8950	0.8622
+ablation_no_mirna	transductive_seen	degree_matched	0.0000	0.0300	nan	nan	nan	nan	nan	0.9902	0.9829
+ablation_no_coexpr	transductive_seen	degree_matched	0.4965	0.0387	0.8323	0.8415	0.8359	0.8392	0.8379	0.9871	0.9782

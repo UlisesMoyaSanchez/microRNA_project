@@ -1,0 +1,78 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# experiments (results, not code)
+experiments/*/
+!experiments/.gitkeep
+
+# checkpoints, logs
+*.ckpt
+*.pt
+lightning_logs/
+*.log
+
+# notebooks outputs
+notebooks/.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# data files
+*.csv
+*.npz
+*.npy
+*.h5
+
+# SLURM output
+*.out
+*.err
+
+# misc
+.DS_Store
+*.swp
+
+# large/generated data & model artifacts - regenerate via data/01_download, 02_preprocess, 03_build_graph
+data/raw/
+data/processed/
+data/graphs/
+# Alternate-interaction-source arms (processed_mirtarbase/, graphs_mirtarbase/, ...).
+# Same rule as above — these hold multi-hundred-MB graphs and a symlink to a 4.5 GB
+# h5ad — but ignore the CONTENTS rather than the directory, so the README explaining
+# each arm stays tracked. (A bare `data/processed_*/` would ignore the dir itself and
+# git cannot un-ignore a file inside an ignored directory.)
+data/processed_*/*
+data/graphs_*/*
+!data/processed_*/README.md
+!data/graphs_*/README.md
+checkpoints/
+checkpoints_v2/
+checkpoints_v3/
+checkpoints_v4/
+logs/
+
+# LaTeX build artifacts (presentation/)
+*.aux
+*.nav
+*.snm
+*.toc
+*.vrb
+*.out.tex
+# Compiled slides: regenerated from main.tex. Scoped to presentation/ so the
+# figure PDFs under results/figures/ stay tracked.
+presentation/**/*.pdf
+
+# PNG twins that make_slide_figures.py writes purely so a human can eyeball the
+# result before shipping. The PDFs are the deliverable and stay tracked; these are
+# regenerable and would only duplicate them in the history.
+results/figures/*.png
+
+# LaTeX build artifacts (manuscript/) -- bmcart.cls/.sty/.bst are vendored template
+# files and DO stay tracked; only the compile output is ignored.
+manuscript/**/*.pdf
+*.bbl
+*.blg
+*.spl
