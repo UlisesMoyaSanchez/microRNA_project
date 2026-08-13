@@ -1,0 +1,45 @@
+# =============================================================================
+# Thin config for the HMDD topology-baseline audit: CoupleMDA (Li et al., IJMS
+# 2025), miRNA-disease link prediction. Tier 1 for positives (exact bundled
+# train/test split from link.dat/link.dat.test, leak-free by construction --
+# see data/01_download/download_hmdd_survey_couplemda.py for the 43-pair
+# train/test overlap removed to guarantee this), Tier 2 for negatives (their
+# own 1:1 negatives are generated at runtime by their data loader and not
+# published as a file, so this audit generates its own 1:1 uniform negatives
+# on their exact positive split).
+# Consumed by training/eval_hmdd_survey_topology_baseline.py.
+# =============================================================================
+
+project:
+  name: couplemda
+  seed: 42
+
+data:
+  train_pos_path: data/raw/hmdd_survey/couplemda/train_pos.csv
+  test_pos_path: data/raw/hmdd_survey/couplemda/test_pos.csv
+  n_mirna: 2090
+  n_disease: 1754
+  negative_ratio: 1
+
+evaluation:
+  paper_reference:
+    tier: 1
+    negatives_exact: false
+    headline_auroc: 0.9536
+    negative_sampling: "uniform random, 1:1"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12112494/"
+    caveat: >
+      0.9536 is CoupleMDA's own reported number (Table 3). Positive train/test
+      split is exact (CoupleMDA's own bundled link.dat/link.dat.test, link-type
+      12, 43 leaking pairs removed from train). Negatives are self-generated at
+      their stated 1:1 ratio, not their own exact (unpublished, runtime-
+      generated) negative pairs -- so this is an exact-positives / approximate-
+      negatives hybrid, not a full reproduction.
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 4
+  mem: 16gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

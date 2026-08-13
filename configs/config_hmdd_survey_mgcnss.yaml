@@ -1,0 +1,41 @@
+# =============================================================================
+# Thin config for the HMDD topology-baseline audit: MGCNSS (Brief. Bioinform.
+# 2024), miRNA-disease link prediction. Tier 1 -- MGCNSS's own bundled, labeled
+# split (data/train/train7.txt + test7_1.txt) is used directly; see
+# data/01_download/download_hmdd_survey_canonical5430.py's docstring for how this
+# was confirmed to be the split that produces the paper's headline number.
+# Consumed by training/eval_hmdd_survey_topology_baseline.py.
+# =============================================================================
+
+project:
+  name: mgcnss
+  seed: 42
+
+data:
+  matrix_path: data/raw/hmdd_survey/mgcnss/matrix.csv
+  train_path: data/raw/hmdd_survey/mgcnss/train7.txt
+  test_path: data/raw/hmdd_survey/mgcnss/test7_1.txt
+  # train7.txt/test7_1.txt use 1-based (miRNA, disease) node ids -- confirmed from
+  # src/link_prediction_evaluate.py's own indexing convention (edge[0]-1, edge[1]+494).
+  index_base: 1
+
+evaluation:
+  paper_reference:
+    tier: 1
+    headline_auroc: 0.9874
+    negative_sampling: "distance-based selection (paper's own contribution)"
+    url: "https://academic.oup.com/bib/article/25/3/bbae168/7645839"
+    caveat: >
+      MGCNSS's own headline negatives are distance-based (their contribution),
+      not uniform-random; our topology baseline is scored against their bundled
+      test7_1.txt labels as published (whatever negative-selection method
+      produced them), so this is a like-for-like comparison on their own
+      exact test pairs, not a re-derivation of their negative sampling.
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 4
+  mem: 8gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

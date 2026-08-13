@@ -463,12 +463,30 @@ done and the second is suspended). Full detail in
          `evaluation.reference_checkpoint`; a config without it gets no row, never a borrowed one.
       3. Fixed output-table and per-architecture checkpoint paths, so the four cells
          overwrote each other's artifacts. Now keyed to the config's `checkpoint_dir` stem.
-- [~] **Support the premise — PILOT DONE (n=7), needs expansion.**
+- [~] **Support the premise — EXPANDED TO n=22 (2026-08-12), spot-checked (2026-08-13), single
+      independent rater remains open.**
       `results/LITERATURE_SURVEY.md`. It **corrected our claim**: the leak is *not*
-      universal (2/7 strip test edges correctly), but **0/7 report a model-free baseline**
-      and 3/7 methods sections do not even permit the reader to tell whether held-out edges
-      reached the encoder. Expand to 20–30 papers, add a second independent rater for the
-      "unclear" calls, and record the supporting quote per cell.
+      universal (7/22 strip test edges correctly, only 2/22 clearly do not), but **0/22 report
+      a model-free baseline** and 12/22 (55%) methods sections do not even permit the reader to
+      tell whether held-out edges reached the encoder. Target of 20-30 papers met with 15 new,
+      open-access, PMC-verified papers; supporting quote recorded per cell in the TSV.
+      2026-08-13: re-verified 14 "unclear" cells against primary sources -- 11/14 held up as a
+      genuine reporting gap (all 14 checked papers had public GitHub code, so the info exists
+      but isn't disclosed in prose), 3/14 were extraction errors and are now corrected.
+      Remaining: a second independent rater for the "unclear" calls -- reported as the
+      manuscript's fifth Discussion limitation rather than resolved.
+- [x] **Quantify the inflation on surveyed papers' own data — ALL 7 PAPERS DONE (2026-08-13).**
+      `results/HMDD_TOPOLOGY_AUDIT.md`. Instead of only inferring inflation from our own graph,
+      computed our model-free topology baseline directly on the HMDD data behind 7 miRNA-disease
+      survey papers (MGCNSS, NIMGSA, HLGNN-MDA, DiGAMN, CKSNP-GNN, MEAHNE, CoupleMDA; 3 dropped
+      with documented reasons). Mean gap: trained models beat the topology floor by 4.7 AUROC
+      points on average (0.951 vs 0.905) -- but 2/7 (MEAHNE, CoupleMDA, the two sparsest graphs)
+      show the trained model adding little to nothing over popularity, MEAHNE's heuristic
+      outright *beating* its trained model (0.9848 vs 0.9520) -- same signature as our own
+      graph. Sanity-checked via degree-matched negatives collapsing to ~0.55-0.58 on all seven
+      (rules out a leak/bug). Bonus: filled in 4 "not extracted" headline-AUROC cells in the
+      original literature survey while tracing each paper's protocol. Remaining: manuscript
+      integration.
 - [~] **Generalize past our own graph — DATA IN HAND, PIPELINE UNBLOCKED (2026-07-16).
       Next gate: pre-register the subsample, then build.**
       One dataset + one interaction database is not a claim about a field. The second,

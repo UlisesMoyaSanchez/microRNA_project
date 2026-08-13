@@ -82,26 +82,34 @@ Inflate microRNA--Target Link Prediction}
 %% TODO: fill in the real affiliation before submission.
 
 \begin{abstract}
-Graph neural network (GNN) papers predicting microRNA--target interactions routinely
-report AUROC in the 0.91--0.99 range. A pilot audit of seven such papers found that none
-report a model-free baseline and four of seven treat every unlabeled pair as a
+Rigorous data handling and transparent evaluation reporting are foundational to reliable network biology, yet
+Graph Neural Network (GNN) papers predicting microRNA--target interactions routinely
+report AUROC in the 0.91--0.99 range without establishing model free baselines. 
+A literature audit of 22 such papers found that none
+report a model-free baseline and 16 of 22 treat every unlabeled pair as a
 uniformly-sampled negative. We quantify the combined, previously unmeasured cost of
 these two evaluation pitfalls on a real biomedical interaction graph. We built a
 heterogeneous graph from a public single-cell RNA-seq cohort and miRDB v6.0
-miRNA--target interactions, trained a heterogeneous graph transformer to score
-miRNA--gene pairs, and compared a conventional evaluation protocol against one that
+miRNA--target interactions, training a heterogeneous graph transformer to score
+miRNA--gene pairs. We then compared a conventional evaluation protocol against one that
 corrects both message-passing edge leakage and negative-sampling bias, across six
 architectures and a set of model-free baselines. The conventional protocol (edges seen
-during message passing, uniform negatives) reports AUROC 0.9867 $\pm$ 0.0011 (four
-seeds, test set). Correcting both flaws simultaneously drops this to 0.6276 $\pm$
+during message passing, uniform negatives) reports AUROC 0.9867 $\pm$ 0.0011. 
+Correcting both flaws simultaneously drops this to 0.6276 $\pm$
 0.0070, within 3.6 points of a one-line, no-learning topological heuristic
-(Adamic--Adar, 0.5912); the inflation is super-additive, so correcting either flaw
+(Adamic/Adar, 0.5912); the inflation is super-additive, so correcting either flaw
 alone understates the total. Across six architectures, including a graph-free MLP,
 every trained model inflates by 0.24--0.31 under the conventional protocol while an
-untrained control does not move. A genuinely unaffected task in the same pipeline
-(cell-type classification, 0.9916 test accuracy) survives an analogous no-learning
-control by a wide margin (best graph-free baseline 0.6692). The inflation is a property
-of the evaluation protocol, not of any one architecture, and this subfield's own
+untrained control does not move. A structurally similar but genuinely unaffected task
+in the same pipeline, cell-type classification, reaches 0.9916 accuracy and survives an
+analogous no-graph control by a 32-point margin (best no-graph baseline 0.6692),
+confirming the audit is discriminating rather than indiscriminate. Applying the same
+model-free heuristics directly to seven of the surveyed papers' own miRNA-disease
+datasets, independently obtained, the trained models beat the topology floor by 4.7
+AUROC points on average, but the gap reverses on the two sparsest graphs audited -- on
+one, the topology-only heuristic outright beats the paper's own trained model. The
+inflation is a property
+of the evaluation protocol, not of any one architecture or dataset, and this subfield's own
 reporting practice does not check for it. We propose a minimum reporting standard: an
 automated leak-free split check and at least one model-free baseline.
 \end{abstract}
@@ -112,11 +120,12 @@ automated leak-free split check and at least one model-free baseline.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
 \item Inflation of 0.24--0.31 AUROC recurs across six independent architectures.
 \item A cell-typing control task shows the audit is not indiscriminate.
+\item On 7 surveyed papers' own data, the same heuristic beats one trained model outright.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
 
 \begin{keyword}
-link prediction \sep microRNA target prediction \sep graph neural networks \sep
+link prediction \sep microRNA--target prediction \sep graph neural networks \sep
 evaluation methodology \sep negative sampling \sep heterogeneous graphs
 \end{keyword}
 %% STAGE: trimmed from the BMC draft's 8 keywords to 6 (dropped "network biology" and
@@ -139,23 +148,30 @@ evaluation methodology \sep negative sampling \sep heterogeneous graphs
 
 \section{Introduction}
 \label{sec:intro}
-Graph neural network papers predicting miRNA--target interactions, and drug--target or
-biomolecule--biomolecule interactions more broadly, routinely report AUROC in the
+Mapping the complex web of biomolecule-biomolecule interactions, particularly microRNA
+and drug targets, is essential for advancing modern network biology
+\cite{barabasi2004networkbiology,vidal2011interactome}. However,
+despite the biological complexity of these relationships,
+Graph Neural Network papers predict an AUROC in the
 0.91--0.99 range \cite{tian2024mgcnss,jin2022nimgsa,ahmad2026hybridgnn,yu2022hgdti,
-cao2024ngcn,zhang2024kmerpmtf,almusawi2023review}. A pilot literature audit for this
-paper, in which we read the methods
-section of seven such papers in full rather than relying on their abstracts, found that
-none report a model-free baseline, and that four of the seven default to
-uniformly-sampled negatives for unlabeled pairs without discussion (full protocol in
-Methods, full results in Related Work below). Neither omission is exotic: both are
+cao2024ngcn,zhang2024kmerpmtf,almusawi2023review,orro2026mirnadisease,
+li2025couplemda,zeng2025gonnmda,liu2024digamn,lu2024dgnmda,yu2022hlgnnmda,
+huang2022meahne,li2022cksnpgnn,liang2023hmcda,wang2026higldp,xiong2025gpsdti,
+zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A
+literature audit of these 22 papers found that none report a model-free baseline, and
+that 16 of the 22 default to uniformly-sampled negatives without discussion (protocol
+in Methods, full results in Related Work below). Neither omission is novel: both are
 already documented pitfalls in the broader link-prediction and knowledge-graph
 literature, reviewed below. What is missing is the connection between that general
 literature and this subfield's own reporting practice -- the general-ML literature
 already knows how to check for these pitfalls, but this subfield's papers do not apply
-the check. This paper quantifies what that gap costs on a real biomedical interaction
-graph, shows that the two pitfalls compound rather than simply add, and shows the cost
-recurs across independently trained architectures rather than being an artifact of any
-single model.
+the check. Concretely, this paper's contribution is fourfold: it quantifies what that
+gap costs on a real biomedical interaction graph, shows that the two pitfalls compound
+rather than simply add, shows the cost recurs across independently trained
+architectures rather than being an artifact of any single model, and shows the same
+model-free floor is high enough to matter -- on two of seven independently obtained
+datasets, decisive -- when measured directly on other papers' own data rather than
+only inferred by analogy.
 
 \section{Related Work}
 \label{sec:related}
@@ -165,7 +181,13 @@ Neither failure mode we quantify in this paper is novel to machine learning in g
 Transductive, seen-edge leakage traces at least to the inverse-relation leak documented
 in the FB15k knowledge-graph benchmark \cite{toutanova2015observed}, and is actively
 being re-examined in the broader link-prediction literature
-\cite{zhu2023pitfalls,li2023evaluating}. Popularity-biased negative sampling is a
+\cite{zhu2023pitfalls,li2023evaluating}. The same failure recurs closer to this paper's
+own domain: a leakage problem inflating reported performance has been independently
+identified in miRNA--disease association prediction \cite{dong2020mirnaleakage}, and,
+contemporaneously, train/test redundancy has been shown to inflate knowledge-graph-embedding
+link prediction across several biomedical graphs -- though that study's own permutation
+test found no evidence its models exploit node degree specifically, a useful contrast to
+the degree-driven bias we quantify below \cite{briere2026kgeleakage}. Popularity-biased negative sampling is a
 known, quantified bias in link prediction generally \cite{kotnis2017analysis,
 aiyappa2024implicit}, and has been documented specifically in network biology
 \cite{yilmaz2025biasaware}, the domain this paper's graph is drawn from. Its likely
@@ -174,28 +196,32 @@ of negatives per positive was adopted for computational convenience and only lat
 shown to distort ranking metrics \cite{krichene2020sampled}.
 
 \subsection{How this subfield evaluates itself}
-Against that backdrop, we ran a pilot survey of seven papers in the miRNA-target and
-adjacent biomolecule-interaction link-prediction literature, reading each paper's
-methods section in full rather than inferring its evaluation protocol from the
-abstract. None of the seven report a model-free baseline. Four of the seven treat every
-unlabeled pair as a uniformly-sampled negative by default, without discussing the
-alternative; of the remaining three, two make a better negative-selection strategy
-their own headline contribution. Split-leakage status is unclear in three of the seven,
-because the methods section does not state whether held-out edges are removed from the
-encoder's input. Table~\ref{tab:literature_survey} summarizes the pilot.
+Against that backdrop, we surveyed 22 papers in the miRNA-target and adjacent
+biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disease,
+lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
+full rather than inferring its evaluation protocol from the abstract. None of the 22
+report a model-free baseline. 16 of the 22 treat every unlabeled pair as a
+uniformly-sampled negative by default, without discussing the alternative; among the
+papers in the original seven-paper pilot that deviate from uniform sampling, two
+(HybridGNN, kmerPMTF) make a better negative-selection strategy their own headline
+contribution -- an implicit admission that the default is known to be inadequate. Whether
+held-out edges are removed from the encoder's input is unclear from the methods section
+in 12 of the 22, up from 3 of the original 7; this reporting gap, not confirmed leakage,
+is now the dominant finding on that dimension. Table~\ref{tab:literature_survey}
+summarizes the full sample.
 
-We deliberately do not claim that this subfield routinely leaks edges: two of the seven
-papers in the pilot get the split right, and our own project's original split was worse
-than the norm we observed. The claim we make is narrower, and we argue more damaging
-precisely because it is universal: no paper in the pilot checks itself against a
-model-free control. Getting the split right is not protective on its own -- the two
-papers that do strip held-out edges from the graph, HybridGNN and kmerPMTF, still draw
-negatives from unlabeled pairs, one uniformly at random and the other count-matched
-rather than degree-matched, and neither reports a model-free baseline
-(Table~\ref{tab:literature_survey}). The two
-failure modes are independent: fixing the split is not evidence against the popularity
-shortcut this paper identifies, which is precisely why, as Results shows, correcting
-both is super-additive rather than redundant.
+We deliberately do not claim that this subfield routinely leaks edges: only 2 of the 22
+papers surveyed clearly do, 7 clearly strip test edges correctly, and our own project's
+original split was worse than the norm we observed. The claim we make is narrower, and
+we argue more damaging precisely because it is universal: no paper in the sample checks
+itself against a model-free control. Getting the split right is not protective on its
+own -- the two papers from the original pilot that do strip held-out edges from the
+graph, HybridGNN and kmerPMTF, still draw negatives from unlabeled pairs, one uniformly
+at random and the other count-matched rather than degree-matched, and neither reports a
+model-free baseline (Table~\ref{tab:literature_survey}). The two failure modes are
+independent: fixing the split is not evidence against the popularity shortcut this
+paper identifies, which is precisely why, as Results shows, correcting both is
+super-additive rather than redundant.
 
 \input{tables/table3_literature_survey.tex}
 
@@ -254,7 +280,12 @@ construction described above.}
 \end{figure}
 
 \subsection{Evaluation protocol}
-We split edges with \texttt{RandomLinkSplit} and strip each held-out edge, together
+We use \emph{transductive evaluation} to name the specific condition audited here: a
+held-out edge is left in the message-passing graph when its score is computed, so the
+encoder can, in effect, observe the exact edge it is later asked to predict. This is
+narrower than the general transductive/inductive distinction in graph learning, which
+concerns whether test-time nodes are visible during training and is not by itself a
+source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out edge, together
 with its automatically-added reverse relation, from the message-passing graph in both
 directions, so that no test edge is reachable to the encoder at evaluation time. This
 leak-free property is not assumed: it is verified by an automated battery of checks
@@ -362,13 +393,19 @@ an untrained random-weight control, and a no-miRNA-input ablation that is
 link-prediction-incapable by construction and retained only as a smoke test.
 
 \subsection{Literature survey protocol}
-The pilot literature survey referenced throughout this paper covers seven papers, each
-read in full at the methods-section level rather than judged from its abstract, and
-classified along four dimensions: whether it cross-validates over edges, whether it
-removes held-out edges from the encoder's input, how it selects negative examples, and
-whether it reports any model-free baseline. We plan to expand this survey to 20--30
-papers with two independent raters before submission, to move the field-level claim in
-Related Work from a pilot estimate to a more representative one.
+The literature survey referenced throughout this paper covers 22 papers, each read in
+full at the methods-section level rather than judged from its abstract, and classified
+along four dimensions: whether it cross-validates over edges, whether it removes
+held-out edges from the encoder's input, how it selects negative examples, and whether
+it reports any model-free baseline. This is an expansion, completed 2026-08-12, of an
+initial seven-paper pilot; one limitation remains open by construction -- every
+classification was made by a single rater, so the "unclear" calls in
+Table~\ref{tab:literature_survey} have not been cross-checked by a second independent
+reader, and we report that as a limitation (Discussion) rather than resolving it here. A
+2026-08-13 re-read of the same rater's own "unclear" classifications against each paper's
+primary source, undertaken to check whether "unclear" reflected a genuine reporting gap
+or overly conservative extraction, corrected 3 of 14 spot-checked cells; the tallies
+reported throughout this paper reflect those corrections (see Discussion).
 
 \section{Results}
 \label{sec:results}
@@ -459,6 +496,37 @@ grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}
 \end{figure}
 
 \input{tables/tableS1_architecture_grid.tex}
+
+\subsection{The inflation is not specific to our own graph}
+The literature survey (Section~\ref{sec:related}) shows this subfield never reports a
+model-free control, but stops short of measuring what that control would show on the
+surveyed papers' own data -- it argues by analogy to our graph. We closed that gap for
+seven miRNA-disease papers from Table~\ref{tab:literature_survey} whose data could be
+independently obtained: their own bundled repositories, or a shared institutional
+mirror for one (CKSNP-GNN), each verified against the paper's own reported node/edge
+counts before use (three further papers -- GONNMDA, Orro, DGNMDA -- were excluded
+because no usable data was recoverable; see Discussion). Applying the same topology-only
+scorers from Table~\ref{tab:model_free_baselines}, unmodified, to each paper's own
+association matrix under uniform-random negatives at that paper's stated ratio
+(Table~\ref{tab:hmdd_survey_audit}), the trained models beat the topology floor by 4.7
+AUROC points on average -- a real, independently-measured gap, not merely our own
+graph's finding restated. But the gap is highly graph-dependent, ranging from $-9.2$
+points (DiGAMN) to $+3.3$ points: on MEAHNE's graph, the topology-only heuristic
+outright \emph{beats} the paper's own trained model (0.9848 vs.\ 0.9520), and on
+CoupleMDA's the two are within 1.3 points. Sanity-checking with degree-matched
+negatives collapses every heuristic on every paper to 0.55--0.58, confirming the
+uniform-negative numbers reflect a genuine popularity ceiling rather than a data error.
+The two papers where the trained model adds the least are also the two sparsest graphs
+audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes; CoupleMDA:
+$\sim$15{,}000 edges over 2{,}090 $\times$ 1{,}754 nodes), consistent with a mechanism
+in which a sparser graph makes popularity alone a harder ceiling for a trained model to
+clear -- a testable hypothesis for future work, not a claim we verify further here. We
+do not conclude that these five other trained models learned nothing: five of seven
+still clearly separate from the topology floor. The claim is narrower and already
+sufficient: \emph{the popularity floor this literature never checks for is frequently
+high enough to matter, and on some of its own graphs, decisive.}
+
+\input{tables/table5_hmdd_survey_audit.tex}
 
 \subsection{A control task that survives its own audit}
 To check that this audit methodology does not simply collapse every number in the
@@ -561,24 +629,31 @@ model-free baseline, but not both, can still miss a substantially inflated headl
 number.
 
 The weakness of model-free baselines relative to trained models is not unique to our
-own graph. On two independent, public link-prediction benchmarks from different
+own graph. Topological heuristics have been shown competitive with, or superior to,
+trained neural link predictors elsewhere in the literature: on realistic biomedical
+graphs, a plain Common Neighbours baseline holds its own against graph-embedding neural
+methods on small or sparse, highly-disconnected graphs \cite{crichton2018realistic}, and
+a purely topology-centric method has been shown to outperform state-of-the-art GNN link
+predictors in accuracy while requiring a fraction of the training and inference cost
+\cite{huang2023gelato}. On two independent, public link-prediction benchmarks from different
 biological domains -- ogbl-ddi (drug--drug interaction) and ogbl-ppa
 (protein--protein association), both verified leak-free at runtime by the same check
 used throughout this paper -- the model-free heuristics from Methods reproduce the
 Open Graph Benchmark's own published leaderboard numbers exactly. On ogbl-ppa,
 Resource Allocation, a zero-parameter formula, ranks 14th of 27 leaderboard entries
-(Hits@100 0.4933), essentially tied with the next-best entry, the trained model BUDDY
-(0.4934), and outperforms the eleven trained or learned methods ranked below it --
+(Hits@100 0.4933), essentially tied with the next-best entry, the trained model
+BUDDY \cite{chamberlain2023buddy} (0.4934), and outperforms the eleven trained or
+learned methods ranked below it --
 including canonical graph neural network architectures such as GCN (0.1867) and
 GraphSAGE (0.1655), the same architecture family compared in our own cross-architecture
-grid. Unlike the papers in our pilot literature survey, OGB already reports these
+grid. Unlike the papers in our literature survey, OGB already reports these
 heuristics alongside trained submissions -- exactly the practice we recommend -- yet a
 formula with no learned parameters still holds its own against a substantial fraction
 of the trained methods evaluated against it, suggesting the gap is not only that
 model-free baselines go unreported, but that reporting one does not, by itself, raise
 the bar the field treats as meaningful progress.
 
-Three limitations qualify these results. First, the cross-architecture grid reports a
+Six limitations qualify these results. First, the cross-architecture grid reports a
 single measurement per architecture rather than an average over multiple training
 runs; we consider this justified because the inflation effect size is far larger than
 the run-to-run variability established elsewhere in this study, but a fully repeated
@@ -596,7 +671,44 @@ heuristics such as the Katz index or rooted PageRank, which are known to outperf
 local heuristics on sparse graphs and which the trained model's multi-hop,
 multi-relation message passing more closely resembles. The 3.6-point gap between the
 best local heuristic and the trained model should therefore be read as an upper bound
-on how much the model exceeds a no-learning topological floor, not a tight one.
+on how much the model exceeds a no-learning topological floor, not a tight one. Fourth,
+the six trained architectures compared here (Table~\ref{tab:architecture_grid}) are all
+either generic message-passing networks (the project HGT, a homogeneous GCN) or a
+graph-free MLP; none explicitly encodes pairwise structural signal -- shared neighbors,
+enclosing-subgraph structure, or path distance -- the way link-prediction-specific
+architectures such as SEAL \cite{zhang2018seal}, NBFNet \cite{zhu2021nbfnet}, Neo-GNN
+\cite{yun2021neognn}, or BUDDY \cite{chamberlain2023buddy} do. Architectures of that
+family place above local heuristics on properly-audited external leaderboards,
+including the OGB benchmarks discussed above, where BUDDY narrowly outperforms
+Resource Allocation on ogbl-ppa. The 3.6-point gap measured here should therefore not be read as a ceiling on
+what any trained model could achieve on this graph under the corrected protocol -- only
+on what the generic message-passing architectures tested here achieve; whether a
+structure-aware architecture closes it is an open question this study does not
+answer. Fifth, the 22-paper literature survey (Table~\ref{tab:literature_survey}) was
+classified by a single rater; the "unclear" calls in particular -- 12 of 22 on whether
+held-out edges are removed from the encoder's input -- have not been cross-checked by a
+second independent reader, so that specific fraction should be read as this rater's
+judgment rather than an inter-rater-agreed figure. A same-rater re-read of 14 of the
+"unclear" cells against primary sources (2026-08-13) corrected 3, a 21\% rate that
+suggests an independent second rater could still move the exact fraction, even though
+it did not change which category is dominant. The two universal findings the
+survey's argument rests on (zero of 22 papers report a model-free baseline; the split
+status is frequently unrecoverable from the methods section as written) do not depend
+on resolving any individual "unclear" call and are therefore more robust to this
+limitation than the exact fraction is. Sixth, the seven-paper topology audit
+(Table~\ref{tab:hmdd_survey_audit}) reconstructs, rather than reproduces, six of seven
+papers' evaluation protocols: only MGCNSS's split and CoupleMDA's positive edges are
+each paper's own exact data, the rest use an exact association matrix (verified against
+each paper's own reported node/edge counts) under a self-generated split at the paper's
+stated negative ratio, since no further split file was published. Three further
+candidate papers from the same survey cluster (GONNMDA, Orro, DGNMDA) were excluded
+from the audit entirely rather than approximated further: GONNMDA's linked repository
+contains no code or data, Orro's data-availability statement provides no public
+repository, and DGNMDA's cited data source was unreachable at the time of this audit.
+The audit's headline number -- a 4.7-point average gap that reverses sign on two of
+seven papers -- should be read as a lower-confidence, but independently-sourced,
+complement to the single-graph result in Table~\ref{tab:model_free_baselines}, not a
+literal replication of any individual paper's reported figure.
 
 Given how directly the inflation problem responds to a small set of checks, we propose
 these as a minimum reporting standard for evaluation methodology in this subfield: an

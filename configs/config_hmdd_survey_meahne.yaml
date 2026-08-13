@@ -1,0 +1,38 @@
+# =============================================================================
+# Thin config for the HMDD topology-baseline audit: MEAHNE (Huang et al., Life
+# 2022), miRNA-disease link prediction. Tier 2 -- exact positive edge list
+# (1,296 miRNAs x 11,783 diseases, 17,972 positives), no bundled split, so one
+# is generated here at their stated 1:1 ratio (their own split is 70/10/20 by
+# description, not published as a file).
+# Consumed by training/eval_hmdd_survey_topology_baseline.py.
+# =============================================================================
+
+project:
+  name: meahne
+  seed: 42
+
+data:
+  matrix_path: data/raw/hmdd_survey/meahne/matrix.csv
+  test_fraction: 0.2
+  negative_ratio: 1
+
+evaluation:
+  paper_reference:
+    tier: 2
+    headline_auroc: 0.9520
+    negative_sampling: "uniform random, 1:1"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9655430/"
+    caveat: >
+      0.9520 is MEAHNE's own reported number (Table 3) on a 70/10/20 train/val/
+      test split, 1:1 negatives. No split file is bundled; this run uses a
+      single random 80/20 edge split (matching their test fraction) with 1:1
+      uniform negatives as an approximation, not a reproduction of their exact
+      split.
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 4
+  mem: 16gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

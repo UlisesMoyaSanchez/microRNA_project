@@ -1,0 +1,20 @@
+\begin{table}[h!]
+\caption{Model-free topology baseline computed directly on the surveyed papers' own miRNA-disease data (seven papers from Table~\ref{tab:literature_survey}; three excluded with documented reasons -- see Discussion). ``Ours'' is the best of four topology-only heuristics under uniform-random negatives, our own reconstruction of each paper's stated protocol; only MGCNSS's split and CoupleMDA's positive edges are the paper's own exact data (Tier 1), the rest use an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2). Gap = theirs $-$ ours; negative gap favors the trained model.}
+\label{tab:hmdd_survey_audit}
+\small
+\begin{tabular}{lccccc}
+\hline
+Paper & Tier & Theirs & Ours (best heuristic) & Gap & Nodes / edges \\
+\hline
+MGCNSS & 1 & 0.9874 & 0.9136 & $-0.074$ & 495 $\times$ 383 / 5{,}430 \\
+DiGAMN & 2 & 0.9635 & 0.8714 & $-0.092$ & 917 $\times$ 792 / 14{,}550 \\
+CoupleMDA & 1/2 & 0.9536 & 0.9406 & $-0.013$ & 2{,}090 $\times$ 1{,}754 / 15{,}032 \\
+MEAHNE & 2 & 0.9520 & \textbf{0.9848} & $\mathbf{+0.033}$ & 1{,}296 $\times$ 11{,}783 / 17{,}972 \\
+CKSNP-GNN & 2 & 0.9371 & 0.8822 & $-0.055$ & 901 $\times$ 877 / 16{,}427 \\
+NIMGSA & 2 & 0.9354 & 0.8680 & $-0.067$ & 495 $\times$ 383 / 5{,}430 \\
+HLGNN-MDA & 2 & 0.93086 & 0.8680 & $-0.063$ & 495 $\times$ 383 / 5{,}430 \\
+\hline
+Mean & & 0.951 & 0.905 & $-0.047$ & \\
+\hline
+\end{tabular}
+\end{table}

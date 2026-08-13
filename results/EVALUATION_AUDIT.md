@@ -393,14 +393,38 @@ from? Yes to both, on independent literature covering both subfields involved he
   Inference,"* CVSC Workshop @ ACL 2015 — the canonical precedent. Showed WN18/FB15k test
   triples are trivially derivable from training triples via inverse relations; this is *why*
   FB15k-237 exists. A field-standard benchmark carried exactly our bug and had to be replaced.
-- **Zhu et al. (2023)**, *"Pitfalls in Link Prediction with Graph Neural Networks,"*
-  arXiv:2306.00899 — formalizes target-edge inclusion in the message-passing graph as *implicit
-  test leakage*, one of three named failure modes, with a proposed fix (SpotTarget). The closest
-  existing paper to our "seen vs. held-out" framing.
+- **Zhu et al. (2024)**, *"Pitfalls in Link Prediction with Graph Neural Networks,"*
+  WSDM 2024 (doi:10.1145/3616855.3635786; also arXiv:2306.00899, 2023 preprint) — formalizes
+  target-edge inclusion in the message-passing graph as *implicit test leakage*, one of three
+  named failure modes, with a proposed fix (SpotTarget). The closest existing paper to our "seen
+  vs. held-out" framing. **Verified by web search 2026-08-11: full 7-author list confirmed
+  (Zhu, Zhou, Ioannidis, Qian, Ai, Song, Koutra); venue corrected from arXiv-only to WSDM 2024.**
 - **Li, Shomer et al. (2023)**, *"Evaluating Graph Neural Networks for Link Prediction: Current
   Pitfalls and New Benchmarking,"* NeurIPS 2023 Datasets & Benchmarks track, arXiv:2306.10453 —
   broader pitfalls-genre benchmark critique; evidence this is an active, recognized concern in
-  the field rather than a one-off complaint.
+  the field rather than a one-off complaint. **Verified by web search 2026-08-11: full 8-author
+  list confirmed (Li, Shomer, Mao, Zeng, Ma, Shah, Tang, Yin).**
+- **Dong & Khosla (2020)**, *"Towards a Consistent Evaluation of miRNA-Disease Association
+  Prediction Models,"* IEEE BIBM 2020, doi:10.1109/BIBM49941.2020.9313142 — **closest domain
+  match**: independently identifies a data-leakage problem inflating reported performance across
+  existing ML approaches to miRNA--disease association, the sibling task to our miRNA--target
+  prediction. Added from `Sources.csv`, 2026-08-11. **Fully confirmed 2026-08-12 via DBLP
+  (conf/bibm/DongK20) and the Semantic Scholar API, independent of the original web-search pass:
+  title, authors, DOI, and page range (1835--1842) all match exactly.**
+- **Brière et al. (bioRxiv preprint)**, *"Benchmarking the Impact of Data Leakage on the
+  Performance of Knowledge Graph Embedding Models for Biomedical Link Prediction,"*
+  doi:10.1101/2025.01.23.634511 — near-contemporaneous parallel work: a systematic
+  redundancy-removal procedure shows train/test overlap inflates KGE-based link prediction across
+  several biomedical graphs. Notably, their own permutation test found *no* evidence their models
+  exploit node degree as an illegitimate feature — a useful contrast to (b) below, not a
+  confirmation of it. Added from `Sources.csv`, 2026-08-11. **Resolved 2026-08-12 via the bioRxiv
+  API (`api.biorxiv.org/details/biorxiv/10.1101/2025.01.23.634511`) plus direct page confirmation:
+  three versions exist — v1 (2025-01-26) and v2 (2025-11-14) share the original title
+  "Benchmarking Data Leakage on Link Prediction in Biomedical Knowledge Graph Embeddings"; v3
+  (2026-07-22) is the retitled version already cited here. The bioRxiv page states explicitly
+  "has not been certified by peer review," and the API's `published` field is `NA` for all three
+  versions — still an unpublished preprint as of this check. Re-confirm only if submission slips
+  by more than a few months, since this is the entry most likely to change status.**
 
 **(b) Uniform-random vs. degree-matched negatives.**
 - **Kotnis & Nastase (2017)**, arXiv:1708.06816, KBCOM Workshop 2018 — negative-sampling method
@@ -409,16 +433,52 @@ from? Yes to both, on independent literature covering both subfields involved he
   arXiv:2405.14985 — near-exact match to our protocol: shows the standard sampling procedure is
   biased toward high-degree nodes (a degree-only predictor is near-optimal under it) and proposes
   a degree-corrected benchmark — our "matched negatives," independently arrived at.
-- **Yilmaz et al. (2025)**, *"Bias-aware training and evaluation of link prediction algorithms in
-  network biology,"* PNAS 122, e2416646122 — **same domain as this project.** Documents that
-  uniform-random negative sampling biases evaluation toward high-degree ("rich") proteins/genes,
-  and connects it to the literature's own >95% concentration on ~5,000 well-studied proteins. The
-  strongest available citation for "documented as common specifically in biological network link
-  prediction," not a generic ML complaint.
+- **Yılmaz, Yorgancıoğlu & Koyutürk (2025)**, *"Bias-aware training and evaluation of link
+  prediction algorithms in network biology,"* PNAS 122(24), e2416646122, doi:10.1073/pnas.2416646122
+  — **same domain as this project.** Documents that uniform-random negative sampling biases
+  evaluation toward high-degree ("rich") proteins/genes, and connects it to the literature's own
+  >95% concentration on ~5,000 well-studied proteins. The strongest available citation for
+  "documented as common specifically in biological network link prediction," not a generic ML
+  complaint. **Verified by web search 2026-08-11: full 3-author list and publication date
+  (10 Jun 2025) confirmed.**
 - **Krichene & Rendle (2020)**, KDD 2020 / *CACM* 65(7) 2022 — the likely historical origin:
   sampled negative-based evaluation metrics are inherited from recommender-systems practice,
   where they were already known to be statistically biased before graph ML adopted the
   convention.
+
+**(c) Model-free baselines competitive with trained models.**
+- **Crichton et al. (2018)**, *"Neural Networks for Link Prediction in Realistic Biomedical
+  Graphs,"* BMC Bioinformatics 19:176, doi:10.1186/s12859-018-2163-9 — biomedical-graph precedent:
+  a plain Common Neighbours baseline is "a justifiable choice" on small or sparse,
+  highly-disconnected graphs, competitive with graph-embedding neural methods. Added from
+  `Sources.csv`, 2026-08-11. **Verified by web search 2026-08-11: title, journal, volume/page,
+  DOI confirmed.**
+- **Huang, Kosan et al. (2023)**, *"Link Prediction without Graph Neural Networks,"*
+  arXiv:2305.13656 (Gelato) — general-domain precedent: a topology-centric method outperforms
+  state-of-the-art GNN link predictors in accuracy while training 11x faster and inferring 6000x
+  faster, with a fraction of the trainable parameters. Added from `Sources.csv`, 2026-08-11.
+  **Verified by web search 2026-08-11: full author list confirmed (Huang, Kosan, Silva, Singh).
+  Still arXiv-only — no confirmed peer-reviewed venue acceptance found; check before submission.**
+
+**(d) Structure-aware architectures that do outperform local heuristics under honest evaluation.**
+Cited in the new Discussion limitation (main.tex, "Four limitations") as evidence that the
+3.6-point gap measured in this paper is a property of the six *generic message-passing*
+architectures tested, not a ceiling on what any trained model could achieve on this graph.
+- **Zhang & Chen (2018)**, *"Link Prediction Based on Graph Neural Networks,"* NeurIPS 2018,
+  pp. 5171--5181 — SEAL: enclosing-subgraph extraction gives the GNN explicit pairwise structural
+  signal instead of relying on message passing to recover it implicitly.
+- **Zhu, Zhang, Xhonneux & Tang (2021)**, *"Neural Bellman-Ford Networks,"* NeurIPS 2021 —
+  path-based link-prediction architecture.
+- **Yun, Kim, Lee, Kang & Kim (2021)**, *"Neo-GNNs: Neighborhood Overlap-Aware Graph Neural
+  Networks for Link Prediction,"* NeurIPS 2021 — explicitly injects neighborhood-overlap
+  (structural heuristic) features into the GNN.
+- **Chamberlain et al. (2023)**, *"Graph Neural Networks for Link Prediction with Subgraph
+  Sketching,"* ICLR 2023 (also arXiv:2209.15486) — BUDDY, the trained model that ties with the
+  Resource Allocation heuristic on ogbl-ppa in this paper's own OGB audit (Discussion).
+
+All four recalled from training knowledge (not sourced from `Sources.csv`), then **verified by
+web search 2026-08-11: authors, venue, and year confirmed exactly for all four** (SEAL pages
+added: 5171--5181).
 
 **Not used as direct support.** Shchur et al. (2018), *"Pitfalls of Graph Neural Network
 Evaluation,"* arXiv:1811.05868, is real and well-cited but addresses node-classification split
@@ -576,19 +636,31 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    graph-free MLP included; the untrained control does not move. Full table, the
    per-architecture super-additivity, and the two caveats (n=1; a different training loop than
    §2's) are in **experiment 5** above. The claim is no longer anecdotal.
-4. **~~Support the premise~~ — PILOT DONE (n=7):** [`LITERATURE_SURVEY.md`](LITERATURE_SURVEY.md).
-   It **corrected the claim we were about to make.** The field does *not* routinely leak test
-   edges — 2/7 strip them correctly, and our own original split (cells only) was **worse than
-   the norm**. What *is* universal: **0/7 papers report any model-free baseline**, unlabeled
-   pairs are treated as uniform negatives in the majority, and 3/7 methods sections do not let
-   the reader determine whether held-out edges reached the encoder at all.
+4. **~~Support the premise~~ — DONE, expanded to n=22 (2026-08-12), spot-checked (2026-08-13):**
+   [`LITERATURE_SURVEY.md`](LITERATURE_SURVEY.md). Grew from the original 7-paper pilot to 22
+   (target 20–30 met), all 15 new papers open-access (PMC), bibliographic metadata verified via
+   each paper's own PMC JATS XML front matter. **It corrected the claim we were about to make,
+   and the correction held at 3x the sample size.** The field does *not* routinely leak test
+   edges — only 2/22 clearly do it wrong, 7/22 clearly strip test edges correctly, and our own
+   original split (cells only) was **worse than the norm**. What *is* universal, and got
+   *stronger* with the larger sample: **0/22 papers report any model-free baseline**, 16/22
+   treat unlabeled pairs as uniform negatives, and 12/22 (55%, up from 3/7) methods sections do
+   not let the reader determine whether held-out edges reached the encoder at all — reporting
+   opacity, not confirmed leakage, is the dominant finding on that dimension.
 
    **This is the motivation section, and it is stronger than the strawman would have been:**
    published AUROCs in this literature sit at **0.91–0.99**; under that same protocol, on a
    real biomedical graph, a one-line popularity heuristic reaches **0.8712** — inside that band
    — and beats a trained graph transformer. *A field that never reports a model-free control
    cannot know whether its 0.97 is a result or a popularity effect.*
-   **Still needed:** expand to 20–30 papers, two independent raters for the "unclear" calls.
+   **2026-08-13 spot-check:** re-verified 14 of the "unclear" cells against primary sources to
+   test whether "unclear" reflected a genuine reporting gap or overly conservative extraction.
+   11/14 held up; 3/14 were extraction errors, now corrected (HLGNN-MDA's held-out-edge-removal
+   cell; CoupleMDA's CV-over-edges and negative-sampling cells). Tallies above reflect the
+   corrections. **Still needed:** a second independent rater — the spot-check was a second read
+   by the same reader, not an independent rater, and the 21% correction rate on the sampled cells
+   means an independent pass could still move the numbers. Reported as the manuscript's fifth
+   Discussion limitation rather than resolved.
 5. **Generalize past our own graph.** One dataset and one interaction database is not a claim
    about a field. Repeat the audit on a second, independent interaction source — **miRTarBase**
    (experimentally validated, and independent *in kind* from miRDB), with TargetScan as a

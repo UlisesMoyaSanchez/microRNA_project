@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{Pilot literature survey (n=7): each paper's methods section was read in full and classified on whether held-out edges are removed from the message-passing / similarity-computation graph, how negative pairs are chosen, and whether any model-free baseline is reported.}
+\caption{Literature survey (n=22): each paper's methods section was read in full and classified on whether held-out edges are removed from the message-passing / similarity-computation graph, how negative pairs are chosen, and whether any model-free baseline is reported. The first seven rows are the original pilot sample; the remaining 15 are the 2026-08-12 expansion, sourced from open-access (PMC) papers only.}
 \label{tab:literature_survey}
 \footnotesize
 \resizebox{\textwidth}{!}{%
@@ -16,8 +16,24 @@ NGCN & 2024 & drug-target & unclear & uniform random from unknown pairs, 1:10 \\
 kmerPMTF & PeerJ 2024 & plant miRNA-target & yes & all unlabeled pairs, count-matched \\
 DTI field convention & multiple & drug-target & NA & unlabeled pairs as negatives, typically 10x positives \\
 \hline
+Orro & Biomedicines 2026 & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs \\
+CoupleMDA & IJMS 2025 & miRNA-disease & yes & uniform random, 1:1 \\
+GONNMDA & Genes 2025 & miRNA-disease & unclear & uniform random, 1:1 \\
+DiGAMN & BMC Genomics 2024 & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 \\
+DGNMDA & Bioengineering 2024 & miRNA-disease & unclear & undersampling (ratio unspecified) \\
+HLGNN-MDA & IJMS 2022 & miRNA-disease & yes & uniform random, 1:1 \\
+MEAHNE & Life 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
+CKSNP-GNN & Genes 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
+HMCDA & BMC Bioinformatics 2023 & circRNA-disease & unclear & uniform random, 5:1 \\
+HiGLDP & BMC Biology 2026 & lncRNA-disease & yes & uniform random, 1:1 \\
+GPS-DTI & BMC Biology 2025 & drug-target & unclear & balanced pos/neg (curation unclear) \\
+SaeGraphDTI & BMC Bioinformatics 2025 & drug-target & unclear & all unlabeled pairs (unsampled) \\
+DTI-MHAPR & BMC Bioinformatics 2025 & drug-target & unclear & uniform random, 1:1 \\
+iNGNN-DTI & Bioinformatics 2024 & drug-target & unclear & uniform random, 1:1 \\
+ModulePred & BMC Bioinformatics 2024 & gene-disease & unclear & uniform random, 50:1 \\
+\hline
 \end{tabular}
 }
 
-\medskip\par Model-free baseline reported: 0/7 papers.
+\medskip\par Model-free baseline reported: 0/22 papers (one paper, ModulePred, computes a topological score for network data augmentation but does not report it as a comparison baseline). Held-out edges removed from the graph: 7/22 yes, 2/22 no, 12/22 unclear, 1/22 not applicable (general field-convention statement, not a specific paper). Single-rater classification; see Discussion for the corresponding limitation.
 \end{table}

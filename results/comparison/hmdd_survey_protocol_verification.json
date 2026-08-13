@@ -1,0 +1,143 @@
+{
+  "checked_at": "2026-08-13T18:24:39.668161+00:00",
+  "checks": {
+    "canonical_matrix_identity": {
+      "shapes": {
+        "mgcnss": [
+          495,
+          383
+        ],
+        "nimgsa": [
+          495,
+          383
+        ],
+        "hlgnn_mda": [
+          495,
+          383
+        ]
+      },
+      "positive_counts": {
+        "mgcnss": 5430,
+        "nimgsa": 5430,
+        "hlgnn_mda": 5430
+      },
+      "expected_shape": [
+        495,
+        383
+      ],
+      "expected_positives": 5430,
+      "passed": true
+    },
+    "mgcnss_split": {
+      "train_pos": 4344,
+      "train_neg": 4344,
+      "test_pos": 1086,
+      "test_neg": 1086,
+      "train_plus_test_pos": 5430,
+      "train_test_positive_overlap": 0,
+      "passed": true
+    },
+    "stage23_manifests": {
+      "digamn": {
+        "manifest": {
+          "fetched_at": "2026-08-13T18:23:36.366437+00:00",
+          "repo": "yinboliu-git/GAMN",
+          "commit": "6695f4e4b4f3ff7060d934a43807ae25925c574e",
+          "src_path": "data/MDA-CF/m_d.csv",
+          "sha256": "354f0aa1e77d1da348405b7f23421e6d24e678b9c6fdbadebfc0bcba37667688",
+          "shape": [
+            917,
+            792
+          ],
+          "n_positives": 14550,
+          "matches_paper_table1": true
+        },
+        "self_check_passed": true
+      },
+      "cksnp_gnn": {
+        "manifest": {
+          "fetched_at": "2026-08-13T18:23:48.922620+00:00",
+          "source_zip_url": "http://public.aibiochem.net/DNA_RNA/Genes_Human-miRNA-disease-Associations/code.zip",
+          "source_zip_sha256": "3277b6661302dca84d745819ef61b281b285a55a45678e826269039956122952",
+          "shape": [
+            901,
+            877
+          ],
+          "n_positives": 16427,
+          "matches_cksnp_gnn_reported_count": true,
+          "caveat": "This zip's bundled README/main.py describe a different model ('GAEMDA'), not CKSNP-GNN -- the code is not used or trusted, only the data, whose positive count (16,427) matches CKSNP-GNN's own reported figure exactly."
+        },
+        "self_check_passed": true
+      },
+      "meahne": {
+        "manifest": {
+          "fetched_at": "2026-08-13T18:23:39.118120+00:00",
+          "repo": "yyx-hc/MEAHNE",
+          "commit": "96f3faa6e143b6e70ef29c9692ffa399c2b5780a",
+          "shape": [
+            1296,
+            11783
+          ],
+          "n_positives": 17972,
+          "matches_expected": true
+        },
+        "self_check_passed": true
+      },
+      "couplemda": {
+        "manifest": {
+          "fetched_at": "2026-08-13T18:23:42.218478+00:00",
+          "repo": "lizhj39/CoupleMDA",
+          "commit": "c9128cb789cf32c13ad5e381d2055a03f91dcbe8",
+          "n_mirna": 2090,
+          "n_disease": 1754,
+          "n_train_pos_raw": 13552,
+          "n_test_pos": 1523,
+          "n_train_test_overlap_removed": 43,
+          "n_train_pos_final": 13509,
+          "tier": 1,
+          "negatives_exact": false,
+          "caveat": "Positive train/test split is exact (from CoupleMDA's own bundled link.dat/link.dat.test). Negatives are NOT exact -- CoupleMDA's own 1:1 negatives are generated at runtime by its data loader and not published as a file, so this audit generates its own 1:1 uniform negatives on this exact positive split."
+        },
+        "self_check_passed": null
+      }
+    },
+    "tsv_references": {
+      "mgcnss": {
+        "headline_auroc": "0.9874",
+        "negative_sampling": "distance-based selection (paper's own contribution)",
+        "url": "https://academic.oup.com/bib/article/25/3/bbae168/7645839"
+      },
+      "nimgsa": {
+        "headline_auroc": "0.9354",
+        "negative_sampling": "not described",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8774034/"
+      },
+      "hlgnn_mda": {
+        "headline_auroc": "0.93086 (10-fold CV, hop4, Table 1)",
+        "negative_sampling": "uniform random, 1:1",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9657597/"
+      },
+      "digamn": {
+        "headline_auroc": "0.9635",
+        "negative_sampling": "uniform random, ratios 1:1/1:5/1:10",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11610307/"
+      },
+      "cksnp_gnn": {
+        "headline_auroc": "0.9371 (5-fold CV mean, Table 1)",
+        "negative_sampling": "uniform random, 1:1 (16,427 negatives)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9602123/"
+      },
+      "meahne": {
+        "headline_auroc": "0.9520 (Table 3)",
+        "negative_sampling": "uniform random, 1:1",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9655430/"
+      },
+      "couplemda": {
+        "headline_auroc": "0.9536 (Table 3)",
+        "negative_sampling": "uniform random, 1:1",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12112494/"
+      }
+    }
+  },
+  "all_checks_passed": true
+}

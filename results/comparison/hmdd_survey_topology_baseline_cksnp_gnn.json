@@ -1,0 +1,62 @@
+{
+  "paper": "cksnp_gnn",
+  "tier": 2,
+  "n_mirna": 901,
+  "n_disease": 877,
+  "n_positives_total": 16427,
+  "seed": 42,
+  "best_model_free_auroc": 0.8822439320024197,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8822439320024197,
+        "auprc": 0.8881134015789688,
+        "n_pairs": 3286
+      },
+      "pref_attach": {
+        "auroc": 0.839146247993572,
+        "auprc": 0.8522668156498371,
+        "n_pairs": 3286
+      },
+      "common_neigh": {
+        "auroc": 0.8454914317699648,
+        "auprc": 0.8623356913788368,
+        "n_pairs": 3286
+      },
+      "adamic_adar": {
+        "auroc": 0.8426862296713143,
+        "auprc": 0.858440477465831,
+        "n_pairs": 3286
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.557146106483212,
+        "auprc": 0.5856812493343524,
+        "n_pairs": 3286
+      },
+      "pref_attach": {
+        "auroc": 0.5525503537944225,
+        "auprc": 0.5761617301928876,
+        "n_pairs": 3286
+      },
+      "common_neigh": {
+        "auroc": 0.5586795675710117,
+        "auprc": 0.5833261691753087,
+        "n_pairs": 3286
+      },
+      "adamic_adar": {
+        "auroc": 0.5590890955895074,
+        "auprc": 0.582503985996884,
+        "n_pairs": 3286
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.9371,
+    "negative_sampling": "uniform random, 1:1 (16,427 negatives)",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9602123/",
+    "caveat": "0.9371 is CKSNP-GNN's own reported 5-fold CV mean (Table 1). No split file is bundled; this run uses a single random 90/10 edge split with 1:1 uniform negatives as an approximation. Data source is a shared institutional mirror whose bundled code is a different model (\"GAEMDA\") -- notably, GAEMDA is itself one of CKSNP-GNN's own comparison baselines in Table 1 (93.56%), which corroborates (does not just excuse) reusing this mirror's data: both papers evidently drew from the same shared benchmark. Data trusted via exact positive-count match (16,427); code in the mirror is not used or claimed to be CKSNP-GNN's own.\n"
+  }
+}

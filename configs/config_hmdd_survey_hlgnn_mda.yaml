@@ -1,0 +1,43 @@
+# =============================================================================
+# Thin config for the HMDD topology-baseline audit: HLGNN-MDA (IJMS 2022),
+# miRNA-disease link prediction. Tier 2 -- HLGNN-MDA's repo bundles
+# train5430_idx.txt / test2792_idx.txt, but tracing Python/Main.py showed those
+# feed an alternate fixed-split SEAL invocation, NOT the one behind the paper's
+# headline number (0.93086, hop4). The paper's own text (PMC9657597) states the
+# headline result comes from ordinary 10-fold CV over the full 5,430 pos + 5,430
+# neg (1:1 uniform) set -- same protocol as NIMGSA, reconstructed the same way
+# here (single random 90/10 slice, not full 10-fold -- a light audit, not a
+# full replication).
+# Consumed by training/eval_hmdd_survey_topology_baseline.py.
+# =============================================================================
+
+project:
+  name: hlgnn_mda
+  seed: 42
+
+data:
+  matrix_path: data/raw/hmdd_survey/hlgnn_mda/matrix.csv
+  test_fraction: 0.1
+  negative_ratio: 1
+
+evaluation:
+  paper_reference:
+    tier: 2
+    headline_auroc: 0.93086
+    negative_sampling: "uniform random, 1:1"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9657597/"
+    caveat: >
+      HLGNN-MDA's repo bundles train5430_idx.txt/test2792_idx.txt, but those
+      feed a different, non-headline SEAL invocation (see Python/Main.py) --
+      NOT used here. This run instead reconstructs the paper's own stated
+      protocol for its headline number: 10-fold CV, 1:1 uniform negatives,
+      approximated here as a single random 90/10 slice (light audit, not a
+      full 10-fold replication).
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 4
+  mem: 8gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

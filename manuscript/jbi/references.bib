@@ -1,8 +1,38 @@
 % References vetted in results/EVALUATION_AUDIT.md, section "External precedent for
-% these pitfalls" (2026-07-29). Verified by web search against real search results, not
-% recalled from memory alone -- see that section for per-entry confidence notes. Entries
-% marked "verify before submission" had at least one field (usually a full author list)
-% that the verification pass could not fully confirm.
+% these pitfalls" (2026-07-29, extended 2026-08-11, re-verified 2026-08-12). Verified by
+% web search and, for the two entries below, by direct primary-source lookup (DBLP,
+% Semantic Scholar, bioRxiv API) rather than search summaries alone -- see that section
+% for per-entry confidence notes. dong2020mirnaleakage and briere2026kgeleakage are now
+% fully confirmed as of 2026-08-12; briere2026kgeleakage remains a preprint (v3, posted
+% 2026-07-22) with no peer-reviewed publication as of that check -- re-confirm this one
+% specifically if submission is delayed past a few months from now, since it is the
+% entry most likely to change status.
+
+@article{barabasi2004networkbiology,
+  author  = {Barab{\'a}si, Albert-L{\'a}szl{\'o} and Oltvai, Zolt{\'a}n N.},
+  title   = {Network Biology: Understanding the Cell's Functional Organization},
+  journal = {Nature Reviews Genetics},
+  year    = {2004},
+  volume  = {5},
+  number  = {2},
+  pages   = {101--113},
+  doi     = {10.1038/nrg1272},
+  note    = {Verified via Crossref API 2026-08-12. Foundational paper for the term
+             "network biology" used in the Introduction's opening sentence.}
+}
+
+@article{vidal2011interactome,
+  author  = {Vidal, Marc and Cusick, Michael E. and Barab{\'a}si, Albert-L{\'a}szl{\'o}},
+  title   = {Interactome Networks and Human Disease},
+  journal = {Cell},
+  year    = {2011},
+  volume  = {144},
+  number  = {6},
+  pages   = {986--998},
+  doi     = {10.1016/j.cell.2011.02.016},
+  note    = {Verified via Crossref API 2026-08-12. Cited for the importance of mapping
+             biomolecule-biomolecule interaction networks (the interactome).}
+}
 
 @inproceedings{toutanova2015observed,
   author    = {Toutanova, Kristina and Chen, Danqi},
@@ -14,25 +44,30 @@
                that motivated FB15k-237.}
 }
 
-@article{zhu2023pitfalls,
-  author = {Zhu, Jing and others},
-  title  = {Pitfalls in Link Prediction with Graph Neural Networks: Understanding the
-            Impact of Target-link Inclusion \& Better Practices},
-  journal = {arXiv preprint arXiv:2306.00899},
-  year    = {2023},
-  note    = {verify before submission: full author list not independently confirmed
-             beyond the first author; check the arXiv listing directly.}
+@inproceedings{zhu2023pitfalls,
+  author    = {Zhu, Jing and Zhou, Yuhang and Ioannidis, Vassilis N. and Qian, Shengyi
+               and Ai, Wei and Song, Xiang and Koutra, Danai},
+  title     = {Pitfalls in Link Prediction with Graph Neural Networks: Understanding the
+               Impact of Target-link Inclusion \& Better Practices},
+  booktitle = {Proceedings of the 17th ACM International Conference on Web Search and
+               Data Mining (WSDM)},
+  year      = {2024},
+  doi       = {10.1145/3616855.3635786},
+  note      = {Also arXiv:2306.00899 (2023 preprint). Confirmed by web search
+               2026-08-11: published at WSDM 2024, not an arXiv-only paper as
+               previously recorded -- venue and full author list corrected.}
 }
 
 @inproceedings{li2023evaluating,
-  author    = {Li, Juanhui and Shomer, Harry and others},
+  author    = {Li, Juanhui and Shomer, Harry and Mao, Haitao and Zeng, Shenglai and
+               Ma, Yao and Shah, Neil and Tang, Jiliang and Yin, Dawei},
   title     = {Evaluating Graph Neural Networks for Link Prediction: Current Pitfalls
                and New Benchmarking},
   booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Datasets
                and Benchmarks Track},
   year      = {2023},
-  note      = {arXiv:2306.10453. verify before submission: confirm full author list
-               and NeurIPS proceedings citation format.}
+  note      = {arXiv:2306.10453; OpenReview id YdjWXrdOTh. Confirmed by web search
+               2026-08-11: full author list verified.}
 }
 
 @inproceedings{kotnis2017analysis,
@@ -53,16 +88,19 @@
 }
 
 @article{yilmaz2025biasaware,
-  author  = {Yilmaz, Serhan and others},
+  author  = {Y{\i}lmaz, Serhan and Yorgancio{\u{g}}lu, Kaan and Koyut{\"u}rk, Mehmet},
   title   = {Bias-Aware Training and Evaluation of Link Prediction Algorithms in
              Network Biology},
   journal = {Proceedings of the National Academy of Sciences},
   volume  = {122},
+  number  = {24},
   pages   = {e2416646122},
   year    = {2025},
+  doi     = {10.1073/pnas.2416646122},
   note    = {Same domain as this work (network biology): documents that uniform-random
              negative sampling biases evaluation toward high-degree proteins/genes.
-             verify before submission: confirm full author list.}
+             Confirmed by web search 2026-08-11: full author list and publication date
+             (10 Jun 2025) verified.}
 }
 
 @inproceedings{krichene2020sampled,
@@ -176,6 +214,132 @@
              by fetching the arXiv abstract page directly, 2026-08-06.}
 }
 
+@inproceedings{dong2020mirnaleakage,
+  author    = {Dong, Thi Ngan and Khosla, Megha},
+  title     = {Towards a Consistent Evaluation of {miRNA}-Disease Association
+               Prediction Models},
+  booktitle = {IEEE International Conference on Bioinformatics and Biomedicine
+               (BIBM)},
+  year      = {2020},
+  doi       = {10.1109/BIBM49941.2020.9313142},
+  pages     = {1835--1842},
+  note      = {Same domain (miRNA) as this work, sibling task (miRNA--disease
+               vs.\ our miRNA--target): independently identifies a data-leakage
+               problem inflating reported performance across existing
+               machine-learning approaches to the task. Title, authors, DOI, and
+               page range (1835--1842) confirmed 2026-08-12 via DBLP
+               (conf/bibm/DongK20) and Semantic Scholar, independent of the
+               original web-search pass.}
+}
+
+@article{briere2026kgeleakage,
+  author  = {Bri{\`e}re, Galadriel and Stosskopf, Thomas and Loire, Benjamin and
+             Baudot, Ana{\"i}s},
+  title   = {Benchmarking the Impact of Data Leakage on the Performance of
+             Knowledge Graph Embedding Models for Biomedical Link Prediction},
+  journal = {bioRxiv preprint},
+  year    = {2026},
+  doi     = {10.1101/2025.01.23.634511},
+  note    = {v3, posted 2026-07-22 (bioRxiv API + direct page check, 2026-08-12).
+             Retitled from v1/v2 (2025-01-26, 2025-11-14), same title as used here.
+             Confirmed still an unpublished preprint as of this check -- no evidence
+             of peer-reviewed publication. Near-contemporaneous, independent work
+             reaching the same central claim (train/test redundancy inflates
+             biomedical link-prediction benchmarks) via a systematic
+             redundancy-removal procedure; also tests node degree as an illegitimate
+             predictive feature, touching this paper's negative-sampling argument
+             directly.}
+}
+
+@article{crichton2018realistic,
+  author  = {Crichton, Gamal K. O. and Guo, Yufan and Pyysalo, Sampo and
+             Korhonen, Anna},
+  title   = {Neural Networks for Link Prediction in Realistic Biomedical
+             Graphs: A Multi-Dimensional Evaluation of Graph
+             Embedding-Based Approaches},
+  journal = {BMC Bioinformatics},
+  volume  = {19},
+  pages   = {176},
+  year    = {2018},
+  doi     = {10.1186/s12859-018-2163-9},
+  note    = {Finds a topological baseline (Common Neighbours) a justifiable
+             choice on small or sparse/highly-disconnected biomedical graphs,
+             supporting this paper's model-free-baseline argument from an
+             independent biomedical-graph study. Confirmed by web search
+             2026-08-11: title, journal, volume/page, DOI verified. Crichton's
+             middle initials "K. O." are plausible (matches an institutional
+             email found in search) but not confirmed against a primary source
+             -- low-stakes, optional to fix before submission.}
+}
+
+@article{huang2023gelato,
+  author  = {Huang, Zexi and Kosan, Mert and Silva, Arlei and Singh, Ambuj K.},
+  title   = {Link Prediction without Graph Neural Networks},
+  journal = {arXiv preprint arXiv:2305.13656},
+  year    = {2023},
+  doi     = {10.48550/arXiv.2305.13656},
+  note    = {Proposes a topology-centric alternative (Gelato) that outperforms
+             GNN-based link predictors while identifying limitations in how
+             GNN methods handle class imbalance in training and evaluation --
+             general-domain precedent for the model-free-baseline argument,
+             alongside crichton2018realistic's biomedical-specific instance.
+             Confirmed by web search 2026-08-11: full author list verified
+             (Arlei Silva, not a placeholder). Still an arXiv-only preprint --
+             no confirmed peer-reviewed venue acceptance found; an OpenReview
+             page exists but without a visible decision. Confirm venue status
+             before submission.}
+}
+
+@inproceedings{zhang2018seal,
+  author    = {Zhang, Muhan and Chen, Yixin},
+  title     = {Link Prediction Based on Graph Neural Networks},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  pages     = {5171--5181},
+  year      = {2018},
+  note      = {SEAL: enclosing-subgraph extraction around each candidate node pair,
+               giving the GNN explicit access to pairwise structural (shared-neighbor)
+               signal rather than relying on generic message passing to recover it.
+               Confirmed by web search 2026-08-11: authors, venue, pages verified.}
+}
+
+@inproceedings{zhu2021nbfnet,
+  author    = {Zhu, Zhaocheng and Zhang, Zuobai and Xhonneux, Louis-Pascal and
+               Tang, Jian},
+  title     = {Neural Bellman-Ford Networks: A General Graph Neural Network
+               Framework for Link Prediction},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2021},
+  note      = {NBFNet: path-based link-prediction architecture, another member of the
+               structure-aware family. Confirmed by web search 2026-08-11: authors,
+               venue, year verified exactly.}
+}
+
+@inproceedings{yun2021neognn,
+  author    = {Yun, Seongjun and Kim, Seoyoon and Lee, Junhyun and Kang, Jaewoo and
+               Kim, Hyunwoo J.},
+  title     = {Neo-{GNN}s: Neighborhood Overlap-Aware Graph Neural Networks for
+               Link Prediction},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2021},
+  note      = {Neo-GNN: explicitly injects neighborhood-overlap (structural heuristic)
+               features into the GNN. Confirmed by web search 2026-08-11: authors,
+               venue, year verified exactly.}
+}
+
+@inproceedings{chamberlain2023buddy,
+  author    = {Chamberlain, Benjamin Paul and Shirobokov, Sergey and Rossi, Emanuele
+               and Frasca, Fabrizio and Markovich, Thomas and Hammerla, Nils and
+               Bronstein, Michael M. and Hansmire, Max},
+  title     = {Graph Neural Networks for Link Prediction with Subgraph Sketching},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
+  note      = {BUDDY: subgraph-sketching features approximating SEAL's structural
+               signal at lower cost; the trained model that ties with the Resource
+               Allocation heuristic on ogbl-ppa in this paper's own OGB audit.
+               Confirmed by web search 2026-08-11: full 8-author list, venue verified
+               exactly. Also arXiv:2209.15486.}
+}
+
 @article{geirhos2020shortcut,
   author  = {Geirhos, Robert and Jacobsen, J{\"o}rn-Henrik and Michaelis, Claudio and
              Zemel, Richard and Brendel, Wieland and Bethge, Matthias and
@@ -183,10 +347,235 @@
   title   = {Shortcut Learning in Deep Neural Networks},
   journal = {Nature Machine Intelligence},
   volume  = {2},
+  number  = {11},
   pages   = {665--673},
   year    = {2020},
+  doi     = {10.1038/s42256-020-00257-z},
   note    = {General-ML term for a model exploiting an easy spurious feature (here,
-             gene degree) instead of the intended signal; not independently
-             re-verified by web search this session -- confirm venue/pages before
-             submission, same standard as the rest of this file.}
+             gene degree) instead of the intended signal. Confirmed by web search
+             2026-08-11: venue, pages, DOI verified exactly.}
+}
+
+% ---------------------------------------------------------------------------
+% Literature-survey expansion (results/literature_survey.tsv, n=7 -> n=22),
+% added 2026-08-12. All 15 open-access (PMC), classification pulled from each
+% paper's own methods section (quotes in the TSV), bibliographic metadata below
+% verified via the Crossref API against each DOI -- not a search-snippet pull.
+% ---------------------------------------------------------------------------
+
+@article{orro2026mirnadisease,
+  author  = {Orro, Alessandro},
+  title   = {Uncovering miRNA--Disease Associations Through Graph Based Neural
+             Network Representations},
+  journal = {Biomedicines},
+  year    = {2026},
+  volume  = {14},
+  number  = {2},
+  pages   = {289},
+  doi     = {10.3390/biomedicines14020289},
+  note    = {Literature-survey row: correctly holds out entire miRNAs (not just
+             edges) between train/validation, the strongest split in the sample;
+             uniform-random negatives; no model-free baseline.}
+}
+
+@article{li2025couplemda,
+  author  = {Li, Zhuojian and Chen, Guanxing and Tan, Guang and Chen, Calvin Yu-Chian},
+  title   = {CoupleMDA: Metapath-Induced Structural-Semantic Coupling Network for
+             miRNA-Disease Association Prediction},
+  journal = {International Journal of Molecular Sciences},
+  year    = {2025},
+  volume  = {26},
+  number  = {10},
+  pages   = {4948},
+  doi     = {10.3390/ijms26104948},
+  note    = {Literature-survey row: test edges removed from training graph; negative
+             sampling and model-free baseline unclear from methods section.}
+}
+
+@article{zeng2025gonnmda,
+  author  = {Zeng, Sihao and Zhang, Shanwen and Wang, Zhen and Yang, Chen and
+             Yuan, Shenao},
+  title   = {GONNMDA: An Ordered Message Passing GNN Approach for miRNA--Disease
+             Association Prediction},
+  journal = {Genes},
+  year    = {2025},
+  volume  = {16},
+  number  = {4},
+  pages   = {425},
+  doi     = {10.3390/genes16040425},
+  note    = {Literature-survey row: uniform-random 1:1 negatives; no model-free
+             baseline; test-edge removal unclear.}
+}
+
+@article{liu2024digamn,
+  author  = {Liu, Yinbo and Wu, Qi and Zhou, Le and Liu, Yuchen and Li, Chao and
+             Wei, Zhuoyu and Peng, Wei and Yue, Yi and Zhu, Xiaolei},
+  title   = {Disentangled Similarity Graph Attention Heterogeneous Biological
+             Memory Network for Predicting Disease-Associated {miRNAs}},
+  journal = {BMC Genomics},
+  year    = {2024},
+  volume  = {25},
+  number  = {1},
+  doi     = {10.1186/s12864-024-11078-4},
+  note    = {Literature-survey row: test edges removed from graph, uniform-random
+             negatives at multiple ratios, no model-free baseline.}
+}
+
+@article{lu2024dgnmda,
+  author  = {Lu, Daying and Zhang, Qi and Zheng, Chunhou and Li, Jian and Yin, Zhe},
+  title   = {DGNMDA: Dual Heterogeneous Graph Neural Network Encoder for
+             {miRNA}-Disease Association Prediction},
+  journal = {Bioengineering},
+  year    = {2024},
+  volume  = {11},
+  number  = {11},
+  pages   = {1132},
+  doi     = {10.3390/bioengineering11111132},
+  note    = {Literature-survey row: undersampling of negatives, method/ratio
+             unspecified; test-edge removal and model-free baseline unclear.}
+}
+
+@article{yu2022hlgnnmda,
+  author  = {Yu, Liang and Ju, Bingyi and Ren, Shujie},
+  title   = {HLGNN-MDA: Heuristic Learning Based on Graph Neural Networks for
+             {miRNA}--Disease Association Prediction},
+  journal = {International Journal of Molecular Sciences},
+  year    = {2022},
+  volume  = {23},
+  number  = {21},
+  pages   = {13155},
+  doi     = {10.3390/ijms232113155},
+  note    = {Literature-survey row: uniform-random 1:1 negatives, no model-free
+             baseline; test-edge removal unclear.}
+}
+
+@article{huang2022meahne,
+  author  = {Huang, Chen and Cen, Keliang and Zhang, Yang and Liu, Bo and
+             Wang, Yadong and Li, Junyi},
+  title   = {{MEAHNE}: {miRNA}--Disease Association Prediction Based on Semantic
+             Information in a Heterogeneous Network},
+  journal = {Life},
+  year    = {2022},
+  volume  = {12},
+  number  = {10},
+  pages   = {1578},
+  doi     = {10.3390/life12101578},
+  note    = {Literature-survey row: uniform-random 1:1 negatives, no model-free
+             baseline; test-edge removal unclear.}
+}
+
+@article{li2022cksnpgnn,
+  author  = {Li, Mingxin and Fan, Yu and Zhang, Yiting and Lv, Zhibin},
+  title   = {Using Sequence Similarity Based on {CKSNP} Features and a Graph
+             Neural Network Model to Identify {miRNA}--Disease Associations},
+  journal = {Genes},
+  year    = {2022},
+  volume  = {13},
+  number  = {10},
+  pages   = {1759},
+  doi     = {10.3390/genes13101759},
+  note    = {Literature-survey row: uniform-random 1:1 negatives (16{,}427 sampled),
+             no model-free baseline; test-edge removal unclear.}
+}
+
+@article{liang2023hmcda,
+  author  = {Liang, Shiyang and Liu, Siwei and Song, Junliang and Lin, Qiang and
+             Zhao, Shihong and Li, Shuaixin and Li, Jiahui and Liang, Shangsong and
+             Wang, Jingjie},
+  title   = {{HMCDA}: A Novel Method Based on the Heterogeneous Graph Neural
+             Network and Metapath for {circRNA}-Disease Associations Prediction},
+  journal = {BMC Bioinformatics},
+  year    = {2023},
+  volume  = {24},
+  number  = {1},
+  doi     = {10.1186/s12859-023-05441-7},
+  note    = {Literature-survey row: uniform-random 5:1 negatives, no model-free
+             baseline; test-edge removal unclear.}
+}
+
+@article{wang2026higldp,
+  author  = {Wang, Yongtian and Wang, Zhiyuan and Wang, Tao and Hu, Jialu and
+             You, Zhuhong and Peng, Jiajie},
+  title   = {{HiGLDP}: A Hierarchical Graph Neural Network for Predicting
+             {lncRNA}-Disease Associations Through Multi-Omic Integration},
+  journal = {BMC Biology},
+  year    = {2026},
+  volume  = {24},
+  number  = {1},
+  doi     = {10.1186/s12915-026-02557-z},
+  note    = {Literature-survey row: test edges removed from graph, uniform-random
+             1:1 negatives, no model-free baseline.}
+}
+
+@article{xiong2025gpsdti,
+  author  = {Xiong, An and Luo, Zhenjie and Xia, Yan and Zou, Quan and Wei, Leyi and
+             Zhang, Zilong and Wang, Tao and Wei, Lesong and Cui, Feifei},
+  title   = {An Interpretable Geometric Graph Neural Network for Enhancing the
+             Generalizability of Drug--Target Interaction Prediction},
+  journal = {BMC Biology},
+  year    = {2025},
+  volume  = {23},
+  number  = {1},
+  doi     = {10.1186/s12915-025-02456-9},
+  note    = {Literature-survey row: balanced positive/negative dataset, curation
+             method unclear; compares only against learned baselines (SVM, RF,
+             GraphDTA, DeepConvDTI, TransformerCPI, MolTrans, HyperAttDTI, DrugBAN,
+             CAT-DTI), no model-free baseline; test-edge removal unclear.}
+}
+
+@article{zhang2025saegraphdti,
+  author  = {Zhang, Qiaosheng and Sun, Zhenyu and Zhong, Zhaoman and Yang, Huihui and
+             Wei, Yalong and Xu, Junjie},
+  title   = {{SaeGraphDTI}: Drug--Target Interaction Prediction Based on Sequence
+             Attribute Extraction and Graph Neural Network},
+  journal = {BMC Bioinformatics},
+  year    = {2025},
+  volume  = {26},
+  number  = {1},
+  doi     = {10.1186/s12859-025-06195-0},
+  note    = {Literature-survey row: treats all unlabeled pairs as negatives rather
+             than sampling; no model-free baseline; test-edge removal unclear.}
+}
+
+@article{yang2025dtimhapr,
+  author  = {Yang, Guang and Liu, Yinbo and Wen, Sijian and Chen, Wenxi and
+             Zhu, Xiaolei and Wang, Yongmei},
+  title   = {{DTI-MHAPR}: Optimized Drug-Target Interaction Prediction via
+             {PCA}-Enhanced Features and Heterogeneous Graph Attention Networks},
+  journal = {BMC Bioinformatics},
+  year    = {2025},
+  volume  = {26},
+  number  = {1},
+  doi     = {10.1186/s12859-024-06021-z},
+  note    = {Literature-survey row: uniform-random 1:1 negatives, no model-free
+             baseline; test-edge removal unclear.}
+}
+
+@article{sun2024ingnndti,
+  author  = {Sun, Yan and Li, Yan Yi and Leung, Carson K. and Hu, Pingzhao},
+  title   = {{iNGNN-DTI}: Prediction of Drug--Target Interaction with Interpretable
+             Nested Graph Neural Network and Pretrained Molecule Models},
+  journal = {Bioinformatics},
+  year    = {2024},
+  volume  = {40},
+  number  = {3},
+  doi     = {10.1093/bioinformatics/btae135},
+  note    = {Literature-survey row: uniform-random 1:1 negatives, no model-free
+             baseline; test-edge removal unclear.}
+}
+
+@article{jia2024modulepred,
+  author  = {Jia, Xianghu and Luo, Weiwen and Li, Jiaqi and Xing, Jieqi and
+             Sun, Hongjie and Wu, Shunyao and Su, Xiaoquan},
+  title   = {A Deep Learning Framework for Predicting Disease-Gene Associations
+             with Functional Modules and Graph Augmentation},
+  journal = {BMC Bioinformatics},
+  year    = {2024},
+  volume  = {25},
+  number  = {1},
+  doi     = {10.1186/s12859-024-05841-3},
+  note    = {Literature-survey row: uniform-random 50:1 negatives; computes an L3
+             topological score as an internal model feature, not a reported
+             standalone model-free baseline -- the sample's one "unclear" case on
+             this dimension; test-edge removal unclear.}
 }

@@ -1,0 +1,62 @@
+{
+  "paper": "hlgnn_mda",
+  "tier": 2,
+  "n_mirna": 495,
+  "n_disease": 383,
+  "n_positives_total": 5430,
+  "seed": 42,
+  "best_model_free_auroc": 0.8680358420750961,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8680358420750961,
+        "auprc": 0.8740417430637603,
+        "n_pairs": 1086
+      },
+      "pref_attach": {
+        "auroc": 0.8329907851137361,
+        "auprc": 0.859058636968508,
+        "n_pairs": 1086
+      },
+      "common_neigh": {
+        "auroc": 0.833872592411709,
+        "auprc": 0.8634362357602181,
+        "n_pairs": 1086
+      },
+      "adamic_adar": {
+        "auroc": 0.8348069689909071,
+        "auprc": 0.8647372165058238,
+        "n_pairs": 1086
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5461744825317366,
+        "auprc": 0.5728979519489567,
+        "n_pairs": 1086
+      },
+      "pref_attach": {
+        "auroc": 0.5388147831601938,
+        "auprc": 0.5623493005575757,
+        "n_pairs": 1086
+      },
+      "common_neigh": {
+        "auroc": 0.5641531767107909,
+        "auprc": 0.5909944946013994,
+        "n_pairs": 1086
+      },
+      "adamic_adar": {
+        "auroc": 0.5682705384790181,
+        "auprc": 0.5920110954559072,
+        "n_pairs": 1086
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.93086,
+    "negative_sampling": "uniform random, 1:1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9657597/",
+    "caveat": "HLGNN-MDA's repo bundles train5430_idx.txt/test2792_idx.txt, but those feed a different, non-headline SEAL invocation (see Python/Main.py) -- NOT used here. This run instead reconstructs the paper's own stated protocol for its headline number: 10-fold CV, 1:1 uniform negatives, approximated here as a single random 90/10 slice (light audit, not a full 10-fold replication).\n"
+  }
+}

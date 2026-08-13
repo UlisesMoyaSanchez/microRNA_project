@@ -1,0 +1,44 @@
+# =============================================================================
+# Thin config for the HMDD topology-baseline audit: CKSNP-GNN (Li et al., Genes
+# 2022), miRNA-disease link prediction. Tier 2 -- exact positive count confirmed
+# (16,427, matching the paper's own reported figure exactly) via a shared
+# institutional data mirror; see data/01_download/download_hmdd_survey_cksnp.py
+# for the code/README-mismatch caveat (the mirror's bundled code is a different
+# model, "GAEMDA" -- not used, data only). No bundled split, so one is generated
+# here at their stated 1:1 ratio.
+# Consumed by training/eval_hmdd_survey_topology_baseline.py.
+# =============================================================================
+
+project:
+  name: cksnp_gnn
+  seed: 42
+
+data:
+  matrix_path: data/raw/hmdd_survey/cksnp_gnn/matrix.csv
+  test_fraction: 0.1
+  negative_ratio: 1
+
+evaluation:
+  paper_reference:
+    tier: 2
+    headline_auroc: 0.9371
+    negative_sampling: "uniform random, 1:1 (16,427 negatives)"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9602123/"
+    caveat: >
+      0.9371 is CKSNP-GNN's own reported 5-fold CV mean (Table 1). No split
+      file is bundled; this run uses a single random 90/10 edge split with
+      1:1 uniform negatives as an approximation. Data source is a shared
+      institutional mirror whose bundled code is a different model ("GAEMDA")
+      -- notably, GAEMDA is itself one of CKSNP-GNN's own comparison baselines
+      in Table 1 (93.56%), which corroborates (does not just excuse) reusing
+      this mirror's data: both papers evidently drew from the same shared
+      benchmark. Data trusted via exact positive-count match (16,427); code
+      in the mirror is not used or claimed to be CKSNP-GNN's own.
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 4
+  mem: 8gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
