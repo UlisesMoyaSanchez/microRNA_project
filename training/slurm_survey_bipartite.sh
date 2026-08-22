@@ -52,11 +52,14 @@ echo "Date:   $(date)"
 echo "Paper:  ${PAPER}"
 echo "Regime: ${REGIME}"
 echo "Seed:   ${SEED}"
+echo "Negs:   ${NEGATIVES:-<config default>}"
 echo "Config: ${CONFIG}"
 echo "========================================"
 echo ""
 
-python training/train_survey_bipartite.py --config "${CONFIG}" --seed "${SEED}"
+NEGARG=()
+if [[ -n "${NEGATIVES:-}" ]]; then NEGARG=(--negatives "${NEGATIVES}"); fi
+python training/train_survey_bipartite.py --config "${CONFIG}" --seed "${SEED}" "${NEGARG[@]}"
 
 echo ""
 echo "Done: $(date)"

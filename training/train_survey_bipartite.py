@@ -105,6 +105,14 @@ def main() -> None:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--config", required=True)
     p.add_argument("--out", default=None)
+    p.add_argument("--negatives", default=None, choices=["uniform", "degree_matched"],
+                   help="Override the config's training negatives. Needed because the "
+                        "protocol grid follows Figure 4's train/eval-MATCHED convention: "
+                        "a model trained on degree-matched negatives and scored against "
+                        "uniform ones measures a train/eval distribution mismatch, not "
+                        "protocol difficulty (the same caveat Table 2 flags with a "
+                        "dagger). Each grid cell must be filled from the arm trained on "
+                        "the negatives it is scored against.")
     p.add_argument("--seed", type=int, default=None,
                    help="Override the config's seed, so one config covers all seeds. "
                         "The split is seeded from this too, so each seed is a different "
@@ -124,8 +132,11 @@ def main() -> None:
     assert regime in ("held_out", "seen"), regime
 
     if args.out is None:
+        neg_tag = ("" if args.negatives is None
+                   else ("_trainuniform" if args.negatives == "uniform"
+                         else "_traindm"))
         args.out = (f"results/comparison/survey_trained_grid_{paper}_{regime}"
-                    f"_s{seed}.json")
+                    f"{neg_tag}_s{seed}.json")
 
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -159,7 +170,8 @@ def main() -> None:
     # Degree bins always from training edges: binning on the full set would leak
     # held-out structure into the choice of negatives, in either regime.
     bins = degree_bins(gene_in_degree(train_edges, n_gene))
-    hard = tcfg.get("hard_negatives", True)
+    hard = (tcfg.get("hard_negatives", True) if args.negatives is None
+            else args.negatives == "degree_matched")
     log.info(f"Training negatives: {'degree-matched' if hard else 'uniform'}")
 
     x_dict = {k: graph[k].x.to(device) for k in ("miRNA", "gene")}
