@@ -19,12 +19,18 @@ MEAHNE's held_out/uniform cell landed ABOVE its seen/uniform cell, with nine tim
 variance of every other cell. This module encodes the convention so it cannot be forgotten:
 
   seen  / uniform          uniform-trained,        uniform eval
-  seen  / degree_matched   uniform-trained,        degree-matched eval
+  seen  / degree_matched   degree-matched-trained, degree-matched eval
   held  / uniform          uniform-trained,        uniform eval
   held  / degree_matched   degree-matched-trained, degree-matched eval
 
-which is exactly what analysis/make_manuscript_figures.py::load_headline_grid does for our
-own graph (seen row from the uniform-trained model, held row on the matched diagonal).
+i.e. EVERY cell matched, so each column is a single training arm and a vertical
+seen-vs-held comparison within a column is a clean protocol comparison. This is stricter
+than analysis/make_manuscript_figures.py::load_headline_grid, which fills our own graph's
+whole seen row from the uniform-trained model; under that convention the degree-matched
+column mixes arms, and the vertical comparison inverts on MEAHNE and CoupleMDA for that
+reason alone. The two corners the paper's claims rest on -- conventional (seen, uniform)
+and corrected (held, degree-matched) -- are matched under either convention, so the
+headline cost and margins are unaffected by the choice.
 
 Usage:
   python analysis/aggregate_trained_grid.py
@@ -61,7 +67,7 @@ SEEDS = [42, 7, 123, 2024]
 # (regime, eval sampler) -> which training arm fills it. See the docstring.
 CELL_ARM = {
     ("seen", "uniform"): "uniform",
-    ("seen", "degree_matched"): "uniform",
+    ("seen", "degree_matched"): "degree_matched",
     ("held_out", "uniform"): "uniform",
     ("held_out", "degree_matched"): "degree_matched",
 }
