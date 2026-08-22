@@ -361,6 +361,75 @@ def table6_protocol_grid() -> str:
     return "\n".join(lines)
 
 
+def table7_discrimination() -> str:
+    """Thesis 2: what the conventional protocol cannot measure.
+
+    Per graph, the margin between a trained model and the model-free floor under each
+    protocol. Both corners are train/eval matched, so both margins are clean comparisons
+    (see analysis/aggregate_trained_grid.py on the cell convention).
+    """
+    summary = json.load(open(COMP / "trained_grid_summary.json"))["graphs"]
+
+    # Our own graph is not in that summary -- its trained numbers live in the multiseed
+    # artifacts and its floor in the topology-baseline ones.
+    seen = json.load(open(COMP / "multiseed_seen_edges_test_v3fixed.json"))["cells"]["uniform"]
+    held = json.load(open(COMP / "multiseed_auroc_test_v3fixed.json"))["cells"]
+    mf_seen = json.load(open(COMP / "topology_baseline_test_seen.json"))["results"]
+    mf_held = json.load(open(COMP / "topology_baseline_test.json"))["results"]
+    own = {
+        "conventional": {"trained": seen["uniform"]["auroc"]["mean"],
+                         "model_free": max(v["auroc"] for v in mf_seen["uniform"].values())},
+        "corrected": {"trained": held["degree_matched"]["degree_matched"]["mean"],
+                      "model_free": max(v["auroc"] for v in mf_held["degree_matched"].values())},
+    }
+    for k in own:
+        own[k]["margin"] = own[k]["trained"] - own[k]["model_free"]
+
+    labels = {"canonical5430": "Canonical HMDD", "cksnp_gnn": "CKSNP-GNN",
+              "digamn": "DiGAMN", "meahne": "MEAHNE", "couplemda": "CoupleMDA"}
+    order = ["canonical5430", "cksnp_gnn", "digamn", "meahne", "couplemda"]
+    by_graph = {g["graph"]: g["discrimination"] for g in summary}
+
+    lines = [
+        r"\begin{table}[h!]",
+        r"\caption{What the conventional protocol cannot measure. For each graph, a trained "
+        r"model (this paper's architecture, mean over 4 seeds) against the best of the same "
+        r"four model-free heuristics, under each protocol. ``Conventional'' is edges seen "
+        r"with uniform-random negatives; ``corrected'' is edges held out with degree-matched "
+        r"negatives -- the two corners of Table~\ref{tab:protocol_grid}, both train/eval "
+        r"matched so both margins are clean comparisons. On all five surveyed graphs the "
+        r"conventional protocol leaves the trained model within 1.3 points of a one-line "
+        r"heuristic and behind it on three, while the corrected protocol separates the same "
+        r"pairs by 4.3 to 8.3 points. Our own graph is the exception and is shown first: its "
+        r"margin narrows rather than widens. The trained arm is our architecture on their "
+        r"graphs, not each paper's own model -- see Discussion.}",
+        r"\label{tab:discrimination}",
+        r"\footnotesize",
+        r"\resizebox{\textwidth}{!}{%",
+        r"\begin{tabular}{lcccccc}",
+        r"\hline",
+        r" & \multicolumn{3}{c}{Conventional protocol} & "
+        r"\multicolumn{3}{c}{Corrected protocol} \\",
+        r"\cline{2-4}\cline{5-7}",
+        r"Graph & Trained & Model-free & Margin & Trained & Model-free & Margin \\",
+        r"\hline",
+    ]
+
+    def row(label, d):
+        c, k = d["conventional"], d["corrected"]
+        return (f"{tex_escape(label)} & {c['trained']:.4f} & {c['model_free']:.4f} & "
+                f"${c['margin']:+.4f}$ & {k['trained']:.4f} & {k['model_free']:.4f} & "
+                f"${k['margin']:+.4f}$ \\\\")
+
+    lines.append(row("Own graph (primary case)", own))
+    lines.append(r"\hline")
+    for g in order:
+        lines.append(row(labels[g], by_graph[g]))
+
+    lines += [r"\hline", r"\end{tabular}", r"}", r"\end{table}", ""]
+    return "\n".join(lines)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     generators = [
@@ -369,6 +438,7 @@ def main() -> None:
         ("table3_literature_survey.tex", table3_literature_survey),
         ("table4_celltype_control.tex", table4_celltype_control),
         ("table6_protocol_grid.tex", table6_protocol_grid),
+        ("table7_discrimination.tex", table7_discrimination),
         ("tableS1_architecture_grid.tex", table_s1_architecture_grid),
     ]
     failures = []
