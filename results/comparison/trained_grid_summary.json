@@ -10,10 +10,10 @@
           "trained_on": "uniform"
         },
         "seen__degree_matched": {
-          "mean": 0.6576730801189762,
-          "std": 0.009531877624494773,
+          "mean": 0.720165237121374,
+          "std": 0.0037933128959247763,
           "n_seeds": 4,
-          "trained_on": "uniform"
+          "trained_on": "degree_matched"
         },
         "held_out__uniform": {
           "mean": 0.8555591167004126,
@@ -58,10 +58,10 @@
           "trained_on": "uniform"
         },
         "seen__degree_matched": {
-          "mean": 0.6310829014852212,
-          "std": 0.005483060211632307,
+          "mean": 0.7086732298183642,
+          "std": 0.009054283679280933,
           "n_seeds": 4,
-          "trained_on": "uniform"
+          "trained_on": "degree_matched"
         },
         "held_out__uniform": {
           "mean": 0.8660222449376225,
@@ -106,10 +106,10 @@
           "trained_on": "uniform"
         },
         "seen__degree_matched": {
-          "mean": 0.6524744629846129,
-          "std": 0.011857625417260431,
+          "mean": 0.7325365784532539,
+          "std": 0.010529666939348632,
           "n_seeds": 4,
-          "trained_on": "uniform"
+          "trained_on": "degree_matched"
         },
         "held_out__uniform": {
           "mean": 0.8722498553394503,
@@ -154,10 +154,10 @@
           "trained_on": "uniform"
         },
         "seen__degree_matched": {
-          "mean": 0.559684817551295,
-          "std": 0.0040578971407707306,
+          "mean": 0.7154833815339918,
+          "std": 0.006000941591358999,
           "n_seeds": 4,
-          "trained_on": "uniform"
+          "trained_on": "degree_matched"
         },
         "held_out__uniform": {
           "mean": 0.9852983346695738,
@@ -202,10 +202,10 @@
           "trained_on": "uniform"
         },
         "seen__degree_matched": {
-          "mean": 0.5681509569018981,
-          "std": 0.004064129229198718,
+          "mean": 0.7142358662581689,
+          "std": 0.005888499055351956,
           "n_seeds": 4,
-          "trained_on": "uniform"
+          "trained_on": "degree_matched"
         },
         "held_out__uniform": {
           "mean": 0.9397581528006307,
@@ -249,9 +249,9 @@
   ],
   "cell_arm_convention": {
     "seen__uniform": "uniform",
-    "seen__degree_matched": "uniform",
+    "seen__degree_matched": "degree_matched",
     "held_out__uniform": "uniform",
     "held_out__degree_matched": "degree_matched"
   },
-  "generated_utc": "2026-08-22T17:27:13.643790+00:00"
+  "generated_utc": "2026-08-22T17:28:33.229695+00:00"
 }
