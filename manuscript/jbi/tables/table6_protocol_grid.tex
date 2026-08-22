@@ -1,0 +1,22 @@
+\begin{table}[h!]
+\caption{The model-free protocol grid, measured with the same four unmodified topology scorers (Table~\ref{tab:model_free_baselines}) on our own graph and on every distinct graph behind the seven surveyed papers. Rows are graphs, not papers: MGCNSS, NIMGSA and HLGNN-MDA share a byte-identical canonical HMDD matrix, which appears twice only because MGCNSS is scored on its own bundled split and the other two on a generated one. Within a row the split and the negatives are identical across all four cells -- only the adjacency the scorers may see changes -- so every cell scores exactly the same pairs and ``Cost'' (conventional corner minus corrected corner) is attributable to the protocol alone. MGCNSS carries the paper's own negatives, so it has no negative-sampling axis. ``Dead'' is the fraction of candidate columns with degree zero and Gini the inequality of the column-degree distribution (\texttt{results/comparison/graph\_candidate\_stats.json}).}
+\label{tab:protocol_grid}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccc}
+\hline
+ & & & & \multicolumn{2}{c}{Uniform negatives} & \multicolumn{2}{c}{Degree-matched} & \\
+\cline{5-6}\cline{7-8}
+Graph & Paper(s) & Dead & Gini & seen & held out & seen & held out & Cost \\
+\hline
+Own graph (primary case) & -- & 47.5\% & 0.742 & 0.9336 & 0.8712 & 0.7237 & 0.5912 & $+0.342$ \\
+Canonical HMDD, paper's split & MGCNSS & 0.0\% & 0.712 & 0.9613 & 0.9136 & -- & -- & $+0.048$ \\
+Canonical HMDD, generated split & NIMGSA, HLGNN-MDA & 0.0\% & 0.712 & 0.8842 & 0.8680 & 0.5986 & 0.5683 & $+0.316$ \\
+DiGAMN & DiGAMN & 0.0\% & 0.723 & 0.8833 & 0.8714 & 0.5756 & 0.5580 & $+0.325$ \\
+CKSNP-GNN & CKSNP-GNN & 0.0\% & 0.713 & 0.8924 & 0.8822 & 0.5746 & 0.5591 & $+0.333$ \\
+CoupleMDA & CoupleMDA & 55.7\% & 0.874 & 0.9497 & 0.9406 & 0.5944 & 0.5789 & $+0.371$ \\
+MEAHNE & MEAHNE & 92.4\% & 0.979 & 0.9908 & 0.9848 & 0.5813 & 0.5648 & $+0.426$ \\
+\hline
+\end{tabular}
+}
+\end{table}

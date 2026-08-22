@@ -276,6 +276,91 @@ def table_s1_architecture_grid() -> str:
     return "\n".join(lines) + "\n"
 
 
+def table6_protocol_grid() -> str:
+    """The model-free 2x2 protocol grid, measured with the same four scorers on our own
+    graph and on every distinct graph behind the seven surveyed papers.
+
+    One row per distinct GRAPH, not per paper: MGCNSS, NIMGSA and HLGNN-MDA share a
+    byte-identical canonical HMDD matrix, so it appears twice only because MGCNSS is
+    scored on the paper's own bundled split and the other two on a generated one.
+    """
+    def load(path):
+        with open(COMP / path) as fh:
+            return json.load(fh)["results"]
+
+    def best(res, regime):
+        return max(v["auroc"] for v in res[regime].values()) if regime in res else None
+
+    stats = {r["graph"]: r for r in
+             json.load(open(COMP / "graph_candidate_stats.json"))["graphs"]}
+
+    hmdd = "hmdd_survey_topology_baseline_%s%s.json"
+    rows = [
+        ("Own graph (primary case)", "own_graph", "--",
+         load("topology_baseline_test_seen.json"), load("topology_baseline_test.json")),
+        ("Canonical HMDD, paper's split", "canonical5430", "MGCNSS",
+         load(hmdd % ("mgcnss", "_seen")), load(hmdd % ("mgcnss", ""))),
+        ("Canonical HMDD, generated split", "canonical5430", "NIMGSA, HLGNN-MDA",
+         load(hmdd % ("nimgsa", "_seen")), load(hmdd % ("nimgsa", ""))),
+        ("DiGAMN", "digamn", "DiGAMN",
+         load(hmdd % ("digamn", "_seen")), load(hmdd % ("digamn", ""))),
+        ("CKSNP-GNN", "cksnp_gnn", "CKSNP-GNN",
+         load(hmdd % ("cksnp_gnn", "_seen")), load(hmdd % ("cksnp_gnn", ""))),
+        ("CoupleMDA", "couplemda", "CoupleMDA",
+         load(hmdd % ("couplemda", "_seen")), load(hmdd % ("couplemda", ""))),
+        ("MEAHNE", "meahne", "MEAHNE",
+         load(hmdd % ("meahne", "_seen")), load(hmdd % ("meahne", ""))),
+    ]
+
+    lines = [
+        r"\begin{table}[h!]",
+        r"\caption{The model-free protocol grid, measured with the same four unmodified "
+        r"topology scorers (Table~\ref{tab:model_free_baselines}) on our own graph and on "
+        r"every distinct graph behind the seven surveyed papers. Rows are graphs, not "
+        r"papers: MGCNSS, NIMGSA and HLGNN-MDA share a byte-identical canonical HMDD "
+        r"matrix, which appears twice only because MGCNSS is scored on its own bundled "
+        r"split and the other two on a generated one. Within a row the split and the "
+        r"negatives are identical across all four cells -- only the adjacency the scorers "
+        r"may see changes -- so every cell scores exactly the same pairs and ``Cost'' "
+        r"(conventional corner minus corrected corner) is attributable to the protocol "
+        r"alone. MGCNSS carries the paper's own negatives, so it has no negative-sampling "
+        r"axis. ``Dead'' is the fraction of candidate columns with degree zero and Gini "
+        r"the inequality of the column-degree distribution "
+        r"(\texttt{results/comparison/graph\_candidate\_stats.json}).}",
+        r"\label{tab:protocol_grid}",
+        r"\footnotesize",
+        r"\resizebox{\textwidth}{!}{%",
+        r"\begin{tabular}{llccccccc}",
+        r"\hline",
+        r" & & & & \multicolumn{2}{c}{Uniform negatives} & "
+        r"\multicolumn{2}{c}{Degree-matched} & \\",
+        r"\cline{5-6}\cline{7-8}",
+        r"Graph & Paper(s) & Dead & Gini & seen & held out & seen & held out & Cost \\",
+        r"\hline",
+    ]
+
+    for label, key, papers, seen, held in rows:
+        st = stats[key]
+        if "paper_split" in held:
+            us, uh = best(seen, "paper_split"), best(held, "paper_split")
+            ds = dh = None
+        else:
+            us, uh = best(seen, "uniform"), best(held, "uniform")
+            ds, dh = best(seen, "degree_matched"), best(held, "degree_matched")
+        cost = us - (dh if dh is not None else uh)
+        cell = lambda v: "--" if v is None else f"{v:.4f}"
+        lines.append(
+            f"{tex_escape(label)} & {tex_escape(papers)} & "
+            f"{st['dead_column_fraction'] * 100:.1f}\\% & "
+            f"{st['column_degree_gini']:.3f} & "
+            f"{cell(us)} & {cell(uh)} & {cell(ds)} & {cell(dh)} & "
+            f"$+{cost:.3f}$ \\\\"
+        )
+
+    lines += [r"\hline", r"\end{tabular}", r"}", r"\end{table}", ""]
+    return "\n".join(lines)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     generators = [
@@ -283,6 +368,7 @@ def main() -> None:
         ("table2_model_free_baselines.tex", table2_model_free_baselines),
         ("table3_literature_survey.tex", table3_literature_survey),
         ("table4_celltype_control.tex", table4_celltype_control),
+        ("table6_protocol_grid.tex", table6_protocol_grid),
         ("tableS1_architecture_grid.tex", table_s1_architecture_grid),
     ]
     failures = []

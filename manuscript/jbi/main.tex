@@ -581,6 +581,24 @@ outright \emph{beats} the paper's own trained model (0.9848 vs.\ 0.9520), and on
 CoupleMDA's the two are within 1.3 points. Sanity-checking with degree-matched
 negatives collapses every heuristic on every paper to 0.55--0.58, confirming the
 uniform-negative numbers reflect a genuine popularity ceiling rather than a data error.
+
+Running the same scorers under both edge regimes as well closes the full protocol grid
+on every one of these graphs (Table~\ref{tab:protocol_grid}), so the two-factor
+experiment of \S\ref{sec:results} is no longer something we can only perform on our own
+data. Within each row the split and the negatives are held identical across all four
+cells and only the adjacency the scorers may see changes, so the cost of the corrected
+protocol is attributable to the protocol alone. That cost is $+0.316$ to $+0.426$ across
+the six graphs with a full grid, and our own graph's $+0.342$ sits inside that range
+rather than at either edge -- the primary case is an ordinary member of this
+distribution, not the extreme one a reader might reasonably suspect it of being. The
+decomposition, however, differs from ours: on these graphs the negative-sampling axis
+carries almost the entire effect ($\approx 0.30$) while the edge-split axis adds only
+$0.01$--$0.02$, whereas on our own graph the two axes were comparable and compounded
+super-additively. Held-out edges matter less here because these association matrices are
+small and their heuristics lean on node degree, which a handful of masked edges barely
+moves; the pattern is the same, its internal balance is not.
+
+\input{tables/table6_protocol_grid.tex}
 The two papers where the trained model adds the least are also the two sparsest graphs
 audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes; CoupleMDA:
 $\sim$15{,}000 edges over 2{,}090 $\times$ 1{,}754 nodes). Sparsity itself, however, is
@@ -590,9 +608,15 @@ direction: it falls monotonically as the graph is thinned, on all five graphs
 (Spearman $\rho = +0.60$ to $+1.00$ against density), and the degree-matched control
 falls with it, so thinning simply makes every degree estimate noisier.
 
-What separates these graphs is instead how much of their candidate space can never be
-positive. MEAHNE's matrix carries 11{,}783 disease columns of which 92.4\% have degree
-zero, and CoupleMDA's 55.7\%, while the other three graphs have none. Padding the
+What separates these graphs appears instead to be how much of their candidate space can
+never be positive. MEAHNE's matrix carries 11{,}783 disease columns of which 92.4\% have
+degree zero, and CoupleMDA's 55.7\%, while the other three graphs have none. Across
+graphs this is only suggestive and we do not rest the claim on it: with six graphs no
+descriptive statistic separates them significantly (dead-column fraction $\rho = +0.70$,
+$p = 0.12$; column-degree Gini $\rho = +0.77$, $p = 0.07$), and our own graph is a
+counterexample to the simplest version of the story, carrying 47.5\% dead columns yet a
+floor indistinguishable from the graphs with none. The evidence is instead a direct
+manipulation. Padding the
 canonical HMDD matrix -- which has no dead columns -- with empty ones, adding no edges,
 no features, nothing but candidate slots that can never be positive, raises its
 model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$; at 92.9\% dead columns,
