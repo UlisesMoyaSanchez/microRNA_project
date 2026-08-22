@@ -1,0 +1,55 @@
+{
+  "split": "test",
+  "edge_regime": "seen",
+  "n_held_out_edges": 4418,
+  "train_edges_visible": 35350,
+  "edges_visible_to_scorers": 39768,
+  "hgt_v2_edgesplit_auroc_reference": 0.6268,
+  "best_model_free_degree_matched": 0.7236529652245711,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8772027823130242,
+        "auprc": 0.8396131272218438,
+        "n_pairs": 8836
+      },
+      "pref_attach": {
+        "auroc": 0.8464087867629052,
+        "auprc": 0.8074145355002343,
+        "n_pairs": 8836
+      },
+      "common_neigh": {
+        "auroc": 0.9238968438715562,
+        "auprc": 0.9067932954875688,
+        "n_pairs": 8836
+      },
+      "adamic_adar": {
+        "auroc": 0.9336012179894546,
+        "auprc": 0.9158781133342251,
+        "n_pairs": 8836
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5236367397786863,
+        "auprc": 0.5235698009615236,
+        "n_pairs": 8836
+      },
+      "pref_attach": {
+        "auroc": 0.5159224035341654,
+        "auprc": 0.5143035746006379,
+        "n_pairs": 8836
+      },
+      "common_neigh": {
+        "auroc": 0.7034552053710069,
+        "auprc": 0.6943865909608946,
+        "n_pairs": 8836
+      },
+      "adamic_adar": {
+        "auroc": 0.7236529652245711,
+        "auprc": 0.7076145715252279,
+        "n_pairs": 8836
+      }
+    }
+  }
+}
