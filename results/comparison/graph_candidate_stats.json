@@ -1,0 +1,91 @@
+{
+  "graphs": [
+    {
+      "graph": "canonical5430",
+      "papers": [
+        "MGCNSS",
+        "NIMGSA",
+        "HLGNN-MDA"
+      ],
+      "n_rows": 495,
+      "n_columns": 383,
+      "n_positives": 5430,
+      "density": 0.02864150644829496,
+      "dead_column_fraction": 0.0,
+      "n_dead_columns": 0,
+      "column_degree_gini": 0.7117176117594449,
+      "mean_column_degree": 14.177545547485352
+    },
+    {
+      "graph": "cksnp_gnn",
+      "papers": [
+        "CKSNP-GNN"
+      ],
+      "n_rows": 901,
+      "n_columns": 877,
+      "n_positives": 16427,
+      "density": 0.020789013094534514,
+      "dead_column_fraction": 0.0,
+      "n_dead_columns": 0,
+      "column_degree_gini": 0.7132264587342959,
+      "mean_column_degree": 18.73090171813965
+    },
+    {
+      "graph": "digamn",
+      "papers": [
+        "DiGAMN"
+      ],
+      "n_rows": 917,
+      "n_columns": 792,
+      "n_positives": 14550,
+      "density": 0.02003403720960973,
+      "dead_column_fraction": 0.0,
+      "n_dead_columns": 0,
+      "column_degree_gini": 0.7226772883473914,
+      "mean_column_degree": 18.371212005615234
+    },
+    {
+      "graph": "own_graph",
+      "papers": [
+        "this paper (primary case)"
+      ],
+      "n_rows": 2460,
+      "n_columns": 3000,
+      "n_positives": 44186,
+      "density": 0.005987262872628726,
+      "dead_column_fraction": 0.475,
+      "n_dead_columns": 1425,
+      "column_degree_gini": 0.7420412649557175,
+      "mean_column_degree": 14.728666305541992
+    },
+    {
+      "graph": "couplemda",
+      "papers": [
+        "CoupleMDA"
+      ],
+      "n_rows": 2090,
+      "n_columns": 1754,
+      "n_positives": 15032,
+      "density": 0.0041005384821024265,
+      "dead_column_fraction": 0.557012542759407,
+      "n_dead_columns": 977,
+      "column_degree_gini": 0.8738767406423879,
+      "mean_column_degree": 8.570125579833984
+    },
+    {
+      "graph": "meahne",
+      "papers": [
+        "MEAHNE"
+      ],
+      "n_rows": 1296,
+      "n_columns": 11783,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "dead_column_fraction": 0.9242128490197743,
+      "n_dead_columns": 10890,
+      "column_degree_gini": 0.9789893636161404,
+      "mean_column_degree": 1.5252482891082764
+    }
+  ],
+  "generated_utc": "2026-08-22T16:57:43.587319+00:00"
+}
