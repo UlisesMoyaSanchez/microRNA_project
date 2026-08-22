@@ -8,29 +8,29 @@
 Paper & Venue/year & Task & Held-out edges & Negative sampling \\
  & & & removed from graph? & \\
 \hline
-MGCNSS & Briefings in Bioinformatics 2024 & miRNA-disease & no & distance-based selection (paper's own contribution) \\
-NIMGSA & 2022 & miRNA-disease & unclear & not described \\
-HybridGNN & Bioinformatics 2026 & miRNA-disease & yes & uniform random from unknown pairs \\
-HGDTI & BMC Bioinformatics 2022 & drug-target & no & reliable score-filtered (non-uniform) \\
-NGCN & 2024 & drug-target & unclear & uniform random from unknown pairs, 1:10 \\
-kmerPMTF & PeerJ 2024 & plant miRNA-target & yes & all unlabeled pairs, count-matched \\
-DTI field convention & multiple & drug-target & NA & unlabeled pairs as negatives, typically 10x positives \\
+MGCNSS \cite{tian2024mgcnss} & Briefings in Bioinformatics 2024 & miRNA-disease & no & distance-based selection (paper's own contribution) \\
+NIMGSA \cite{jin2022nimgsa} & 2022 & miRNA-disease & unclear & not described \\
+HybridGNN \cite{ahmad2026hybridgnn} & Bioinformatics 2026 & miRNA-disease & yes & uniform random from unknown pairs \\
+HGDTI \cite{yu2022hgdti} & BMC Bioinformatics 2022 & drug-target & no & reliable score-filtered (non-uniform) \\
+NGCN \cite{cao2024ngcn} & 2024 & drug-target & unclear & uniform random from unknown pairs, 1:10 \\
+kmerPMTF \cite{zhang2024kmerpmtf} & PeerJ 2024 & plant miRNA-target & yes & all unlabeled pairs, count-matched \\
+DTI field convention \cite{cao2024ngcn} & multiple & drug-target & NA & unlabeled pairs as negatives, typically 10x positives \\
 \hline
-Orro & Biomedicines 2026 & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs \\
-CoupleMDA & IJMS 2025 & miRNA-disease & yes & uniform random, 1:1 \\
-GONNMDA & Genes 2025 & miRNA-disease & unclear & uniform random, 1:1 \\
-DiGAMN & BMC Genomics 2024 & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 \\
-DGNMDA & Bioengineering 2024 & miRNA-disease & unclear & undersampling (ratio unspecified) \\
-HLGNN-MDA & IJMS 2022 & miRNA-disease & yes & uniform random, 1:1 \\
-MEAHNE & Life 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
-CKSNP-GNN & Genes 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
-HMCDA & BMC Bioinformatics 2023 & circRNA-disease & unclear & uniform random, 5:1 \\
-HiGLDP & BMC Biology 2026 & lncRNA-disease & yes & uniform random, 1:1 \\
-GPS-DTI & BMC Biology 2025 & drug-target & unclear & balanced pos/neg (curation unclear) \\
-SaeGraphDTI & BMC Bioinformatics 2025 & drug-target & unclear & all unlabeled pairs (unsampled) \\
-DTI-MHAPR & BMC Bioinformatics 2025 & drug-target & unclear & uniform random, 1:1 \\
-iNGNN-DTI & Bioinformatics 2024 & drug-target & unclear & uniform random, 1:1 \\
-ModulePred & BMC Bioinformatics 2024 & gene-disease & unclear & uniform random, 50:1 \\
+Orro \cite{orro2026mirnadisease} & Biomedicines 2026 & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs \\
+CoupleMDA \cite{li2025couplemda} & IJMS 2025 & miRNA-disease & yes & uniform random, 1:1 \\
+GONNMDA \cite{zeng2025gonnmda} & Genes 2025 & miRNA-disease & unclear & uniform random, 1:1 \\
+DiGAMN \cite{liu2024digamn} & BMC Genomics 2024 & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 \\
+DGNMDA \cite{lu2024dgnmda} & Bioengineering 2024 & miRNA-disease & unclear & undersampling (ratio unspecified) \\
+HLGNN-MDA \cite{yu2022hlgnnmda} & IJMS 2022 & miRNA-disease & yes & uniform random, 1:1 \\
+MEAHNE \cite{huang2022meahne} & Life 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
+CKSNP-GNN \cite{li2022cksnpgnn} & Genes 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
+HMCDA \cite{liang2023hmcda} & BMC Bioinformatics 2023 & circRNA-disease & unclear & uniform random, 5:1 \\
+HiGLDP \cite{wang2026higldp} & BMC Biology 2026 & lncRNA-disease & yes & uniform random, 1:1 \\
+GPS-DTI \cite{xiong2025gpsdti} & BMC Biology 2025 & drug-target & unclear & balanced pos/neg (curation unclear) \\
+SaeGraphDTI \cite{zhang2025saegraphdti} & BMC Bioinformatics 2025 & drug-target & unclear & all unlabeled pairs (unsampled) \\
+DTI-MHAPR \cite{yang2025dtimhapr} & BMC Bioinformatics 2025 & drug-target & unclear & uniform random, 1:1 \\
+iNGNN-DTI \cite{sun2024ingnndti} & Bioinformatics 2024 & drug-target & unclear & uniform random, 1:1 \\
+ModulePred \cite{jia2024modulepred} & BMC Bioinformatics 2024 & gene-disease & unclear & uniform random, 50:1 \\
 \hline
 \end{tabular}
 }
