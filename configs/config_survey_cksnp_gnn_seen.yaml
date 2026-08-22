@@ -1,0 +1,54 @@
+# =============================================================================
+# cksnp_gnn trained on its own miRNA-disease graph, edge regime: seen
+#
+# Consumed by training/train_survey_bipartite.py (NOT training/train.py -- that one
+# seeds mini-batches from cell nodes, which this graph has none of; see that script's
+# docstring). Graph built by data/03_build_graph/build_survey_bipartite_graph.py.
+#
+# NOTE ON NODE TYPES: the disease axis is stored under the node type name `gene`, so
+# training/splits.py and the model's link head run unmodified. The column axis here is
+# diseases; only the label says gene. See the builder's docstring for the full rationale.
+#
+# edge_regime is the ONLY difference between this config and its held_out sibling:
+#   held_out  encoder message-passes over training edges only (corrected protocol)
+#   seen      encoder message-passes over every edge, incl. the scored ones (conventional)
+# Supervision, split and scored test pairs are identical across the pair, so the
+# difference between the two runs is attributable to the protocol alone.
+#
+# Model hyperparameters are copied verbatim from configs/config_v3fixed_edgesplit.yaml
+# so the architecture is the same one measured on our own graph.
+# =============================================================================
+
+project:
+  name: cksnp_gnn
+  seed: 42
+
+data:
+  graphs_dir: data/graphs_survey/cksnp_gnn
+
+model:
+  hidden_channels: 512
+  num_heads:       8
+  num_layers:      4
+  dropout:         0.3
+  mirna_init_dim:  64
+
+training:
+  edge_regime:  seen
+  num_epochs:   200
+  lr:           5.0e-4        # same as configs/config_v3fixed_edgesplit.yaml
+  weight_decay: 1.0e-5
+  patience:     25
+  eval_every:   5
+  val_ratio:    0.10
+  test_ratio:   0.10
+  disjoint_train_ratio: 0.3
+  hard_negatives: true          # degree-matched negatives during training
+
+slurm:
+  partition: dgx_large
+  nodelist: dgxa100jal
+  cpus_per_task: 4
+  mem: 32gb
+  conda_env: mirna_ms
+  conda_init: /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh

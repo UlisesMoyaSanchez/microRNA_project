@@ -30,8 +30,8 @@ classification head with `if "cell" in h`, so the head is simply never invoked, 
 cell nodes the way `train.py` does.
 
 Usage:
-  python data/03_build_graph/build_survey_bipartite_graph.py --paper meahne
-  python data/03_build_graph/build_survey_bipartite_graph.py --paper digamn
+  python data/03_build_graph/build_survey_bipartite_graph.py --graph meahne
+  python data/03_build_graph/build_survey_bipartite_graph.py --graph couplemda
 """
 
 from __future__ import annotations
@@ -50,16 +50,12 @@ from torch_geometric.data import HeteroData
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from training.eval_hmdd_survey_topology_baseline import load_matrix
-
-PAPERS = {
-    "meahne": "data/raw/hmdd_survey/meahne/matrix.csv",
-    "digamn": "data/raw/hmdd_survey/digamn/matrix.csv",
-    "cksnp_gnn": "data/raw/hmdd_survey/cksnp_gnn/matrix.csv",
-    "nimgsa": "data/raw/hmdd_survey/nimgsa/matrix.csv",
-    "hlgnn_mda": "data/raw/hmdd_survey/hlgnn_mda/matrix.csv",
-    "mgcnss": "data/raw/hmdd_survey/mgcnss/matrix.csv",
-}
+# The graph definitions come from analysis/density_sweep.py rather than a second copy
+# here: it already keys by DISTINCT GRAPH (so the canonical HMDD matrix shared by MGCNSS,
+# NIMGSA and HLGNN-MDA appears once, not three times) and already handles CoupleMDA, which
+# publishes pair lists instead of a matrix. Two sources of truth for "which graphs are
+# there" is exactly how the three-papers-one-matrix duplication went unnoticed before.
+from analysis.density_sweep import GRAPHS, load_positives
 
 FEATURE_SEED = 42
 
@@ -74,7 +70,9 @@ def build_features(n: int, dim: int) -> torch.Tensor:
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--paper", required=True, choices=list(PAPERS))
+    p.add_argument("--graph", required=True, choices=list(GRAPHS),
+                   help="A distinct graph, not a paper: canonical5430 covers MGCNSS, "
+                        "NIMGSA and HLGNN-MDA, which share one byte-identical matrix.")
     p.add_argument("--out-root", default="data/graphs_survey")
     p.add_argument("--init-dim", type=int, default=64,
                    help="Width of the random-normal node embeddings, both sides.")
@@ -83,12 +81,13 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     log = logging.getLogger(__name__)
 
-    A = load_matrix(PAPERS[args.paper])
-    n_mirna, n_disease = A.shape
-    edges = A.nonzero().T.contiguous()
-    log.info(f"{args.paper}: {n_mirna} miRNA x {n_disease} diseases, "
+    spec = GRAPHS[args.graph]
+    edges, n_mirna, n_disease = load_positives(spec)
+    edges = edges.contiguous()
+    log.info(f"{args.graph}: {n_mirna} miRNA x {n_disease} diseases, "
              f"{edges.shape[1]:,} associations "
-             f"(density {edges.shape[1] / (n_mirna * n_disease):.5f})")
+             f"(density {edges.shape[1] / (n_mirna * n_disease):.5f}) "
+             f"[{', '.join(spec['papers'])}]")
 
     data = HeteroData()
     data["miRNA"].x = build_features(n_mirna, args.init_dim)
@@ -96,7 +95,7 @@ def main() -> None:
     data["miRNA", "regulates", "gene"].edge_index = edges
     data["gene", "regulated_by", "miRNA"].edge_index = edges.flip(0)
 
-    out_dir = Path(args.out_root) / args.paper
+    out_dir = Path(args.out_root) / args.graph
     out_dir.mkdir(parents=True, exist_ok=True)
     torch.save(data, out_dir / "hetero_graph.pt")
 
@@ -108,8 +107,9 @@ def main() -> None:
                      "n_disease": n_disease}, fh)
 
     manifest = {
-        "paper": args.paper,
-        "source_matrix": PAPERS[args.paper],
+        "graph": args.graph,
+        "papers": spec["papers"],
+        "source": spec.get("matrix") or spec.get("pair_lists"),
         "n_mirna": int(n_mirna),
         "n_disease": int(n_disease),
         "n_associations": int(edges.shape[1]),
