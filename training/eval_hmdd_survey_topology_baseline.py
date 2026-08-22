@@ -34,8 +34,22 @@ download_hmdd_survey_canonical5430.py for why it's tiered the way it is):
                           reproduction. Every output JSON records which regime
                           applies.
 
+Two edge regimes per paper (--edge-regime, see build_scoring_matrix), crossing the
+two negative regimes above into the same 2x2 protocol grid this project measures on
+its own graph (manuscript Figure 4):
+  held_out  heuristics see training positives only -- the corrected protocol, and
+            the default, so an un-flagged run reproduces the published numbers.
+  seen      heuristics see every positive including the scored ones -- what a paper
+            does when it never masks held-out edges from its message-passing graph.
+Only the graph view differs; the split and the negatives are identical across the
+two, so the difference between rows is attributable to the protocol alone.
+
+MGCNSS is the exception: its Mode-A split carries the paper's own negatives, so the
+negative axis does not exist there and it contributes a 1x2 row, not a 2x2 grid.
+
 Usage:
   python training/eval_hmdd_survey_topology_baseline.py --config configs/config_hmdd_survey_mgcnss.yaml
+  python training/eval_hmdd_survey_topology_baseline.py --config configs/config_hmdd_survey_meahne.yaml --edge-regime seen
   python training/eval_hmdd_survey_topology_baseline.py --config configs/config_hmdd_survey_nimgsa.yaml
   python training/eval_hmdd_survey_topology_baseline.py --config configs/config_hmdd_survey_hlgnn_mda.yaml
 """
@@ -119,6 +133,33 @@ def load_pair_list(path: str) -> torch.Tensor:
     return torch.tensor(pairs, dtype=torch.long).T if pairs else torch.empty((2, 0), dtype=torch.long)
 
 
+def build_scoring_matrix(
+    train_pairs: torch.Tensor,
+    all_pairs: torch.Tensor,
+    n_mirna: int,
+    n_disease: int,
+    edge_regime: str,
+) -> torch.Tensor:
+    """The adjacency the heuristics are allowed to see. Only this differs between
+    the two edge regimes -- the split and the negatives are identical either way,
+    so the same pairs are scored and any AUROC difference is the protocol alone.
+
+    held_out (corrected)     training positives only. The scored edge was never in
+                             the graph, so nothing about it can leak into its score.
+    seen (conventional)      every positive, including the ones about to be scored.
+                             build_scorers() zeroes its miRNA-miRNA diagonal, so a
+                             test edge still cannot vouch for itself directly -- but
+                             it does inflate the co-targeting counts that feed
+                             common_neigh/adamic_adar, and it raises the disease's
+                             own degree. That indirect inflation IS the conventional
+                             protocol's leak, not a bug in this function.
+    """
+    pairs = train_pairs if edge_regime == "held_out" else all_pairs
+    A = torch.zeros((n_mirna, n_disease))
+    A[pairs[0], pairs[1]] = 1.0
+    return A
+
+
 def score_pairs(scorers: dict[str, torch.Tensor], pos: torch.Tensor, neg: torch.Tensor) -> dict:
     k = pos.shape[1]
     y = np.concatenate([np.ones(k), np.zeros(neg.shape[1])])
@@ -140,6 +181,10 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--config", required=True)
     p.add_argument("--out", default=None)
+    p.add_argument("--edge-regime", default="held_out", choices=["held_out", "seen"],
+                   help="Which edges the heuristics may see (see build_scoring_matrix). "
+                        "held_out is the corrected protocol and the default, so an "
+                        "un-flagged run reproduces the published numbers exactly.")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -154,11 +199,14 @@ def main() -> None:
     ref = cfg["evaluation"]["paper_reference"]
     tier = ref["tier"]
 
+    # Unsuffixed for held_out: the already-published artifacts keep their paths.
     if args.out is None:
-        args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}.json"
+        suffix = "" if args.edge_regime == "held_out" else f"_{args.edge_regime}"
+        args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}{suffix}.json"
 
     log.info("=" * 78)
-    log.info(f"HMDD survey topology baseline — {paper}  (tier {tier})")
+    log.info(f"HMDD survey topology baseline — {paper}  (tier {tier}, "
+             f"edges {args.edge_regime.replace('_', ' ')})")
     log.info(f"Paper's own reported AUROC: {ref['headline_auroc']}  ({ref['url']})")
     log.info("=" * 78)
 
@@ -177,9 +225,12 @@ def main() -> None:
         test_pos, test_neg = split["test_pos"], split["test_neg"]
         log.info(f"Exact labeled split: train_pos={train_edges.shape[1]:,}  "
                  f"test_pos={test_pos.shape[1]:,}  test_neg={test_neg.shape[1]:,}")
-        A_train = torch.zeros((n_mirna, n_disease))
-        A_train[train_edges[0], train_edges[1]] = 1.0
-        scorers = build_scorers(A_train)
+        # Mode A carries the paper's OWN negatives, so the negative-sampling axis
+        # does not exist here -- this paper contributes a 1x2 row (held_out vs
+        # seen), not a full 2x2 grid.
+        scorers = build_scorers(build_scoring_matrix(
+            train_edges, A_full.nonzero().T, n_mirna, n_disease, args.edge_regime
+        ))
         results = {"paper_split": score_pairs(scorers, test_pos, test_neg)}
         n_positives_total = int(A_full.sum())
 
@@ -197,12 +248,15 @@ def main() -> None:
                  f"train_pos={train_pos.shape[1]:,}  test_pos={test_pos.shape[1]:,}  "
                  f"negative_ratio=1:{ratio}")
 
-        A_train = torch.zeros((n_mirna, n_disease))
-        A_train[train_pos[0], train_pos[1]] = 1.0
-        scorers = build_scorers(A_train)
+        scorers = build_scorers(build_scoring_matrix(
+            train_pos, all_pos, n_mirna, n_disease, args.edge_regime
+        ))
 
         tiled = test_pos.repeat(1, ratio)
         unif_neg = uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen)
+        # Degree bins stay on train_pos in BOTH regimes: the negatives must be the
+        # same pairs across the two rows, or the row difference would confound the
+        # edge regime with a different negative set.
         deg = gene_in_degree(train_pos, n_disease)
         bins = degree_bins(deg)
         dm_neg, n_fb = sample_degree_matched_negatives(
@@ -237,13 +291,14 @@ def main() -> None:
                  f"seed={seed}): train_pos={train_pos.shape[1]:,}  test_pos={test_pos.shape[1]:,}  "
                  f"negative_ratio=1:{ratio}")
 
-        A_train = torch.zeros((n_mirna, n_disease))
-        A_train[train_pos[0], train_pos[1]] = 1.0
-        scorers = build_scorers(A_train)
+        scorers = build_scorers(build_scoring_matrix(
+            train_pos, all_pos, n_mirna, n_disease, args.edge_regime
+        ))
 
         tiled = test_pos.repeat(1, ratio)
         unif_neg = uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen)
 
+        # Degree bins stay on train_pos in BOTH regimes -- see the Mode B note.
         deg = gene_in_degree(train_pos, n_disease)
         bins = degree_bins(deg)
         dm_neg, n_fb = sample_degree_matched_negatives(
@@ -274,6 +329,7 @@ def main() -> None:
     summary = {
         "paper": paper,
         "tier": tier,
+        "edge_regime": args.edge_regime,
         "n_mirna": n_mirna,
         "n_disease": n_disease,
         "n_positives_total": n_positives_total,

@@ -1,0 +1,67 @@
+{
+  "experiment": "empty_column_padding",
+  "base_graph": "canonical5430",
+  "n_mirna": 495,
+  "n_disease_base": 383,
+  "n_positives": 5430,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "points": [
+    {
+      "pad_columns": 0,
+      "total_columns": 383,
+      "dead_column_fraction": 0.0,
+      "density": 0.02864150644829496,
+      "uniform": {
+        "mean": 0.8591136480028763,
+        "std": 0.014108969295985145
+      }
+    },
+    {
+      "pad_columns": 500,
+      "total_columns": 883,
+      "dead_column_fraction": 0.5662514156285391,
+      "density": 0.012423212876214009,
+      "uniform": {
+        "mean": 0.9361296799378664,
+        "std": 0.00530092815338072
+      }
+    },
+    {
+      "pad_columns": 2000,
+      "total_columns": 2383,
+      "dead_column_fraction": 0.839278220730172,
+      "density": 0.004603313877338216,
+      "uniform": {
+        "mean": 0.9700673904269642,
+        "std": 0.00473596720619142
+      }
+    },
+    {
+      "pad_columns": 5000,
+      "total_columns": 5383,
+      "dead_column_fraction": 0.9288500835965076,
+      "density": 0.002037840789466277,
+      "uniform": {
+        "mean": 0.9791191423406558,
+        "std": 0.0048265071690305975
+      }
+    },
+    {
+      "pad_columns": 11400,
+      "total_columns": 11783,
+      "dead_column_fraction": 0.9674955444284138,
+      "density": 0.0009309765738519028,
+      "uniform": {
+        "mean": 0.9816923238674711,
+        "std": 0.005562568535628948
+      }
+    }
+  ],
+  "generated_utc": "2026-08-22T16:41:42.078197+00:00"
+}

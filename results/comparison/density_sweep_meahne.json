@@ -1,0 +1,1453 @@
+{
+  "graph": "meahne",
+  "papers": [
+    "MEAHNE"
+  ],
+  "n_mirna": 1296,
+  "n_disease": 11783,
+  "n_positives_full": 17972,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "retentions": [
+    1.0,
+    0.75,
+    0.5,
+    0.25,
+    0.1
+  ],
+  "points": [
+    {
+      "retention": 1.0,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "uniform": {
+        "mean": 0.9853898508891806,
+        "std": 0.0020001466501127167
+      },
+      "degree_matched": {
+        "mean": 0.5626162475082908,
+        "std": 0.0015353614076328837
+      }
+    },
+    {
+      "retention": 0.75,
+      "n_positives": 13479,
+      "density": 0.0008826668049701233,
+      "uniform": {
+        "mean": 0.9830486725030598,
+        "std": 0.0016822899089914813
+      },
+      "degree_matched": {
+        "mean": 0.522772499537726,
+        "std": 0.002091389929149976
+      }
+    },
+    {
+      "retention": 0.5,
+      "n_positives": 8986,
+      "density": 0.0005884445366467489,
+      "uniform": {
+        "mean": 0.9759038204092706,
+        "std": 0.002700099164423514
+      },
+      "degree_matched": {
+        "mean": 0.5140439036308891,
+        "std": 0.0020863179257798944
+      }
+    },
+    {
+      "retention": 0.25,
+      "n_positives": 4493,
+      "density": 0.00029422226832337444,
+      "uniform": {
+        "mean": 0.9641117741749886,
+        "std": 0.002129019972282614
+      },
+      "degree_matched": {
+        "mean": 0.510444802716156,
+        "std": 0.004902516964310706
+      }
+    },
+    {
+      "retention": 0.1,
+      "n_positives": 1797,
+      "density": 0.00011767581041110702,
+      "uniform": {
+        "mean": 0.9232384913214517,
+        "std": 0.005143268206801149
+      },
+      "degree_matched": {
+        "mean": 0.5059155344853004,
+        "std": 0.006036507262466904
+      }
+    }
+  ],
+  "trend_vs_density": {
+    "uniform": {
+      "spearman_rho": 0.9999999999999999,
+      "p_value": 1.4042654220543672e-24
+    },
+    "degree_matched": {
+      "spearman_rho": 0.9999999999999999,
+      "p_value": 1.4042654220543672e-24
+    }
+  },
+  "runs": [
+    {
+      "retention": 1.0,
+      "seed": 42,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "n_test": 3594,
+      "degree_matched_fallback_rate": 0.04284919309961046,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9878787653570891,
+          "auprc": 0.9862118784747171,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.9751360549905563,
+          "auprc": 0.9729926360076393,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.9740033859685142,
+          "auprc": 0.9723488323015222,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.973800549917952,
+          "auprc": 0.9720227463874895,
+          "n_pairs": 7188
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5546581608684975,
+          "auprc": 0.5677960185370287,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.5549833178961163,
+          "auprc": 0.5718234622325877,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.5611604885283052,
+          "auprc": 0.5788073825186418,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.5624153623998942,
+          "auprc": 0.578442797875796,
+          "n_pairs": 7188
+        }
+      },
+      "best_uniform": 0.9878787653570891,
+      "best_degree_matched": 0.5624153623998942
+    },
+    {
+      "retention": 1.0,
+      "seed": 43,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "n_test": 3594,
+      "degree_matched_fallback_rate": 0.05036171396772399,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9842305422163755,
+          "auprc": 0.9819573666052099,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.9711511781987476,
+          "auprc": 0.9695965223874324,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.9703323244175277,
+          "auprc": 0.969008096575318,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.9701975390877459,
+          "auprc": 0.9688217956433466,
+          "n_pairs": 7188
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5555326010177725,
+          "auprc": 0.5642752984889563,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.5580224909567637,
+          "auprc": 0.5763787200291335,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.5633647047930312,
+          "auprc": 0.5809729789965317,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.5645748695733228,
+          "auprc": 0.5809407256858363,
+          "n_pairs": 7188
+        }
+      },
+      "best_uniform": 0.9842305422163755,
+      "best_degree_matched": 0.5645748695733228
+    },
+    {
+      "retention": 1.0,
+      "seed": 44,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "n_test": 3594,
+      "degree_matched_fallback_rate": 0.045075125208681135,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9875424213793533,
+          "auprc": 0.9859669900295897,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.9718671042970585,
+          "auprc": 0.9705789819138806,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.9704315747292913,
+          "auprc": 0.969523237913736,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.9703118085574517,
+          "auprc": 0.9693170988631749,
+          "n_pairs": 7188
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5554812339492426,
+          "auprc": 0.5742885962449391,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.5564606146582646,
+          "auprc": 0.57390092329852,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.5615621348757545,
+          "auprc": 0.5783671173637276,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.5628402342493162,
+          "auprc": 0.5783614757111091,
+          "n_pairs": 7188
+        }
+      },
+      "best_uniform": 0.9875424213793533,
+      "best_degree_matched": 0.5628402342493162
+    },
+    {
+      "retention": 1.0,
+      "seed": 45,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "n_test": 3594,
+      "degree_matched_fallback_rate": 0.0439621591541458,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9845889504209854,
+          "auprc": 0.9819296940068614,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.9688916078209866,
+          "auprc": 0.967029723134488,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.968317937922259,
+          "auprc": 0.9668107245358591,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.968200997519826,
+          "auprc": 0.9666822585091928,
+          "n_pairs": 7188
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5541206453345076,
+          "auprc": 0.5629281917003892,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.5550247754171378,
+          "auprc": 0.5732473215118411,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.5621166824445243,
+          "auprc": 0.579131957198079,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.5633424083111375,
+          "auprc": 0.5793893560969332,
+          "n_pairs": 7188
+        }
+      },
+      "best_uniform": 0.9845889504209854,
+      "best_degree_matched": 0.5633424083111375
+    },
+    {
+      "retention": 1.0,
+      "seed": 46,
+      "n_positives": 17972,
+      "density": 0.0011768890732934978,
+      "n_test": 3594,
+      "degree_matched_fallback_rate": 0.04284919309961046,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9827085750720997,
+          "auprc": 0.9802265740560244,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.966867544033229,
+          "auprc": 0.9657997595328963,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.9659050405223074,
+          "auprc": 0.9652779957029332,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.9657617778843054,
+          "auprc": 0.9650642549672178,
+          "n_pairs": 7188
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5525224211254212,
+          "auprc": 0.5652242167823478,
+          "n_pairs": 7188
+        },
+        "pref_attach": {
+          "auroc": 0.5525776978201163,
+          "auprc": 0.5713760668369164,
+          "n_pairs": 7188
+        },
+        "common_neigh": {
+          "auroc": 0.5589989297688691,
+          "auprc": 0.57679554613178,
+          "n_pairs": 7188
+        },
+        "adamic_adar": {
+          "auroc": 0.559908363007783,
+          "auprc": 0.5765823616476599,
+          "n_pairs": 7188
+        }
+      },
+      "best_uniform": 0.9827085750720997,
+      "best_degree_matched": 0.559908363007783
+    },
+    {
+      "retention": 0.75,
+      "seed": 42,
+      "n_positives": 13479,
+      "density": 0.0008826668049701233,
+      "n_test": 2696,
+      "degree_matched_fallback_rate": 0.006305637982195846,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.983405050013648,
+          "auprc": 0.9799176944149939,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.9632302278790867,
+          "auprc": 0.9592856767905047,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.9610190170733212,
+          "auprc": 0.9572119594091714,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.9609726520881579,
+          "auprc": 0.9570999560867988,
+          "n_pairs": 5392
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5187163200345164,
+          "auprc": 0.5221055178600303,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.5179792956264473,
+          "auprc": 0.5181300234112238,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.5226719274185737,
+          "auprc": 0.5236613761539607,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.5237898463709287,
+          "auprc": 0.5239700902731905,
+          "n_pairs": 5392
+        }
+      },
+      "best_uniform": 0.983405050013648,
+      "best_degree_matched": 0.5237898463709287
+    },
+    {
+      "retention": 0.75,
+      "seed": 43,
+      "n_positives": 13479,
+      "density": 0.0008826668049701233,
+      "n_test": 2696,
+      "degree_matched_fallback_rate": 0.000741839762611276,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9834474251336192,
+          "auprc": 0.9821261053192558,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.9632664118289321,
+          "auprc": 0.9620791043173432,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.9600688100405921,
+          "auprc": 0.9593693102305667,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.9598645014264456,
+          "auprc": 0.9590968410169098,
+          "n_pairs": 5392
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5168705946385017,
+          "auprc": 0.5267568998523557,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.5149672913603184,
+          "auprc": 0.5137526348757612,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.5193350243024065,
+          "auprc": 0.5170709912669882,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.5201203398374556,
+          "auprc": 0.5170314996986346,
+          "n_pairs": 5392
+        }
+      },
+      "best_uniform": 0.9834474251336192,
+      "best_degree_matched": 0.5201203398374556
+    },
+    {
+      "retention": 0.75,
+      "seed": 44,
+      "n_positives": 13479,
+      "density": 0.0008826668049701233,
+      "n_test": 2696,
+      "degree_matched_fallback_rate": 0.00556379821958457,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9830871678230856,
+          "auprc": 0.9814099734391981,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.964945250794671,
+          "auprc": 0.9641101579942055,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.961330708093758,
+          "auprc": 0.9607465815740756,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.9612146580492916,
+          "auprc": 0.9606285966170004,
+          "n_pairs": 5392
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5206004306853103,
+          "auprc": 0.5304779007667717,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.519094669319973,
+          "auprc": 0.5168323077657555,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.5224928650203842,
+          "auprc": 0.518635851193713,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.5236671924116616,
+          "auprc": 0.5193253501004931,
+          "n_pairs": 5392
+        }
+      },
+      "best_uniform": 0.9830871678230856,
+      "best_degree_matched": 0.5236671924116616
+    },
+    {
+      "retention": 0.75,
+      "seed": 45,
+      "n_positives": 13479,
+      "density": 0.0008826668049701233,
+      "n_test": 2696,
+      "degree_matched_fallback_rate": 0.004821958456973294,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9800491606424289,
+          "auprc": 0.9767120077666159,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.9599049504046,
+          "auprc": 0.9567266574575277,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.9578490691782089,
+          "auprc": 0.9552113338078955,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.9577330879245216,
+          "auprc": 0.9550766547387625,
+          "n_pairs": 5392
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5161579909570393,
+          "auprc": 0.5235020892873576,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.514648652471185,
+          "auprc": 0.5143912697632611,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.5194154407232607,
+          "auprc": 0.5177354223625434,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.5206200360573748,
+          "auprc": 0.5178899683853296,
+          "n_pairs": 5392
+        }
+      },
+      "best_uniform": 0.9800491606424289,
+      "best_degree_matched": 0.5206200360573748
+    },
+    {
+      "retention": 0.75,
+      "seed": 46,
+      "n_positives": 13479,
+      "density": 0.0008826668049701233,
+      "n_test": 2696,
+      "degree_matched_fallback_rate": 0.010385756676557863,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9852545589025175,
+          "auprc": 0.982847910204711,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.9672536629714096,
+          "auprc": 0.9656912757900301,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.9658869965615617,
+          "auprc": 0.9641939857977786,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.9658235714631632,
+          "auprc": 0.9642429247398425,
+          "n_pairs": 5392
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5210840986536819,
+          "auprc": 0.5205837982342605,
+          "n_pairs": 5392
+        },
+        "pref_attach": {
+          "auroc": 0.5212121182937246,
+          "auprc": 0.5188896699864276,
+          "n_pairs": 5392
+        },
+        "common_neigh": {
+          "auroc": 0.5250313823534591,
+          "auprc": 0.5231152537415089,
+          "n_pairs": 5392
+        },
+        "adamic_adar": {
+          "auroc": 0.5256650830112091,
+          "auprc": 0.5231149725543346,
+          "n_pairs": 5392
+        }
+      },
+      "best_uniform": 0.9852545589025175,
+      "best_degree_matched": 0.5256650830112091
+    },
+    {
+      "retention": 0.5,
+      "seed": 42,
+      "n_positives": 8986,
+      "density": 0.0005884445366467489,
+      "n_test": 1797,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9761839509303981,
+          "auprc": 0.9732528083592892,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.9516236019409087,
+          "auprc": 0.9482961312820646,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.9447200537345214,
+          "auprc": 0.9420734904728181,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.9447036410464607,
+          "auprc": 0.9422052866326855,
+          "n_pairs": 3594
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5128299221264402,
+          "auprc": 0.5204096069980587,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.5109735851720962,
+          "auprc": 0.5106190369772158,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.5152436711281307,
+          "auprc": 0.5134313625956753,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.5162947025107387,
+          "auprc": 0.5138171152931117,
+          "n_pairs": 3594
+        }
+      },
+      "best_uniform": 0.9761839509303981,
+      "best_degree_matched": 0.5162947025107387
+    },
+    {
+      "retention": 0.5,
+      "seed": 43,
+      "n_positives": 8986,
+      "density": 0.0005884445366467489,
+      "n_test": 1797,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9759637731716961,
+          "auprc": 0.9731900561669276,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.9515869056477918,
+          "auprc": 0.9476702938275279,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.9466767248573876,
+          "auprc": 0.9437086354091957,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.9464675405029529,
+          "auprc": 0.9434905785763141,
+          "n_pairs": 3594
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5118160515469887,
+          "auprc": 0.5192647427150897,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.5084915531946059,
+          "auprc": 0.5092554175260153,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.5116852145525421,
+          "auprc": 0.5094937876356127,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.5122265235851876,
+          "auprc": 0.5099639898773933,
+          "n_pairs": 3594
+        }
+      },
+      "best_uniform": 0.9759637731716961,
+      "best_degree_matched": 0.5122265235851876
+    },
+    {
+      "retention": 0.5,
+      "seed": 44,
+      "n_positives": 8986,
+      "density": 0.0005884445366467489,
+      "n_test": 1797,
+      "degree_matched_fallback_rate": 0.0005564830272676684,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9721756937999368,
+          "auprc": 0.9673584893785154,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.9472175693799938,
+          "auprc": 0.9416772944838574,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.9403426659593727,
+          "auprc": 0.9349936771339042,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.9400809919704793,
+          "auprc": 0.934657242067071,
+          "n_pairs": 3594
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5114924428861681,
+          "auprc": 0.5198872173393622,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.5096144287966495,
+          "auprc": 0.5094866530716258,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.5142565872942879,
+          "auprc": 0.5144278011136788,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.5153878240770418,
+          "auprc": 0.515153925283148,
+          "n_pairs": 3594
+        }
+      },
+      "best_uniform": 0.9721756937999368,
+      "best_degree_matched": 0.5153878240770418
+    },
+    {
+      "retention": 0.5,
+      "seed": 45,
+      "n_positives": 8986,
+      "density": 0.0005884445366467489,
+      "n_test": 1797,
+      "degree_matched_fallback_rate": 0.0005564830272676684,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9804902686695102,
+          "auprc": 0.9769677456863353,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.9599586152522182,
+          "auprc": 0.9554035765312949,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.9505894477564011,
+          "auprc": 0.9463247925026395,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.9504835394674053,
+          "auprc": 0.9463288045010527,
+          "n_pairs": 3594
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5115615000453672,
+          "auprc": 0.5202915056334789,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.5107613040840652,
+          "auprc": 0.508523516296827,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.514127608339999,
+          "auprc": 0.5104166679025595,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.5153923143407564,
+          "auprc": 0.5110680118094799,
+          "n_pairs": 3594
+        }
+      },
+      "best_uniform": 0.9804902686695102,
+      "best_degree_matched": 0.5153923143407564
+    },
+    {
+      "retention": 0.5,
+      "seed": 46,
+      "n_positives": 8986,
+      "density": 0.0005884445366467489,
+      "n_test": 1797,
+      "degree_matched_fallback_rate": 0.0005564830272676684,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9747054154748114,
+          "auprc": 0.9712027273912142,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.9518515215336019,
+          "auprc": 0.9503829875570531,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.947398263785342,
+          "auprc": 0.945774717679378,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.947280433072,
+          "auprc": 0.9458905616684428,
+          "n_pairs": 3594
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5062436342770009,
+          "auprc": 0.5094726063345679,
+          "n_pairs": 3594
+        },
+        "pref_attach": {
+          "auroc": 0.5058570070874941,
+          "auprc": 0.5050877292808426,
+          "n_pairs": 3594
+        },
+        "common_neigh": {
+          "auroc": 0.5091787183796403,
+          "auprc": 0.5075403896373234,
+          "n_pairs": 3594
+        },
+        "adamic_adar": {
+          "auroc": 0.5109181536407212,
+          "auprc": 0.5083643312462371,
+          "n_pairs": 3594
+        }
+      },
+      "best_uniform": 0.9747054154748114,
+      "best_degree_matched": 0.5109181536407212
+    },
+    {
+      "retention": 0.25,
+      "seed": 42,
+      "n_positives": 4493,
+      "density": 0.00029422226832337444,
+      "n_test": 899,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9616889857844768,
+          "auprc": 0.9582917645470034,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.9187089597760953,
+          "auprc": 0.9105615634381379,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.885912044157332,
+          "auprc": 0.8764793683145855,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.885761710267619,
+          "auprc": 0.8761513749922041,
+          "n_pairs": 1798
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.50727170592464,
+          "auprc": 0.5080288529819526,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.5064971461307273,
+          "auprc": 0.5031530801485459,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.5028600558524425,
+          "auprc": 0.5006981561429914,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.5058593097509159,
+          "auprc": 0.5025416658985972,
+          "n_pairs": 1798
+        }
+      },
+      "best_uniform": 0.9616889857844768,
+      "best_degree_matched": 0.50727170592464
+    },
+    {
+      "retention": 0.25,
+      "seed": 43,
+      "n_positives": 4493,
+      "density": 0.00029422226832337444,
+      "n_test": 899,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9674653953657568,
+          "auprc": 0.964992572698378,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.9357208169749852,
+          "auprc": 0.9280104705602114,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.8985425655251601,
+          "auprc": 0.8912822547390303,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.8985029714142893,
+          "auprc": 0.8904959845414013,
+          "n_pairs": 1798
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5073348090388405,
+          "auprc": 0.507952173734621,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.5063381510292613,
+          "auprc": 0.5043923702913654,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.5081805145007244,
+          "auprc": 0.5034197962980281,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.5072927402960402,
+          "auprc": 0.5015406678001764,
+          "n_pairs": 1798
+        }
+      },
+      "best_uniform": 0.9674653953657568,
+      "best_degree_matched": 0.5081805145007244
+    },
+    {
+      "retention": 0.25,
+      "seed": 44,
+      "n_positives": 4493,
+      "density": 0.00029422226832337444,
+      "n_test": 899,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.965673761848847,
+          "auprc": 0.9632404696734553,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.9256602008658738,
+          "auprc": 0.9244017887456847,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.892748214862392,
+          "auprc": 0.8909001637728957,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.8924364112392833,
+          "auprc": 0.8909984820960117,
+          "n_pairs": 1798
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5083308483904374,
+          "auprc": 0.5120742330926069,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.5069425798780254,
+          "auprc": 0.5061821295267901,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.5088610382813187,
+          "auprc": 0.5103305460341085,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.5110263412195728,
+          "auprc": 0.5123283419821312,
+          "n_pairs": 1798
+        }
+      },
+      "best_uniform": 0.965673761848847,
+      "best_degree_matched": 0.5110263412195728
+    },
+    {
+      "retention": 0.25,
+      "seed": 45,
+      "n_positives": 4493,
+      "density": 0.00029422226832337444,
+      "n_test": 899,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9628594866870989,
+          "auprc": 0.9605032105198189,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.9263747508354975,
+          "auprc": 0.9231394482021396,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.893256133065908,
+          "auprc": 0.8917418538057835,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.8930408400880473,
+          "auprc": 0.8919861340772188,
+          "n_pairs": 1798
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5060591362792177,
+          "auprc": 0.5026041600426601,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.5030110084001381,
+          "auprc": 0.5010181256802394,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.5050284520806088,
+          "auprc": 0.5017980218327919,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.5057089758612029,
+          "auprc": 0.5027721300538674,
+          "n_pairs": 1798
+        }
+      },
+      "best_uniform": 0.9628594866870989,
+      "best_degree_matched": 0.5060591362792177
+    },
+    {
+      "retention": 0.25,
+      "seed": 46,
+      "n_positives": 4493,
+      "density": 0.00029422226832337444,
+      "n_test": 899,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9628712411887637,
+          "auprc": 0.9609131926563867,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.9281094678180305,
+          "auprc": 0.9253346351730782,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.8987980712718743,
+          "auprc": 0.8961553265215451,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.8984324444043005,
+          "auprc": 0.8956681808837088,
+          "n_pairs": 1798
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5109199320466072,
+          "auprc": 0.51604129927051,
+          "n_pairs": 1798
+        },
+        "pref_attach": {
+          "auroc": 0.5070625995266029,
+          "auprc": 0.5105256596454858,
+          "n_pairs": 1798
+        },
+        "common_neigh": {
+          "auroc": 0.518745336865458,
+          "auprc": 0.521287207863136,
+          "n_pairs": 1798
+        },
+        "adamic_adar": {
+          "auroc": 0.519686315656625,
+          "auprc": 0.5220227477006346,
+          "n_pairs": 1798
+        }
+      },
+      "best_uniform": 0.9628712411887637,
+      "best_degree_matched": 0.519686315656625
+    },
+    {
+      "retention": 0.1,
+      "seed": 42,
+      "n_positives": 1797,
+      "density": 0.00011767581041110702,
+      "n_test": 359,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9194605876739006,
+          "auprc": 0.9069614278968765,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.8408066355785571,
+          "auprc": 0.8255057790932043,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.6592825940208409,
+          "auprc": 0.647001698413785,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.6593330281422397,
+          "auprc": 0.647324608684992,
+          "n_pairs": 718
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5005314980485874,
+          "auprc": 0.4998064910925396,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.49915037903182,
+          "auprc": 0.5021638280988564,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.48644098043931994,
+          "auprc": 0.5012824520562912,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.48533918886414595,
+          "auprc": 0.5009439670342724,
+          "n_pairs": 718
+        }
+      },
+      "best_uniform": 0.9194605876739006,
+      "best_degree_matched": 0.5005314980485874
+    },
+    {
+      "retention": 0.1,
+      "seed": 43,
+      "n_positives": 1797,
+      "density": 0.00011767581041110702,
+      "n_test": 359,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.920546861057875,
+          "auprc": 0.9193587276293943,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.8377185155298298,
+          "auprc": 0.8376767442878632,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.6551082005881395,
+          "auprc": 0.6537747303764017,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.6553875280297329,
+          "auprc": 0.6568276203707781,
+          "n_pairs": 718
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5024441151139424,
+          "auprc": 0.5170478968575835,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.5025449833567399,
+          "auprc": 0.5072983774014197,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.49370737346854854,
+          "auprc": 0.49834763638198004,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.4951234084155151,
+          "auprc": 0.4963508320735849,
+          "n_pairs": 718
+        }
+      },
+      "best_uniform": 0.920546861057875,
+      "best_degree_matched": 0.5025449833567399
+    },
+    {
+      "retention": 0.1,
+      "seed": 44,
+      "n_positives": 1797,
+      "density": 0.00011767581041110702,
+      "n_test": 359,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9305328170948395,
+          "auprc": 0.9283268162810729,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.8696045188972773,
+          "auprc": 0.8664832448543491,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.6831030175122789,
+          "auprc": 0.6812606608142948,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.6827267013756877,
+          "auprc": 0.6816259394550447,
+          "n_pairs": 718
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5049813393750824,
+          "auprc": 0.4990730562867721,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.5031191564311264,
+          "auprc": 0.5003844991742348,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.5032083860305243,
+          "auprc": 0.5100089556836608,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.504620541429691,
+          "auprc": 0.5195617348169631,
+          "n_pairs": 718
+        }
+      },
+      "best_uniform": 0.9305328170948395,
+      "best_degree_matched": 0.5049813393750824
+    },
+    {
+      "retention": 0.1,
+      "seed": 45,
+      "n_positives": 1797,
+      "density": 0.00011767581041110702,
+      "n_test": 359,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9174781387481477,
+          "auprc": 0.9165475298588196,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.8354334618756838,
+          "auprc": 0.8329574631275041,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.6585532390344582,
+          "auprc": 0.6565426361171247,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.6584834071740598,
+          "auprc": 0.6554982640882158,
+          "n_pairs": 718
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5039028250867078,
+          "auprc": 0.5113699093722975,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.5031191564311264,
+          "auprc": 0.5055545913069229,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.49041363738642624,
+          "auprc": 0.5020715568995314,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.48895104786586074,
+          "auprc": 0.5003388123283417,
+          "n_pairs": 718
+        }
+      },
+      "best_uniform": 0.9174781387481477,
+      "best_degree_matched": 0.5039028250867078
+    },
+    {
+      "retention": 0.1,
+      "seed": 46,
+      "n_positives": 1797,
+      "density": 0.00011767581041110702,
+      "n_test": 359,
+      "degree_matched_fallback_rate": 0.0,
+      "uniform": {
+        "gene_degree": {
+          "auroc": 0.9281740520324951,
+          "auprc": 0.9225385873673712,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.86356406297282,
+          "auprc": 0.8623369076707963,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.6643997175689201,
+          "auprc": 0.6580665634852612,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.6651019157207037,
+          "auprc": 0.6629331745027105,
+          "n_pairs": 718
+        }
+      },
+      "degree_matched": {
+        "gene_degree": {
+          "auroc": 0.5106144427805495,
+          "auprc": 0.5187044993705233,
+          "n_pairs": 718
+        },
+        "pref_attach": {
+          "auroc": 0.506905595083837,
+          "auprc": 0.5119872218131674,
+          "n_pairs": 718
+        },
+        "common_neigh": {
+          "auroc": 0.5151379955152428,
+          "auprc": 0.5098666660758696,
+          "n_pairs": 718
+        },
+        "adamic_adar": {
+          "auroc": 0.5176170265593842,
+          "auprc": 0.5101776310280158,
+          "n_pairs": 718
+        }
+      },
+      "best_uniform": 0.9281740520324951,
+      "best_degree_matched": 0.5176170265593842
+    }
+  ],
+  "generated_utc": "2026-08-22T16:41:36.536190+00:00"
+}

@@ -46,11 +46,48 @@ Bonus: extracting each paper's own headline number for this audit filled in four
 extracted" cells left open in the original literature survey (HLGNN-MDA, CKSNP-GNN, MEAHNE,
 CoupleMDA) — `results/literature_survey.tsv` and `LITERATURE_SURVEY.md` updated accordingly.
 
+## Seven papers, five distinct graphs (found 2026-08-22)
+
+**MGCNSS, NIMGSA and HLGNN-MDA evaluate on the same matrix.** Their three `matrix.csv` files
+differ only in float formatting (`1,0,0` vs `1.000000000000000000e+00`), so their md5s differ,
+but the parsed tensors are `torch.equal` — 495 x 383, 5,430 associations, the canonical
+HMDD v3.2 benchmark. This was known at download time and is stated in
+`data/01_download/download_hmdd_survey_canonical5430.py` ("One fetch of the canonical matrix
+serves all three"); what was missing is that it never reached the manuscript, whose Table 3 and
+prose read as seven independent graphs.
+
+| Graph | Shape | Positives | Density | Papers |
+|---|---|---:|---:|---|
+| canonical-5430 | 495 x 383 | 5,430 | 0.02864 | **MGCNSS, NIMGSA, HLGNN-MDA** |
+| CKSNP-GNN | 901 x 877 | 16,427 | 0.02079 | CKSNP-GNN |
+| DiGAMN | 917 x 792 | 14,550 | 0.02003 | DiGAMN |
+| CoupleMDA | 2,090 x 1,754 | 15,032 | 0.00410 | CoupleMDA |
+| MEAHNE | 1,296 x 11,783 | 17,972 | 0.00118 | MEAHNE |
+
+Consequences, all now propagated to `manuscript/jbi/main.tex` and
+`manuscript/jbi/tables/table5_hmdd_survey_audit.tex`:
+
+- NIMGSA and HLGNN-MDA produce **bit-identical** model-free numbers in every cell (same graph,
+  same generated split, same seed). MGCNSS differs (0.9136 vs 0.8680) only because it is scored
+  on the paper's own bundled Tier-1 split.
+- The mean gap is now reported **both ways**: -0.047 per paper (7), -0.039 per distinct graph (5).
+  The per-paper mean is weighted 3x toward one benchmark.
+- "Ten independently-sourced graphs" was inaccurate: ten cases, **eight distinct graphs**.
+
+That much of this subfield validates on one shared dataset is itself a finding about its
+evaluation practice, and is reported as such rather than quietly corrected.
+
+**Also corrected in the same pass:** the Abstract claimed the gap "reverses on the two sparsest
+graphs, where the heuristic beats the paper's own trained model." It reverses on **one** —
+MEAHNE (+0.033). On CoupleMDA the heuristic still loses, by 1.3 points. Results §4.5 already
+stated this correctly; the Abstract and the Discussion's sixth limitation did not.
+
 ## What this does — and does not — license us to say
 
-**We CAN say:** across seven independently-sourced miRNA-disease datasets, a no-learning
-topology heuristic averages 4.7 AUROC points below the papers' own trained-model numbers — a
-real, quantified gap, not our own graph's finding by inference alone. **But the gap is highly
+**We CAN say:** across seven externally-sourced miRNA-disease papers — five distinct graphs, see
+the section above — a no-learning topology heuristic averages 4.7 AUROC points below the papers'
+own trained-model numbers (3.9 averaging per graph) — a real, quantified gap, not our own graph's
+finding by inference alone. **But the gap is highly
 graph-dependent**, ranging from −9.2 points (DiGAMN) to **+3.3 points** (MEAHNE, where the
 heuristic outright beats the trained model) and −1.3 points (CoupleMDA, essentially tied). Two
 of seven papers — the two with the sparsest graphs relative to their node counts (MEAHNE:
@@ -73,14 +110,67 @@ measurable benefit over popularity alone.**
   version, size, and density; only each row's own within-paper comparison (theirs vs. ours, same
   data) is apples-to-apples.
 
-**The honest framing for the manuscript:** *sparser graphs make the popularity ceiling higher
-relative to what a trained model can add* — this is a mechanism-level explanation for why the
-gap varies as much as it does, and it is itself a useful, falsifiable claim a future paper could
-test directly (does the gap shrink monotonically with edge density?).
+**The honest framing for the manuscript — REVISED 2026-08-22, the first version was wrong.**
+The earlier framing claimed *sparser graphs make the popularity ceiling higher relative to what a
+trained model can add*. It was tested and **refuted**; see the next section.
+
+## Density hypothesis: tested and refuted; the real mechanism is dead candidate columns
+
+`analysis/density_sweep.py`, 5 seeds per point. Artifacts: `results/comparison/
+density_sweep_{canonical5430,cksnp_gnn,digamn,meahne,couplemda,padding}.json`.
+
+**Between graphs, the correlation was never there.** Gap vs. density over the five distinct
+graphs gives Spearman rho=+0.70, p=0.19 (per paper, n=7: +0.59, p=0.16). Right direction, no
+significance, and DiGAMN breaks the ordering — dense, yet the largest gap of all.
+
+**Within a graph, the effect runs BACKWARDS.** Subsampling positives from each graph
+(100/75/50/25/10% retention) makes the model-free floor *fall*, monotonically, in all five:
+
+| Graph | floor @100% | floor @10% | rho vs density |
+|---|--:|--:|--:|
+| canonical-5430 | 0.868 | 0.836 | +0.60 |
+| CKSNP-GNN | 0.873 | 0.814 | +0.90 |
+| DiGAMN | 0.882 | 0.830 | +1.00 |
+| CoupleMDA | 0.944 | 0.899 | +1.00 |
+| MEAHNE | 0.985 | 0.923 | +1.00 |
+
+The degree-matched control falls too (0.56 → 0.51), so this is not a popularity effect either;
+removing edges simply makes every degree estimate noisier. **Sparsity does not explain MEAHNE.**
+
+**What does: the fraction of disease columns with degree zero.**
+
+| Graph | Columns | Dead columns | Degree Gini | Floor |
+|---|--:|--:|--:|--:|
+| canonical-5430 | 383 | 0.0% | 0.712 | 0.8680 |
+| CKSNP-GNN | 877 | 0.0% | 0.713 | 0.8822 |
+| DiGAMN | 792 | 0.0% | 0.723 | 0.8714 |
+| CoupleMDA | 1,754 | 55.7% | 0.874 | 0.9406 |
+| MEAHNE | 11,783 | **92.4%** | 0.979 | **0.9848** |
+
+Dead-column fraction vs. floor: rho=+0.89, p=0.041; density: rho=−0.90, p=0.037 (i.e. the
+between-graph density correlation is real but is a *proxy* for this).
+
+**Confirmed causally, not just correlationally.** Pad canonical-5430 — which has no dead columns
+— with empty disease columns. Padding adds no edges, no features, nothing but candidate slots
+that can never be positive:
+
+| Empty columns added | Total columns | Dead | Model-free floor |
+|--:|--:|--:|--:|
+| 0 | 383 | 0.0% | 0.8591 ± 0.0141 |
+| 500 | 883 | 56.6% | 0.9361 ± 0.0053 |
+| 2,000 | 2,383 | 83.9% | 0.9701 ± 0.0047 |
+| 5,000 | 5,383 | 92.9% | 0.9791 ± 0.0048 |
+| 11,400 | 11,783 | 96.7% | 0.9817 ± 0.0056 |
+
+At 92.9% dead columns — MEAHNE's own level — a graph with none of MEAHNE's data reaches 0.9791,
+reproducing MEAHNE's 0.9848 almost exactly. **An AUROC reported under uniform negatives is partly
+a measure of how a dataset padded its candidate space, and a padded dataset hands that inflation
+to a trained model and a one-line heuristic alike.** This is a stronger, more mechanistic version
+of this paper's own thesis than the density story it replaces, and it is a claim about dataset
+construction plus protocol, not about anyone's architecture.
 
 ## Still to do
 
-- Fold into `manuscript/jbi/main.tex` — not done in this pass, results-first per the OGB
-  extension's own sequencing.
-- The graph-density-explains-the-gap observation above is a hypothesis, not yet tested; doing so
-  would need edge density computed per paper and a correlation against the gap column.
+- Propagate the refutation into `manuscript/jbi/main.tex` §4.5, which still carries the old
+  sparsity mechanism sentence.
+- Dead-column fraction is not yet reported per graph in the manuscript's Table 3.
