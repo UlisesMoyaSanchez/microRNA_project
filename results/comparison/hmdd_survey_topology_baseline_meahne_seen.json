@@ -1,0 +1,63 @@
+{
+  "paper": "meahne",
+  "tier": 2,
+  "edge_regime": "seen",
+  "n_mirna": 1296,
+  "n_disease": 11783,
+  "n_positives_total": 17972,
+  "seed": 42,
+  "best_model_free_auroc": 0.9907694113326204,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.9907694113326204,
+        "auprc": 0.9885184972109254,
+        "n_pairs": 7188
+      },
+      "pref_attach": {
+        "auroc": 0.9889309967239654,
+        "auprc": 0.9865291289392959,
+        "n_pairs": 7188
+      },
+      "common_neigh": {
+        "auroc": 0.9852099616345673,
+        "auprc": 0.9836972754102218,
+        "n_pairs": 7188
+      },
+      "adamic_adar": {
+        "auroc": 0.985431300668368,
+        "auprc": 0.9838563543303757,
+        "n_pairs": 7188
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5634186266667781,
+        "auprc": 0.5734787753812907,
+        "n_pairs": 7188
+      },
+      "pref_attach": {
+        "auroc": 0.5673495815848402,
+        "auprc": 0.5832396260717686,
+        "n_pairs": 7188
+      },
+      "common_neigh": {
+        "auroc": 0.5785253834607794,
+        "auprc": 0.5972043811145364,
+        "n_pairs": 7188
+      },
+      "adamic_adar": {
+        "auroc": 0.5813125598250222,
+        "auprc": 0.5967220112755767,
+        "n_pairs": 7188
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.952,
+    "negative_sampling": "uniform random, 1:1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9655430/",
+    "caveat": "0.9520 is MEAHNE's own reported number (Table 3) on a 70/10/20 train/val/ test split, 1:1 negatives. No split file is bundled; this run uses a single random 80/20 edge split (matching their test fraction) with 1:1 uniform negatives as an approximation, not a reproduction of their exact split.\n"
+  }
+}
