@@ -1,0 +1,26 @@
+{
+  "paper": "digamn",
+  "edge_regime": "held_out",
+  "seed": 7,
+  "n_mirna": 917,
+  "n_disease": 792,
+  "n_associations": 14550,
+  "encoder_edges_visible": 11640,
+  "n_train_sup": 3492,
+  "n_test": 1455,
+  "training_negatives": "uniform",
+  "best_val_auroc": 0.8680691064111195,
+  "results": {
+    "uniform": {
+      "auroc": 0.878191329814244,
+      "auprc": 0.8828449623910015,
+      "n_pairs": 2910
+    },
+    "degree_matched": {
+      "auroc": 0.5546004416575147,
+      "auprc": 0.5577203288362925,
+      "n_pairs": 2910
+    }
+  },
+  "generated_utc": "2026-08-22T17:12:40.033217+00:00"
+}

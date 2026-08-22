@@ -1,0 +1,26 @@
+{
+  "paper": "meahne",
+  "edge_regime": "seen",
+  "seed": 42,
+  "n_mirna": 1296,
+  "n_disease": 11783,
+  "n_associations": 17972,
+  "encoder_edges_visible": 17972,
+  "n_train_sup": 4313,
+  "n_test": 1797,
+  "training_negatives": "degree_matched",
+  "best_val_auroc": 0.7250766364146761,
+  "results": {
+    "uniform": {
+      "auroc": 0.8745256191222062,
+      "auprc": 0.8968749189652332,
+      "n_pairs": 3594
+    },
+    "degree_matched": {
+      "auroc": 0.7123698094486917,
+      "auprc": 0.7489413124833387,
+      "n_pairs": 3594
+    }
+  },
+  "generated_utc": "2026-08-22T17:09:48.776694+00:00"
+}
