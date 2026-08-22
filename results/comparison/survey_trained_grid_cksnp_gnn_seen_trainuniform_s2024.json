@@ -1,0 +1,26 @@
+{
+  "paper": "cksnp_gnn",
+  "edge_regime": "seen",
+  "seed": 2024,
+  "n_mirna": 901,
+  "n_disease": 877,
+  "n_associations": 16427,
+  "encoder_edges_visible": 16427,
+  "n_train_sup": 3942,
+  "n_test": 1642,
+  "training_negatives": "uniform",
+  "best_val_auroc": 0.8836906805372373,
+  "results": {
+    "uniform": {
+      "auroc": 0.8772277947483906,
+      "auprc": 0.8815010530260852,
+      "n_pairs": 3284
+    },
+    "degree_matched": {
+      "auroc": 0.6219714379392351,
+      "auprc": 0.6221460652062696,
+      "n_pairs": 3284
+    }
+  },
+  "generated_utc": "2026-08-22T17:25:34.340441+00:00"
+}

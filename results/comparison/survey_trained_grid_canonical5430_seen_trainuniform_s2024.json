@@ -1,0 +1,26 @@
+{
+  "paper": "canonical5430",
+  "edge_regime": "seen",
+  "seed": 2024,
+  "n_mirna": 495,
+  "n_disease": 383,
+  "n_associations": 5430,
+  "encoder_edges_visible": 5430,
+  "n_train_sup": 1303,
+  "n_test": 543,
+  "training_negatives": "uniform",
+  "best_val_auroc": 0.8916462324783194,
+  "results": {
+    "uniform": {
+      "auroc": 0.8790499543834303,
+      "auprc": 0.8929684224352938,
+      "n_pairs": 1086
+    },
+    "degree_matched": {
+      "auroc": 0.6680775583434233,
+      "auprc": 0.6925757832336248,
+      "n_pairs": 1086
+    }
+  },
+  "generated_utc": "2026-08-22T17:24:27.614461+00:00"
+}
