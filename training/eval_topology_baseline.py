@@ -126,9 +126,18 @@ def main() -> None:
     # Split-suffixed: a --split test run must not silently clobber the val artifact.
     p.add_argument("--out", default=None,
                    help="Default: results/comparison/topology_baseline_<split>.json")
+    p.add_argument("--edge-regime", default="held_out", choices=["held_out", "seen"],
+                   help="Which edges the heuristics may see. held_out is the corrected "
+                        "protocol and the default, so an un-flagged run reproduces the "
+                        "published artifacts; seen is the conventional protocol, in "
+                        "which the scored edges were never masked from the graph. "
+                        "Crossed with the two negative samplers this gives the same 2x2 "
+                        "protocol grid measured on the surveyed papers' graphs by "
+                        "eval_hmdd_survey_topology_baseline.py.")
     args = p.parse_args()
     if args.out is None:
-        args.out = f"results/comparison/topology_baseline_{args.split}.json"
+        suffix = "" if args.edge_regime == "held_out" else f"_{args.edge_regime}"
+        args.out = f"results/comparison/topology_baseline_{args.split}{suffix}.json"
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     log = logging.getLogger(__name__)
@@ -169,11 +178,19 @@ def main() -> None:
         f"train_sup {split.train_sup.shape[1]:,})"
     )
 
-    A = torch.zeros((n_mirna, n_gene))
-    A[train_edges[0].long(), train_edges[1].long()] = 1.0
-
     scored_pos = split.val_sup if args.split == "val" else split.test_sup
     log.info(f"Scoring {scored_pos.shape[1]:,} held-out {args.split} edges")
+
+    # The ONLY thing the edge regime changes. Negatives and scored pairs are identical
+    # either way, so the difference between the two rows is the protocol alone.
+    if args.edge_regime == "held_out":
+        visible = train_edges
+    else:
+        visible = torch.cat([train_edges, scored_pos], dim=1)
+        log.info(f"edge-regime=seen: the {scored_pos.shape[1]:,} scored edges are left "
+                 f"in the graph the heuristics see (the conventional protocol's leak)")
+    A = torch.zeros((n_mirna, n_gene))
+    A[visible[0].long(), visible[1].long()] = 1.0
 
     # Same negatives as the model saw: degree bins from TRAINING edges only.
     deg = gene_in_degree(train_edges, n_gene)
@@ -233,8 +250,10 @@ def main() -> None:
 
     summary = {
         "split": args.split,
+        "edge_regime": args.edge_regime,
         "n_held_out_edges": int(k),
         "train_edges_visible": int(train_edges.shape[1]),
+        "edges_visible_to_scorers": int(visible.shape[1]),
         "hgt_v2_edgesplit_auroc_reference": 0.6268,
         "best_model_free_degree_matched": float(best),
         "results": results,

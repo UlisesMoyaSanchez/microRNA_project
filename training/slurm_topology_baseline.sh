@@ -37,6 +37,16 @@ set -u
 
 CONFIG="${CONFIG:-configs/config_v2_edgesplit.yaml}"
 SPLIT="${SPLIT:-val}"
+REGIME="${REGIME:-held_out}"
+if [[ "${REGIME}" != "held_out" && "${REGIME}" != "seen" ]]; then
+    echo "error: REGIME must be held_out or seen, got '${REGIME}'" >&2
+    exit 1
+fi
+if [[ "${REGIME}" == "seen" ]]; then
+    SUFFIX="_seen"
+else
+    SUFFIX=""
+fi
 
 echo "========================================"
 echo "Job:    ${SLURM_JOB_ID:-local}"
@@ -44,17 +54,19 @@ echo "Node:   $(hostname)"
 echo "Date:   $(date)"
 echo "Config: ${CONFIG}"
 echo "Split:  ${SPLIT}"
+echo "Regime: ${REGIME}"
 echo "========================================"
 echo ""
 
 python training/eval_topology_baseline.py \
     --config "${CONFIG}" \
-    --split "${SPLIT}"
+    --split "${SPLIT}" \
+    --edge-regime "${REGIME}"
 
 echo ""
 echo "========================================"
 echo "Results:"
-cat "results/comparison/topology_baseline_${SPLIT}.json"
+cat "results/comparison/topology_baseline_${SPLIT}${SUFFIX}.json"
 echo ""
 echo "Done: $(date)"
 echo "========================================"
