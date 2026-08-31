@@ -52,7 +52,12 @@ checkpoints/
 checkpoints_v2/
 checkpoints_v3/
 checkpoints_v4/
+checkpoints_v3fixed_edgesplit/
 logs/
+
+# Pre-run snapshots kept on the DGX so a re-run can be compared against what it
+# replaced. Regenerable by definition and never an input to the manuscript.
+results/comparison/pre_overfit_diag_backup/
 
 # LaTeX build artifacts (presentation/)
 *.aux
