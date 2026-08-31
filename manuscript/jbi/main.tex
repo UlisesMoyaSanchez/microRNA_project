@@ -86,43 +86,39 @@ Inflate microRNA--Target Link Prediction}
 interactions routinely report AUROC in the 0.91--0.99 range without a model-free
 baseline -- a simple, no-learning scorer (e.g.\ node degree) used as a sanity-check
 floor. We audit whether this subfield's evaluation practice inflates reported
-performance, using our own graph as a primary case and nine further cases as
-validation.
+performance, across ten cases spanning eight distinct graphs.
 
 \textbf{Methods:} A literature audit of 22 such papers checked split handling,
 negative sampling, and model-free-baseline reporting. For the primary case, we built a
 heterogeneous graph from a single-cell RNA-seq cohort and miRDB v6.0
 interactions, trained a graph transformer, and compared a conventional
-protocol against one correcting edge leakage and negative-sampling bias. The same
-heuristics were computed on nine further cases: two OGB benchmarks and seven
-survey-paper datasets.
+protocol against one correcting edge leakage and negative-sampling bias. The same heuristics, and the same
+architecture retrained under both protocols, were then applied to nine further cases:
+two OGB benchmarks and seven survey-paper datasets.
 
-\textbf{Results:} None of the 22 papers report a model-free baseline; 16 of 22 use
-uniformly-sampled negatives. On our graph the conventional protocol reports AUROC
-0.9867 $\pm$ 0.0011; correcting both flaws drops this to 0.6276 $\pm$ 0.0070, within
-3.6 points of a no-learning heuristic (0.5912). Inflation (0.24--0.31) recurs across
-six architectures and is super-additive, while an untrained control does not move. A
+\textbf{Results:} None of the 22 papers report a model-free baseline; 16 use
+uniformly-sampled negatives. Retraining one architecture under both protocols on six
+graphs -- ours and five from the surveyed papers -- collapses AUROC from 0.879--0.992
+to 0.618--0.641 on every one. On our graph, instrumented in full, the two
+protocols report 0.9867 $\pm$ 0.0011 and 0.6276 $\pm$ 0.0070, the latter within 3.6
+points of a no-learning heuristic (0.5912); the inflation recurs across six
+architectures and is super-additive, while an untrained control does not move. A
 similar cell-typing task reaches 0.9916 accuracy, surviving an analogous control by 32
-points. On two OGB benchmarks, our heuristics reproduce the published
-leaderboard exactly and rank competitively against trained methods. On seven surveyed
-papers' own miRNA-disease datasets (five distinct graphs; three papers share one
-canonical matrix), trained models beat the topology floor by 4.7 points per paper and
-3.9 per graph, but the margin all but vanishes on the two sparsest graphs and reverses
-on the sparsest.
+points. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against the seven papers' own reported numbers,
+trained models beat the topology floor by 4.7 points per paper and 3.9 per graph, though
+the heuristic wins outright on the sparsest.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
-any one architecture, dataset, or subfield, and this literature's reporting
-practice does not check for it. We propose a minimum reporting standard: an automated
+any one architecture or dataset, and this literature does not check for it. We propose a minimum reporting standard: an automated
 leak-free split check and at least one model-free baseline.
 \end{abstract}
 
 \begin{highlights}
-\item Conventional GNN evaluation reports AUROC 0.99 on a real miRNA--target graph.
-\item Fixing edge leakage and negative-sampling bias together drops it to 0.63.
+\item One protocol collapse on six graphs: 0.88--0.99 all fall to 0.62--0.64.
+\item On our own graph the same two fixes drop a reported 0.9867 to 0.6276.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
 \item Inflation of 0.24--0.31 AUROC recurs across six independent architectures.
 \item A cell-typing control task shows the audit is not indiscriminate.
-\item On 7 of 22 surveyed papers, the heuristic beats one trained model outright.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
 
@@ -171,18 +167,18 @@ literature and this subfield's own reporting practice -- the general-ML literatu
 already knows how to check for these pitfalls, but this subfield's papers do not apply
 the check.
 
-This paper is structured as an audit of that gap, not a single case report: we
-quantify what it costs on our own graph as a fully-instrumented primary case, then
-test whether the same pattern holds on nine further, externally-sourced cases --
-two public link-prediction benchmarks and seven of the 22 surveyed papers' own
-datasets, spanning seven distinct graphs, since three of those papers share one
-canonical benchmark matrix -- so the finding does not rest on our graph alone. Concretely, this paper's
-contribution is fourfold: it quantifies what the gap costs on a real biomedical
-interaction graph; shows the two pitfalls compound rather than simply add; shows the
-cost recurs across independently trained architectures rather than being an artifact
-of any single model; and shows the same model-free floor is high enough to matter when
-measured directly on other papers' own data -- on two of the seven, decisive -- rather
-than only inferred by analogy.
+This paper is structured as an audit of that gap, not a single case report. We measure
+what the gap costs by retraining one architecture under both protocols on six graphs --
+our own, which we built and can instrument in full, and five taken from the surveyed
+papers themselves -- and by comparing nine further externally-sourced cases against a
+no-learning floor: two public link-prediction benchmarks and seven of the 22 surveyed
+papers' own datasets. Concretely, this paper's contribution is fourfold: it
+shows the conventional protocol inflates a trained model by 0.26--0.37 AUROC on every
+graph tested, not only on ours; shows the two pitfalls compound rather than simply add;
+shows the cost recurs across independently trained architectures rather than being an
+artifact of any single model; and shows the same model-free floor is high enough to
+matter when measured directly on other papers' own data -- on two of the seven,
+decisive -- rather than only inferred by analogy.
 
 \section{Related Work}
 \label{sec:related}
@@ -421,10 +417,86 @@ reported throughout this paper reflect those corrections (see Discussion).
 \section{Results}
 \label{sec:results}
 
-\subsection{The general pattern across ten cases spanning eight distinct graphs}
-Before the fully-instrumented primary case, Table~\ref{tab:validation_cases} previews
-the pattern this paper audits across all ten cases examined: our own miRNA-target
-graph, two public OGB link-prediction benchmarks (ogbl-ddi, ogbl-ppa)
+\subsection{The protocol collapse is a property of the protocol, not of our graph}
+\label{sec:collapse_general}
+The central measurement of this paper -- what a conventional evaluation protocol costs a
+trained model -- can be made on any graph whose association matrix can be obtained, and we
+make it on six. Training this paper's architecture from scratch on each of the five
+distinct graphs behind the seven surveyed papers, under a protocol we control rather than
+each paper's own, reproduces the same collapse every time
+(Figure~\ref{fig:cross_graph_collapse}, Table~\ref{tab:discrimination}): AUROC between
+0.8789 and 0.9919 under the conventional protocol -- edges visible to the encoder during
+message passing, negatives drawn uniformly at random -- falling to between 0.6182 and
+0.6406 once test edges are held out and negatives are degree-matched. Six graphs that
+share no data, no node types and no size land inside the same 0.023-wide band the moment
+the protocol is corrected.
+
+The cost is $+0.256$ to $+0.365$ AUROC. Our own graph's $+0.359$ sits inside that range
+but near its upper end: only MEAHNE's $+0.365$ exceeds it. The primary case is a member
+of this distribution rather than the outlier a reader might reasonably suspect a single
+self-reported graph of being -- though it is not the median member either, and we do not
+claim it is. What follows in \S\ref{sec:primary} instruments that one case in the depth
+its data allows; the effect it dissects is the one measured here on all six.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
+\caption{The same protocol collapse on six graphs. This paper's architecture trained on
+each graph (mean over 4 seeds), under the conventional protocol (edges seen + uniform
+negatives) and the corrected one (edges held out + degree-matched negatives). Rows sorted
+by inflation; our own graph in bold. The shaded band marks the 0.618--0.641 interval every
+graph falls into once the protocol is corrected. Deliberately the same visual form as
+Figure~\ref{fig:architecture_inflation}, which shows the same collapse across six
+architectures on one graph.}
+\label{fig:cross_graph_collapse}
+\end{figure}
+
+\input{tables/table7_discrimination.tex}
+
+Closing the same grid with the four unmodified topology scorers instead of a trained
+model gives the model-free half of the same experiment on every one of these graphs
+(Table~\ref{tab:protocol_grid}), and shows the collapse is not something only a trained
+model does. Within each row the split and the negatives are held identical across all
+four cells and only the adjacency the scorers may see changes, so the cost of the
+corrected protocol is attributable to the protocol alone. That cost is $+0.316$ to
+$+0.426$ across the six graphs with a full grid, and here our own graph's $+0.342$ sits
+inside the range without approaching either edge -- squarely ordinary, where its trained
+cost above was ordinary but high. The decomposition, however, differs from ours: on these graphs the negative-sampling axis
+carries almost the entire effect ($\approx 0.30$) while the edge-split axis adds only
+$0.01$--$0.02$, whereas on our own graph the two axes were comparable and compounded
+super-additively. Held-out edges matter less here because these association matrices are
+small and their heuristics lean on node degree, which a handful of masked edges barely
+moves; the pattern is the same, its internal balance is not.
+
+\input{tables/table6_protocol_grid.tex}
+
+One asymmetry in Table~\ref{tab:discrimination} we can measure but cannot explain. The
+\emph{margin} between the trained model and the model-free floor behaves differently on
+our graph than on the other five. On all five surveyed graphs the conventional protocol
+leaves the two within 1.3 points of each other -- and puts the one-line heuristic ahead
+on three of them -- while the corrected protocol opens that margin to between 4.3 and 8.3
+points: the conventional protocol cannot tell a trained model from a degree count, and
+the corrected one can. On our own graph the margin moves the other way, narrowing from
+$+0.053$ to $+0.036$. The obvious candidate explanation is that our graph, unlike the five
+bare association matrices, carries real node features and learnable miRNA embeddings, so
+the conventional protocol lets the model memorise training edges in a way the corrected
+protocol strips -- an advantage the other five graphs have nothing to reproduce. We tested
+it and it does not hold: logging training and validation loss per epoch across all six
+runs shows the same divergence signature on every graph, including the five with nothing
+to memorise. We therefore report the asymmetry as an open observation rather than attach a
+mechanism the data does not support, on the same footing as the candidate-space
+correlation in \S\ref{sec:dead_columns}. It does not affect the figures themselves: every
+checkpoint reported here is selected at peak validation AUROC, before that divergence
+begins.
+
+\subsection{Each paper's own reported number against a no-learning floor}
+\label{sec:generalization}
+The collapse in \S\ref{sec:collapse_general} is measured with our architecture on other
+people's graphs. A separate question is how each paper's \emph{own} reported number stands
+against a no-learning floor -- the question the literature survey (Section~\ref{sec:related})
+raises but cannot answer, since it shows this subfield never reports a model-free control
+without measuring what such a control would show on the surveyed papers' own data.
+Table~\ref{tab:validation_cases} closes that gap across all ten cases examined: our own
+miRNA-target graph, two public OGB link-prediction benchmarks (ogbl-ddi, ogbl-ppa)
 \cite{hu2020ogb}, and seven of the 22 surveyed papers' own miRNA-disease datasets
 (Table~\ref{tab:literature_survey}). Ten cases are not ten independent graphs: three
 of the seven surveyed papers -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a
@@ -434,112 +506,10 @@ separate rows because each is a separate paper reporting a separate number on th
 shared benchmark, and we report the mean gap both per paper ($-0.047$) and per graph
 ($-0.039$). That a substantial share of this subfield validates on one shared dataset
 is itself a fact about its evaluation practice, not a defect of this audit.
-Comparing each case's best reported or best
-leaderboard result against a no-learning topological floor computed with the same
-unmodified scorers (Table~\ref{tab:model_free_baselines}) gives a genuinely mixed
-picture, not uniform in either direction: on ogbl-ddi the floor trails the best
-trained result by a wide margin, while on ogbl-ppa and two of the seven surveyed
-papers it matches or beats it. What is consistent across all nine external cases is
-that the comparison had essentially never been made before this audit -- only OGB
-already reports it as a matter of course. The rest of this section works through the
-evidence in two passes: first the primary case in full instrumented detail, then the
-nine validation cases in the depth their data allows (\S\ref{sec:generalization}).
+Two lines of evidence fill the table in: two public
+benchmarks with open leaderboards, then the seven papers' own data.
 
 \input{tables/table5_hmdd_survey_audit.tex}
-
-\subsection{Quantifying the inflation on the primary case}
-Under the conventional evaluation protocol -- edges visible to the encoder during
-message passing, negatives drawn uniformly at random -- the trained heterogeneous graph
-transformer reaches a test AUROC of 0.9867 $\pm$ 0.0011, averaged across four
-independent random seeds. Correcting both flaws simultaneously -- holding out test edges
-from message passing and degree-matching negatives to positives -- drops this to 0.6276
-$\pm$ 0.0070 (AUPRC 0.6598 $\pm$ 0.0049). Figure~\ref{fig:protocol_grid} and
-Table~\ref{tab:headline_grid} report the full 2$\times$2 grid crossing both corrections
-independently: fixing either flaw alone still leaves a substantially inflated number,
-and only correcting both reaches the lower figure, confirming that the two corrections
-are super-additive rather than redundant (the exact per-term attribution is
-convention-sensitive, as discussed in Methods, so we report the total rather than a
-decomposition). This result is not an artifact of a single snapshot of the graph: an
-independently applied fix to the graph-construction pipeline reproduces both the
-inflated and the corrected figures within 0.1 standard deviations, and the
-topology-only floor reported below is numerically identical before and after that fix,
-since it touched only co-expression and cell-expression edges, not the miRNA-to-gene
-topology the floor is computed from.
-
-\begin{figure}[h!]
-\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig1_protocol_grid.pdf}
-\caption{The headline protocol grid. AUROC (mean $\pm$ std, 4 seeds) crossing edge
-split (seen during message passing vs.\ held out) with negative-sampling regime
-(uniform-random vs.\ degree-matched). Correcting both flaws simultaneously costs 0.359
-AUROC points.}
-\label{fig:protocol_grid}
-\end{figure}
-
-\input{tables/table1_headline_grid.tex}
-
-\subsection{Model-free controls}
-Model-free controls place the corrected trained model close to a purely topological
-floor. The best no-learning heuristic, Adamic--Adar, reaches an AUROC of 0.5912 under
-the corrected protocol, within 3.6 points of the trained heterogeneous graph
-transformer (0.6276); Table~\ref{tab:model_free_baselines} reports all four topological
-heuristics against both negative-sampling regimes. The direction reverses under the
-conventional protocol: a heuristic that never looks at the miRNA at all, gene
-in-degree, reaches 0.8712 and outperforms the trained model (0.8056). The mechanism
-behind this reversal is directly testable: a model trained with uniform negatives and
-then evaluated against degree-matched negatives collapses toward chance, AUROC 0.5352
-$\pm$ 0.0202, indistinguishable from the gene-degree heuristic's floor -- direct
-evidence that uniform-negative training teaches the model to exploit gene popularity
-rather than miRNA-specific target information. Figure~\ref{fig:negative_sampler_collapse}
-shows this mismatch-induced collapse is not specific to the heterogeneous transformer:
-it recurs across every trained architecture in the grid.
-
-\begin{figure}[h!]
-\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
-\caption{The mismatch mechanism: every architecture trained with uniform negatives,
-evaluated under both negative regimes. Matched-negative evaluation collapses every
-trained model toward the gene-degree heuristic's floor; the untrained control does not
-move.}
-\label{fig:negative_sampler_collapse}
-\end{figure}
-
-\input{tables/table2_model_free_baselines.tex}
-
-\subsection{The inflation generalizes across architectures}
-Extending the protocol grid across six independently trained architectures -- the
-heterogeneous graph transformer, a homogeneous GCN, a co-expression ablation, a
-graph-free MLP, an untrained random-weight control, and a no-miRNA-input ablation
-retained as a smoke test -- shows the inflation is not a property of any single model.
-Every trained architecture inflates by 0.24--0.31 AUROC points between the conventional
-and corrected protocols, including the graph-free MLP, which never sees the graph
-topology at all; the untrained control, by contrast, does not move ($-0.004$). Each
-architecture here is measured from a single training run rather than averaged across
-seeds, but the inflation magnitude is an order of magnitude larger than the
-seed-to-seed spread measured elsewhere in this study (0.005--0.02 AUROC points), so the
-qualitative pattern does not depend on averaging away noise. Figure~\ref{fig:architecture_inflation}
-plots the full comparison, and Table~\ref{tab:architecture_grid} gives the numeric
-grid, including the no-miRNA-input smoke test. A secondary finding emerges from the
-same grid: under the corrected protocol, a plain homogeneous GCN (0.6236) outperforms
-the heterogeneous graph transformer (0.6080) -- the added architectural complexity this
-project was originally built around does not earn its keep even against the simplest
-graph-based baseline.
-
-\begin{figure}[h!]
-\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
-\caption{Inflation between the conventional and corrected protocols, across five
-architectures plus an untrained control. Single seed (42); the inflation magnitude
-(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). Full numeric
-grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}.}
-\label{fig:architecture_inflation}
-\end{figure}
-
-\input{tables/tableS1_architecture_grid.tex}
-
-\subsection{The nine validation cases in detail}
-\label{sec:generalization}
-The literature survey (Section~\ref{sec:related}) shows this subfield never reports a
-model-free control, but stops short of measuring what that control would show on the
-surveyed papers' own data -- it argues by analogy to our graph. Two independent lines
-of evidence close that gap.
 
 \textbf{Two public OGB benchmarks.} On ogbl-ddi (drug--drug interaction) and ogbl-ppa
 (protein--protein association), both verified leak-free at runtime by the same check
@@ -582,23 +552,8 @@ CoupleMDA's the two are within 1.3 points. Sanity-checking with degree-matched
 negatives collapses every heuristic on every paper to 0.55--0.58, confirming the
 uniform-negative numbers reflect a genuine popularity ceiling rather than a data error.
 
-Running the same scorers under both edge regimes as well closes the full protocol grid
-on every one of these graphs (Table~\ref{tab:protocol_grid}), so the two-factor
-experiment of \S\ref{sec:results} is no longer something we can only perform on our own
-data. Within each row the split and the negatives are held identical across all four
-cells and only the adjacency the scorers may see changes, so the cost of the corrected
-protocol is attributable to the protocol alone. That cost is $+0.316$ to $+0.426$ across
-the six graphs with a full grid, and our own graph's $+0.342$ sits inside that range
-rather than at either edge -- the primary case is an ordinary member of this
-distribution, not the extreme one a reader might reasonably suspect it of being. The
-decomposition, however, differs from ours: on these graphs the negative-sampling axis
-carries almost the entire effect ($\approx 0.30$) while the edge-split axis adds only
-$0.01$--$0.02$, whereas on our own graph the two axes were comparable and compounded
-super-additively. Held-out edges matter less here because these association matrices are
-small and their heuristics lean on node degree, which a handful of masked edges barely
-moves; the pattern is the same, its internal balance is not.
-
-\input{tables/table6_protocol_grid.tex}
+\subsection{What separates these graphs: dead candidate columns}
+\label{sec:dead_columns}
 The two papers where the trained model adds the least are also the two sparsest graphs
 audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes; CoupleMDA:
 $\sim$15{,}000 edges over 2{,}090 $\times$ 1{,}754 nodes). Sparsity itself, however, is
@@ -631,6 +586,100 @@ Across all nine external cases, the claim is narrower than "the field's models l
 nothing" and already sufficient: \emph{the popularity floor this literature never
 checks for is frequently high enough to matter, and on some of its own graphs,
 decisive.}
+
+\subsection{The primary case: quantifying the inflation}
+\label{sec:primary}
+This subsection and the two that follow dissect the one case we built ourselves and can
+therefore instrument fully: the graph's own construction, every architectural variant, and the
+mechanism behind the collapse. The effect they dissect is the one already established on
+all six graphs in \S\ref{sec:collapse_general}; what the primary case adds is why it
+happens, not that it does.
+
+Under the conventional evaluation protocol -- edges visible to the encoder during
+message passing, negatives drawn uniformly at random -- the trained heterogeneous graph
+transformer reaches a test AUROC of 0.9867 $\pm$ 0.0011, averaged across four
+independent random seeds. Correcting both flaws simultaneously -- holding out test edges
+from message passing and degree-matching negatives to positives -- drops this to 0.6276
+$\pm$ 0.0070 (AUPRC 0.6598 $\pm$ 0.0049). Figure~\ref{fig:protocol_grid} and
+Table~\ref{tab:headline_grid} report the full 2$\times$2 grid crossing both corrections
+independently: fixing either flaw alone still leaves a substantially inflated number,
+and only correcting both reaches the lower figure, confirming that the two corrections
+are super-additive rather than redundant (the exact per-term attribution is
+convention-sensitive, as discussed in Methods, so we report the total rather than a
+decomposition). This result is not an artifact of a single snapshot of the graph: an
+independently applied fix to the graph-construction pipeline reproduces both the
+inflated and the corrected figures within 0.1 standard deviations, and the
+topology-only floor reported below is numerically identical before and after that fix,
+since it touched only co-expression and cell-expression edges, not the miRNA-to-gene
+topology the floor is computed from.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig1_protocol_grid.pdf}
+\caption{The headline protocol grid. AUROC (mean $\pm$ std, 4 seeds) crossing edge
+split (seen during message passing vs.\ held out) with negative-sampling regime
+(uniform-random vs.\ degree-matched). Correcting both flaws simultaneously costs 0.359
+AUROC points.}
+\label{fig:protocol_grid}
+\end{figure}
+
+\input{tables/table1_headline_grid.tex}
+
+\subsection{The primary case: model-free controls}
+Model-free controls place the corrected trained model close to a purely topological
+floor. The best no-learning heuristic, Adamic--Adar, reaches an AUROC of 0.5912 under
+the corrected protocol, within 3.6 points of the trained heterogeneous graph
+transformer (0.6276); Table~\ref{tab:model_free_baselines} reports all four topological
+heuristics against both negative-sampling regimes. The direction reverses under the
+conventional protocol: a heuristic that never looks at the miRNA at all, gene
+in-degree, reaches 0.8712 and outperforms the trained model (0.8056). The mechanism
+behind this reversal is directly testable: a model trained with uniform negatives and
+then evaluated against degree-matched negatives collapses toward chance, AUROC 0.5352
+$\pm$ 0.0202, indistinguishable from the gene-degree heuristic's floor -- direct
+evidence that uniform-negative training teaches the model to exploit gene popularity
+rather than miRNA-specific target information. Figure~\ref{fig:negative_sampler_collapse}
+shows this mismatch-induced collapse is not specific to the heterogeneous transformer:
+it recurs across every trained architecture in the grid.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
+\caption{The mismatch mechanism: every architecture trained with uniform negatives,
+evaluated under both negative regimes. Matched-negative evaluation collapses every
+trained model toward the gene-degree heuristic's floor; the untrained control does not
+move.}
+\label{fig:negative_sampler_collapse}
+\end{figure}
+
+\input{tables/table2_model_free_baselines.tex}
+
+\subsection{The primary case: the inflation generalizes across architectures}
+Extending the protocol grid across six independently trained architectures -- the
+heterogeneous graph transformer, a homogeneous GCN, a co-expression ablation, a
+graph-free MLP, an untrained random-weight control, and a no-miRNA-input ablation
+retained as a smoke test -- shows the inflation is not a property of any single model.
+Every trained architecture inflates by 0.24--0.31 AUROC points between the conventional
+and corrected protocols, including the graph-free MLP, which never sees the graph
+topology at all; the untrained control, by contrast, does not move ($-0.004$). Each
+architecture here is measured from a single training run rather than averaged across
+seeds, but the inflation magnitude is an order of magnitude larger than the
+seed-to-seed spread measured elsewhere in this study (0.005--0.02 AUROC points), so the
+qualitative pattern does not depend on averaging away noise. Figure~\ref{fig:architecture_inflation}
+plots the full comparison, and Table~\ref{tab:architecture_grid} gives the numeric
+grid, including the no-miRNA-input smoke test. A secondary finding emerges from the
+same grid: under the corrected protocol, a plain homogeneous GCN (0.6236) outperforms
+the heterogeneous graph transformer (0.6080) -- the added architectural complexity this
+project was originally built around does not earn its keep even against the simplest
+graph-based baseline.
+
+\begin{figure}[h!]
+\includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
+\caption{Inflation between the conventional and corrected protocols, across five
+architectures plus an untrained control. Single seed (42); the inflation magnitude
+(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). Full numeric
+grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}.}
+\label{fig:architecture_inflation}
+\end{figure}
+
+\input{tables/tableS1_architecture_grid.tex}
 
 \subsection{A control task that survives its own audit}
 To check that this audit methodology does not simply collapse every number in the
@@ -732,9 +781,16 @@ practical implication is that auditing a paper for target-link inclusion \emph{o
 model-free baseline, but not both, can still miss a substantially inflated headline
 number.
 
-The weakness of trained models relative to a model-free floor is not unique to our own
-graph -- it recurs, unevenly, across the nine further, externally-sourced cases
-(seven distinct graphs) that make up this paper's validation set
+Neither result above is confined to our own graph. The compounded inflation itself
+reproduces on every graph we could retrain on: five externally-sourced association
+matrices, sharing no data with ours and none of its node features, each lose 0.256 to
+0.365 AUROC between the two protocols and each land in the same 0.618--0.641 band
+(\S\ref{sec:collapse_general}, Table~\ref{tab:discrimination}). That is the strongest
+form the claim takes -- the inflation is a property of the protocol, measurable wherever
+the protocol is applied -- and it is what licenses the title's framing over the weaker
+reading that we found a quirk of one graph. The separate weakness of trained models
+relative to a model-free floor also recurs, more unevenly, across the nine further
+cases (seven distinct graphs) that make up this paper's validation set
 (Section~\ref{sec:generalization}, Table~\ref{tab:validation_cases}). Topological heuristics have also been shown
 competitive with, or superior to, trained neural link predictors elsewhere in the
 literature, corroborating the pattern from an independent direction: on realistic
@@ -748,7 +804,7 @@ submissions -- exactly the practice we recommend -- which suggests the gap is no
 that model-free baselines go unreported, but that reporting one does not, by itself,
 raise the bar the field treats as meaningful progress.
 
-Six limitations qualify these results. First, the cross-architecture grid reports a
+Seven limitations qualify these results. First, the cross-architecture grid reports a
 single measurement per architecture rather than an average over multiple training
 runs; we consider this justified because the inflation effect size is far larger than
 the run-to-run variability established elsewhere in this study, but a fully repeated
@@ -812,6 +868,22 @@ lower-confidence, but externally-sourced, complement to the single-graph result 
 Table~\ref{tab:model_free_baselines}, not a literal replication of any individual
 paper's reported figure, and not yet evidence about the 12 domains it does not cover.
 
+Seventh, the six-graph retraining experiment (Table~\ref{tab:discrimination},
+Figure~\ref{fig:cross_graph_collapse}) trains \emph{our} architecture on each paper's
+graph, not each paper's own model, which we could not in general reproduce. It therefore
+licenses the claim that the conventional protocol inflates \emph{a} trained model on
+those graphs -- the claim this paper makes -- and not the stronger claim that the
+specific figures those papers report are inflated by that amount, which would require
+re-running their models under both protocols. The two arms are kept in separate tables
+for this reason: Table~\ref{tab:validation_cases} reports each paper's own number
+against a floor, Table~\ref{tab:discrimination} reports ours under both protocols, and
+the two should not be read across. A related open item sits inside the same experiment:
+the trained-versus-floor margin widens under the corrected protocol on all five external
+graphs but narrows on ours, and the one mechanism we tested for it -- memorisation
+afforded by our graph's node features, absent from the five bare association matrices --
+is ruled out by per-epoch loss curves that show the same divergence on all six. We
+report it as an open observation (\S\ref{sec:collapse_general}) rather than resolve it.
+
 Given how directly the inflation problem responds to a small set of checks, we propose
 these as a minimum reporting standard for evaluation methodology in this subfield: an
 automated, leak-free split check that verifies held-out edges are unreachable to the
@@ -822,11 +894,14 @@ Table~\ref{tab:correct_protocol}).
 
 \section{Conclusion}
 \label{sec:conclusion}
-On a real biomedical interaction graph, evaluating a heterogeneous graph transformer
-under conventions common in this subfield -- edges visible to the encoder during
-message passing, negatives sampled uniformly at random -- reports AUROC 0.9867.
-Correcting both conventions simultaneously drops this to 0.6276, within 3.6 points of a
-one-line, no-learning topological heuristic; the two corrections are super-additive, so
+Evaluating a trained link predictor under conventions common in this subfield -- edges
+visible to the encoder during message passing, negatives sampled uniformly at random --
+reports AUROC between 0.879 and 0.992 on six biomedical interaction graphs; correcting
+both conventions simultaneously drops every one of them into the range 0.618--0.641.
+Five of those graphs are other groups' published association matrices, sharing no data
+with ours, so the inflation is not a property of any one dataset. On the graph we built
+and can instrument in full, the same two corrections take 0.9867 to 0.6276, within 3.6
+points of a one-line, no-learning topological heuristic, and they are super-additive, so
 auditing for either pitfall alone is not sufficient to catch the inflation. The same
 compounding recurs across six independently trained architectures, including a
 graph-free MLP, while an untrained control does not move, and a structurally similar
