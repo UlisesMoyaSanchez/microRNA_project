@@ -1,5 +1,5 @@
 """
-make_manuscript_figures.py — the three Results figures for the BMC Bioinformatics
+make_manuscript_figures.py — the four Results figures for the BMC Bioinformatics
 manuscript, in English, sized for bmcart's single-column layout (\\textwidth = 127mm).
 
 Reads ONLY committed artifacts under results/comparison/, same rule
@@ -17,6 +17,7 @@ Outputs (vector PDF; PNG twin only for on-screen review):
   results/figures/manuscript/fig1_protocol_grid.pdf
   results/figures/manuscript/fig2_architecture_inflation.pdf
   results/figures/manuscript/fig3_negative_sampler_collapse.pdf
+  results/figures/manuscript/fig4_cross_graph_collapse.pdf
 
 Usage:  python analysis/make_manuscript_figures.py
 """
@@ -279,6 +280,103 @@ def fig3_negative_sampler_collapse(same_model, topo, out: Path) -> None:
     plt.close(fig)
 
 
+
+# ── Figure 4 — the same protocol collapse, across six graphs (slope chart) ────────────
+GRAPH_PRETTY = {
+    "own":           "Our graph (primary case)",
+    "canonical5430": "Canonical HMDD",
+    "cksnp_gnn":     "CKSNP-GNN",
+    "digamn":        "DiGAMN",
+    "meahne":        "MEAHNE",
+    "couplemda":     "CoupleMDA",
+}
+
+
+def load_cross_graph_grid() -> dict[str, dict[str, float]]:
+    """The two corners Figure 1 connects, for every graph with a trained protocol grid.
+
+    The five surveyed graphs come from the aggregated trained grid (4 seeds each, every
+    cell matched to its own training arm -- see analysis/aggregate_trained_grid.py); our
+    own graph's two corners come from the same multiseed artifacts fig1 reads, so both
+    arms of this figure are the numbers Table 7 reports.
+    """
+    out: dict[str, dict[str, float]] = {}
+
+    own = load_headline_grid()
+    out["own"] = {"seen_uniform": own["seen_uniform"][0],
+                  "held_matched": own["held_matched"][0]}
+
+    with open(COMP / "trained_grid_summary.json") as fh:
+        for g in json.load(fh)["graphs"]:
+            cells = g["trained_cells"]
+            out[g["graph"]] = {"seen_uniform": cells["seen__uniform"]["mean"],
+                               "held_matched": cells["held_out__degree_matched"]["mean"]}
+    return out
+
+
+def fig4_cross_graph_collapse(grid: dict[str, dict[str, float]], out: Path) -> None:
+    """Job: the same two-condition change, across graphs -> slope chart, as in fig2.
+
+    Deliberately the same visual form as the per-architecture figure: the point is that
+    the collapse is a property of the protocol, so it should look identical whether the
+    rows are architectures on one graph or one architecture across graphs.
+    """
+    rows = [(g, grid[g]["seen_uniform"], grid[g]["held_matched"]) for g in GRAPH_PRETTY]
+    rows.sort(key=lambda r: (r[1] - r[2]))
+
+    corrected = [r[2] for r in rows]
+    lo, hi = min(corrected), max(corrected)
+
+    fig, ax = plt.subplots(figsize=(COL_WIDTH_IN, 3.4))
+    ys = range(len(rows))
+
+    # The band every graph lands in once the protocol is corrected -- drawn first so the
+    # slopes sit on top of it.
+    ax.axvspan(lo, hi, color=BLUE, alpha=0.10, lw=0, zorder=0)
+    ax.text((lo + hi) / 2, len(rows) - 0.45, f"{lo:.3f}-{hi:.3f}", ha="center",
+            va="center", fontsize=7.5, color=BLUE, fontweight="bold")
+
+    for y, (g, orig, honest) in zip(ys, rows):
+        own = g == "own"
+        ax.plot([honest, orig], [y, y], color=GRID, lw=2, zorder=1, solid_capstyle="round")
+        ax.plot(orig,   y, "o", ms=9, color=ORANGE, zorder=3, mec=SURF, mew=1.6)
+        ax.plot(honest, y, "o", ms=9, color=BLUE,   zorder=3, mec=SURF, mew=1.6)
+        ax.text(orig + 0.012, y, f"{orig:.3f}", va="center", ha="left", fontsize=8, color=INK)
+        ax.text(honest - 0.012, y, f"{honest:.3f}", va="center", ha="right", fontsize=8, color=INK)
+        ax.text(0.995, y + 0.30, f"inflation  +{orig - honest:.3f}", va="center",
+                ha="right", fontsize=8, color=INK,
+                fontweight="bold" if own else "normal")
+
+    ax.set_yticks(list(ys))
+    ax.set_yticklabels([GRAPH_PRETTY[r[0]] for r in rows], fontsize=9)
+    # Our own graph is one row among six; marked, not privileged.
+    for tick, (g, _, _) in zip(ax.get_yticklabels(), rows):
+        if g == "own":
+            tick.set_fontweight("bold")
+
+    ax.set_xlim(0.54, 1.05)
+    ax.set_ylim(-0.7, len(rows) - 0.35)
+    ax.set_xlabel("AUROC", fontsize=8.5, color=INK2)
+    ax.xaxis.grid(True, color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(False)
+    _despine(ax, keep=("left",))
+    ax.tick_params(axis="y", length=0)
+
+    ax.legend(handles=[
+        Line2D([], [], marker="o", ls="", ms=8, color=ORANGE,
+               label="Conventional protocol  (seen edges + uniform negatives)"),
+        Line2D([], [], marker="o", ls="", ms=8, color=BLUE,
+               label="Corrected protocol  (held-out edges + degree-matched negatives)"),
+    ], loc="lower center", bbox_to_anchor=(0.5, -0.38), ncol=1, frameon=False,
+        fontsize=8, labelcolor=INK, handletextpad=0.6)
+
+    fig.tight_layout()
+    fig.subplots_adjust(left=0.32)
+    fig.savefig(out, bbox_inches="tight")
+    plt.close(fig)
+
+
 def main() -> None:
     FIGS.mkdir(parents=True, exist_ok=True)
 
@@ -286,11 +384,13 @@ def main() -> None:
     arch_grid = load_architecture_grid()
     same_model = load_uniform_trained()
     topo = load_topology()
+    cross = load_cross_graph_grid()
 
     targets = [
         ("fig1_protocol_grid.pdf",              lambda p: fig1_protocol_grid(headline, p)),
         ("fig2_architecture_inflation.pdf",     lambda p: fig2_architecture_inflation(arch_grid, p)),
         ("fig3_negative_sampler_collapse.pdf",  lambda p: fig3_negative_sampler_collapse(same_model, topo, p)),
+        ("fig4_cross_graph_collapse.pdf",       lambda p: fig4_cross_graph_collapse(cross, p)),
     ]
     for name, fn in targets:
         fn(FIGS / name)
