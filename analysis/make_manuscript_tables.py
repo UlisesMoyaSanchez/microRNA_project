@@ -392,17 +392,24 @@ def table7_discrimination() -> str:
 
     lines = [
         r"\begin{table}[h!]",
-        r"\caption{What the conventional protocol cannot measure. For each graph, a trained "
-        r"model (this paper's architecture, mean over 4 seeds) against the best of the same "
-        r"four model-free heuristics, under each protocol. ``Conventional'' is edges seen "
-        r"with uniform-random negatives; ``corrected'' is edges held out with degree-matched "
-        r"negatives -- the two corners of Table~\ref{tab:protocol_grid}, both train/eval "
-        r"matched so both margins are clean comparisons. On all five surveyed graphs the "
-        r"conventional protocol leaves the trained model within 1.3 points of a one-line "
-        r"heuristic and behind it on three, while the corrected protocol separates the same "
-        r"pairs by 4.3 to 8.3 points. Our own graph is the exception and is shown first: its "
-        r"margin narrows rather than widens. The trained arm is our architecture on their "
-        r"graphs, not each paper's own model -- see Discussion.}",
+        r"\caption{The protocol collapse, and what the conventional protocol cannot "
+        r"measure, on every graph with a trained protocol grid. ``Our architecture'' is "
+        r"this paper's model trained on that graph (mean over 4 seeds, each cell matched "
+        r"to its own training arm); ``model-free'' is the best of the same four heuristics "
+        r"(Table~\ref{tab:model_free_baselines}) scored on exactly the same pairs. "
+        r"``Conventional'' is edges seen with uniform-random negatives; ``corrected'' is "
+        r"edges held out with degree-matched negatives -- the same two corners "
+        r"Figure~\ref{fig:cross_graph_collapse} connects, and the \emph{seen} column of "
+        r"Table~\ref{tab:protocol_grid}, not the held-out column "
+        r"Table~\ref{tab:validation_cases} reports. Every graph loses 0.256--0.365 AUROC "
+        r"between the two protocols and lands in 0.618--0.641. The margin columns show "
+        r"what that buys: on all five surveyed graphs the conventional protocol leaves the "
+        r"trained model within 1.3 points of a one-line heuristic and behind it on three, "
+        r"while the corrected protocol separates the same pairs by 4.3 to 8.3 points. Our "
+        r"own graph is the exception in the margin columns alone -- its margin narrows "
+        r"rather than widens (see text). The trained arm is our architecture on their "
+        r"graphs, not each paper's own model, so this table is evidence about the protocol, "
+        r"not about their reported numbers -- see Discussion.}",
         r"\label{tab:discrimination}",
         r"\footnotesize",
         r"\resizebox{\textwidth}{!}{%",
@@ -411,7 +418,8 @@ def table7_discrimination() -> str:
         r" & \multicolumn{3}{c}{Conventional protocol} & "
         r"\multicolumn{3}{c}{Corrected protocol} \\",
         r"\cline{2-4}\cline{5-7}",
-        r"Graph & Trained & Model-free & Margin & Trained & Model-free & Margin \\",
+        r"Graph & Our architecture & Model-free & Margin & Our architecture & "
+        r"Model-free & Margin \\",
         r"\hline",
     ]
 

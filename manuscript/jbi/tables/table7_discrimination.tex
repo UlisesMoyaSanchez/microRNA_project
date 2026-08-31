@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{What the conventional protocol cannot measure. For each graph, a trained model (this paper's architecture, mean over 4 seeds) against the best of the same four model-free heuristics, under each protocol. ``Conventional'' is edges seen with uniform-random negatives; ``corrected'' is edges held out with degree-matched negatives -- the two corners of Table~\ref{tab:protocol_grid}, both train/eval matched so both margins are clean comparisons. On all five surveyed graphs the conventional protocol leaves the trained model within 1.3 points of a one-line heuristic and behind it on three, while the corrected protocol separates the same pairs by 4.3 to 8.3 points. Our own graph is the exception and is shown first: its margin narrows rather than widens. The trained arm is our architecture on their graphs, not each paper's own model -- see Discussion.}
+\caption{The protocol collapse, and what the conventional protocol cannot measure, on every graph with a trained protocol grid. ``Our architecture'' is this paper's model trained on that graph (mean over 4 seeds, each cell matched to its own training arm); ``model-free'' is the best of the same four heuristics (Table~\ref{tab:model_free_baselines}) scored on exactly the same pairs. ``Conventional'' is edges seen with uniform-random negatives; ``corrected'' is edges held out with degree-matched negatives -- the same two corners Figure~\ref{fig:cross_graph_collapse} connects, and the \emph{seen} column of Table~\ref{tab:protocol_grid}, not the held-out column Table~\ref{tab:validation_cases} reports. Every graph loses 0.256--0.365 AUROC between the two protocols and lands in 0.618--0.641. The margin columns show what that buys: on all five surveyed graphs the conventional protocol leaves the trained model within 1.3 points of a one-line heuristic and behind it on three, while the corrected protocol separates the same pairs by 4.3 to 8.3 points. Our own graph is the exception in the margin columns alone -- its margin narrows rather than widens (see text). The trained arm is our architecture on their graphs, not each paper's own model, so this table is evidence about the protocol, not about their reported numbers -- see Discussion.}
 \label{tab:discrimination}
 \footnotesize
 \resizebox{\textwidth}{!}{%
@@ -7,7 +7,7 @@
 \hline
  & \multicolumn{3}{c}{Conventional protocol} & \multicolumn{3}{c}{Corrected protocol} \\
 \cline{2-4}\cline{5-7}
-Graph & Trained & Model-free & Margin & Trained & Model-free & Margin \\
+Graph & Our architecture & Model-free & Margin & Our architecture & Model-free & Margin \\
 \hline
 Own graph (primary case) & 0.9867 & 0.9336 & $+0.0531$ & 0.6276 & 0.5912 & $+0.0364$ \\
 \hline
