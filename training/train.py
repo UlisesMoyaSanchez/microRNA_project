@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import os
 import sys
+import json
 import pickle
 import argparse
 import random
@@ -406,6 +407,7 @@ def main() -> None:
 
     # ── Training ──────────────────────────────────────────────────────────────
     log.info(f"Starting training (epochs={tcfg['num_epochs']}, patience={tcfg['patience']})")
+    history = []
     for epoch in range(start_epoch, tcfg["num_epochs"]):
         train_metrics = train_one_epoch(
             model, train_loader, optimizer, criterion, device,
@@ -428,6 +430,12 @@ def main() -> None:
                 f"val_auroc={val_metrics.get('auroc', 0):.4f} | "
                 f"val_acc={val_metrics.get('cell_acc', 0):.4f}"
             )
+            history.append({
+                "epoch": epoch + 1,
+                "train_loss": train_metrics["loss"],
+                "val_loss": val_metrics["loss"],
+                "val_auroc": val_metrics.get("auroc", 0.0),
+            })
 
             current = val_metrics.get(monitor, float("nan"))
             if improved(current):
@@ -459,6 +467,13 @@ def main() -> None:
             # A high rate means many negatives could not be degree-matched and fell back
             # to uniform, which drags the metric back toward the inflated one.
             log.info(f"Degree-matched negative fallback rate: {sampler.fallback_pct:.1f}%")
+        # checkpoint_dir, not log_dir: log_dir is shared across configs
+        # ("logs/"), checkpoint_dir is config-specific, so concurrent runs
+        # can't clobber each other's history file.
+        history_path = os.path.join(cfg["training"]["checkpoint_dir"], "history.json")
+        with open(history_path, "w") as fh:
+            json.dump(history, fh, indent=2)
+        log.info(f"Wrote per-epoch history: {history_path}")
 
     if is_dist():
         dist.destroy_process_group()

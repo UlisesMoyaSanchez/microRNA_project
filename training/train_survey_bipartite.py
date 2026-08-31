@@ -184,6 +184,7 @@ def main() -> None:
 
     best_auroc, best_state, patience = -1.0, None, 0
     val_neg = draw_negatives(val_sup, split.all_pos, bins, n_mirna, n_gene, hard, gen)
+    history = []
 
     for epoch in range(1, tcfg["num_epochs"] + 1):
         model.train()
@@ -201,14 +202,25 @@ def main() -> None:
         opt.step()
 
         if epoch % tcfg.get("eval_every", 5) == 0 or epoch == tcfg["num_epochs"]:
+            model.eval()
+            with torch.no_grad():
+                val_pairs = torch.cat([val_sup, val_neg], dim=1)
+                val_labels = torch.cat([torch.ones(val_sup.shape[1]),
+                                        torch.zeros(val_neg.shape[1])]).to(device)
+                val_out = model(x_dict, ei_dict,
+                                mirna_idx=val_pairs[0].to(device), gene_idx=val_pairs[1].to(device))
+                val_loss = torch.nn.functional.binary_cross_entropy_with_logits(
+                    val_out["edge_logits"], val_labels).item()
             v = evaluate(model, x_dict, ei_dict, val_sup, val_neg, device)["auroc"]
+            history.append({"epoch": epoch, "train_loss": loss.item(),
+                            "val_loss": val_loss, "val_auroc": v})
             if v > best_auroc:
                 best_auroc, patience = v, 0
                 best_state = copy.deepcopy(model.state_dict())
             else:
                 patience += 1
-            log.info(f"  epoch {epoch:>4}  loss {loss.item():.4f}  val AUROC {v:.4f}"
-                     f"{'  *' if patience == 0 else ''}")
+            log.info(f"  epoch {epoch:>4}  loss {loss.item():.4f}  val_loss {val_loss:.4f}  "
+                     f"val AUROC {v:.4f}{'  *' if patience == 0 else ''}")
             if patience >= tcfg["patience"]:
                 log.info(f"  early stop at epoch {epoch} (best val AUROC {best_auroc:.4f})")
                 break
@@ -239,6 +251,7 @@ def main() -> None:
         "training_negatives": "degree_matched" if hard else "uniform",
         "best_val_auroc": float(best_auroc),
         "results": results,
+        "history": history,
         "generated_utc": datetime.now(timezone.utc).isoformat(),
     }
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
