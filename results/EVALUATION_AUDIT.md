@@ -642,8 +642,8 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    (target 20–30 met; a 22nd sheet row records a field convention, not a paper, and is excluded
    from all denominators), all 15 new papers open-access (PMC), bibliographic metadata verified
    via each paper's own PMC JATS XML front matter. **It corrected the claim we were about to
-   make — twice.** First: the field does *not* routinely leak test edges — after the 2026-09-06 adjudication only 1/21 clearly does
-   it wrong, 7/21 clearly strip test edges correctly, and our own original split (cells only)
+   make — twice.** First: the field does *not* routinely leak test edges — after the 2026-09-06 adjudication only 1/19 clearly does
+   it wrong, 7/19 clearly strip test edges correctly, and our own original split (cells only)
    was **worse than the norm**. Second, and only after a blind second rater (2026-09-01): the
    claim that **0/21 papers report any model-free baseline was false**. Six do — NIMGSA, NGCN,
    Orro, HLGNN-MDA, CKSNP-GNN, ModulePred — each comparing against one of this subfield's
@@ -651,7 +651,7 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    criterion's enumerated list had silently excluded. The surviving claim is stronger: in the
    five cases whose numbers are readable, the trained model clears the untrained comparator by
    **1.7 to 7.4 AUROC points and no paper remarks on it**. Also updated by that adjudication: 17/21 treat unlabeled
-   pairs as negatives, and 13/21 (62%) methods sections do not let the reader determine
+   pairs as negatives, and 11/19 (58%) methods sections do not let the reader determine
    whether held-out edges reached the encoder at all — reporting opacity, not confirmed
    leakage, is the dominant finding on that dimension.
 

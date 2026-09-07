@@ -234,12 +234,15 @@ by a distance or reliability criterion of its own devising -- an implicit admiss
 the default is known to be inadequate -- and the remaining two never say where their
 negatives come from. Whether
 held-out edges are removed from the encoder's input is unclear from the methods section
-in 13 of the 21, up from 3 of the original 6; this reporting gap, not confirmed leakage,
+in 11 of the 19 papers where the question applies -- the other two encode drug and
+protein separately and never propagate over an interaction graph at all, so a held-out
+association cannot reach their encoder through graph structure -- up from 3 of the
+original 6; this reporting gap, not confirmed leakage,
 is now the dominant finding on that dimension. Table~\ref{tab:literature_survey}
 summarizes the full sample.
 
 We deliberately do not claim that this subfield routinely leaks edges: after
-adjudication only 1 of the 21 papers surveyed clearly does -- MGCNSS, whose propagated
+adjudication only 1 of the 19 clearly does -- MGCNSS, whose propagated
 matrix is defined globally from all 5,430 known associations -- 7 clearly strip test
 edges correctly, and our own project's
 original split was worse than the norm we observed. The claim we make is narrower: no
@@ -430,7 +433,14 @@ full at the methods-section level rather than judged from its abstract, and clas
 along four dimensions: whether it cross-validates over edges, whether it removes
 held-out edges from the encoder's input, how it selects negative examples, and whether
 it reports any model-free baseline. This is an expansion, completed 2026-08-12, of an
-initial six-paper pilot. A twenty-second row of the original survey sheet recorded a
+initial six-paper pilot. The second dimension admits a fourth value, \emph{not
+applicable}: two papers encode drug and protein separately -- one as a molecular graph
+of atoms and bonds, the other from a contact map or a sequence embedding -- and fuse the
+two representations with attention, never propagating over a graph that contains the
+associations being predicted. A held-out association cannot reach an encoder of that
+shape through graph structure, so the question has no answer to give rather than an
+undisclosed one, and those two are excluded from that dimension's denominator instead of
+being counted among its \emph{unclear} calls. A twenty-second row of the original survey sheet recorded a
 general drug-target field convention rather than a paper, and is excluded from every
 denominator reported here.
 
@@ -889,7 +899,7 @@ read the primary sources under a written codebook, and every disagreement was
 adjudicated against the source rather than averaged away, but agreement before
 adjudication was moderate on the two dimensions that carry real spread: Cohen's
 $\kappa$ 0.44 on whether held-out edges are removed from the encoder's input and 0.49
-on negative sampling. The "unclear" calls in particular -- 13 of 21 on the former --
+on negative sampling. The "unclear" calls in particular -- 11 of 19 on the former --
 should be read as an adjudicated two-rater judgment rather than a fact a third reader
 would recover with certainty. We report the double-rating as a limitation and not as a
 resolution because it changed a headline: the first rater's classification, from which

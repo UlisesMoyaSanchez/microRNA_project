@@ -70,6 +70,15 @@ propagates over**, or do they remain in the graph while being scored?
 - **`unclear`** — the paper describes the split at the level of "samples", "positive and negative
   pairs", or "folders" and never states what happens to the graph the encoder sees. **This is
   the modal case and it is the survey's actual finding — do not resolve it by inference.**
+- **`not_applicable`** (added 2026-09-06) — the encoder never propagates over a graph containing
+  the associations being predicted. Pair-encoder architectures are the case: the model encodes
+  each entity separately (a molecular graph of atoms and bonds, a protein contact map or sequence
+  embedding) and fuses the two representations with attention, so a held-out association cannot
+  reach the encoder through graph structure at all. The question has no answer to give, which is
+  not the same as an undisclosed one, and these papers are **excluded from D2's denominator**
+  rather than counted as `unclear`. Establish it from the architecture description, quoting what
+  the GNN's nodes and edges are. (iNGNN-DTI and GPS-DTI in this sample; every other paper
+  propagates over an association-derived structure.)
 
 > Boundary note, the hardest call in the codebook: "we divided the *associations* into training
 > and test sets" is **`unclear`**, not `yes`. Dividing the associations into sets says nothing

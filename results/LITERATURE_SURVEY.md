@@ -29,9 +29,9 @@ headline** — see below.
 We went in expecting to show *"everyone leaks held-out edges into the message-passing graph."*
 **That is not what the literature shows, and we should not claim it.** In the original pilot (n=6 papers), 2
 clearly strip test edges from the graph, 1 clearly does not, 3 do not say. Expanding to n=21
-sharpens this further in the same direction: only 7/21 clearly strip test edges correctly and
-**1/21 clearly leaves them in** — but the "unclear" bucket is still the largest category at
-**13/21 (62%)**, because most 2024–2026 papers' methods sections simply do not state whether
+sharpens this further in the same direction: only 7/19 clearly strip test edges correctly and
+**1/19 clearly leaves them in** — but the "unclear" bucket is still the largest category at
+**11/19 (58%)**, because most 2024–2026 papers' methods sections simply do not state whether
 held-out edges are masked from the graph at all. The story is not "the field leaks" — it is "the
 field's methods sections do not let a reader check."
 
@@ -134,9 +134,10 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 | Practice | Original pilot (n=6) | Expansion (n=15) | Combined (n=21) |
 |---|---|---|---|
 | Cross-validate over **edges** (not nodes) | 5 / 6 | 14 / 15 | **19 / 21 (90%)** |
-| Held-out edges **removed** from the encoder's input graph | 2 / 6 | 5 / 15 | **7 / 21 (33%)** |
-| Held-out edges **left in** the encoder's input graph | 1 / 6 | 0 / 15 | **1 / 21 (5%)** ⚠️ |
-| **Unclear** from the methods section | 3 / 6 | 10 / 15 | **13 / 21 (62%)** ⚠️ |
+| Held-out edges **removed** from the encoder's input graph | 2 / 6 | 5 / 13 | **7 / 19 (37%)** |
+| Held-out edges **left in** the encoder's input graph | 1 / 6 | 0 / 13 | **1 / 19 (5%)** ⚠️ |
+| **Unclear** from the methods section | 3 / 6 | 8 / 13 | **11 / 19 (58%)** ⚠️ |
+| — D2 **not applicable**: no association graph in the encoder | 0 / 6 | 2 / 15 | **2 / 21** |
 | Negatives = unlabeled pairs, uniform or wholesale | 4 / 6 | 13 / 15 | **17 / 21 (81%)** |
 | Any **model-free / heuristic baseline** reported | 2 / 6 | 4 / 15 | **6 / 21 (29%)** 🔴 |
 | — of those, margin over it **discussed by the paper** | 0 / 2 | 0 / 4 | **0 / 6 (0%)** 🔴 |
@@ -157,8 +158,8 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
    original pilot — and each does so by selecting negatives on a criterion of its own devising:
    evidence the problem is recognized but has no standard remedy or control. Two more (HiGLDP,
    GPS-DTI) never say where their negatives come from.
-3. **Reporting of the split is frequently too vague to reproduce (13/21 unclear, 62%, up from
-   3/6 in the pilot).** Whether test edges reach the encoder — the single thing that decides if
+3. **Reporting of the split is frequently too vague to reproduce (11/19 unclear, 58%, up from
+   3/6 in the pilot; the D2 denominator is 19, not 21 — see the `not_applicable` note below).** Whether test edges reach the encoder — the single thing that decides if
    the number is prediction or reconstruction — often cannot be determined from the paper at
    all, and this got *more* common, not less, in the more recent (2024–2026) papers added in the
    expansion. That is a reporting-standards finding, and it is independently publishable. A
@@ -171,8 +172,8 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 - ❌ *"The field routinely leaks test edges into message passing."* **Not supported, and even
   less supported at n=21 than in the pilot, and weaker still after the 2026-09-06 adjudication.**
-  Only **1/21** clearly does it wrong — MGCNSS, whose propagated matrix is defined globally over
-  all 5,430 known associations; 7/21 clearly strip test edges correctly (one, Orro 2026, holds
+  Only **1/19** clearly does it wrong — MGCNSS, whose propagated matrix is defined globally over
+  all 5,430 known associations; 7/19 clearly strip test edges correctly (one, Orro 2026, holds
   out entire miRNAs — a stronger, inductive-style check, and the reason its own D1 call is *no*).
   Making the "routinely leaks" claim would be the same sin we are criticizing: asserting a
   strong quantitative claim the evidence does not carry.
@@ -189,7 +190,7 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 > *Across 21 papers surveyed, edge-level cross-validation is near-universal (19/21), but **15
 > report no model-free baseline and the 6 that do never remark on the 1.7–7.4-point margin
 > their own tables show**, unlabeled pairs are treated as negatives in the
-> majority (17/21), and in the majority of cases (13/21) the methods section does not permit
+> majority (17/21), and in the majority of cases (11/19) the methods section does not permit
 > the reader to determine whether held-out edges were visible to the encoder. We show that
 > under exactly this protocol, a one-line popularity heuristic attains AUROC 0.87 on a real
 > biomedical graph — within the band of published state-of-the-art results (0.91–0.99) — and
@@ -265,7 +266,7 @@ with the codebook rule that decided each and the verbatim sentence it rests on r
   construct the heterogeneous networks") and SaeGraphDTI, which names the inflation mechanism this
   survey is about in its own words. Out: HiGLDP, whose exclusion statement reaches only "the
   training folds", and kmerPMTF, where the first rater's "similarity matrices computed only from
-  the training split" was again a paraphrase with no sentence behind it. The count stayed at 7/21;
+  the training split" was again a paraphrase with no sentence behind it. The count stayed at 7;
   the membership did not.
 - **Orro's D1 call flipped to `no`** on the first rater's own quote: it holds out whole miRNAs, not
   associations, which is a stronger check than the survey's other 20 papers apply.
@@ -326,11 +327,12 @@ the encoder through graph structure, so D2's question — are held-out edges rem
 adjacency structure the encoder propagates over? — has no answer to give rather than an
 undisclosed one.
 
-Counting them as `unclear` therefore overstates the reporting gap by two papers. The fix would be a
-fourth D2 value, `not_applicable`, and a denominator of 19 for that dimension: **7/19 yes, 1/19 no,
-11/19 unclear (58%)** in place of 7/21, 1/21, 13/21 (62%). Not applied yet — it changes a headline
-denominator, and that is the author's call. Every other paper in the sample propagates over an
-association-derived structure, so the two are the only candidates.
+Counting them as `unclear` therefore overstates the reporting gap by two papers. **APPLIED 2026-09-06** on the author's decision: D2 now has a
+fourth value, `not_applicable`, and a denominator of 19 for that dimension — **7/19 yes, 1/19 no,
+11/19 unclear (58%)**, in place of 7/21, 1/21, 13/21 (62%). Every other paper in the sample
+propagates over an association-derived structure, so these two are the only candidates. The rule is
+in `SURVEY_CODEBOOK.md` under D2 and requires establishing the architecture from the paper's own
+description of what its GNN's nodes and edges are.
 
 
 ## Sources
