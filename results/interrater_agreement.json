@@ -1,0 +1,109 @@
+{
+  "n_shared": 21,
+  "n_excluded": 0,
+  "dimensions": {
+    "cv_over_edges": {
+      "n": 21,
+      "agreement": 0.8571428571428571,
+      "kappa": -0.05,
+      "disagreements": [
+        {
+          "paper": "HLGNN-MDA (Yu et al.)",
+          "rater1": "unclear",
+          "rater2": "yes"
+        },
+        {
+          "paper": "NIMGSA",
+          "rater1": "yes",
+          "rater2": "unclear"
+        },
+        {
+          "paper": "Orro (single-author)",
+          "rater1": "yes",
+          "rater2": "no"
+        }
+      ]
+    },
+    "testedges_removed_from_encoder_graph": {
+      "n": 21,
+      "agreement": 0.7142857142857143,
+      "kappa": 0.4375,
+      "disagreements": [
+        {
+          "paper": "HGDTI",
+          "rater1": "no",
+          "rater2": "unclear"
+        },
+        {
+          "paper": "HiGLDP (Wang et al.)",
+          "rater1": "yes",
+          "rater2": "unclear"
+        },
+        {
+          "paper": "MGCNSS",
+          "rater1": "no",
+          "rater2": "unclear"
+        },
+        {
+          "paper": "NGCN",
+          "rater1": "unclear",
+          "rater2": "yes"
+        },
+        {
+          "paper": "SaeGraphDTI (Zhang et al.)",
+          "rater1": "unclear",
+          "rater2": "yes"
+        },
+        {
+          "paper": "kmerPMTF",
+          "rater1": "yes",
+          "rater2": "unclear"
+        }
+      ]
+    },
+    "negative_sampling": {
+      "n": 21,
+      "agreement": 0.7619047619047619,
+      "kappa": 0.4903,
+      "disagreements": [
+        {
+          "paper": "DGNMDA (Lu et al.)",
+          "rater1": "not_described",
+          "rater2": "uniform_unlabeled"
+        },
+        {
+          "paper": "GPS-DTI (Xiong et al.)",
+          "rater1": "not_described",
+          "rater2": "uniform_unlabeled"
+        },
+        {
+          "paper": "HiGLDP (Wang et al.)",
+          "rater1": "uniform_unlabeled",
+          "rater2": "not_described"
+        },
+        {
+          "paper": "NIMGSA",
+          "rater1": "not_described",
+          "rater2": "all_unlabeled"
+        },
+        {
+          "paper": "kmerPMTF",
+          "rater1": "all_unlabeled",
+          "rater2": "uniform_unlabeled"
+        }
+      ]
+    },
+    "model_free_baseline": {
+      "n": 21,
+      "agreement": 0.9523809523809523,
+      "kappa": 0.0,
+      "disagreements": [
+        {
+          "paper": "ModulePred (Jia et al.)",
+          "rater1": "no",
+          "rater2": "yes"
+        }
+      ]
+    }
+  }
+}
