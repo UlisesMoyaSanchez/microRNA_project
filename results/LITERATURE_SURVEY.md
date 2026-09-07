@@ -289,6 +289,50 @@ re-audited under it; agreement is evidence but not proof, and a full D2 re-audit
 verbatim-quote rule remains open.
 
 
+## D2 re-audit of the cells the two raters agreed on (2026-09-06)
+
+The adjudication overturned 4 of the 6 disputed D2 cells for the same reason — a call recorded on
+the rater's inference instead of on a sentence from the paper — so the 15 D2 cells where *both*
+raters agreed were re-audited under the same rule. Agreement is evidence, not proof.
+
+**The 5 agreed `yes` cells all hold.** Each rests on a verbatim sentence naming the graph, the
+adjacency matrix, or a documented split API: HLGNN-MDA ("removed the positive samples in the test
+set from the adjacency matrix"), CoupleMDA ("the training graph only contained positive edges from
+the training set"), DiGAMN ("We masked 20% of the association information during cross-validation
+in the test set to prevent information leakage"), Orro (associations of validation miRNAs removed
+from the training graph), and HybridGNN (PyG's `RandomLinkSplit`, which the codebook admits by
+name). The verbatim-quote rule does not threaten any of them.
+
+**The 10 agreed `unclear` cells all hold too**, checked in the opposite direction: each paper's
+full text was searched today for any sentence connecting its split to the graph, adjacency matrix,
+similarity matrices or message passing. All ten came back with nothing — NIMGSA, GONNMDA, DGNMDA,
+MEAHNE, CKSNP-GNN, HMCDA, GPS-DTI, DTI-MHAPR, iNGNN-DTI, ModulePred. Several define the association
+matrix and their GIP-kernel similarities globally, which is suggestive, but none states what
+happens to that matrix at the split, and the codebook forbids resolving `unclear` by inference.
+
+This matters more than it sounds: the survey's dominant finding is the size of the `unclear`
+bucket, and the obvious objection to it is that "unclear" measures the raters rather than the
+papers. Two raters, a written codebook, and now a targeted full-text search per paper all return
+the same answer.
+
+### Open question this raised: two cells may be category errors, not reporting gaps
+
+**iNGNN-DTI and GPS-DTI never propagate over a drug-target interaction graph at all.** Both encode
+each drug as a molecular graph (atoms as nodes, bonds as edges) and each protein separately
+(iNGNN-DTI from an AlphaFold2 contact map, GPS-DTI from ESM-2 features), then fuse the two
+representations with cross-attention: "There is no drug-target interaction graph with edges between
+them used during the GNN phase." For a model of that shape, a held-out interaction *cannot* reach
+the encoder through graph structure, so D2's question — are held-out edges removed from the
+adjacency structure the encoder propagates over? — has no answer to give rather than an
+undisclosed one.
+
+Counting them as `unclear` therefore overstates the reporting gap by two papers. The fix would be a
+fourth D2 value, `not_applicable`, and a denominator of 19 for that dimension: **7/19 yes, 1/19 no,
+11/19 unclear (58%)** in place of 7/21, 1/21, 13/21 (62%). Not applied yet — it changes a headline
+denominator, and that is the author's call. Every other paper in the sample propagates over an
+association-derived structure, so the two are the only candidates.
+
+
 ## Sources
 
 - [MGCNSS — Briefings in Bioinformatics 2024](https://academic.oup.com/bib/article/25/3/bbae168/7645839)
