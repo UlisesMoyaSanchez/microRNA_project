@@ -658,7 +658,7 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    **This is the motivation section, and it is stronger than the strawman would have been:**
    published AUROCs in this literature sit at **0.91–0.99**; under that same protocol, on a
    real biomedical graph, a one-line popularity heuristic reaches **0.8712** — inside that band
-   — and beats a trained graph transformer. *A field that never reports a model-free control
+   — and beats a trained graph transformer. *A field that does not read a model-free control as a floor
    cannot know whether its 0.97 is a result or a popularity effect.*
    **2026-08-13 spot-check:** re-verified 14 of the "unclear" cells against primary sources to
    test whether "unclear" reflected a genuine reporting gap or overly conservative extraction.

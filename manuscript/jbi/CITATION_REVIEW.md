@@ -15,6 +15,17 @@ papers (Table 3 in the manuscript), whose link + verified quote already exist in
 one — reformatted here, not re-fetched. The other 19 were freshly fetched and read this pass
 (arXiv/DOI/proceedings pages, Semantic Scholar API, PMC, OGB's own leaderboard).
 
+> **Superseded in part, 2026-09-06 — read Part 2's survey column as a snapshot, not as current.**
+> This artifact was written before the survey was double-rated. Three things in it are now wrong:
+> the sample is **21 papers, not 22** (one sheet row records a field convention, not a paper);
+> the survey is a **two-rater instrument**, not the single-rater one described below; and Part 2's
+> "No model-free baseline" cells are **false for six papers** (NIMGSA, NGCN, Orro, HLGNN-MDA,
+> CKSNP-GNN, ModulePred), which do report an untrained comparator — the criterion defect found on
+> 2026-09-01 and corrected on 2026-09-02. The D2 column also moved for five papers in the
+> 2026-09-06 adjudication. Current classifications live in `results/literature_survey.tsv`,
+> `results/literature_survey_d4_reaudit.tsv` and `results/literature_survey_adjudication.tsv`.
+> The citation-content verdicts themselves (links, ✅/⚠️/❌ per key) are unaffected and stand.
+
 **Assessment key:** ✅ Supported — the source states what the sentence claims. ⚠️ Caveat —
 supported but with a nuance, a narrower/broader scope than implied, or a detail I could not
 independently re-confirm this pass. ❌ Mismatch — not found in the review.

@@ -1,7 +1,9 @@
 # HMDD topology-baseline audit — quantifying AUROC inflation on the survey's own data
 
-**Purpose.** The literature survey (`results/LITERATURE_SURVEY.md`) shows the field never
-reports a model-free control, and — by inference from our own graph — asserts that published
+**Purpose.** The literature survey (`results/LITERATURE_SURVEY.md`) shows the field does not
+read a model-free control as a floor — 15 of 21 papers report none at all, and the 6 that do
+clear it by only 1.7–7.4 AUROC points without one of them remarking on the margin — and, by
+inference from our own graph, asserts that published
 AUROCs are probably inflated by the same popularity effect (0.8712 on our own miRNA-gene graph,
 beating a trained heterogeneous graph transformer's 0.8056). This document measures that
 inflation directly, on seven of the survey's own miRNA-disease papers' own data, instead of

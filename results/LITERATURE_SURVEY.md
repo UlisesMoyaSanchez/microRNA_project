@@ -78,9 +78,10 @@ numbers — and it is evidence the field already published, not evidence we had 
 And separately:
 
 > **Treating unlabeled pairs as uniformly-sampled negatives remains the field's default.**
-> 16 / 21 do exactly this (76%, versus 3/6 = 50% in the original pilot). Among the original
-> six, two of the three that deviate from uniform sampling made "better negative selection"
-> their *headline contribution* — itself an admission that the default is known to be broken.
+> 17 / 21 do exactly this (81%, versus 4/6 = 67% in the original pilot). Only two papers in
+> the whole sample deviate — MGCNSS and HGDTI, both from the original pilot — and each selects
+> negatives on a criterion of its own devising, itself an admission that the default is known
+> to be broken. Two more (HiGLDP, GPS-DTI) never say where their negatives come from.
 
 **Put those two together and you get the paper.** The headline AUROCs in this literature sit
 at **0.91–0.99**. On our graph, under the *same* protocol (unlabeled pairs as uniform
