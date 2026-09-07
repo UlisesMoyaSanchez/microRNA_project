@@ -28,10 +28,10 @@ headline** — see below.
 
 We went in expecting to show *"everyone leaks held-out edges into the message-passing graph."*
 **That is not what the literature shows, and we should not claim it.** In the original pilot (n=6 papers), 2
-clearly strip test edges from the graph, 2 clearly do not, 2 do not say. Expanding to n=21
+clearly strip test edges from the graph, 1 clearly does not, 3 do not say. Expanding to n=21
 sharpens this further in the same direction: only 7/21 clearly strip test edges correctly and
-2/21 clearly leave them in — but the "unclear" bucket is still the largest category at
-**12/21 (57%)**, because most 2024–2026 papers' methods sections simply do not state whether
+**1/21 clearly leaves them in** — but the "unclear" bucket is still the largest category at
+**13/21 (62%)**, because most 2024–2026 papers' methods sections simply do not state whether
 held-out edges are masked from the graph at all. The story is not "the field leaks" — it is "the
 field's methods sections do not let a reader check."
 
@@ -132,11 +132,11 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 | Practice | Original pilot (n=6) | Expansion (n=15) | Combined (n=21) |
 |---|---|---|---|
-| Cross-validate over **edges** (not nodes) | 6 / 6 | 14 / 15 | **20 / 21 (95%)** |
+| Cross-validate over **edges** (not nodes) | 5 / 6 | 14 / 15 | **19 / 21 (90%)** |
 | Held-out edges **removed** from the encoder's input graph | 2 / 6 | 5 / 15 | **7 / 21 (33%)** |
-| Held-out edges **left in** the encoder's input graph | 2 / 6 | 0 / 15 | **2 / 21 (10%)** ⚠️ |
-| **Unclear** from the methods section | 2 / 6 | 10 / 15 | **12 / 21 (57%)** ⚠️ |
-| Negatives = unlabeled pairs, uniform or wholesale | 3 / 6 | 13 / 15 | **16 / 21 (76%)** |
+| Held-out edges **left in** the encoder's input graph | 1 / 6 | 0 / 15 | **1 / 21 (5%)** ⚠️ |
+| **Unclear** from the methods section | 3 / 6 | 10 / 15 | **13 / 21 (62%)** ⚠️ |
+| Negatives = unlabeled pairs, uniform or wholesale | 4 / 6 | 13 / 15 | **17 / 21 (81%)** |
 | Any **model-free / heuristic baseline** reported | 2 / 6 | 4 / 15 | **6 / 21 (29%)** 🔴 |
 | — of those, margin over it **discussed by the paper** | 0 / 2 | 0 / 4 | **0 / 6 (0%)** 🔴 |
 
@@ -151,11 +151,13 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
    numbers beat a popularity heuristic — and where the comparison is on the page, the margin
    (1.7–7.4 AUROC points) passes without comment. We show, on a real graph, that under this
    protocol the trained model may not beat the heuristic at all.
-2. **Uniform/unlabeled negatives are the default (16/21, 76%),** consistent with the pilot's
-   3/6 (50%). Among the original six, the papers that deviate do so as their *headline
-   contribution* — evidence the problem is recognized but has no standard remedy or control.
-3. **Reporting of the split is frequently too vague to reproduce (12/21 unclear, 57%, up from
-   2/6 in the pilot).** Whether test edges reach the encoder — the single thing that decides if
+2. **Uniform/unlabeled negatives are the default (17/21, 81%),** consistent with the pilot's
+   4/6 (67%). Only two papers in the whole sample deviate — MGCNSS and HGDTI, both from the
+   original pilot — and each does so by selecting negatives on a criterion of its own devising:
+   evidence the problem is recognized but has no standard remedy or control. Two more (HiGLDP,
+   GPS-DTI) never say where their negatives come from.
+3. **Reporting of the split is frequently too vague to reproduce (13/21 unclear, 62%, up from
+   3/6 in the pilot).** Whether test edges reach the encoder — the single thing that decides if
    the number is prediction or reconstruction — often cannot be determined from the paper at
    all, and this got *more* common, not less, in the more recent (2024–2026) papers added in the
    expansion. That is a reporting-standards finding, and it is independently publishable. A
@@ -167,8 +169,10 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 **We must NOT say:**
 
 - ❌ *"The field routinely leaks test edges into message passing."* **Not supported, and even
-  less supported at n=21 than in the pilot.** Only 2/21 clearly do it wrong; 7/21 clearly strip test
-  edges correctly (one, Orro 2026, holds out entire miRNAs — a stronger, inductive-style check).
+  less supported at n=21 than in the pilot, and weaker still after the 2026-09-06 adjudication.**
+  Only **1/21** clearly does it wrong — MGCNSS, whose propagated matrix is defined globally over
+  all 5,430 known associations; 7/21 clearly strip test edges correctly (one, Orro 2026, holds
+  out entire miRNAs — a stronger, inductive-style check, and the reason its own D1 call is *no*).
   Making the "routinely leaks" claim would be the same sin we are criticizing: asserting a
   strong quantitative claim the evidence does not carry.
 - ❌ *"No surveyed paper reports a model-free baseline."* **Retracted 2026-09-01 — it was
@@ -181,10 +185,10 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 **The honest framing for the manuscript's motivation section:**
 
-> *Across 21 papers surveyed, edge-level cross-validation is near-universal (20/21), but **15
+> *Across 21 papers surveyed, edge-level cross-validation is near-universal (19/21), but **15
 > report no model-free baseline and the 6 that do never remark on the 1.7–7.4-point margin
 > their own tables show**, unlabeled pairs are treated as negatives in the
-> majority (16/21), and in the majority of cases (12/21) the methods section does not permit
+> majority (17/21), and in the majority of cases (13/21) the methods section does not permit
 > the reader to determine whether held-out edges were visible to the encoder. We show that
 > under exactly this protocol, a one-line popularity heuristic attains AUROC 0.87 on a real
 > biomedical graph — within the band of published state-of-the-art results (0.91–0.99) — and
@@ -235,6 +239,54 @@ own graph's finding. See that document for the full results, tiering, and caveat
   lncRNA-disease paper (Sci Rep 2022), gGATLDA (BMC Bioinformatics 2022), DHGT-DTI (J Pharm
   Anal 2025), a substructure-GNN DTI paper (Front. Pharmacol. 2025), and a gene-disease GNN
   paper (Entropy 2023). None were included in the n=21 count above.
+
+## Adjudication of the 14 rater disagreements (2026-09-06)
+
+The blind second pass (2026-09-01) left 14 cells where the two raters disagreed: 3 on the
+cross-validation unit, 6 on whether held-out edges are removed from the encoder's graph, and 5 on
+negative sampling. (The fifteenth, ModulePred's D4 cell, was adjudicated on 2026-09-01 and is what
+exposed the criterion defect.) All 14 are now settled one at a time against the primary source,
+with the codebook rule that decided each and the verbatim sentence it rests on recorded in
+**`results/literature_survey_adjudication.tsv`**. **11 went to the second rater, 3 upheld the first.**
+
+**What changed, and what it cost the paper's claims:**
+
+- **"Only 2 of 21 clearly leave held-out edges in the graph" became 1 of 21.** The first rater had
+  recorded HGDTI as retaining them on a paraphrase — "heterogeneous network retains held-out test
+  interactions during message passing" — not on a quote. The paper describes its heterogeneous
+  network and its 10-fold CV in separate places and never connects them, so no qualifying sentence
+  exists and the cell is `unclear`. The one surviving `no` is **MGCNSS**, and it is solid: the
+  propagated matrix is defined globally as `M = [IM A; A^T ID]` with `A` the full HMDD v2.0 matrix
+  of 5,430 associations, while the split is described separately over "the positive and selected
+  negative samples ... into five folders".
+- **Two papers moved into the "clearly strips test edges" column and two moved out.** In: NGCN
+  ("a randomly chosen subset of 90% positive and negative pairs was used as training data to
+  construct the heterogeneous networks") and SaeGraphDTI, which names the inflation mechanism this
+  survey is about in its own words. Out: HiGLDP, whose exclusion statement reaches only "the
+  training folds", and kmerPMTF, where the first rater's "similarity matrices computed only from
+  the training split" was again a paraphrase with no sentence behind it. The count stayed at 7/21;
+  the membership did not.
+- **Orro's D1 call flipped to `no`** on the first rater's own quote: it holds out whole miRNAs, not
+  associations, which is a stronger check than the survey's other 20 papers apply.
+- **Negatives drawn from unlabeled pairs rose from 16/21 to 17/21**: DGNMDA's cell was decided on a
+  sentence the first rater stopped one short of, and NIMGSA — which never uses the word "negative"
+  — minimises a reconstruction loss over the whole association matrix, so every unlabeled pair is
+  a negative by construction. HiGLDP went the other way: a stated 1:1 ratio is not a stated
+  procedure.
+
+**Two of the 14 were codebook gaps rather than rater errors,** and both rules are now written into
+`SURVEY_CODEBOOK.md`: D3 had no rule for a paper that samples negatives one way for training and
+another for evaluation (kmerPMTF), nor for one that describes its negatives for a case study but
+not for the benchmark carrying its headline number (GPS-DTI). Both cells are now classified on the
+arm the reported metric comes from, which upheld the first rater in each case.
+
+**The pattern in the errors, worth naming:** 4 of the 6 D2 disagreements were the same mistake in
+the same direction — a call recorded on the rater's inference about what the architecture must be
+doing, where the codebook now requires a verbatim sentence. That rule was written on 2026-09-01
+precisely to catch this, and it did. The 15 D2 cells the two raters *agreed* on have not been
+re-audited under it; agreement is evidence but not proof, and a full D2 re-audit under the
+verbatim-quote rule remains open.
+
 
 ## Sources
 

@@ -76,6 +76,13 @@ propagates over**, or do they remain in the graph while being scored?
 > about which of those sets is wired into the encoder. Only an explicit statement about the
 > graph / adjacency / matrix / message passing earns `yes`.
 
+> Where the verbatim-quote requirement bites hardest, confirmed 2026-09-06: 4 of the 6 D2
+> disagreements between the two raters were the same error in the same direction -- a `yes` or a
+> `no` recorded on the rater's inference about what the architecture must be doing, with a
+> paraphrase in the evidence field where a sentence from the paper should have been (HGDTI,
+> kmerPMTF, HiGLDP). All three became `unclear`. A `no` survives only when the paper defines the
+> propagated matrix globally, as MGCNSS does.
+
 ## D3. `negative_sampling` — where do the negatives come from?
 
 Record both a free-text description (with ratio if stated) and one category:
@@ -93,6 +100,21 @@ Record both a free-text description (with ratio if stated) and one category:
 
 > A paper whose negative-selection scheme is one of its own contributions is `non_uniform` even
 > when a uniform variant appears in an ablation.
+
+### Two rules added 2026-09-06, each forced by an adjudicated cell
+
+1. **Two regimes in one paper: classify the evaluation one.** Where a paper draws its training
+   negatives one way and its evaluation negatives another, the category is the regime the
+   *reported metric* is computed over, and the free text records both. (kmerPMTF draws an equal
+   number of random unlabeled pairs for training but tests against "all the remaining negative
+   samples" — `all_unlabeled`, not `uniform_unlabeled`, because the AUROC on the page is computed
+   against every remaining pair.)
+2. **Two arms in one paper: the headline arm governs.** Where a paper describes its negatives for
+   one experiment and not for another, classify the arm carrying the headline number, and note the
+   other in the free text. This is the same principle D1 already applies to cold-start arms.
+   (GPS-DTI describes random 1x-20x sampling for its COVID-19 case study only; for the five
+   benchmark datasets carrying its five-fold cross-validation it says nothing beyond one dataset
+   being "balanced" — which states balance, not procedure. `not_described`.)
 
 ## D4. `model_free_baseline` — is an untrained comparator in the results table?
 

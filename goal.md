@@ -464,14 +464,15 @@ done and the second is suspended). Full detail in
       3. Fixed output-table and per-architecture checkpoint paths, so the four cells
          overwrote each other's artifacts. Now keyed to the config's `checkpoint_dir` stem.
 - [x] **Support the premise — EXPANDED TO n=21 papers (2026-08-12), spot-checked (2026-08-13),
-      DOUBLE-RATED (2026-09-01; the second-rater item is now closed).**
+      DOUBLE-RATED (2026-09-01) and every rater disagreement ADJUDICATED against the
+      primary source (2026-09-06; both items now closed).**
       `results/LITERATURE_SURVEY.md`. It **corrected our claim twice**: the leak is *not*
-      universal (7/21 strip test edges correctly, only 2/21 clearly do not); and the blind
+      universal (7/21 strip test edges correctly, only 1/21 clearly does not); and the blind
       second pass overturned "0/22 report a model-free baseline" — **6 of 21 do**, against this
       subfield's classical untrained methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR), which
       the original criterion's enumerated list had silently excluded. The surviving, stronger
       claim: those six clear the untrained comparator by only **1.7-7.4 AUROC points and none
-      remarks on it**. 12/21 (57%) methods sections still do not permit the reader to
+      remarks on it**. 13/21 (62%) methods sections still do not permit the reader to
       tell whether held-out edges reached the encoder. Target of 20-30 papers met with 15 new,
       open-access, PMC-verified papers; supporting quote recorded per cell in the TSV.
       2026-08-13: re-verified 14 "unclear" cells against primary sources -- 11/14 held up as a

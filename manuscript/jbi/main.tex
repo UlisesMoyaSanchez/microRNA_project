@@ -173,8 +173,8 @@ literature audit of these 21 papers found that 15 report no model-free baseline 
 a simple, no-learning scorer, such as node degree or a common-neighbours count, used
 as a sanity-check floor a trained model's performance should be judged against -- that
 the six which do report one clear it by between 1.7 and 7.4 AUROC points and none
-remarks on how narrow that is, and that 16 of the 21 default to uniformly-sampled
-negatives without discussion (protocol in Methods, full results in Related Work
+remarks on how narrow that is, and that 17 of the 21 default to negatives
+drawn from unlabeled pairs, without discussion (protocol in Methods, full results in Related Work
 below). Neither omission is novel: both are
 already documented pitfalls in the broader link-prediction and knowledge-graph
 literature, reviewed below. What is missing is the connection between that general
@@ -227,28 +227,30 @@ CKSNP-GNN and ModulePred -- report one of this subfield's classical untrained
 propagation or scoring methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR) as one more
 competitor in a comparison table, never as a floor: no paper remarks on how narrow its
 own margin over that comparator is (\S\ref{sec:generalization} measures those margins,
-and what they look like against a floor measured independently). 16 of the 21 treat
-every unlabeled pair as a
-uniformly-sampled negative by default, without discussing the alternative; among the
-papers in the original six-paper pilot that deviate from uniform sampling, two
-(HybridGNN, kmerPMTF) make a better negative-selection strategy their own headline
-contribution -- an implicit admission that the default is known to be inadequate. Whether
+and what they look like against a floor measured independently). 17 of the 21 draw
+their negatives from unlabeled pairs, uniformly sampled or taken wholesale, without
+discussing the alternative; only two deviate, MGCNSS and HGDTI, each selecting negatives
+by a distance or reliability criterion of its own devising -- an implicit admission that
+the default is known to be inadequate -- and the remaining two never say where their
+negatives come from. Whether
 held-out edges are removed from the encoder's input is unclear from the methods section
-in 12 of the 21, up from 2 of the original 6; this reporting gap, not confirmed leakage,
+in 13 of the 21, up from 3 of the original 6; this reporting gap, not confirmed leakage,
 is now the dominant finding on that dimension. Table~\ref{tab:literature_survey}
 summarizes the full sample.
 
-We deliberately do not claim that this subfield routinely leaks edges: only 2 of the 21
-papers surveyed clearly do, 7 clearly strip test edges correctly, and our own project's
+We deliberately do not claim that this subfield routinely leaks edges: after
+adjudication only 1 of the 21 papers surveyed clearly does -- MGCNSS, whose propagated
+matrix is defined globally from all 5,430 known associations -- 7 clearly strip test
+edges correctly, and our own project's
 original split was worse than the norm we observed. The claim we make is narrower: no
 paper in the sample reads an untrained comparator as a floor. Most report none at all,
 and the six that do put one on the page treat it as a method to beat rather than as a
 sanity check on their own number, none of them commenting on how small the margin it
 leaves them is (\S\ref{sec:generalization}). Getting the split right is not protective on its
-own -- the two papers from the original pilot that do strip held-out edges from the
-graph, HybridGNN and kmerPMTF, still draw negatives from unlabeled pairs, one uniformly
-at random and the other count-matched rather than degree-matched, and neither reports a
-model-free baseline (Table~\ref{tab:literature_survey}). The two failure modes are
+own -- all seven papers that do strip held-out edges from the graph still draw their
+negatives from unlabeled pairs, six uniformly at random and one wholesale, none of them
+degree-matched, and four of the seven report no model-free baseline
+(Table~\ref{tab:literature_survey}). The two failure modes are
 independent: fixing the split is not evidence against the popularity shortcut this
 paper identifies, which is precisely why, as Results shows, correcting both is
 super-additive rather than redundant.
@@ -439,11 +441,20 @@ papers was made from the primary sources alone, blind to the first pass. Raw agr
 was 95\% on model-free-baseline reporting, 86\% on the cross-validation unit, 76\% on
 negative sampling and 71\% on whether held-out edges are removed from the encoder's
 graph; Cohen's $\kappa$ is 0.49 and 0.44 on the latter two, and is uninformative on the
-former two, whose marginals are too skewed for chance-correction to behave. Every
-disagreement was adjudicated against the primary source rather than averaged away
-(\texttt{results/interrater\_agreement.json}).
+former two, whose marginals are too skewed for chance-correction to behave. All 14 disagreements were adjudicated one at a time
+against the primary source rather than averaged away, each call recorded with the
+codebook rule that decided it and the verbatim sentence it rests on
+(\texttt{results/interrater\_agreement.json},
+\texttt{results/literature\_survey\_adjudication.tsv}); 11 went to the second rater and
+3 upheld the first. Two of them were settled by a quote the first rater had already
+recorded and classified against, and two exposed gaps in the codebook itself rather than
+in either reading: it had no rule for a paper that samples negatives one way for training
+and another for evaluation, nor for one that describes its negatives for a case study but
+not for the benchmark carrying its headline number. Both rules are now written down, and
+the affected cells are classified on the arm the reported metric comes from.
 
-One adjudication changed a headline number. The raters split on whether ModulePred
+Two adjudications changed a headline number. The first was on model-free-baseline
+reporting. The raters split on whether ModulePred
 reports a model-free baseline, and the disagreement exposed a defect in the original
 criterion rather than in either reading: the criterion gave a definition -- a comparator
 whose predictions require no parameters fitted to the association data -- and then an
@@ -455,7 +466,17 @@ therefore re-audited on that dimension alone under the definition, recording for
 qualifying comparator its name, its reported score, and the surveying paper's own score
 on the same metric and dataset, so that the margin between them could be read off
 (\texttt{results/literature\_survey\_d4\_reaudit.tsv}). The corrected tallies are the ones
-used throughout this paper. An earlier 2026-08-13 re-read of the first rater's own
+used throughout this paper.
+
+The second was on whether held-out edges are removed from the encoder's input. The first
+rater had recorded HGDTI as retaining them, on a paraphrase rather than on a quote; the
+codebook requires a \emph{yes} or a \emph{no} to carry a verbatim sentence that supports
+it alone, and no such sentence exists in that paper -- it describes its heterogeneous
+network and its cross-validation separately and never connects them. The cell became
+\emph{unclear}, and the number of surveyed papers that clearly do \emph{not} remove
+held-out edges fell from two to one. The surviving one, MGCNSS, states the matrix it
+propagates over explicitly, and that matrix is the full set of 5,430 known associations.
+An earlier 2026-08-13 re-read of the first rater's own
 "unclear" classifications against each paper's primary source, undertaken to check
 whether "unclear" reflected a genuine reporting gap or overly conservative extraction,
 corrected 3 of 14 spot-checked cells; those corrections are also reflected throughout.
@@ -868,7 +889,7 @@ read the primary sources under a written codebook, and every disagreement was
 adjudicated against the source rather than averaged away, but agreement before
 adjudication was moderate on the two dimensions that carry real spread: Cohen's
 $\kappa$ 0.44 on whether held-out edges are removed from the encoder's input and 0.49
-on negative sampling. The "unclear" calls in particular -- 12 of 21 on the former --
+on negative sampling. The "unclear" calls in particular -- 13 of 21 on the former --
 should be read as an adjudicated two-rater judgment rather than a fact a third reader
 would recover with certainty. We report the double-rating as a limitation and not as a
 resolution because it changed a headline: the first rater's classification, from which
