@@ -25,7 +25,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 COMP = ROOT / "results" / "comparison"
-OUT = ROOT / "manuscript" / "bmc_bioinformatics" / "tables"
+OUT = ROOT / "manuscript" / "jbi" / "tables"
+
+# Tables the manuscript keeps by hand, so a regeneration cannot silently overwrite them.
+# Each value says what the hand-kept file carries that this script does not produce.
+HAND_MAINTAINED = {
+    "table3_literature_survey.tex":
+        "the manuscript copy carries \\cite keys per paper, a rule separating the pilot "
+        "six from the 2026-08-12 expansion, and a prose tally footer; regenerating would "
+        "drop all three. Delete the entry here once the generator emits them.",
+}
 
 PRETTY = {
     "hgt_v2":             "HGT (project model)",
@@ -59,21 +68,27 @@ def table1_headline_grid() -> str:
         held_auprc = json.load(fh)["cells"]
 
     rows = [
-        ("Edges seen in training (conventional)", "uniform-random negatives",
-         seen["uniform"]["auroc"], seen["uniform"]["auprc"]),
-        ("Edges seen in training (conventional)", "degree-matched negatives",
-         seen["degree_matched"]["auroc"], seen["degree_matched"]["auprc"]),
-        ("Edges held out (honest)", "uniform-random negatives",
-         held_auroc["uniform"]["uniform"], held_auprc["uniform"]["uniform"]),
-        ("Edges held out (honest)", "degree-matched negatives",
-         held_auroc["degree_matched"]["degree_matched"], held_auprc["degree_matched"]["degree_matched"]),
+        # The two bold rows are the protocols the text names; the off-diagonal pair fixes
+        # only one axis each and is never called "conventional" or "corrected" anywhere.
+        ("Edges seen in training", "uniform-random negatives",
+         seen["uniform"]["auroc"], seen["uniform"]["auprc"], True),
+        ("Edges seen in training", "degree-matched negatives",
+         seen["degree_matched"]["auroc"], seen["degree_matched"]["auprc"], False),
+        ("Edges held out", "uniform-random negatives",
+         held_auroc["uniform"]["uniform"], held_auprc["uniform"]["uniform"], False),
+        ("Edges held out", "degree-matched negatives",
+         held_auroc["degree_matched"]["degree_matched"], held_auprc["degree_matched"]["degree_matched"], True),
     ]
 
     lines = [
         r"\begin{table}[h!]",
         r"\caption{Headline protocol grid: mean $\pm$ std AUROC and AUPRC over 4 seeds "
         r"(\{123, 777, 2024, 7\}), test set, \texttt{graphs\_v3fixed}. Rows cross the edge "
-        r"split (seen vs.\ held out); columns cross the negative-sampling regime. The "
+        r"split (seen vs.\ held out); columns cross the negative-sampling regime. Bold "
+        r"marks the two protocols the text calls ``conventional'' (edges seen + uniform "
+        r"negatives) and ``corrected'' (edges held out + degree-matched negatives); the two "
+        r"off-diagonal cells isolate the effect of fixing only one axis and are not "
+        r"themselves called ``corrected'' or ``conventional'' elsewhere in the paper. The "
         r"``edges seen'' row reports the uniform-negative-trained model (matching the "
         r"conventional protocol's semantics) under both evaluation regimes; the ``edges "
         r"held out'' row reports each model evaluated with the negative type it was "
@@ -85,10 +100,11 @@ def table1_headline_grid() -> str:
         r"Split & Negatives & AUROC & AUPRC \\",
         r"\hline",
     ]
-    for split, neg, auroc, auprc in rows:
+    for split, neg, auroc, auprc, bold in rows:
+        emph = (lambda c: rf"\textbf{{{c}}}") if bold else (lambda c: c)
         lines.append(
-            f"{split} & {neg} & {mean_std(auroc['mean'], auroc['std'])} & "
-            f"{mean_std(auprc['mean'], auprc['std'])} \\\\"
+            f"{split} & {neg} & {emph(mean_std(auroc['mean'], auroc['std']))} & "
+            f"{emph(mean_std(auprc['mean'], auprc['std']))} \\\\"
         )
     lines += [r"\hline", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines) + "\n"
@@ -451,6 +467,9 @@ def main() -> None:
     ]
     failures = []
     for name, fn in generators:
+        if name in HAND_MAINTAINED:
+            print(f"skipped {name}: {HAND_MAINTAINED[name]}")
+            continue
         try:
             content = fn()
         except FileNotFoundError as e:
