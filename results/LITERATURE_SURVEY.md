@@ -4,25 +4,34 @@
 work are *not ours alone*. Until now that was **asserted and never shown** — a strawman a
 reviewer would rightly name. This document is the evidence.
 
-**Status: n = 22 papers read in full (2026-08-12 expansion of the original 7).** Target range
-(20–30) met. Every row below was verified by reading the paper's methods section, not by
-inference from an abstract. Where a paper does not say, the cell reads **unclear** — and *that
-category is itself a finding*. **Remaining limitation: single rater.** All 22 classifications,
-including the original 7, were made by one reader; the "unclear" calls have not been
-cross-checked by a second independent rater. See "Still to do."
+**Status: n = 21 papers read in full (2026-08-12 expansion of the original pilot), every cell
+double-rated 2026-09-01.** Target range (20–30) met. Every row below was verified by reading the
+paper's methods section, not by inference from an abstract. Where a paper does not say, the cell
+reads **unclear** — and *that category is itself a finding*.
 
-**Last updated:** 2026-08-13
+A twenty-second row of the sheet, "DTI field convention", records a general drug-target
+convention rather than a paper (`counted_as_paper = no` in the TSV) and is **excluded from every
+denominator** here. That is why the pilot is n=6 papers, not 7, and the total is 21, not 22.
+
+**Second-rater limitation: CLOSED 2026-09-01.** Decision rules were written up first
+([`SURVEY_CODEBOOK.md`](SURVEY_CODEBOOK.md)), then a blind second pass over all 21 papers was
+made from the primary sources ([`literature_survey_rater2.tsv`](literature_survey_rater2.tsv)),
+and agreement computed by [`analysis/interrater_agreement.py`](../analysis/interrater_agreement.py)
+→ [`interrater_agreement.json`](interrater_agreement.json). **It overturned the model-free-baseline
+headline** — see below.
+
+**Last updated:** 2026-09-01
 
 ---
 
 ## The finding, and it is not the one we expected
 
 We went in expecting to show *"everyone leaks held-out edges into the message-passing graph."*
-**That is not what the literature shows, and we should not claim it.** In the original n=7, 2
-clearly strip test edges from the graph, 2 clearly do not, 3 do not say. Expanding to n=22
-sharpens this further in the same direction: only 7/22 clearly strip test edges correctly and
-2/22 clearly leave them in — but the "unclear" bucket is still the largest category at
-**12/22 (55%)**, because most 2024–2026 papers' methods sections simply do not state whether
+**That is not what the literature shows, and we should not claim it.** In the original pilot (n=6 papers), 2
+clearly strip test edges from the graph, 2 clearly do not, 2 do not say. Expanding to n=21
+sharpens this further in the same direction: only 7/21 clearly strip test edges correctly and
+2/21 clearly leave them in — but the "unclear" bucket is still the largest category at
+**12/21 (57%)**, because most 2024–2026 papers' methods sections simply do not state whether
 held-out edges are masked from the graph at all. The story is not "the field leaks" — it is "the
 field's methods sections do not let a reader check."
 
@@ -34,20 +43,43 @@ and CoupleMDA's CV-over-edges and negative-sampling cells all had explicit suppo
 that the first pass missed. See "Still to do" for the follow-up this implies for the second-rater
 plan.)*
 
-What the literature *does* show is sharper, more universal, and more damaging, and it gets
-*stronger*, not weaker, at n=22:
+What the literature *does* show is sharper and more damaging — though **not** in the form this
+document asserted until 2026-09-01. The original claim was "0 / 22, not one paper reports a
+model-free baseline." **That claim was wrong, and the second rater is what caught it.**
 
-> **Not one of the 22 papers surveyed reports a single model-free baseline.**
-> **0 / 22.** No gene/node degree. No common neighbours. No Adamic–Adar. Not even random. One
-> paper (ModulePred) computes an L3 topological score, but only for network data augmentation —
-> confirmed absent from every results/comparison table, so even the closest near-exception does
-> not count. Every comparison is a learned method against other learned methods.
+The defect was in the criterion, not in either reading of any paper. It stated a definition — a
+comparator with no parameters fitted to the association data — and then an enumerated list of
+qualifying baselines (degree, common neighbours, Adamic–Adar, L3, …). The list left out this
+subfield's *own* classical untrained methods: RWR, SPM, PBMDA, BNPMDA, WBSMDA, HNM, LLCMDA. The
+first rater applied the list and recorded **no** for six papers the definition admits. The
+corrected reading, re-audited paper by paper in
+[`literature_survey_d4_reaudit.tsv`](literature_survey_d4_reaudit.tsv):
+
+> **6 of 21 papers do report an untrained comparator — and every one of them beats it by a
+> margin small enough to be worth remarking on, which none of them does.**
+>
+> | Paper | Untrained comparator | Its score | Paper's score | Margin |
+> |---|---|---|---|---|
+> | NGCN | HNM (heterogeneous network model) | 0.940 | 0.957 | **+1.7 pts** |
+> | CKSNP-GNN | LLCMDA (also PBMDA) | 91.90 | 93.71 | **+1.8 pts** |
+> | NIMGSA | SPM (structural perturbation) | 0.8960 | 0.9354 | **+3.9 pts** |
+> | Orro | TCRWMDA (also WBSMDA, ICFMDA) | 92.09 | 97.10 | **+5.0 pts** |
+> | HLGNN-MDA | BNPMDA (bipartite projection) | 0.85648 | 0.93086 | **+7.4 pts** |
+> | ModulePred | RWR / RWRH (also DADA) | figure only | 0.834 | not readable |
+>
+> The other **14 report none at all**; 1 (DTI-MHAPR) is unclear. NIMGSA's SPM also *beats*
+> IMCMDA, a trained matrix-completion baseline, in that paper's own Table 1.
+
+**This is a better finding than the one it replaces.** "Nobody reports a floor" was an argument
+about a hole in the literature. "Six papers print the floor in their own tables, clear it by
+1.7–7.4 points, and not one of them says so" is an argument about how the field *reads* its own
+numbers — and it is evidence the field already published, not evidence we had to generate.
 
 And separately:
 
 > **Treating unlabeled pairs as uniformly-sampled negatives remains the field's default.**
-> 16 / 22 do exactly this (73%, versus 4/7 = 57% in the original pilot). Among the original
-> seven, two of the three that deviate from uniform sampling made "better negative selection"
+> 16 / 21 do exactly this (76%, versus 3/6 = 50% in the original pilot). Among the original
+> six, two of the three that deviate from uniform sampling made "better negative selection"
 > their *headline contribution* — itself an admission that the default is known to be broken.
 
 **Put those two together and you get the paper.** The headline AUROCs in this literature sit
@@ -56,8 +88,8 @@ negatives), a scorer that **ignores the miRNA entirely and only counts how many 
 target the gene** reaches **AUROC 0.8712** — and *beats* our trained graph transformer
 (0.8056).
 
-**A field that never reports a model-free control cannot know whether its 0.97 is a result or
-a popularity effect.** That is the claim, it is supported, and it does not require accusing
+**A field that does not read a model-free control as a floor cannot know whether its 0.97 is a
+result or a popularity effect.** That is the claim, it is supported, and it does not require accusing
 anyone of leakage.
 
 ---
@@ -67,27 +99,27 @@ anyone of leakage.
 | # | Paper | Venue / Year | CV over edges? | Test edges removed from message-passing graph? | Negatives | Model-free baseline? | Headline AUROC |
 |---|---|---|:--:|:--:|---|:--:|:--:|
 | 1 | **MGCNSS** | Brief. Bioinform. 2024 | yes | **NO** — graph/similarity matrices unchanged | distance-based selection (their contribution) | **NO** | **0.9874** |
-| 2 | **NIMGSA** | 2022 | yes | **unclear** — never stated | **not described at all** | **NO** | **0.9354** |
+| 2 | **NIMGSA** | 2022 | yes | **unclear** — never stated | **not described at all** | **YES** — SPM (structural perturbation), 0.8960 vs 0.9354 (+3.9 pts) | **0.9354** |
 | 3 | **HybridGNN** | Bioinformatics 2026 | yes | **YES** — PyG `RandomLinkSplit` | uniform random from unknown pairs | **NO** | **0.9715** |
 | 4 | **HGDTI** | BMC Bioinform. 2022 | yes | **NO** — test edges retained in network | "reliable" score-filtered (non-uniform) | **NO** | **~0.979** |
-| 5 | **NGCN** | 2024 | yes | **unclear** — not confirmed | uniform random, 1:10 ("an unknown pair is generally viewed as a negative sample") | **NO** | **0.910** |
+| 5 | **NGCN** | 2024 | yes | **unclear** — not confirmed | uniform random, 1:10 ("an unknown pair is generally viewed as a negative sample") | **YES** — HNM (heterogeneous network model), 0.940 vs 0.957 (+1.7 pts) | **0.910** |
 | 6 | **kmerPMTF** | PeerJ 2024 | yes | **YES** — similarity matrices built from training split only | all unlabeled pairs, count-matched | **NO** | **0.80–0.91** |
-| 7 | *DTI field convention* | (multiple) | yes | — | "a drug–target pair with an unknown interaction is generally viewed as a negative sample", typically 10× positives | **NO** | — |
-| 8 | **Orro** | Biomedicines 2026 | yes | **YES** — miRNA-level holdout (stronger than edge-level) | uniform random from unannotated pairs | **NO** | ~0.98 |
+| 7 | *DTI field convention* | (multiple) | yes | — | "a drug–target pair with an unknown interaction is generally viewed as a negative sample", typically 10× positives | — *(not a paper; excluded from all denominators)* | — |
+| 8 | **Orro** | Biomedicines 2026 | yes | **YES** — miRNA-level holdout (stronger than edge-level) | uniform random from unannotated pairs | **YES** — TCRWMDA (also WBSMDA, ICFMDA), 92.09 vs 97.10 (+5.0 pts) | ~0.98 |
 | 9 | **CoupleMDA** | IJMS 2025 | yes | **YES** — train/val/test edges strictly partitioned | uniform random, 1:1 | **NO** | 0.9536 (Table 3) |
 | 10 | **GONNMDA** | Genes 2025 | yes | **unclear** | uniform random, 1:1 | **NO** | 0.9541 |
 | 11 | **DiGAMN** | BMC Genomics 2024 | yes | **YES** — 20% masked to prevent leakage | uniform random, 1:1 / 1:5 / 1:10 | **NO** | 0.9635 |
 | 12 | **DGNMDA** | Bioengineering 2024 | yes | **unclear** | undersampling (ratio unspecified) | **NO** | 0.9455 |
-| 13 | **HLGNN-MDA** | IJMS 2022 | unclear | **YES** — positive test-set samples removed from the adjacency matrix each round | uniform random, 1:1 | **NO** | 0.93086 (10-fold CV) |
+| 13 | **HLGNN-MDA** | IJMS 2022 | unclear | **YES** — positive test-set samples removed from the adjacency matrix each round | uniform random, 1:1 | **YES** — BNPMDA (bipartite projection), 0.85648 vs 0.93086 (+7.4 pts) | 0.93086 (10-fold CV) |
 | 14 | **MEAHNE** | Life 2022 | yes | **unclear** | uniform random, 1:1 | **NO** | 0.9520 (Table 3) |
-| 15 | **CKSNP-GNN** | Genes 2022 | yes | **unclear** | uniform random, 1:1 (16,427 negatives) | **NO** | 0.9371 (5-fold CV mean) |
+| 15 | **CKSNP-GNN** | Genes 2022 | yes | **unclear** | uniform random, 1:1 (16,427 negatives) | **YES** — LLCMDA (also PBMDA), 91.90 vs 93.71 (+1.8 pts) | 0.9371 (5-fold CV mean) |
 | 16 | **HMCDA** | BMC Bioinform. 2023 | yes | **unclear** | uniform random, 5:1 | **NO** | 0.9135 |
 | 17 | **HiGLDP** | BMC Biology 2026 | yes | **YES** — strictly excluded from training folds | uniform random, 1:1 | **NO** | 0.9696 |
 | 18 | **GPS-DTI** | BMC Biology 2025 | yes | **unclear** | balanced pos/neg (curation unclear) | **NO** | not extracted |
 | 19 | **SaeGraphDTI** | BMC Bioinform. 2025 | yes | **unclear** | all unlabeled pairs (unsampled) | **NO** | not extracted |
-| 20 | **DTI-MHAPR** | BMC Bioinform. 2025 | yes | **unclear** | uniform random, 1:1 | **NO** | not extracted |
+| 20 | **DTI-MHAPR** | BMC Bioinform. 2025 | yes | **unclear** | uniform random, 1:1 | **unclear** — an eighth comparator is mentioned but cannot be identified | not extracted |
 | 21 | **iNGNN-DTI** | Bioinformatics 2024 | yes | **unclear** | uniform random, 1:1 | **NO** | 0.931–0.934 |
-| 22 | **ModulePred** | BMC Bioinform. 2024 | yes | **unclear** | uniform random, 50:1 | **NO** — L3 score confirmed used only for network augmentation, absent from every comparison table | 0.834 |
+| 22 | **ModulePred** | BMC Bioinform. 2024 | yes | **unclear** | uniform random, 50:1 | **YES** — RWR and RWRH reported as compared methods (the L3 score is augmentation-only, but it is not the only untrained method in the paper) | 0.834 |
 
 Rows 8–22 (2026-08-12 expansion): all open-access (PMC), verified via the paper's own PMC JATS
 XML front matter for bibliographic metadata; classification quotes are in
@@ -96,16 +128,17 @@ spot-check note above: 3 cells among rows 8–22 were corrected after re-reading
 source (CoupleMDA's CV-over-edges and negative-sampling cells, HLGNN-MDA's held-out-edge-removal
 cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a confirmed "no").
 
-### Tallies (n = 22)
+### Tallies (n = 21 papers; the field-convention row is excluded)
 
-| Practice | Original pilot (n=7) | Expansion (n=15) | Combined (n=22) |
+| Practice | Original pilot (n=6) | Expansion (n=15) | Combined (n=21) |
 |---|---|---|---|
-| Cross-validate over **edges** (not nodes) | 7 / 7 | 14 / 15 | **21 / 22 (95%)** |
-| Held-out edges **removed** from the encoder's input graph | 2 / 7 | 5 / 15 | **7 / 22 (32%)** |
-| Held-out edges **left in** the encoder's input graph | 2 / 7 | 0 / 15 | **2 / 22 (9%)** ⚠️ |
-| **Unclear** from the methods section | 3 / 7 | 9 / 15 (+1 NA) | **12 / 22 (55%)** ⚠️ |
-| Negatives = unlabeled pairs, uniform | 4 / 7 | 12 / 15 | **16 / 22 (73%)** |
-| Any **model-free / heuristic baseline** reported | 0 / 7 | 0 / 15 | **0 / 22 (0%)** 🔴 |
+| Cross-validate over **edges** (not nodes) | 6 / 6 | 14 / 15 | **20 / 21 (95%)** |
+| Held-out edges **removed** from the encoder's input graph | 2 / 6 | 5 / 15 | **7 / 21 (33%)** |
+| Held-out edges **left in** the encoder's input graph | 2 / 6 | 0 / 15 | **2 / 21 (10%)** ⚠️ |
+| **Unclear** from the methods section | 2 / 6 | 10 / 15 | **12 / 21 (57%)** ⚠️ |
+| Negatives = unlabeled pairs, uniform or wholesale | 3 / 6 | 13 / 15 | **16 / 21 (76%)** |
+| Any **model-free / heuristic baseline** reported | 2 / 6 | 4 / 15 | **6 / 21 (29%)** 🔴 |
+| — of those, margin over it **discussed by the paper** | 0 / 2 | 0 / 4 | **0 / 6 (0%)** 🔴 |
 
 ---
 
@@ -113,15 +146,16 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 **We CAN say, with evidence:**
 
-1. **No model-free control is reported anywhere in this sample (0/22).** The field has no
-   routine way of knowing whether its numbers beat a popularity heuristic — and we show, on a
-   real graph, that under its own default protocol they may not. This held with zero exceptions
-   across a 3x larger, independently sourced sample than the original pilot.
-2. **Uniform/unlabeled negatives are the default (16/22, 73%),** consistent with the pilot's
-   4/7 (57%). Among the original seven, the papers that deviate do so as their *headline
+1. **A model-free control is missing from 15 of 21 papers, and is never read as a floor by
+   any of the 6 that do report one.** The field has no routine way of knowing whether its
+   numbers beat a popularity heuristic — and where the comparison is on the page, the margin
+   (1.7–7.4 AUROC points) passes without comment. We show, on a real graph, that under this
+   protocol the trained model may not beat the heuristic at all.
+2. **Uniform/unlabeled negatives are the default (16/21, 76%),** consistent with the pilot's
+   3/6 (50%). Among the original six, the papers that deviate do so as their *headline
    contribution* — evidence the problem is recognized but has no standard remedy or control.
-3. **Reporting of the split is frequently too vague to reproduce (12/22 unclear, 55%, up from
-   3/7 in the pilot).** Whether test edges reach the encoder — the single thing that decides if
+3. **Reporting of the split is frequently too vague to reproduce (12/21 unclear, 57%, up from
+   2/6 in the pilot).** Whether test edges reach the encoder — the single thing that decides if
    the number is prediction or reconstruction — often cannot be determined from the paper at
    all, and this got *more* common, not less, in the more recent (2024–2026) papers added in the
    expansion. That is a reporting-standards finding, and it is independently publishable. A
@@ -133,19 +167,24 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 **We must NOT say:**
 
 - ❌ *"The field routinely leaks test edges into message passing."* **Not supported, and even
-  less supported at n=22 than at n=7.** Only 2/22 clearly do it wrong; 7/22 clearly strip test
+  less supported at n=21 than in the pilot.** Only 2/21 clearly do it wrong; 7/21 clearly strip test
   edges correctly (one, Orro 2026, holds out entire miRNAs — a stronger, inductive-style check).
   Making the "routinely leaks" claim would be the same sin we are criticizing: asserting a
   strong quantitative claim the evidence does not carry.
+- ❌ *"No surveyed paper reports a model-free baseline."* **Retracted 2026-09-01 — it was
+  false.** Six do. The claim that survives is about how the margin is read, not about whether
+  the comparator exists. See the criterion defect described above; the failure mode was a
+  checklist that silently narrowed its own definition.
 - ❌ *"Our leak is typical."* **It is not — ours was worse than the norm.** Every paper here at
   least cross-validates over edges; our original split partitioned *cells* only. Honesty here
   costs us nothing and buys credibility: we found our own error, and it was a bad one.
 
 **The honest framing for the manuscript's motivation section:**
 
-> *Across 22 papers surveyed, edge-level cross-validation is near-universal (21/22), but **no
-> paper reports a model-free baseline**, unlabeled pairs are treated as negatives in the
-> majority (16/22), and in the majority of cases (12/22) the methods section does not permit
+> *Across 21 papers surveyed, edge-level cross-validation is near-universal (20/21), but **15
+> report no model-free baseline and the 6 that do never remark on the 1.7–7.4-point margin
+> their own tables show**, unlabeled pairs are treated as negatives in the
+> majority (16/21), and in the majority of cases (12/21) the methods section does not permit
 > the reader to determine whether held-out edges were visible to the encoder. We show that
 > under exactly this protocol, a one-line popularity heuristic attains AUROC 0.87 on a real
 > biomedical graph — within the band of published state-of-the-art results (0.91–0.99) — and
@@ -165,33 +204,37 @@ own graph's finding. See that document for the full results, tiering, and caveat
 
 ## Still to do
 
-- ~~**Expand to 20–30 papers.**~~ **DONE 2026-08-12 — n=22.** 15 new papers added, all
+- ~~**Expand to 20–30 papers.**~~ **DONE 2026-08-12 — n=21 papers.** 15 new papers added, all
   open-access (PMC), verified via each paper's own PMC JATS XML front matter. See the expanded
   table and tallies above.
-- **Two independent raters** for the "unclear" column, with disagreements recorded. **Still
-  open, but partially de-risked.** A 2026-08-13 spot-check re-verified 14 of the 15 "unclear"
-  cells among rows 8-22 directly against each paper's methods section (not a second rater, but a
-  second read by the same reader, prompted by the question of whether "unclear" was a genuine
-  reporting gap or an extraction artifact). Result: 11/14 held up, 3/14 were corrected (see the
-  note at the top of this document). This is evidence the "unclear" calls are not rubber-stamped,
-  but it is not a substitute for an independent second rater — the correction rate (3/14, ~21%)
-  is high enough that an independent pass over the full n=22 could still move the tallies further.
-  This remains the survey's primary open item and is reported as such in the manuscript's
-  Discussion (fifth limitation).
+- ~~**Two independent raters** for the "unclear" column, with disagreements recorded.~~
+  **DONE 2026-09-01.** Codebook written first ([`SURVEY_CODEBOOK.md`](SURVEY_CODEBOOK.md)), then
+  a blind second pass over all 21 papers from the primary sources
+  ([`literature_survey_rater2.tsv`](literature_survey_rater2.tsv)); agreement and every
+  disagreement by name in [`interrater_agreement.json`](interrater_agreement.json).
+  Raw agreement / Cohen's κ: model-free baseline 95% (κ n/a, skewed marginals), CV-over-edges
+  86% (κ n/a), negative sampling 76% (κ = 0.49), held-out edges removed 71% (κ = 0.44).
+  The prior 2026-08-13 same-rater spot-check of 14 "unclear" cells (11/14 held up, 3/14
+  corrected) stands as a separate, weaker check. **The one D4 disagreement is what exposed the
+  criterion defect and overturned the 0/22 headline** — see the top of this document.
+  **Open follow-up:** the 6 D2 and 5 D3 disagreements listed in the JSON have *not* yet been
+  adjudicated one by one; the tallies above still carry rater 1's calls on those cells.
 - **Record the exact quoted sentence** supporting each classification, in the TSV. **DONE** for
-  all 22 rows.
+  all 21 rows.
 - **Check the two "did it right" papers (HybridGNN, kmerPMTF) for negative sampling and
   baselines.** Both strip test edges — and both still use uniform/unlabeled negatives and
   report no model-free control. This pattern replicates in the expansion: several new papers
-  that correctly remove test edges from the graph (Orro, DiGAMN, HiGLDP, CoupleMDA) still use
-  uniform-random or unclear negative sampling and report no model-free baseline. If a paper can
+  that correctly remove test edges from the graph (DiGAMN, HiGLDP, CoupleMDA) still use
+  uniform-random or unclear negative sampling and report no model-free baseline. Orro is the
+  instructive exception in the other direction: it holds out whole miRNAs *and* reports an
+  untrained comparator — and still never asks why it only beats it by 5 points. If a paper can
   get the split right and *still* be vulnerable to the popularity artifact, that is the
   strongest possible argument for our proposed reporting standard.
 - **Manual close-reading candidates, not pursued (not paywalled, extraction was inconclusive):**
   Gra-CRC-miRTar (CSBJ 2024), GraphTar (BMC Bioinformatics 2023), a heterogeneous-GNN
   lncRNA-disease paper (Sci Rep 2022), gGATLDA (BMC Bioinformatics 2022), DHGT-DTI (J Pharm
   Anal 2025), a substructure-GNN DTI paper (Front. Pharmacol. 2025), and a gene-disease GNN
-  paper (Entropy 2023). None were included in the n=22 count above.
+  paper (Entropy 2023). None were included in the n=21 count above.
 
 ## Sources
 

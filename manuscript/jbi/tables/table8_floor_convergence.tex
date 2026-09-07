@@ -1,0 +1,19 @@
+\begin{table}[h!]
+\caption{The untrained floor, measured twice. The three surveyed papers that both report an untrained comparator (Table~\ref{tab:literature_survey}) and evaluate on an association matrix we could re-measure. ``Reported'' is the paper's own comparison table; ``re-measured here'' is our architecture and the best of our four heuristics on the same matrix under the conventional protocol (edges seen, uniform-random negatives), from Table~\ref{tab:discrimination}. The two floors are measured by different methods, by different groups, and they agree: an untrained scorer reaches 0.86--0.92 on these graphs however it is built. What the paper's own table therefore shows, unremarked, is a headline sitting a few points above a floor that replicates independently. The trained columns are \emph{not} comparable -- ours is our architecture, not theirs, and the fold counts and negative ratios differ -- so this table is evidence about the floor, not a reproduction of any reported number. Under the corrected protocol the same two floors fall to 0.5683 and 0.5591, and the same trained arm to 0.6182 and 0.6219 (Table~\ref{tab:discrimination}). $^{\dagger}$CKSNP-GNN did not run its comparators: it reports ``the optimal AUC recorded in each paper'', so its floor is a number transferred across papers and datasets, and is the weakest row here.}
+\label{tab:floor_convergence}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\hline
+ & \multicolumn{4}{c}{Reported by the paper} & \multicolumn{3}{c}{Re-measured here, same matrix} \\
+\cline{2-5}\cline{6-8}
+Paper & Untrained & Its & Paper's & Margin & Model-free & Trained & Margin \\
+ & comparator & AUROC & AUROC & & (floor) & (ours) & \\
+\hline
+NIMGSA & SPM & 0.8960 & 0.9354 & $+0.0394$ & 0.8842 & 0.8789 & $-0.0053$ \\
+HLGNN-MDA & BNPMDA & 0.8565 & 0.9309 & $+0.0744$ & 0.8842 & 0.8789 & $-0.0053$ \\
+CKSNP-GNN$^{\dagger}$ & LLCMDA & 0.9190 & 0.9371 & $+0.0181$ & 0.8924 & 0.8812 & $-0.0112$ \\
+\hline
+\end{tabular}
+}
+\end{table}

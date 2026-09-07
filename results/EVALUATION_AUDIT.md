@@ -636,17 +636,24 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    graph-free MLP included; the untrained control does not move. Full table, the
    per-architecture super-additivity, and the two caveats (n=1; a different training loop than
    §2's) are in **experiment 5** above. The claim is no longer anecdotal.
-4. **~~Support the premise~~ — DONE, expanded to n=22 (2026-08-12), spot-checked (2026-08-13):**
-   [`LITERATURE_SURVEY.md`](LITERATURE_SURVEY.md). Grew from the original 7-paper pilot to 22
-   (target 20–30 met), all 15 new papers open-access (PMC), bibliographic metadata verified via
-   each paper's own PMC JATS XML front matter. **It corrected the claim we were about to make,
-   and the correction held at 3x the sample size.** The field does *not* routinely leak test
-   edges — only 2/22 clearly do it wrong, 7/22 clearly strip test edges correctly, and our own
-   original split (cells only) was **worse than the norm**. What *is* universal, and got
-   *stronger* with the larger sample: **0/22 papers report any model-free baseline**, 16/22
-   treat unlabeled pairs as uniform negatives, and 12/22 (55%, up from 3/7) methods sections do
-   not let the reader determine whether held-out edges reached the encoder at all — reporting
-   opacity, not confirmed leakage, is the dominant finding on that dimension.
+4. **~~Support the premise~~ — DONE, expanded to n=21 papers (2026-08-12), spot-checked
+   (2026-08-13), double-rated (2026-09-01):**
+   [`LITERATURE_SURVEY.md`](LITERATURE_SURVEY.md). Grew from the original 6-paper pilot to 21
+   (target 20–30 met; a 22nd sheet row records a field convention, not a paper, and is excluded
+   from all denominators), all 15 new papers open-access (PMC), bibliographic metadata verified
+   via each paper's own PMC JATS XML front matter. **It corrected the claim we were about to
+   make — twice.** First: the field does *not* routinely leak test edges — only 2/21 clearly do
+   it wrong, 7/21 clearly strip test edges correctly, and our own original split (cells only)
+   was **worse than the norm**. Second, and only after a blind second rater (2026-09-01): the
+   claim that **0/21 papers report any model-free baseline was false**. Six do — NIMGSA, NGCN,
+   Orro, HLGNN-MDA, CKSNP-GNN, ModulePred — each comparing against one of this subfield's
+   classical untrained methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR) that the original
+   criterion's enumerated list had silently excluded. The surviving claim is stronger: in the
+   five cases whose numbers are readable, the trained model clears the untrained comparator by
+   **1.7 to 7.4 AUROC points and no paper remarks on it**. Also unchanged: 16/21 treat unlabeled
+   pairs as uniform negatives, and 12/21 (57%) methods sections do not let the reader determine
+   whether held-out edges reached the encoder at all — reporting opacity, not confirmed
+   leakage, is the dominant finding on that dimension.
 
    **This is the motivation section, and it is stronger than the strawman would have been:**
    published AUROCs in this literature sit at **0.91–0.99**; under that same protocol, on a

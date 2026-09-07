@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{Literature survey (n=22): each paper's methods section was read in full and classified on whether held-out edges are removed from the message-passing / similarity-computation graph, how negative pairs are chosen, and whether any model-free baseline is reported. The first seven rows are the original pilot sample; the remaining 15 are the 2026-08-12 expansion, sourced from open-access (PMC) papers only.}
+\caption{Literature survey (n=21 papers): each paper's methods section was read in full and classified on whether held-out edges are removed from the message-passing / similarity-computation graph, how negative pairs are chosen, and whether any model-free baseline is reported. The first six rows are the original pilot sample; the remaining 15 are the 2026-08-12 expansion, sourced from open-access (PMC) papers only.}
 \label{tab:literature_survey}
 \footnotesize
 \resizebox{\textwidth}{!}{%
@@ -14,7 +14,6 @@ HybridGNN \cite{ahmad2026hybridgnn} & Bioinformatics 2026 & miRNA-disease & yes 
 HGDTI \cite{yu2022hgdti} & BMC Bioinformatics 2022 & drug-target & no & reliable score-filtered (non-uniform) \\
 NGCN \cite{cao2024ngcn} & 2024 & drug-target & unclear & uniform random from unknown pairs, 1:10 \\
 kmerPMTF \cite{zhang2024kmerpmtf} & PeerJ 2024 & plant miRNA-target & yes & all unlabeled pairs, count-matched \\
-DTI field convention \cite{cao2024ngcn} & multiple & drug-target & NA & unlabeled pairs as negatives, typically 10x positives \\
 \hline
 Orro \cite{orro2026mirnadisease} & Biomedicines 2026 & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs \\
 CoupleMDA \cite{li2025couplemda} & IJMS 2025 & miRNA-disease & yes & uniform random, 1:1 \\
@@ -35,5 +34,5 @@ ModulePred \cite{jia2024modulepred} & BMC Bioinformatics 2024 & gene-disease & u
 \end{tabular}
 }
 
-\medskip\par Model-free baseline reported: 0/22 papers (one paper, ModulePred, computes a topological score for network data augmentation but does not report it as a comparison baseline). Held-out edges removed from the graph: 7/22 yes, 2/22 no, 12/22 unclear, 1/22 not applicable (general field-convention statement, not a specific paper). Single-rater classification; see Discussion for the corresponding limitation.
+\medskip\par Model-free baseline reported: 6/21 papers yes, 14/21 no, 1/21 unclear (DTI-MHAPR, whose eighth comparator cannot be identified from the text). The six are NIMGSA (SPM), NGCN (HNM), Orro (TCRWMDA), HLGNN-MDA (BNPMDA), CKSNP-GNN (LLCMDA and PBMDA), and ModulePred (RWR/RWRH); in the five whose numbers are readable from the text, the paper's own margin over the untrained comparator is 1.7, 1.8, 3.9, 5.0 and 7.4 AUROC points, and no paper comments on it. Held-out edges removed from the graph: 7/21 yes, 2/21 no, 12/21 unclear. Cross-validation over edges: 20/21 yes, 1/21 unclear. Negatives drawn from unlabeled pairs, uniformly sampled or taken wholesale: 16/21. Every cell double-rated against the primary source under \texttt{results/SURVEY\_CODEBOOK.md}; see Discussion for the agreement rates. A twenty-second row of the original sheet recorded a general drug-target field convention (``a drug-target pair with an unknown interaction is generally viewed as a negative sample'') rather than a paper, and is excluded from every denominator above.
 \end{table}

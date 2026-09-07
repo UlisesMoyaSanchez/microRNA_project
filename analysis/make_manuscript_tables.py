@@ -168,6 +168,9 @@ def table2_model_free_baselines() -> str:
 def table3_literature_survey() -> str:
     with open(ROOT / "results" / "literature_survey.tsv") as fh:
         rows = list(csv.DictReader(fh, delimiter="\t"))
+    # One sheet row records a general field convention rather than a paper; it is excluded
+    # from every denominator the survey reports (see results/LITERATURE_SURVEY.md).
+    rows = [r for r in rows if r.get("counted_as_paper", "yes") == "yes"]
 
     lines = [
         r"\begin{table}[h!]",
@@ -193,8 +196,11 @@ def table3_literature_survey() -> str:
         )
     lines += [r"\hline", r"\end{tabular}", "}", ""]
     n_baseline = sum(1 for r in rows if r["model_free_baseline"].strip().lower() == "yes")
+    n_unclear = sum(1 for r in rows if r["model_free_baseline"].strip().lower() == "unclear")
     lines.append(
-        f"\\medskip\\par Model-free baseline reported: {n_baseline}/{len(rows)} papers."
+        f"\\medskip\\par Model-free baseline reported: {n_baseline}/{len(rows)} papers "
+        f"({n_unclear} unclear); see results/literature\\_survey\\_d4\\_reaudit.tsv for each "
+        f"untrained comparator and the margin over it."
     )
     lines.append(r"\end{table}")
     return "\n".join(lines) + "\n"
@@ -454,6 +460,77 @@ def table7_discrimination() -> str:
     return "\n".join(lines)
 
 
+# ── Table 8 — the untrained floor, measured twice ─────────────────────────────────────
+def table8_floor_convergence() -> str:
+    """The three surveyed papers that both report an untrained comparator and evaluate on a
+    graph we re-measured, so the floor they put on the page can be checked against a floor
+    measured independently on the same association matrix.
+
+    Graph mapping is the topology audit's (results/HMDD_TOPOLOGY_AUDIT.md): NIMGSA and
+    HLGNN-MDA both evaluate on the canonical 5,430-association HMDD v2.0 matrix (parsed
+    tensors verified torch.equal), CKSNP-GNN on its own 16,427-association matrix.
+    """
+    with open(ROOT / "results" / "literature_survey_d4_reaudit.tsv") as fh:
+        reaudit = {r["paper"]: r for r in csv.DictReader(fh, delimiter="\t")}
+    summary = {g["graph"]: g["discrimination"]
+               for g in json.load(open(COMP / "trained_grid_summary.json"))["graphs"]}
+
+    # paper key -> (display name, comparator short name, our graph key, number provenance)
+    rows_spec = [
+        ("NIMGSA", "NIMGSA", "SPM", "canonical5430", ""),
+        ("HLGNN-MDA (Yu et al.)", "HLGNN-MDA", "BNPMDA", "canonical5430", ""),
+        ("CKSNP-GNN (Li et al.)", "CKSNP-GNN", "LLCMDA", "cksnp_gnn", r"$^{\dagger}$"),
+    ]
+
+    def as_auroc(x: str) -> float:
+        """Reported scores are AUROC in [0,1] for two papers and AUC(%) for the third."""
+        v = float(x)
+        return v / 100.0 if v > 1.0 else v
+
+    lines = [
+        r"\begin{table}[h!]",
+        r"\caption{The untrained floor, measured twice. The three surveyed papers that both "
+        r"report an untrained comparator (Table~\ref{tab:literature_survey}) and evaluate on "
+        r"an association matrix we could re-measure. ``Reported'' is the paper's own "
+        r"comparison table; ``re-measured here'' is our architecture and the best of our four "
+        r"heuristics on the same matrix under the conventional protocol (edges seen, "
+        r"uniform-random negatives), from Table~\ref{tab:discrimination}. The two floors are "
+        r"measured by different methods, by different groups, and they agree: an untrained "
+        r"scorer reaches 0.86--0.92 on these graphs however it is built. What the paper's own "
+        r"table therefore shows, unremarked, is a headline sitting a few points above a floor "
+        r"that replicates independently. The trained columns are \emph{not} comparable -- ours "
+        r"is our architecture, not theirs, and the fold counts and negative ratios differ -- so "
+        r"this table is evidence about the floor, not a reproduction of any reported number. "
+        r"Under the corrected protocol the same two floors fall to 0.5683 and 0.5591, and the "
+        r"same trained arm to 0.6182 and 0.6219 (Table~\ref{tab:discrimination}). "
+        r"$^{\dagger}$CKSNP-GNN did not run its comparators: it reports "
+        r"``the optimal AUC recorded in each paper'', so its floor is a number transferred "
+        r"across papers and datasets, and is the weakest row here.}",
+        r"\label{tab:floor_convergence}",
+        r"\footnotesize",
+        r"\resizebox{\textwidth}{!}{%",
+        r"\begin{tabular}{lccccccc}",
+        r"\hline",
+        r" & \multicolumn{4}{c}{Reported by the paper} & "
+        r"\multicolumn{3}{c}{Re-measured here, same matrix} \\",
+        r"\cline{2-5}\cline{6-8}",
+        r"Paper & Untrained & Its & Paper's & Margin & Model-free & Trained & Margin \\",
+        r" & comparator & AUROC & AUROC & & (floor) & (ours) & \\",
+        r"\hline",
+    ]
+    for key, label, comparator, graph, dagger in rows_spec:
+        r = reaudit[key]
+        floor, paper_score = as_auroc(r["mf_score"]), as_auroc(r["paper_score"])
+        conv = summary[graph]["conventional"]
+        lines.append(
+            f"{tex_escape(label)}{dagger} & {comparator} & {floor:.4f} & {paper_score:.4f} & "
+            f"${paper_score - floor:+.4f}$ & {conv['model_free']:.4f} & "
+            f"{conv['trained']:.4f} & ${conv['margin']:+.4f}$ \\\\"
+        )
+    lines += [r"\hline", r"\end{tabular}", r"}", r"\end{table}", ""]
+    return "\n".join(lines)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     generators = [
@@ -463,6 +540,7 @@ def main() -> None:
         ("table4_celltype_control.tex", table4_celltype_control),
         ("table6_protocol_grid.tex", table6_protocol_grid),
         ("table7_discrimination.tex", table7_discrimination),
+        ("table8_floor_convergence.tex", table8_floor_convergence),
         ("tableS1_architecture_grid.tex", table_s1_architecture_grid),
     ]
     failures = []

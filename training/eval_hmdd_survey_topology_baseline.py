@@ -6,7 +6,7 @@ Part of the HMDD topology-baseline audit (see data/01_download/
 download_hmdd_survey_canonical5430.py and results/HMDD_TOPOLOGY_AUDIT.md). Extends
 this project's own model-free-baseline finding (training/eval_topology_baseline.py:
 0.8712 on our miRNA-gene graph, beating a trained HGT's 0.8056) to the miRNA-disease
-/ HMDD cluster of the 22-paper literature survey (results/literature_survey.tsv).
+/ HMDD cluster of the 21-paper literature survey (results/literature_survey.tsv).
 
 Reuses training.eval_topology_baseline.build_scorers() UNCHANGED -- it already
 operates on a plain (rows, cols) binary adjacency tensor, so no bipartite-vs-
