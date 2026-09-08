@@ -63,8 +63,8 @@
 
 \begin{frontmatter}
 
-\title{Transductive Evaluation and Popularity-Biased Negative Sampling Inflate Link
-Prediction on Biomedical Interaction Graphs, with a microRNA--Target Case Study}
+\title{The Protocol, Not the Model: Evaluation Bias Inflates Link Prediction on
+Biomedical Interaction Graphs}
 %% STAGE: title. Two constraints, both decided explicitly -- do not drift either without
 %% revisiting them.
 %%   (1) No disease in the title (decision D1, 2026-07-17 -- see goal.md \S3.2 and
@@ -83,6 +83,18 @@ Prediction on Biomedical Interaction Graphs, with a microRNA--Target Case Study}
 %%       Replication"), leading with the number ("From 0.99 to 0.63"), and leading with
 %%       the deliverable ("A Minimum Reporting Standard for..."). Dropped "Substantially"
 %%       as redundant once the object is stated plainly.
+%%   (3) Reworded 2026-09-07 (constraints (1) and (2) revisited and both still hold: no
+%%       disease named, object still "biomedical interaction graphs"). The previous
+%%       wording front-loaded both mechanisms and reached its verb at word seven, said
+%%       "inflate link prediction" where what inflates is the MEASURED performance, and
+%%       hung the case study on a trailing "with a..." clause. The new title is the
+%%       paper's own Conclusion sentence -- the inflation is a property of the protocol,
+%%       not of any one architecture or dataset. Two things were traded away knowingly:
+%%       the two mechanisms are no longer named in the title (they open the Abstract's
+%%       Methods and Results), and "microRNA" is no longer in the title -- indexing for
+%%       it now rests on the keyword "microRNA--target prediction", the Abstract's first
+%%       sentence, and the Highlights. Do not re-add a "with a microRNA--Target Case
+%%       Study" tail to recover it; that was the clause this revision removed.
 
 \author[aff1]{Ulises Moya S\'anchez\corref{cor}}
 \ead{dr.ulisesmoya@gmail.com}
@@ -127,13 +139,38 @@ leak-free split check and a model-free baseline whose margin is stated.
 \end{abstract}
 
 \begin{highlights}
-\item One protocol collapse on six graphs: 0.88--0.99 all fall to 0.62--0.64.
-\item On our own graph the same two fixes drop a reported 0.9867 to 0.6276.
+\item Six graphs, one architecture: AUROC collapses from 0.88--0.99 to 0.62--0.64.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
-\item Inflation of 0.24--0.31 AUROC recurs across six independent architectures.
+\item Six architectures, our graph: all inflate by 0.24--0.31 AUROC; an untrained
+control does not.
 \item A cell-typing control task shows the audit is not indiscriminate.
+\item We propose a minimum reporting standard: a leak-free split check, a model-free
+baseline with its margin stated, and matched negative sampling.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
+%% 2026-09-07: former highlights 1 and 2 merged. The second ("on our own graph the same
+%% two fixes drop a reported 0.9867 to 0.6276") stated no fact the first did not already
+%% cover: 0.9867 falls inside the 0.88--0.99 band and 0.6276 inside the 0.618--0.641
+%% corrected band, so it was a named instance of the six-graph range, not a second
+%% result. Merging it frees one of Elsevier's five slots -- see the bullet added below.
+%% Do not re-split them to "give our own graph its own bullet"; that was the redundancy.
+%% The freed slot went to the proposed reporting standard (the Conclusion's deliverable);
+%% its three components are kept faithful to \S\ref{sec:discussion}'s statement -- split
+%% check, baseline WITH its margin stated, and matched negative sampling -- so do not
+%% drop the third or the "margin stated" qualifier when trimming.
+%% LENGTH NOT YET TRIMMED (2026-09-07, deliberate): this bullet is 140 chars against the
+%% 85-char Elsevier limit, and bullet 2 (heuristic) is 79. Trim pass still owed before
+%% submission; the audit of 21 papers remains the one pillar with no highlight at all.
+%% 2026-09-07: bullets 1 and 3 rewritten as a deliberate chiasmus -- "Six graphs, one
+%% architecture" / "Six architectures, our graph" -- because they previously read as the
+%% same result twice (both opened on an AUROC drop, both said "six"). They are the two
+%% axes of the generality claim: bullet 1 varies the DATA at fixed architecture, bullet 3
+%% varies the MODEL at fixed data. Keep the parallel phrasing when trimming; collapsing
+%% either back into "inflation recurs across six X" is what made them indistinguishable.
+%% Bullet 3 now names our graph as the substrate -- it is where the architecture grid and
+%% the cell-typing control both run. This does not reopen the 2026-09-02 de-scaling of
+%% our graph to "one graph among several": that decision was about not centring the
+%% paper's claim on it, and bullet 1 still carries the headline over all six graphs.
 
 \begin{keyword}
 link prediction \sep microRNA--target prediction \sep graph neural networks \sep
