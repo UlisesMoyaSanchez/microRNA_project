@@ -139,7 +139,7 @@ leak-free split check and a model-free baseline whose margin is stated.
 \end{abstract}
 
 \begin{highlights}
-\item Six graphs, one architecture: AUROC collapses from 0.88--0.99 to 0.62--0.64.
+\item Correcting the protocol drops our model from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
 \item Six architectures, our graph: all inflate by 0.24--0.31 AUROC; an untrained
 control does not.
@@ -161,12 +161,26 @@ baseline with its margin stated, and matched negative sampling.
 %% LENGTH NOT YET TRIMMED (2026-09-07, deliberate): this bullet is 140 chars against the
 %% 85-char Elsevier limit, and bullet 2 (heuristic) is 79. Trim pass still owed before
 %% submission; the audit of 21 papers remains the one pillar with no highlight at all.
-%% 2026-09-07: bullets 1 and 3 rewritten as a deliberate chiasmus -- "Six graphs, one
-%% architecture" / "Six architectures, our graph" -- because they previously read as the
-%% same result twice (both opened on an AUROC drop, both said "six"). They are the two
-%% axes of the generality claim: bullet 1 varies the DATA at fixed architecture, bullet 3
-%% varies the MODEL at fixed data. Keep the parallel phrasing when trimming; collapsing
-%% either back into "inflation recurs across six X" is what made them indistinguishable.
+%% 2026-09-07: bullets 1 and 3 were rewritten as a chiasmus ("Six graphs, one architecture"
+%% / "Six architectures, our graph") because they read as the same result twice -- both
+%% opened on an AUROC drop, both said "six". They are the two axes of the generality claim:
+%% bullet 1 varies the DATA at fixed model, bullet 3 varies the MODEL at fixed data. Keep
+%% that contrast when trimming; collapsing either into "inflation recurs across six X" is
+%% what made them indistinguishable.
+%% Bullet 1 then rewritten again, same day, and the chiasmus deliberately given up. Two
+%% reasons. (1) The word "protocol" appeared in none of the five bullets while the title is
+%% "The Protocol, Not the Model" -- the protocol had to become the grammatical agent
+%% somewhere, and this is the bullet where it acts. (2) "One architecture" was defending
+%% the symmetry, not the claim: it states a LIMITATION (a single model class), which is not
+%% what a highlight is for, and bullet 3 already carries the across-architecture
+%% generality. What actually prevents the misreading -- that we re-ran the surveyed papers'
+%% own models, which we never did (\S\ref{sec:generalization}: "measured with our
+%% architecture on other people's graphs") -- is the word "our", not the word
+%% "architecture". Do not restore "architecture" here, and do not write "the correct
+%% protocol": the paper says "corrected" throughout, and claiming the correct protocol is
+%% the kind of overreach this paper is about. Dropped from the bullet for length: that five
+%% of the six graphs come from published papers. If the 21-paper audit ever gets the
+%% highlight it still lacks, "published" belongs there instead.
 %% Bullet 3 now names our graph as the substrate -- it is where the architecture grid and
 %% the cell-typing control both run. This does not reopen the 2026-09-02 de-scaling of
 %% our graph to "one graph among several": that decision was about not centring the

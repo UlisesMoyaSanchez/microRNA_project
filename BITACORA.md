@@ -73,6 +73,48 @@ Tabla S1 sigue invitando la lectura equivocada que su caption ahora corrige;
 `slurm_heldout_grid.sh:65` hace `cat` del nombre de archivo equivocado en modo transductivo
 (falso fallo tras un éxito real).
 
+**Sincronización.** El DGX estaba nueve commits atrás, no tres — le faltaban también los
+seis del 2026-09-06. Fast-forward limpio. El artefacto del job 6465 se commiteó desde el
+DGX, que es donde se produjo: sin él, la frase de `EVALUATION_AUDIT.md` *"every number
+traces to a job ID and a JSON artifact"* habría sido falsa justo para el job que sostiene
+la afirmación nueva. `f662e62`
+
+**El bullet 1, reescrito una segunda vez.** Quedó *"Correcting the protocol drops our model
+from 0.88--0.99 to 0.62--0.64 on six graphs."* El quiasmo del mismo día se abandonó a
+propósito. Tres cosas salieron de la discusión, y valen más que la redacción:
+
+1. **La palabra "protocol" no aparecía en ninguno de los cinco highlights**, mientras el
+   título es *The Protocol, Not the Model*. El título y los highlights estaban
+   desalineados y nadie lo había notado.
+2. **La mala lectura es real y está medida.** Al proponer una reescritura, la primera
+   formulación fue *"six previous models plus our model"* — es decir, que se corrieron los
+   modelos de los papers auditados. Si quien mejor conoce el paper lo lee así, un revisor
+   también. Lo que previene esa lectura es la palabra *our*, no la palabra *architecture*,
+   que era lo que se estaba defendiendo por inercia.
+3. **"One architecture" es una limitación, no una virtud**, y un highlight no es donde van
+   las limitaciones. La generalidad entre arquitecturas ya la carga el bullet 3.
+
+**Qué se replicó de los papers auditados, y qué no** (quedó claro al discutir el punto 2 y
+conviene no volver a preguntarlo):
+
+- **Su proceso: no, y deliberadamente no.** Se entrena *nuestra* arquitectura sobre *sus
+  grafos*, "under a protocol we control rather than each paper's own" (`main.tex:539`). Sus
+  modelos nunca corrieron. El manifiesto de CKSNP-GNN lo dice sin rodeos: *"the code is not
+  used or trusted, only the data"*.
+- **Su dato: sí, con procedencia pineada.** `sha256` y commit por matriz, y forma y número
+  de positivos verificados contra lo que cada paper reporta
+  (`hmdd_survey_protocol_verification.json`).
+- **Su número headline: nunca se intentó reproducir.** Se toma como reportado. El paper no
+  afirma en ninguna forma haberlo reproducido ni haberlo visto fallar.
+- **Su piso: sí replica, y es la réplica de verdad.** Reportan comparadores sin entrenar en
+  0.8960, 0.8565 y 0.9190; nuestras heurísticas, por otro método sobre las mismas matrices,
+  dan 0.8842 y 0.8924. Eso es lo que hace interpretables sus propios márgenes.
+- **OGB: reproducción exacta**, pero del leaderboard público, no del modelo de un paper.
+
+Un revisor va a preguntar "¿reprodujeron sus números?". La respuesta es no, está declarada
+al abrir §`sec:generalization`, y es defendible porque la pregunta que hace el paper es
+otra. Por eso ningún highlight debe insinuar lo contrario.
+
 ---
 
 ## 2026-09-06 — La encuesta, doble-calificada contra las fuentes primarias
