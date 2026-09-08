@@ -376,8 +376,9 @@ summarizes these two requirements, together with the model-free-baseline require
 described below, as a minimum reporting checklist. We report AUROC and AUPRC for link
 prediction, and accuracy and macro-F1 for cell typing. Headline numbers are averaged
 over four independent random seeds where feasible; the six-architecture grid is
-measured from a single training run per architecture, a choice we justify in Results by
-effect size against the seed-to-seed variability observed elsewhere.
+measured from a single training run per architecture, trained on one GPU by a driver
+separate from the multi-GPU headline runs. Results gives both the effect-size argument
+for the single run and the comparability limit the driver difference imposes.
 
 \begin{figure}[h!]
 \centering
@@ -799,19 +800,30 @@ control, and a no-miRNA-input ablation retained as a smoke test -- every trained
 architecture inflates by 0.24--0.31 AUROC points between the two protocols, the
 graph-free MLP included, while the untrained control does not move ($-0.004$)
 (Figure~\ref{fig:architecture_inflation}, Table~\ref{tab:architecture_grid}). Each
-architecture is a single training run rather than a seed average, but the inflation is an
+architecture is a single training run rather than a seed average, and the inflation is an
 order of magnitude larger than the seed spread measured elsewhere here (0.005--0.02), so
-the pattern does not depend on averaging away noise. One secondary finding falls out of
-the same grid: under the corrected protocol a plain homogeneous GCN (0.6236) outperforms
-the heterogeneous transformer (0.6080), so the architectural complexity this project was
-originally built around does not earn its keep against the simplest graph-based
-baseline.
+the pattern does not depend on averaging away noise. A second caveat governs how the grid
+may be read. Every row of it is trained by the same driver on a single GPU, which is what
+makes the comparison across architectures controlled; the levels, however, are not
+comparable to Table~\ref{tab:headline_grid}. The grid's transformer reaches 0.9222 under
+the conventional protocol, against 0.9867 for the four-GPU run of the identical
+configuration reported there. That gap is a training-regime difference, not a protocol or
+a measurement one: both were scored on the same split and the same 44,186 edges, and the
+headline checkpoint moves by 0.00004 AUROC between the validation and test splits. Rows of
+the grid may therefore be compared with one another, and not with the headline numbers.
+One secondary finding falls out of the same grid: under the corrected protocol a plain
+homogeneous GCN (0.6236) outperforms the heterogeneous transformer (0.6080), so under
+identical single-GPU training the architectural complexity this project was originally
+built around does not earn its keep against the simplest graph-based baseline. Whether
+that ordering survives the headline training regime is untested.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
 \caption{Inflation between the conventional and corrected protocols, across five
 architectures plus an untrained control. Single seed (42); the inflation magnitude
-(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). Full numeric
+(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). All six rows are
+trained on one GPU by the same driver, so they are comparable with one another but not
+with Table~\ref{tab:headline_grid} -- see the text. Full numeric
 grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}.}
 \label{fig:architecture_inflation}
 \end{figure}

@@ -276,7 +276,13 @@ def table_s1_architecture_grid() -> str:
         r"jobs 5849--5852, \texttt{graphs\_v3fixed}). "
         r"\texttt{ablation\_no\_mirna} has no link-prediction head by construction and is "
         r"retained only as a smoke test (cell classification accuracy unaffected). "
-        r"Inflation = seen+uniform $-$ held+matched.}",
+        r"Inflation = seen+uniform $-$ held+matched. "
+        r"All six rows are trained by \texttt{training/run\_baselines.py} on one GPU and "
+        r"scored on the validation split, so they are comparable with one another but not "
+        r"with Table~\ref{tab:headline_grid}, whose transformer is a four-GPU DDP run of "
+        r"the same configuration (0.9222 against 0.9867 in the conventional cell). The row "
+        r"labelled \emph{HGT (project model)} is that single-GPU retraining of this "
+        r"paper's architecture, not the headline model itself.}",
         r"\label{tab:architecture_grid}",
         r"\footnotesize",
         r"\resizebox{\textwidth}{!}{%",

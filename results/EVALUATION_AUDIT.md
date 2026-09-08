@@ -2,7 +2,7 @@
 
 **Status:** canonical results document. Supersedes `results/archive_pre_audit/REPORT.md`
 and `results/archive_pre_audit/EXEC_SUMMARY.md`, which report numbers we now know are artifacts.
-**Last updated:** 2026-07-29
+**Last updated:** 2026-09-07
 **Spanish summary for clinical collaborators:** [`RESUMEN_AUDITORIA.md`](RESUMEN_AUDITORIA.md)
 
 > **Graph lineage note (2026-07-27).** Two graph-construction bugs (co-expression gene
@@ -12,6 +12,31 @@ and `results/archive_pre_audit/EXEC_SUMMARY.md`, which report numbers we now kno
 > pre-fix numbers are kept throughout, explicitly labelled, because **they replicate**: every
 > figure below lands within 1σ of its pre-fix counterpart. That replication is itself
 > evidence the finding is about the *protocol*, not about one buggy graph.
+
+> **Training-regime note (2026-09-07).** Three different drivers train the models in this
+> project, and they are not interchangeable. Our own graph's headline numbers come from
+> `training/train.py` under **4-GPU DDP** (`slurm_train.sh`, `--gres=gpu:4`); the
+> six-architecture grid (Table S1 / Fig. 2, jobs 5849--5852) from
+> `training/run_baselines.py` on **one GPU**; the five surveyed graphs from
+> `training/train_survey_bipartite.py`, also one GPU, full-batch. The YAML configs are
+> identical apart from seed and checkpoint dir -- the difference lives in the SLURM script,
+> which is why it went unnoticed for six weeks. Under DDP each of the four ranks loads the
+> full `train_mask` (`train.py:348`, there is no `DistributedSampler`) with a per-rank seed
+> (`train.py:314`), so one optimizer step consumes 4x512 cells rather than 512. The two
+> regimes produce materially different models from the same configuration: best `val_auroc`
+> **0.9952** (4-GPU, job 5765) against **0.9345** (1-GPU, job 5852), and **0.9867** against
+> **0.9222** in the conventional cell. **Grid rows may be compared with one another, never
+> with the headline numbers.** Ruled out as causes, in this order: the evaluation split
+> (job 6465 scores the headline checkpoint on val at 0.98586 against 0.98582 on test, over
+> the same 44,186 edges -- a difference of 0.00004), the seed (the four headline seeds span
+> 0.0024, the gap is 0.065), and the training budget (both converged, early stopping at 196
+> and 181, both selecting on `val_auroc`).
+
+> **The one exception to the test-split rule below (2026-09-07).** The six-architecture grid
+> is scored on the **validation** split: `run_baselines.py:313` discards `test_mask` and
+> every later call goes through `val_loader`. Numerically this is worth almost nothing here
+> (0.00004 on the headline checkpoint, measured in job 6465), but it was unlabelled. It is
+> now declared in the manuscript's Table S1 and Fig. 2 captions.
 
 > **All headline numbers below are on the untouched TEST split** (4,418 edges never used for
 > training or model selection). Validation numbers appear only where explicitly labelled
@@ -534,11 +559,32 @@ paper is submitted.**
 - **`val_loss` as a cross-model column.** A model without a link head optimizes a strictly
   smaller objective, which is why `ablation_no_mirna` showed the "best" loss while being the
   worst model.
+- **Reading the grid's transformer row as this project's model** (2026-09-07). The row
+  labelled *HGT (project model)* in Table S1 is a single-GPU retraining that lands 0.065
+  below the headline run of the identical configuration. Any sentence comparing a grid
+  number against a headline number is comparing two different models. This also weakens the
+  secondary claim that a homogeneous GCN (0.6236) beats the transformer (0.6080) under the
+  corrected protocol: the comparison is controlled *within* the grid, but the transformer in
+  it is not the architecture as the project actually trains it, and whether the ordering
+  survives the headline regime is untested. See the training-regime note at the top.
+- **Some architecture numbers quoted in this document** (2026-09-07). The `HeteroData.get()`
+  entry above cites `homo_gcn` 0.9170, `ablation_no_coexpr` 0.9374 and `random` 0.5126; the
+  current grid reports 0.9177, 0.9128 and 0.4895. Those are from an earlier run and were
+  never refreshed. The manuscript takes its numbers from the generator, not from here.
 
 ## What does stand
 
 - **Cell-type classification: 0.9916 (test)**, on a real cell-level split, now with its own
   no-learning control (best no-graph baseline 0.6692 — see "The cell-type control" above).
+- **The six-architecture inflation, 0.24--0.31, and the untrained control at $-0.004$**
+  (2026-09-07). All six rows share one driver, one GPU, one seed and one split, so the
+  comparison across architectures is internally controlled and the training-regime confound
+  does not touch it. The graph-free MLP inflating too (+0.242) is what rules out a
+  GNN-specific artifact.
+- **The six-graph collapse** (2026-09-07). Each graph's two protocol arms are trained
+  identically to each other, so the per-graph cost is internally valid on all six rows. The
+  training regime differs *between* rows, but that is inherent: our graph has 110,798 cell
+  nodes and 16.7M cell--gene edges, the surveyed ones are miRNA--disease matrices.
 - **The audit instrumentation**, now the project's main asset: `training/splits.py`,
   `training/test_edge_split.py`, `training/diagnose_leakage.py`,
   `training/eval_hard_negatives.py`, `training/eval_topology_baseline.py`,
@@ -575,7 +621,18 @@ for c in edgesplit edgesplit_uniform transductive transductive_uniform; do
     sbatch --export=ALL,CONFIG=configs/config_v3fixed_baselines_${c}.yaml \
         training/slurm_baselines.sh
 done
+
+# Experiment 6 — does the val/test split explain the grid-vs-headline gap? It does not
+# (0.98586 val against 0.98582 test, same 44,186 seen edges). Inference only.      # 6465
+sbatch --export=ALL,CONFIG=configs/config_v3fixed_transductive_uniform_s123.yaml,\
+CKPT=checkpoints_v3fixed_transductive_uniform_s123/best_model.pt,SPLIT=val \
+    training/slurm_heldout_grid.sh
 ```
+
+NOTE: `slurm_heldout_grid.sh:65` `cat`s `heldout_grid_<ckpt>_<split>.json`, but in
+transductive mode the script writes `seen_grid_<ckpt>_<split>.json`. The work succeeds and
+the `cat` then fails under `set -e` — a false failure after a real success. Read the JSON
+directly rather than trusting the job's exit code.
 
 Every number traces to a job ID and a JSON artifact under `results/comparison/`.
 

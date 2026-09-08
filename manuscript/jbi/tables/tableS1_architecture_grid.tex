@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{Full six-architecture $\times$ four-condition AUROC grid backing Figure~\ref{fig:architecture_inflation} (single seed, 42, jobs 5849--5852, \texttt{graphs\_v3fixed}). \texttt{ablation\_no\_mirna} has no link-prediction head by construction and is retained only as a smoke test (cell classification accuracy unaffected). Inflation = seen+uniform $-$ held+matched.}
+\caption{Full six-architecture $\times$ four-condition AUROC grid backing Figure~\ref{fig:architecture_inflation} (single seed, 42, jobs 5849--5852, \texttt{graphs\_v3fixed}). \texttt{ablation\_no\_mirna} has no link-prediction head by construction and is retained only as a smoke test (cell classification accuracy unaffected). Inflation = seen+uniform $-$ held+matched. All six rows are trained by \texttt{training/run\_baselines.py} on one GPU and scored on the validation split, so they are comparable with one another but not with Table~\ref{tab:headline_grid}, whose transformer is a four-GPU DDP run of the same configuration (0.9222 against 0.9867 in the conventional cell). The row labelled \emph{HGT (project model)} is that single-GPU retraining of this paper's architecture, not the headline model itself.}
 \label{tab:architecture_grid}
 \footnotesize
 \resizebox{\textwidth}{!}{%
