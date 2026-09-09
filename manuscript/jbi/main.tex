@@ -126,15 +126,16 @@ graphs -- ours and five from surveyed papers -- collapses the Area Under the
 Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641. On our own graph the two
 protocols report 0.9867 $\pm$ 0.0011 and 0.6276 $\pm$ 0.0070, the latter within 3.6
 points of a no-learning heuristic (0.5912); the inflation recurs across six
-architectures and is super-additive, while an untrained control does not move. A
+models and is super-additive, while an untrained control does not move. A
 cell-typing task reaches 0.9916 accuracy, surviving an analogous control by 32
 points. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against the seven papers' own reported numbers,
 trained models beat the topology floor by 4.7 points per paper (3.9 per graph), though
 the heuristic wins outright on the sparsest.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
-any one architecture or dataset, and this literature does not check for it. We propose a minimum reporting standard: an automated
-leak-free split check and a model-free baseline whose margin is stated.
+any one model or dataset. We propose a minimum reporting standard: an automated
+leak-free split check, a model-free baseline whose margin is stated, and matched
+negative sampling.
 \end{abstract}
 %% 2026-09-09: Objective's closing clause added ("...to help correct how link
 %% prediction is evaluated on biomedical interaction graphs") so the Abstract's first

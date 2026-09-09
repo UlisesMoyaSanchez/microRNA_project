@@ -134,6 +134,25 @@ biológica estándar para la audiencia de JBI.
 
 Compila limpio (43 pp., 0 refs indefinidas).
 
+**Conclusion, revisado.** Tres ajustes:
+
+1. "not of any one architecture" → "not of any one model", y en Results "the
+   inflation recurs across six architectures" → "...six models" — para que
+   highlight 3, Results y Conclusion digan lo mismo. Queda un tercer uso de
+   "architecture" sin tocar, en la apertura de Results ("Retraining one
+   architecture under both protocols on six graphs..."), que corresponde al
+   claim del highlight 1 ("our model") y no se cambió por no haber sido pedido
+   explícitamente.
+2. Se quitó "and this literature does not check for it" del Conclusion —
+   dependía de la auditoría de 21 papers, que ya no aparece en ninguna parte
+   del Abstract.
+3. El "reporting standard" del Conclusion solo tenía 2 de los 3 componentes
+   protegidos por la nota de highlight 5 (le faltaba "matched negative
+   sampling", pre-existente desde antes de esta sesión). Se completó para
+   que coincida con el highlight 5 y con Discusión (`main.tex:1038-1044`).
+
+Compila limpio (43 pp., 0 refs indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
