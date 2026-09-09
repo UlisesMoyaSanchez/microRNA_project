@@ -71,6 +71,22 @@ es el tipo de sobre-alcance que el paper evita. "Standard" queda como estaba.
 Ambos trims compilan limpio (43 pp., 0 refs indefinidas) y quedan documentados con
 notas fechadas en `main.tex` junto al resto de notas del bloque de highlights.
 
+**El Objective del Abstract** solo decía *qué* se auditó, no *para qué*. Se agregó una
+cláusula de cierre: *"...across ten cases spanning eight distinct graphs, to help
+correct how link prediction is evaluated on biomedical interaction graphs."*
+
+Se descartó una primera propuesta ("ayudar a que se usen los protocolos correctos en
+datos de grafos en el ambiente salud") por los mismos dos motivos que ya aplicaban a
+"Protocol" en el bullet 5: (1) "protocolos correctos" es exactamente el overreach que
+la nota del bullet 1 (2026-09-07) ya prohibió — el paper dice "corrected", nunca
+reclama poseer "el" protocolo correcto. La versión final usa "correct" como **verbo**
+sobre la práctica de evaluación, no como adjetivo sobre "protocolos". (2) alcance: solo
+se auditaron ocho grafos de interacción biomédica, todos de link prediction —
+"grafos en el ambiente salud" en general reclamaría cobertura (grafos de imagenología,
+de historia clínica, etc.) que este paper nunca tocó.
+
+Documentado con nota fechada justo después de `\end{abstract}`.
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas

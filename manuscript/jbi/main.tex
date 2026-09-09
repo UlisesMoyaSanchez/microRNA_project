@@ -111,7 +111,8 @@ Biomedical Interaction Graphs}
 interactions routinely report AUROC in the 0.91--0.99 range without a model-free
 baseline -- a simple, no-learning scorer (e.g.\ node degree) used as a sanity-check
 floor. We audit whether this subfield's evaluation practice inflates reported
-performance, across ten cases spanning eight distinct graphs.
+performance, across ten cases spanning eight distinct graphs, to help correct how
+link prediction is evaluated on biomedical interaction graphs.
 
 \textbf{Methods:} A literature audit of 21 such papers checked split handling,
 negative sampling, and model-free-baseline reporting. One of them is ours, built
@@ -137,6 +138,17 @@ the heuristic wins outright on the sparsest.
 any one architecture or dataset, and this literature does not check for it. We propose a minimum reporting standard: an automated
 leak-free split check and a model-free baseline whose margin is stated.
 \end{abstract}
+%% 2026-09-09: Objective's closing clause added ("...to help correct how link
+%% prediction is evaluated on biomedical interaction graphs") so the Abstract's first
+%% paragraph states why the audit matters, not only what was audited. Rejected: "help
+%% ensure correct protocols are used on graph data in health" -- two problems. (1) "the
+%% correct protocol[s]" is the exact overreach already ruled out for the highlights
+%% (main.tex, bullet-1 note, 2026-09-07): the paper says "corrected", never claims to
+%% possess "the correct" one. Here "correct" is kept as a VERB applied to the evaluation
+%% PRACTICE (consistent with "corrected protocol" elsewhere), not an adjective claiming a
+%% definitive protocol. (2) scope: only eight biomedical interaction graphs were audited,
+%% all link-prediction tasks -- "graph data in the health environment" would claim
+%% coverage (imaging graphs, EHR graphs, etc.) this paper never touched.
 
 \begin{highlights}
 \item Correcting the protocol drops our model from 0.88--0.99 to 0.62--0.64 on six graphs.
