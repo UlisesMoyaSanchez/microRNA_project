@@ -107,22 +107,23 @@ Biomedical Interaction Graphs}
 %% TODO: fill in the real affiliation before submission.
 
 \begin{abstract}
-\textbf{Objective:} We audit whether GNN link-prediction evaluation practice inflates
+\textbf{Objective:} We audit whether Graph Neural Network (GNN) link-prediction evaluation practice inflates
 reported performance, across ten cases spanning eight distinct graphs, to help
 correct how link prediction is evaluated on biomedical interaction graphs.
 
-\textbf{Methods:} A literature audit of 21 such papers checked split handling,
-negative sampling, and model-free-baseline reporting. One of them is ours, built
-from a single-cell RNA-seq cohort and miRDB v6.0
-interactions; on it we trained a graph transformer and compared a conventional
-protocol against one correcting edge leakage and negative-sampling bias. The same heuristics and
-architecture, retrained under both protocols, were applied to nine further cases:
-two OGB benchmarks and seven survey-paper datasets.
+\textbf{Methods:} The same topological heuristics and a graph transformer, trained
+under a conventional evaluation protocol and one correcting edge leakage and
+negative-sampling bias, were compared across ten cases spanning eight distinct
+graphs: two Open Graph Benchmark (OGB) datasets, seven survey-paper datasets, and
+our own graph (a single-cell RNA-seq cohort with miRDB v6.0 interactions). On our
+own graph only, five further models -- a homogeneous Graph Convolutional Network
+(GCN), two ablations, a graph-free Multi-Layer Perceptron (MLP), and an untrained
+control -- and an unrelated cell-typing task with two no-graph controls were also
+tested under both protocols.
 
-\textbf{Results:} Six of 21 papers report an untrained comparator, clearing it
-by 1.7--7.4 points unremarked; 15 report none; 17 use unlabeled-pair negatives. Retraining one architecture under both protocols on six
-graphs -- ours and five from surveyed papers -- collapses AUROC from 0.879--0.992
-to 0.618--0.641. On our own graph the two
+\textbf{Results:} Retraining one architecture under both protocols on six
+graphs -- ours and five from surveyed papers -- collapses the Area Under the
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641. On our own graph the two
 protocols report 0.9867 $\pm$ 0.0011 and 0.6276 $\pm$ 0.0070, the latter within 3.6
 points of a no-learning heuristic (0.5912); the inflation recurs across six
 architectures and is super-additive, while an untrained control does not move. A
@@ -156,6 +157,21 @@ leak-free split check and a model-free baseline whose margin is stated.
 %% Abstract (it still is, in \S\ref{sec:results}/\S\ref{sec:discussion}). Do not restore
 %% "this subfield's" without either restoring an antecedent sentence or keeping this
 %% self-contained phrasing.
+%% 2026-09-09 (same day): Methods rewritten to open with the multi-graph/multi-model
+%% comparison (ten cases, eight graphs) instead of the 21-paper literature audit, at the
+%% author's request -- "our own graph" is now one item in a list, not the lead subject,
+%% and the audit felt secondary to the empirical inflation measurement. Also added: the
+%% five-further-model grid (matches highlight 3) and the cell-typing control, both of
+%% which Results already used without Methods ever describing them -- that gap is now
+%% closed. The literature audit was then removed from Methods entirely, and its Results
+%% sentence ("Six of 21 papers report an untrained comparator...") removed too.
+%% Known gap accepted: Conclusion's "...and this literature does not check for it" now
+%% has no methodological grounding left anywhere in the Abstract (the audit is still
+%% real and reported in the body, \S\ref{sec:results}/\S\ref{sec:discussion} -- just not
+%% referenced from the Abstract). Flagged to the author, left as is by their choice.
+%% Acronyms (GNN, OGB, GCN, MLP, AUROC) were also spelled out at first use in the
+%% Abstract -- none of the four ML ones is expanded anywhere else in the paper either.
+%% RNA-seq deliberately left unexpanded (standard term for this readership).
 
 \begin{highlights}
 \item Correcting the protocol drops our model from 0.88--0.99 to 0.62--0.64 on six graphs.

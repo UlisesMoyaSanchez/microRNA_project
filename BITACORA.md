@@ -103,6 +103,37 @@ usa en Methods y Conclusion sin explicarse ahí); sigue definido en el cuerpo de
 paper (Resultados/Discusión). Documentado en la misma nota fechada de `main.tex`.
 Compila limpio (43 pp., 0 refs indefinidas).
 
+**Methods y Results, reordenados para bajar el peso de "nuestro grafo".** El autor
+señaló dos problemas: (1) el Methods abría con la auditoría de 21 papers como si
+fuera el método principal, cuando el diseño empírico (otros datos, otros modelos)
+es lo que de verdad mide la inflación; y (2) el grid de seis modelos (highlight 3) y
+el control de cell-typing aparecían en Results sin haber sido descritos nunca en
+Methods.
+
+Se reescribió Methods para abrir con la comparación multi-grafo/multi-modelo (los
+diez casos de ocho grafos, nuestro grafo como uno más de la lista, no el sujeto
+principal), y se agregó la mención que faltaba de los cinco modelos adicionales y
+el control de cell-typing. Se quitó la auditoría de 21 papers de Methods por
+completo, y también la oración correspondiente en Results ("Six of 21 papers report
+an untrained comparator..."), a petición del autor — la survey le parece secundaria
+frente a la comparación empírica.
+
+Costo aceptado a sabiendas, mismo patrón que con "model-free baseline": la oración
+del Conclusion *"...and this literature does not check for it"* sigue ahí sin
+ningún respaldo metodológico dentro del Abstract (la auditoría de 21 papers ya no
+se menciona en Methods ni Results). Sigue siendo cierta y respaldada en el cuerpo
+del paper — el hueco es solo dentro del propio Abstract, señalado pero no resuelto
+por decisión del autor.
+
+**Acrónimos del Abstract, definidos en su primer uso.** GNN, OGB, GCN, MLP y AUROC
+no tenían su forma larga en ningún lado del Abstract (algunos, como AUROC/OGB/GCN/
+MLP, tampoco se expanden en el cuerpo del paper). Se agregó la definición completa
+la primera vez que aparece cada uno dentro del Abstract; las repeticiones
+posteriores quedan en sigla. "RNA-seq" se dejó sin expandir -- terminología
+biológica estándar para la audiencia de JBI.
+
+Compila limpio (43 pp., 0 refs indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
