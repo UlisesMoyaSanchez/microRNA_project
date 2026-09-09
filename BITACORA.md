@@ -23,6 +23,56 @@ trabajo, no por commit.
 
 ---
 
+## 2026-09-09 — Trim de highlights 3 y 5, y por qué "standard" no se volvió "protocol"
+
+El bullet 3 de los highlights medía 93 caracteres contra el límite de 85 de Elsevier
+(deuda abierta desde el 2026-09-07, junto con el bullet 5 que sigue en 142). Se
+reescribió de *"Six architectures, our graph: all inflate by 0.24--0.31 AUROC; an
+untrained control does not."* a *"Six models tested on our graph data: AUROC
+inflates 0.24--0.31, except untrained."* — 81 caracteres.
+
+Dos cambios de vocabulario pedidos por el autor: "architectures" → "models", y "our
+graph" → "our graph data". Ninguno de los dos rompe las invariantes ya documentadas
+para este bullet: "models" incluso calza mejor con cómo `main.tex` ya nombra este eje
+("bullet 3 varía el MODELO a datos fijos"). Se descartó una redacción alternativa
+propuesta primero ("probamos 6 modelos adicionalmente y en todos se infla el
+resultado") por dos motivos: HGT es uno de los seis, no un séptimo añadido a otros
+seis; y "en todos se infla" borra al control sin entrenar, que es justo la excepción
+que muestra que la inflación es un artefacto del protocolo de entrenamiento y no algo
+que cualquier modelo al azar mostraría — perderlo tergiversa el hallazgo. También se
+aclaró de paso que 0.24--0.31 es la **inflación** de AUROC (un delta entre
+protocolos), no un AUROC absoluto: los seis modelos tienen AUROCs absolutos muy
+distintos (0.92 a 0.49).
+
+Documentado en una nota fechada dentro de `main.tex` junto al resto de notas del
+bloque de highlights, para que una edición futura no reintroduzca ninguno de los
+dos errores. `c32ae79`
+
+**Bullet 5** medía 142 caracteres — el más largo de los cinco, y la otra mitad de la
+misma deuda del 2026-09-07. Se reescribió de *"We propose a minimum reporting
+standard: a leak-free split check, a model-free baseline with its margin stated, and
+matched negative sampling."* a *"Standard: leak-free splits, margin-stated
+model-free baselines, matched negatives."* — 82 caracteres. Se perdió la palabra
+"check" (ahora son "splits" a secas), pero se conservaron los tres componentes que
+el comentario del código ya protegía, y en particular "model-free" y
+"margin-stated" intactos: la Tabla 5 (`tab:correct_protocol`) exige un baseline
+específicamente *sin aprendizaje*, no cualquier baseline más débil, y ese
+calificador es tan central como el margen declarado.
+
+Se consideró y descartó cambiar "Standard" por "Protocol" para hacer eco del
+título ("The Protocol, Not the Model"). No son el mismo concepto: en el resto del
+paper "protocol" nombra lo que se audita (el conventional/corrected que colapsa el
+AUROC — Tabla 6 `protocol_grid`, Tabla 7, y ahora el propio bullet 1), mientras que
+este bullet describe el checklist con el que se audita cualquier protocolo. Usar
+"Protocol" aquí habría chocado con el bullet 1 y se acercaba a la advertencia ya
+escrita contra "the correct protocol" (2026-09-07): reclamar tener "el protocolo"
+es el tipo de sobre-alcance que el paper evita. "Standard" queda como estaba.
+
+Ambos trims compilan limpio (43 pp., 0 refs indefinidas) y quedan documentados con
+notas fechadas en `main.tex` junto al resto de notas del bloque de highlights.
+
+---
+
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
 
 **Título y highlights.** El título pasó a *"The Protocol, Not the Model: Evaluation Bias

@@ -143,8 +143,7 @@ leak-free split check and a model-free baseline whose margin is stated.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
 \item Six models tested on our graph data: AUROC inflates 0.24--0.31, except untrained.
 \item A cell-typing control task shows the audit is not indiscriminate.
-\item We propose a minimum reporting standard: a leak-free split check, a model-free
-baseline with its margin stated, and matched negative sampling.
+\item Standard: leak-free splits, margin-stated model-free baselines, matched negatives.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
 %% 2026-09-07: former highlights 1 and 2 merged. The second ("on our own graph the same
@@ -157,9 +156,10 @@ baseline with its margin stated, and matched negative sampling.
 %% its three components are kept faithful to \S\ref{sec:discussion}'s statement -- split
 %% check, baseline WITH its margin stated, and matched negative sampling -- so do not
 %% drop the third or the "margin stated" qualifier when trimming.
-%% LENGTH NOT YET TRIMMED (2026-09-07, deliberate): this bullet is 140 chars against the
-%% 85-char Elsevier limit, and bullet 2 (heuristic) is 79. Trim pass still owed before
-%% submission; the audit of 21 papers remains the one pillar with no highlight at all.
+%% LENGTH (2026-09-07, deliberate; trimmed 2026-09-09): this bullet was 142 chars against
+%% the 85-char Elsevier limit; bullet 2 (heuristic) is 79. Now 82 chars -- see the dated
+%% note below for what was cut. The audit of 21 papers remains the one pillar with no
+%% highlight at all.
 %% 2026-09-07: bullets 1 and 3 were rewritten as a chiasmus ("Six graphs, one architecture"
 %% / "Six architectures, our graph") because they read as the same result twice -- both
 %% opened on an AUROC drop, both said "six". They are the two axes of the generality claim:
@@ -193,6 +193,19 @@ baseline with its margin stated, and matched negative sampling.
 %% not "untrained models" plural -- losing that exception would misstate the finding, since
 %% it is what shows the inflation is a training-protocol artifact and not something any
 %% random model would exhibit.
+%% 2026-09-09: bullet 5 trimmed from 142 to 82 chars. Dropped "We propose a minimum
+%% reporting" (the Conclusion already frames this as the paper's proposal) and turned
+%% "a leak-free split check" into "leak-free splits" -- the word CHECK is gone, but the
+%% "Standard:" opener keeps the sense that this is something to be verified, not just a
+%% property to have. "model-free" and "margin-stated" are both kept: per
+%% \S\ref{sec:discussion}, the standard's second requirement is specifically a
+%% MODEL-FREE baseline (Table~\ref{tab:correct_protocol}), not a weaker trained one, and
+%% dropping "margin-stated" was already forbidden by the note above. Considered and
+%% rejected: replacing "Standard" with "Protocol" to echo the title -- "protocol"
+%% everywhere else in this paper names the thing being audited (conventional/corrected,
+%% Table~\ref{tab:protocol_grid}), not the audit itself; calling this checklist "the
+%% protocol" would collide with bullet 1 and edge toward the "correct protocol" overreach
+%% already ruled out above.
 
 \begin{keyword}
 link prediction \sep microRNA--target prediction \sep graph neural networks \sep
