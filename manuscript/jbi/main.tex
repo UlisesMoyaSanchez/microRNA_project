@@ -141,8 +141,7 @@ leak-free split check and a model-free baseline whose margin is stated.
 \begin{highlights}
 \item Correcting the protocol drops our model from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
-\item Six architectures, our graph: all inflate by 0.24--0.31 AUROC; an untrained
-control does not.
+\item Six models tested on our graph data: AUROC inflates 0.24--0.31, except untrained.
 \item A cell-typing control task shows the audit is not indiscriminate.
 \item We propose a minimum reporting standard: a leak-free split check, a model-free
 baseline with its margin stated, and matched negative sampling.
@@ -185,6 +184,15 @@ baseline with its margin stated, and matched negative sampling.
 %% the cell-typing control both run. This does not reopen the 2026-09-02 de-scaling of
 %% our graph to "one graph among several": that decision was about not centring the
 %% paper's claim on it, and bullet 1 still carries the headline over all six graphs.
+%% 2026-09-09: bullet 3 trimmed from 93 to 81 chars, and "architectures" dropped for
+%% "models" at the author's request -- consistent with \S\ref{sec:results} calling this
+%% axis the MODEL axis. "Our graph" became "our graph data". 0.24--0.31 is the AUROC
+%% INFLATION (the delta between protocols), not an absolute AUROC value; do not let a
+%% future edit read as "AUROC of 0.24--0.31". "Except untrained" elides the article for
+%% length but still names the single untrained-control row (Table~\ref{tab:architecture_grid}),
+%% not "untrained models" plural -- losing that exception would misstate the finding, since
+%% it is what shows the inflation is a training-protocol artifact and not something any
+%% random model would exhibit.
 
 \begin{keyword}
 link prediction \sep microRNA--target prediction \sep graph neural networks \sep
