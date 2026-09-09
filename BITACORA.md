@@ -87,6 +87,22 @@ de historia clínica, etc.) que este paper nunca tocó.
 
 Documentado con nota fechada justo después de `\end{abstract}`.
 
+**El mismo día, se acortó más.** El autor pidió quitar la oración de contexto que
+abría el Objective ("GNN papers predicting microRNA--target interactions routinely
+report AUROC in the 0.91--0.99 range without a model-free baseline..."), dejando
+solo la oración del objetivo propiamente dicho. Se hizo, con un ajuste obligatorio:
+"this subfield's evaluation practice" se quedaba sin antecedente al desaparecer la
+oración que nombraba el subcampo, así que se reescribió a "GNN link-prediction
+evaluation practice" (autocontenida). Objective final: *"We audit whether GNN
+link-prediction evaluation practice inflates reported performance, across ten cases
+spanning eight distinct graphs, to help correct how link prediction is evaluated on
+biomedical interaction graphs."*
+
+Costo aceptado a sabiendas: "model-free baseline" ya no se define en el Abstract (se
+usa en Methods y Conclusion sin explicarse ahí); sigue definido en el cuerpo del
+paper (Resultados/Discusión). Documentado en la misma nota fechada de `main.tex`.
+Compila limpio (43 pp., 0 refs indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas

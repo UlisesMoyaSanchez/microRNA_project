@@ -107,12 +107,9 @@ Biomedical Interaction Graphs}
 %% TODO: fill in the real affiliation before submission.
 
 \begin{abstract}
-\textbf{Objective:} Graph Neural Network (GNN) papers predicting microRNA--target
-interactions routinely report AUROC in the 0.91--0.99 range without a model-free
-baseline -- a simple, no-learning scorer (e.g.\ node degree) used as a sanity-check
-floor. We audit whether this subfield's evaluation practice inflates reported
-performance, across ten cases spanning eight distinct graphs, to help correct how
-link prediction is evaluated on biomedical interaction graphs.
+\textbf{Objective:} We audit whether GNN link-prediction evaluation practice inflates
+reported performance, across ten cases spanning eight distinct graphs, to help
+correct how link prediction is evaluated on biomedical interaction graphs.
 
 \textbf{Methods:} A literature audit of 21 such papers checked split handling,
 negative sampling, and model-free-baseline reporting. One of them is ours, built
@@ -149,6 +146,16 @@ leak-free split check and a model-free baseline whose margin is stated.
 %% definitive protocol. (2) scope: only eight biomedical interaction graphs were audited,
 %% all link-prediction tasks -- "graph data in the health environment" would claim
 %% coverage (imaging graphs, EHR graphs, etc.) this paper never touched.
+%% 2026-09-09 (same day): the opening context sentence ("GNN papers predicting
+%% microRNA--target interactions routinely report AUROC in the 0.91--0.99 range without a
+%% model-free baseline...") was then dropped at the author's request, and "this
+%% subfield's evaluation practice" rewritten to "GNN link-prediction evaluation
+%% practice" so the sentence is self-contained -- "this subfield" had no antecedent left
+%% once the sentence naming it was removed. Trade-off accepted knowingly: "model-free
+%% baseline" is now used in Methods and Conclusion without ever being defined in the
+%% Abstract (it still is, in \S\ref{sec:results}/\S\ref{sec:discussion}). Do not restore
+%% "this subfield's" without either restoring an antecedent sentence or keeping this
+%% self-contained phrasing.
 
 \begin{highlights}
 \item Correcting the protocol drops our model from 0.88--0.99 to 0.62--0.64 on six graphs.
