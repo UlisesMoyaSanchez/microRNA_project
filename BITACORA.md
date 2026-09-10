@@ -245,6 +245,26 @@ independently trained architectures" -- ese sí cubría ambos ejes desde antes).
 
 Compila limpio (43 pp., 0 refs indefinidas).
 
+**El mismo día, la lista de contribución del párrafo 2 quedó desactualizada en dos
+sentidos.** El autor señaló ambos: (1) el tercer punto todavía decía "architectures"
+en vez de "models" (mismo cambio ya hecho en highlight 3, Results y Conclusion); (2)
+la lista de "fourfold" solo cubría 4 de los 5 highlights -- protocolo/seis grafos,
+super-additividad, seis modelos, y el piso model-free en otros datos -- sin mencionar
+el control de cell-typing (highlight 4) ni el reporting standard propuesto
+(highlight 5) como contribuciones del paper.
+
+Se corrigió "architectures" → "models", y se agregaron los dos puntos faltantes,
+reescribiendo la lista de "fourfold" a "sixfold": el control de cell-typing
+("shows a structurally similar cell-typing task survives the identical audit by a
+wide margin, so the audit is discriminating rather than indiscriminate" -- misma
+frase que ya usa Discusión, `main.tex:1091`) y el reporting standard (los mismos
+tres componentes protegidos desde highlight 5 y Conclusion: split check, baseline
+con margen declarado, negative sampling emparejado).
+
+Ahora la lista de contribución del párrafo 2 cubre los cinco highlights, no solo
+cuatro. Compila limpio (44 pp. -- subió una por el texto agregado --, 0 refs
+indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas

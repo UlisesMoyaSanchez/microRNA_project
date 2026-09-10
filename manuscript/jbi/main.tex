@@ -296,13 +296,17 @@ what the gap costs by retraining one architecture under both protocols on six gr
 our own, which we built and can instrument in full, and five taken from the surveyed
 papers themselves -- and by comparing nine further externally-sourced cases against a
 no-learning floor: two public link-prediction benchmarks and seven of the 21 surveyed
-papers' own datasets. Concretely, this paper's contribution is fourfold: it
+papers' own datasets. Concretely, this paper's contribution is sixfold: it
 shows the conventional protocol inflates a trained model by 0.26--0.37 AUROC on every
 graph tested, not only on ours; shows the two pitfalls compound rather than simply add;
-shows the cost recurs across independently trained architectures rather than being an
-artifact of any single model; and shows the same model-free floor is high enough to
+shows the cost recurs across independently trained models rather than being an
+artifact of any single model; shows the same model-free floor is high enough to
 matter when measured directly on other papers' own data -- on two of the seven,
-decisive -- rather than only inferred by analogy.
+decisive -- rather than only inferred by analogy; shows a structurally similar
+cell-typing task survives the identical audit by a wide margin, so the audit is
+discriminating rather than indiscriminate; and proposes a minimum reporting standard
+-- a leak-free split check, a model-free baseline with its margin stated, and matched
+negative sampling -- for the subfield to adopt.
 
 \section{Related Work}
 \label{sec:related}
