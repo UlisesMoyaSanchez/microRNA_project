@@ -171,6 +171,27 @@ ninguna resuelta todavía):
 
 ---
 
+## 2026-09-09 (cont.) — La Introducción, acercada al título
+
+El primer párrafo de la Introducción (`main.tex:270-291`) abría con la motivación
+biológica y los hallazgos del audit de 21 papers, pero nunca nombraba "protocol"
+como término sustantivo (solo aparecía entre paréntesis, como referencia cruzada a
+Methods), y la idea de probar sobre varios grafos -- no solo el nuestro -- tampoco
+aparecía hasta el párrafo 2. El autor señaló que el párrafo 1 debía sonar más cerca
+del título ("The Protocol, Not the Model") desde el principio.
+
+Se cerró el párrafo 1 con: *"This paper asks whether the inflated numbers are a
+property of the evaluation protocol, not of any one model or dataset -- and tests
+that question not on a single graph, but across eight distinct graphs."* La frase
+hace eco deliberado de dos decisiones ya tomadas hoy en el Abstract: "not of any
+one model or dataset" es la misma frase del Conclusion, y "eight distinct graphs"
+es la cifra del Objective -- para que el lector llegue al párrafo 2 (el detalle
+metodológico) ya sabiendo hacia dónde va el argumento.
+
+Compila limpio (44 pp. -- subió una por el párrafo nuevo --, 0 refs indefinidas).
+
+---
+
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
 
 **Título y highlights.** El título pasó a *"The Protocol, Not the Model: Evaluation Bias
