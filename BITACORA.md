@@ -230,6 +230,21 @@ solo que no las dos con la misma cita inline.
 
 Compila limpio (43 pp., 0 refs indefinidas).
 
+**El mismo día, un tercer ajuste al cierre del párrafo 1.** El autor notó que la
+oración nombraba los dos ejes ("not of any one **model or dataset**") pero solo
+operaba uno: "tests that question... across eight distinct graphs" -- eso es solo
+el eje de los datos (highlight 1: seis grafos, un modelo). El eje del modelo
+(highlight 3: seis modelos, un grafo) quedaba prometido al inicio de la oración
+pero nunca desarrollado.
+
+Se cerró explícitamente con los dos: *"...and tests that question two ways: across
+eight distinct graphs, and across six independently trained models on our own
+graph."* Ahora el párrafo 1 anticipa los mismos dos experimentos que ya reflejan
+los highlights 1 y 3, y que el párrafo 2 ya desarrollaba ("recurs across
+independently trained architectures" -- ese sí cubría ambos ejes desde antes).
+
+Compila limpio (43 pp., 0 refs indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
