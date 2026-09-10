@@ -190,6 +190,26 @@ metodológico) ya sabiendo hacia dónde va el argumento.
 
 Compila limpio (44 pp. -- subió una por el párrafo nuevo --, 0 refs indefinidas).
 
+**El mismo día, más recorte.** El autor sintió que, otra vez, el párrafo 1 le daba
+demasiado peso al audit de 21 papers frente al diseño empírico -- el mismo patrón ya
+corregido ayer en Methods del Abstract. Midiendo: el bloque de cifras del audit
+("15 report no model-free baseline... six... 1.7 and 7.4 AUROC points... 17 of the
+21...") ocupaba ~100 de las ~250 palabras del párrafo, casi el 40%, en una sola
+oración con tres sub-cláusulas. Esas mismas cifras, con nombres de paper, ya están
+completas en Related Work (`main.tex:335-341`) -- el propio texto ya prometía "full
+results in Related Work below" entre paréntesis, así que no se perdía nada al
+recortar aquí.
+
+Se condensó a una oración: *"A literature audit of these 21 papers found that most
+omit a model-free baseline -- a simple, no-learning scorer such as node degree, used
+as a sanity-check floor -- or default to negatives drawn from unlabeled pairs
+without discussion (protocol in Methods, full results in Related Work below)."* Se
+conservó la definición breve de "model-free baseline" (primera explicación real del
+término en todo el cuerpo del paper, ya que también se quitó del Abstract ayer) pero
+se soltaron las cifras específicas. Bloque de ~100 palabras bajó a ~55.
+
+Compila limpio (43 pp., 0 refs indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
