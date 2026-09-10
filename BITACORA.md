@@ -265,6 +265,35 @@ Ahora la lista de contribución del párrafo 2 cubre los cinco highlights, no so
 cuatro. Compila limpio (44 pp. -- subió una por el texto agregado --, 0 refs
 indefinidas).
 
+**Pendiente por hacer, todavía sin empezar: una herramienta ejecutable del reporting
+standard.** El autor preguntó si se puede convertir el checklist de tres puntos
+(Tabla 5, `tab:correct_protocol`) en código que verifique si un dataset/protocolo ya
+los cumple -- pensado como herramienta fácil para la comunidad (ej. un notebook de
+Colab), no solo como script interno del repo.
+
+Estado de cada punto, verificado hoy:
+- **Leak-free split check**: ya existe -- `training/test_edge_split.py` +
+  `assert_no_edge_leakage()` en `training/splits.py`. Es el gate que el proyecto ya
+  usa antes de someter un retrain.
+- **Model-free baseline**: ya existe -- `training/eval_topology_baseline.py` (y
+  variantes para OGB, la survey de HMDD, y cell-typing) calcula el piso sin
+  aprendizaje.
+- **Matched negative sampling**: **no existe ningún check automatizado** -- hoy solo
+  se garantiza por convención en el config (mismo sampler en train y eval), sin
+  ninguna función que lo verifique.
+
+Idea acordada, no ejecutada: un script delgado que llame a los dos checks
+existentes y agregue el tercero (comparar la distribución de negativos declarada en
+el config de train contra el de eval), empaquetado como algo corrible por fuera de
+este repo (Colab u similar) para que otros grupos auditen su propio código antes de
+reportar un número. Trade-off ya señalado: el tercer check es una verificación de
+*configuración* (¿pide el mismo sampler?), no una verificación empírica sobre los
+datos como las otras dos -- no detecta un sampler correcto pero con semilla o
+parámetro distinto.
+
+No se empezó a construir nada -- queda como pendiente explícito para una sesión
+futura.
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
