@@ -210,6 +210,26 @@ se soltaron las cifras específicas. Bloque de ~100 palabras bajó a ~55.
 
 Compila limpio (43 pp., 0 refs indefinidas).
 
+**El mismo día, se pidieron citas para "Neither omission is novel: both are already
+documented pitfalls... reviewed below".** Al revisar Related Work
+(`main.tex:308-323`) para encontrarlas, resultó que esa sección solo respalda **una**
+de las dos mitades: "default to negatives drawn from unlabeled pairs" sí tiene citas
+verificadas ya en uso (`kotnis2017analysis, aiyappa2024implicit` para el sesgo de
+negative sampling en link prediction en general; `yilmaz2025biasaware` para network
+biology específicamente). "Omit a model-free baseline" **no tiene ninguna cita en
+todo el paper** que la respalde como pitfall ya documentado en la literatura general
+de ML -- no se inventó una (memoria: citas siempre contra fuente primaria, nunca
+inventadas -- [[feedback_citation_rigor]]).
+
+Se agregaron las tres citas verificadas a la mitad de negative sampling únicamente;
+la mitad de "model-free baseline" queda sin cita inline, a decisión del autor
+(opción 1 de dos ofrecidas). La oración "both are already documented pitfalls"
+sigue tal cual -- no se reescribió para reflejar que solo una mitad está citada
+directamente aquí; sigue siendo cierta en el sentido amplio de "reviewed below",
+solo que no las dos con la misma cita inline.
+
+Compila limpio (43 pp., 0 refs indefinidas).
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
