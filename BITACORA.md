@@ -153,6 +153,22 @@ Compila limpio (43 pp., 0 refs indefinidas).
 
 Compila limpio (43 pp., 0 refs indefinidas).
 
+**Deudas abiertas al cierre del 2026-09-09** (todas señaladas durante la sesión,
+ninguna resuelta todavía):
+
+- Results todavía dice "Retraining one **architecture** under both protocols on six
+  graphs..." (línea ~123) — corresponde al claim de highlight 1 ("our model"), no al
+  grid de seis modelos, y no se cambió a "model" por no haber sido pedido
+  explícitamente. Confirmar si debe unificarse también.
+- La etiqueta *"HGT (project model)"* en la Tabla S1 sigue invitando la lectura
+  equivocada que su propio caption ya corrige (deuda desde 2026-09-07).
+- `training/slurm_heldout_grid.sh:65` hace `cat` del archivo equivocado en modo
+  transductivo -- falso fallo tras un éxito real (deuda desde 2026-09-07, es un bug
+  de código, no de manuscrito).
+- La auditoría de 21 papers sigue sin un highlight propio (deuda desde 2026-09-07),
+  y ahora además desapareció de Methods/Results del Abstract -- su único rastro en
+  el Abstract ya es indirecto, vía el checklist del Conclusion.
+
 ---
 
 ## 2026-09-07 — Un confound de régimen de entrenamiento bajo el grid de arquitecturas
