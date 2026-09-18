@@ -270,43 +270,43 @@ evaluation methodology \sep negative sampling \sep heterogeneous graphs
 Mapping the complex web of biomolecule-biomolecule interactions, particularly microRNA
 and drug targets, is essential for advancing modern network biology
 \cite{barabasi2004networkbiology,vidal2011interactome}. However,
-despite the biological complexity of these relationships,
-Graph Neural Network papers predict an AUROC in the
-0.91--0.99 range \cite{tian2024mgcnss,jin2022nimgsa,ahmad2026hybridgnn,yu2022hgdti,
-cao2024ngcn,zhang2024kmerpmtf,orro2026mirnadisease,
+despite the biological complexity of these relationships, Graph Neural Network papers
+in this space report inflated performance \cite{tian2024mgcnss,jin2022nimgsa,
+ahmad2026hybridgnn,yu2022hgdti,cao2024ngcn,zhang2024kmerpmtf,orro2026mirnadisease,
 li2025couplemda,zeng2025gonnmda,liu2024digamn,lu2024dgnmda,yu2022hlgnnmda,
 huang2022meahne,li2022cksnpgnn,liang2023hmcda,wang2026higldp,xiong2025gpsdti,
-zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A
-literature audit of these 21 papers found that most omit a model-free baseline -- a
-simple, no-learning scorer such as node degree, used as a sanity-check floor -- or
-default to negatives drawn from unlabeled pairs without discussion
+zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A literature
+audit found methodological omissions behind those numbers: most omit a model-free
+baseline, a simple, no-learning scorer such as node degree used as a sanity-check
+floor, or default to negatives drawn from unlabeled pairs without discussion
 \cite{kotnis2017analysis,aiyappa2024implicit,yilmaz2025biasaware} (protocol in
 Methods, full results in Related Work below). Neither omission is novel: both are
 already documented pitfalls in the broader link-prediction and knowledge-graph
 literature, reviewed below. What is missing is the connection between that general
-literature and this subfield's own reporting practice -- the general-ML literature
+literature and this subfield's own reporting practice: the general-ML literature
 already knows how to check for these pitfalls, but this subfield's papers do not apply
 the check. This paper asks whether the inflated numbers are a property of the
-evaluation protocol, not of any one model or dataset -- and tests that question two
+evaluation protocol, not of any one model or dataset, and tests that question two
 ways: across eight distinct graphs, and across six independently trained models on
-our own graph.
+our own graph. It also proposes a minimum reporting standard for the subfield to
+adopt: leak-free splits, model-free baselines, and matched negative sampling.
 
 This paper is structured as an audit of that gap, not a single case report. We measure
-what the gap costs by retraining one architecture under both protocols on six graphs --
-our own, which we built and can instrument in full, and five taken from the surveyed
-papers themselves -- and by comparing nine further externally-sourced cases against a
-no-learning floor: two public link-prediction benchmarks and seven of the 21 surveyed
-papers' own datasets. Concretely, this paper's contribution is sixfold: it
-shows the conventional protocol inflates a trained model by 0.26--0.37 AUROC on every
-graph tested, not only on ours; shows the two pitfalls compound rather than simply add;
-shows the cost recurs across independently trained models rather than being an
-artifact of any single model; shows the same model-free floor is high enough to
-matter when measured directly on other papers' own data -- on two of the seven,
-decisive -- rather than only inferred by analogy; shows a structurally similar
-cell-typing task survives the identical audit by a wide margin, so the audit is
-discriminating rather than indiscriminate; and proposes a minimum reporting standard
--- a leak-free split check, a model-free baseline with its margin stated, and matched
-negative sampling -- for the subfield to adopt.
+what the gap costs by retraining one architecture under both protocols on six graphs
+(our own, which we built and can instrument in full, and five taken from the surveyed
+papers themselves) and by comparing nine further externally-sourced cases against a
+no-learning floor: two public link-prediction benchmarks, and seven of the 21 papers
+from that audit, evaluated on their own datasets. Concretely, this paper's
+contribution is sixfold: it shows the conventional protocol inflates a trained model
+by 0.26--0.37 AUROC on every graph tested, not only on ours; shows the two pitfalls
+compound rather than simply add; shows the cost recurs across independently trained
+models rather than being an artifact of any single model; shows the same model-free
+floor is high enough to matter when measured directly on other papers' own data (on
+two of the seven, decisive) rather than only inferred by analogy; shows a
+structurally similar cell-typing task survives the identical audit by a wide margin,
+so the audit is discriminating rather than indiscriminate; and proposes a minimum
+reporting standard for the subfield to adopt: a leak-free split check, a model-free
+baseline with its margin stated, and matched negative sampling.
 
 \section{Related Work}
 \label{sec:related}
@@ -328,13 +328,18 @@ aiyappa2024implicit}, and has been documented specifically in network biology
 \cite{yilmaz2025biasaware}, the domain this paper's graph is drawn from. Its likely
 historical root is recommender-systems evaluation practice, where sampling a small set
 of negatives per positive was adopted for computational convenience and only later
-shown to distort ranking metrics \cite{krichene2020sampled}.
+shown to distort ranking metrics \cite{krichene2020sampled}. Table~\ref{tab:known_pitfalls}
+summarizes both precedents.
 
-\subsection{How this subfield evaluates itself}
+\input{tables/table_known_pitfalls.tex}
+
+\subsection{A survey of this subfield's evaluation practice}
 Against that backdrop, we surveyed 21 papers in the miRNA-target and adjacent
 biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disease,
 lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
-full rather than inferring its evaluation protocol from the abstract. 15 of the 21
+full rather than inferring its evaluation protocol from the abstract. Nearly all
+cross-validate over edges rather than some other unit (19 of the 21; the exception,
+Orro, holds out miRNAs rather than associations). 15 of the 21
 report no model-free baseline; the six that do -- NIMGSA, NGCN, Orro, HLGNN-MDA,
 CKSNP-GNN and ModulePred -- report one of this subfield's classical untrained
 propagation or scoring methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR) as one more
@@ -376,8 +381,144 @@ super-additive rather than redundant.
 \section{Methods}
 \label{sec:methods}
 
+\subsection{Evaluation protocol}
+We use \emph{transductive evaluation} for the specific condition audited here: a
+held-out edge left in the message-passing graph when its score is computed, so the
+encoder can, in effect, observe the edge it is later asked to predict -- narrower than
+the general transductive/inductive distinction in graph learning, which is not itself a
+source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out
+edge, and its automatically-added reverse relation, from the message-passing graph in
+both directions; this leak-free property is verified by an automated battery of checks
+before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same logic
+applies within the training set: a fraction of training edges are withheld from the
+encoder's own input and used only as supervision targets, so the model cannot read a
+training edge off the graph while being asked to predict it.
+
+For negative sampling we compare two regimes, uniform-random and degree-matched, and
+enforce the same sampler at training and evaluation time within any single reported
+number. Mixing the two produces the ``mismatch trap'': an apparent difficulty
+measurement that is in fact an artifact of the distribution mismatch
+(Figure~\ref{fig:neg_sampling_mechanism}). Table~\ref{tab:correct_protocol} summarizes
+both requirements, together with the model-free-baseline requirement described below,
+as a minimum reporting checklist.
+
+We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
+typing, averaged over four random seeds where feasible; the six-architecture grid is a
+single run per architecture, on one GPU, by a driver separate from the multi-GPU
+headline runs -- Results gives the effect-size argument for the single run and the
+comparability limit the driver difference imposes.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+\node[font=\small] at (1.3,3.0) {\textbf{Conventional (edges seen)}};
+\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m1) at (0,1.5) {m};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1a) at (3.0,2.4) {g1};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1b) at (3.0,0.6) {g2};
+\draw[-{Latex[length=2mm]}, thick] (m1) -- (g1a);
+\draw[-{Latex[length=2mm]}, thick, red] (m1) -- (g1b);
+\node[font=\scriptsize, text=red] at (1.5,0.35) {test edge};
+\node[align=center, text width=3.6cm] at (1.3,-0.8) {message passing sees the test edge};
+
+\node[font=\small] at (9.3,3.0) {\textbf{Corrected (edges held out)}};
+\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m2) at (8,1.5) {m};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2a) at (11.0,2.4) {g1};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2b) at (11.0,0.6) {g2};
+\draw[-{Latex[length=2mm]}, thick] (m2) -- (g2a);
+\draw[dashed, thick, red] (m2) -- (g2b);
+\node[font=\scriptsize, text=red] at (9.5,0.35) {test edge};
+\node[align=center, text width=3.6cm] at (9.3,-0.8) {message passing never sees the test edge};
+\end{tikzpicture}
+\caption{The evaluation-protocol split. \emph{Left (conventional):} the held-out edge
+stays visible to the encoder during message passing. \emph{Right (corrected):} the edge
+and its reverse relation are stripped before message passing, used only to compute the
+loss/metric.}
+\label{fig:edge_split}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+\node[draw, circle, fill=blue!10, minimum size=0.7cm] (mm1) at (0,0) {m1};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg1) at (4.4,2.1) {g1};
+\node[font=\tiny] at (5.3,2.1) {deg=3};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg2) at (4.4,0.2) {g2};
+\node[font=\tiny] at (5.3,0.2) {deg=1};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg5) at (4.4,-2.1) {g5};
+\node[font=\tiny] at (5.3,-2.1) {deg=3};
+\draw[-{Latex[length=2mm]}, thick, blue] (mm1) -- (gg1);
+\node[font=\scriptsize, text=blue] at (1.9,1.55) {positive};
+\draw[dashed, thick, orange] (mm1) -- (gg2);
+\node[font=\scriptsize, text=orange] at (2.3,-0.35) {uniform negative};
+\draw[dashed, thick, red!70!black] (mm1) -- (gg5);
+\node[font=\scriptsize, text=red!70!black] at (2.5,-1.75) {degree-matched negative};
+\end{tikzpicture}
+\vspace{0.3em}
+
+\small
+\begin{tabular}{lccl}
+\hline
+Negative type & score(pos) & score(neg) & outcome \\
+\hline
+uniform (m1,g2, deg=1) & $\deg(g1){=}3$ & $\deg(g2){=}1$ & positive wins almost for free \\
+degree-matched (m1,g5, deg=3) & $\deg(g1){=}3$ & $\deg(g5){=}3$ & tie -- AUROC contribution 0.5 \\
+\hline
+\end{tabular}
+\caption{Why uniform negative sampling inflates AUROC for a scorer as trivial as
+$\mathrm{score}(m,g)=\deg(g)$. The negative gene is drawn without regard to degree, so
+in a heavy-tailed graph it usually has lower degree than the positive's gene, and the
+heuristic wins nearly for free. Degree-matching removes this by construction, forcing
+the signal back onto \emph{which} miRNA regulates the gene rather than \emph{how
+popular} it is.}
+\label{fig:neg_sampling_mechanism}
+\end{figure}
+
+\input{tables/table5_correct_protocol_checklist.tex}
+
+\subsection{Cross-graph and cross-paper comparison design}
+The protocol defined above is applied identically across three comparisons, so that
+whether its cost is a property of the protocol rather than of any single graph or model
+can be measured rather than assumed. Our own graph, described below, is one case among
+these, not the case the comparisons are built around.
+
+First, we retrain this paper's architecture from scratch, under both protocol arms, on
+six graphs: our own, and five distinct association matrices recovered from among the
+papers surveyed in \S\ref{sec:related}. Three of the seven papers whose data we could
+obtain -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a byte-identical canonical HMDD
+matrix, so those seven papers span five distinct graphs. Each external matrix comes
+from the paper's own bundled repository, or a shared institutional mirror where none
+exists (CKSNP-GNN), and is verified against that paper's own reported node, edge and
+positive counts before use; three further papers -- GONNMDA, Orro and DGNMDA -- were
+excluded because no usable data was recoverable (Discussion).
+
+Second, for the same seven papers we apply the topological heuristics defined below,
+unmodified, directly to each paper's own association matrix under that paper's stated
+negative-sampling ratio, and read the result against the paper's own published number:
+a no-learning floor measured independently of any protocol correction, on each paper's
+own data rather than on ours.
+
+Third, the same heuristics are applied to two public link-prediction benchmarks with
+open leaderboards, ogbl-ddi and ogbl-ppa \cite{hu2020ogb}, both verified leak-free at
+runtime by the same check used throughout this paper (Figure~\ref{fig:edge_split}),
+giving an external check on the floor's behavior outside the literature this paper
+otherwise audits.
+
+Across all three comparisons, ten cases span eight distinct graphs; Results reports
+what each one finds.
+
+\subsection{Baselines}
+For link prediction we report four no-learning topological heuristics -- gene
+in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
+computed purely from training-visible edge topology. For cell typing we report two
+no-learning or graph-free controls, nearest-centroid and logistic regression, both
+trained directly on the raw PCA features without any message passing. Against these
+controls we compare six trained architectures: a heterogeneous graph transformer, a
+homogeneous GCN, a co-expression-ablation variant of the transformer, a graph-free MLP,
+an untrained random-weight control, and a no-miRNA-input ablation that is
+link-prediction-incapable by construction and retained only as a smoke test.
+
 \subsection{Data and graph construction}
-We build a heterogeneous graph from a public single-cell RNA-seq cohort combined with
+Of the graphs compared above, this is the one we built ourselves and can instrument in full. We build a heterogeneous graph from a public single-cell RNA-seq cohort combined with
 miRDB v6.0 miRNA--target interactions. The graph has three node types -- miRNA, gene,
 and cell -- connected by a miRNA-to-gene regulatory edge, a cell-to-gene expression
 edge, and a gene-to-gene co-expression edge, each with an automatically-added reverse
@@ -426,120 +567,6 @@ of its expression profile. Counts are post-fix, i.e.\ from the corrected graph
 construction described above.}
 \label{fig:graph_schema}
 \end{figure}
-
-\subsection{Evaluation protocol}
-We use \emph{transductive evaluation} to name the specific condition audited here: a
-held-out edge is left in the message-passing graph when its score is computed, so the
-encoder can, in effect, observe the exact edge it is later asked to predict. This is
-narrower than the general transductive/inductive distinction in graph learning, which
-concerns whether test-time nodes are visible during training and is not by itself a
-source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out edge, together
-with its automatically-added reverse relation, from the message-passing graph in both
-directions, so that no test edge is reachable to the encoder at evaluation time. This
-leak-free property is not assumed: it is verified by an automated battery of checks
-before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same
-hide-and-recover logic is also applied within the training set itself: a fraction of
-the training edges are reserved as supervision targets only and withheld from the
-encoder's own input, so the model cannot simply read a training edge off the graph
-while being asked to predict it. For negative
-sampling we compare two regimes, uniform-random and degree-matched, and enforce the
-same sampler at training and at evaluation time within any single reported number.
-Mixing the two -- training under one regime and evaluating under the other -- produces
-what we call the ``mismatch trap'': an apparent difficulty measurement that is in fact
-an artifact of the distribution mismatch, which we report as a methodological warning
-in its own right (Figure~\ref{fig:neg_sampling_mechanism}). Table~\ref{tab:correct_protocol}
-summarizes these two requirements, together with the model-free-baseline requirement
-described below, as a minimum reporting checklist. We report AUROC and AUPRC for link
-prediction, and accuracy and macro-F1 for cell typing. Headline numbers are averaged
-over four independent random seeds where feasible; the six-architecture grid is
-measured from a single training run per architecture, trained on one GPU by a driver
-separate from the multi-GPU headline runs. Results gives both the effect-size argument
-for the single run and the comparability limit the driver difference imposes.
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[every node/.style={font=\scriptsize}]
-\node[font=\small] at (1.3,3.0) {\textbf{Conventional (edges seen)}};
-\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m1) at (0,1.5) {m};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1a) at (3.0,2.4) {g1};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1b) at (3.0,0.6) {g2};
-\draw[-{Latex[length=2mm]}, thick] (m1) -- (g1a);
-\draw[-{Latex[length=2mm]}, thick, red] (m1) -- (g1b);
-\node[font=\scriptsize, text=red] at (1.5,0.35) {test edge};
-\node[align=center, text width=3.6cm] at (1.3,-0.8) {message passing sees the test edge};
-
-\node[font=\small] at (9.3,3.0) {\textbf{Corrected (edges held out)}};
-\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m2) at (8,1.5) {m};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2a) at (11.0,2.4) {g1};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2b) at (11.0,0.6) {g2};
-\draw[-{Latex[length=2mm]}, thick] (m2) -- (g2a);
-\draw[dashed, thick, red] (m2) -- (g2b);
-\node[font=\scriptsize, text=red] at (9.5,0.35) {test edge};
-\node[align=center, text width=3.6cm] at (9.3,-0.8) {message passing never sees the test edge};
-\end{tikzpicture}
-\caption{The evaluation-protocol split. \emph{Left, conventional:} the miRNA$\to$gene
-edge later used for testing (m$\to$g2) remains in the graph the encoder aggregates over
-during message passing -- the model can, in effect, look up the answer through the
-node's own neighborhood before being asked to predict it. \emph{Right, corrected:} the same
-edge and its automatically-added reverse relation are stripped from the message-passing
-graph and used only to compute the loss/metric. \texttt{test\_edge\_split.py} verifies
-this leak-free property with eight automated checks before any downstream number is
-trusted.}
-\label{fig:edge_split}
-\end{figure}
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[every node/.style={font=\scriptsize}]
-\node[draw, circle, fill=blue!10, minimum size=0.7cm] (mm1) at (0,0) {m1};
-\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg1) at (4.4,2.1) {g1};
-\node[font=\tiny] at (5.3,2.1) {deg=3};
-\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg2) at (4.4,0.2) {g2};
-\node[font=\tiny] at (5.3,0.2) {deg=1};
-\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg5) at (4.4,-2.1) {g5};
-\node[font=\tiny] at (5.3,-2.1) {deg=3};
-\draw[-{Latex[length=2mm]}, thick, blue] (mm1) -- (gg1);
-\node[font=\scriptsize, text=blue] at (1.9,1.55) {positive};
-\draw[dashed, thick, orange] (mm1) -- (gg2);
-\node[font=\scriptsize, text=orange] at (2.3,-0.35) {uniform negative};
-\draw[dashed, thick, red!70!black] (mm1) -- (gg5);
-\node[font=\scriptsize, text=red!70!black] at (2.5,-1.75) {degree-matched negative};
-\end{tikzpicture}
-\vspace{0.3em}
-
-\small
-\begin{tabular}{lccl}
-\hline
-Negative type & score(pos) & score(neg) & outcome \\
-\hline
-uniform (m1,g2, deg=1) & $\deg(g1){=}3$ & $\deg(g2){=}1$ & positive wins almost for free \\
-degree-matched (m1,g5, deg=3) & $\deg(g1){=}3$ & $\deg(g5){=}3$ & tie -- AUROC contribution 0.5 \\
-\hline
-\end{tabular}
-\caption{Why uniform negative sampling inflates AUROC for a scorer as trivial as
-$\mathrm{score}(m,g)=\deg(g)$. Under uniform sampling the negative gene is drawn without
-regard to degree, and in a heavy-tailed biological graph it almost always has lower
-degree than the positive's gene -- the heuristic (and, mechanistically, a model that
-learns the same shortcut) wins nearly for free. Degree-matching the negative to the
-positive's degree bin removes this artifact by construction, forcing the discriminating
-signal back onto \emph{which} miRNA regulates the gene rather than \emph{how popular}
-the gene is. Toy numbers illustrate the mechanism; real-graph values are
-\texttt{gene\_degree} = 0.8712 (uniform) vs.\ 0.5126 (degree-matched), Table~\ref{tab:model_free_baselines}.}
-\label{fig:neg_sampling_mechanism}
-\end{figure}
-
-\input{tables/table5_correct_protocol_checklist.tex}
-
-\subsection{Baselines}
-For link prediction we report four no-learning topological heuristics -- gene
-in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
-computed purely from training-visible edge topology. For cell typing we report two
-no-learning or graph-free controls, nearest-centroid and logistic regression, both
-trained directly on the raw PCA features without any message passing. Against these
-controls we compare six trained architectures: a heterogeneous graph transformer, a
-homogeneous GCN, a co-expression-ablation variant of the transformer, a graph-free MLP,
-an untrained random-weight control, and a no-miRNA-input ablation that is
-link-prediction-incapable by construction and retained only as a smoke test.
 
 \subsection{Literature survey protocol}
 The literature survey referenced throughout this paper covers 21 papers, each read in

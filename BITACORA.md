@@ -23,6 +23,106 @@ trabajo, no por commit.
 
 ---
 
+## 2026-09-17 — Introducción reescrita, tabla nueva en Related Work, Methods reordenado para bajar el peso de "nuestro grafo"
+
+**Nada de esto está commiteado todavía** — son cambios en el working tree sobre
+`fix/verify-gates`, que sigue en el HEAD de `149e8cc` (el cierre del 2026-09-09). Compila
+limpio en cada paso (`pdflatex`, 0 refs indefinidas); la cuenta de páginas bailó
+44→45→44 según se agregaba/recortaba contenido. Sigue sin revisarse si `main.tex`
+compila con el toolchain de Elsevier, solo con el local.
+
+**Párrafo 1 de la Introducción, reescrito dos veces.** El autor lo editó a mano primero
+(directo en `main.tex`, sin pasar por mí) y pidió revisión: el edit había perdido el
+rango de AUROC 0.91–0.99 y sus 21 citas inline sin querer, dejando `"the inflated
+numbers"` (la frase de cierre del párrafo) sin antecedente; rompió gramática en dos
+puntos (`"this works propose"`, `"nad"` por `"and"`); y los `--` de LaTeX habían quedado
+como doble espacio literal (se colapsan a un espacio en el render, perdiendo la
+puntuación). Encontrado, no asumido: revisado línea por línea contra el diff.
+Corregido, y luego el autor pidió explícitamente **sacar el rango y el conteo de "21
+papers"** — no le parecía relevante — dejando en su lugar la afirmación directa "GNN
+papers... report inflated performance", en eco de la frase que ya usa el Objective del
+Abstract ("inflates reported performance"). Costo aceptado a sabiendas: el "21" que el
+párrafo 2 usa ("seven of the 21 surveyed papers") quedó sin antecedente en el párrafo 1;
+se resolvió atándolo a "that audit" en vez de reintroducir la cifra.
+
+**Los `--` de puntuación se sacaron de los dos párrafos de la Introducción**, a pedido
+del autor, dejando solo los guiones de palabras compuestas (`model-free`, `leak-free`,
+`no-learning`) y el `--` numérico de rangos (`0.26--0.37`), que es notación distinta y no
+se tocó.
+
+**Related Work §2.1, tabla nueva.** El autor notó que Methods ya trae los mecanismos de
+los dos failure modes con diagrama y números propios (`fig:edge_split`,
+`fig:neg_sampling_mechanism`), así que §2.1 no debía duplicar mecanismo -- se decidió
+**no mover esas figuras** (una de ellas cita un número que este paper mide, no existe
+todavía en la posición de Related Work) y en su lugar agregar una tabla nueva
+(`tables/table_known_pitfalls.tex`, `tab:known_pitfalls`) que solo organiza las citas ya
+presentes en el texto: failure mode × precedente general ML/KG × precedente biomédico.
+Tres rondas de ajuste sobre esa tabla: (1) el ancho de columnas desbordaba el margen
+~2.2cm -- el mismo problema preexistente ya tenía `table5_correct_protocol_checklist.tex`
+(`tab:correct_protocol`), tolerado en el documento; se angostaron las columnas de la
+tabla nueva. (2) la tabla no tenía mención en el texto ni el caption estaba resumido --
+se agregó una oración puente y se acortó el caption a una frase. (3) la columna
+"Domain-specific (biomedical)" chocaba con el vocabulario reservado del paper: "subfield"
+se usa consistentemente (8 veces) para el cluster de 21 papers auditados, mientras que
+esta columna cubre precedente biomédico más amplio, no ese cluster -- se renombró a
+"Biomedical / network-biology precedent" para no insinuar que la tabla ya cubre lo que
+hace §2.2.
+
+**§2.2 renombrada.** "How this subfield evaluates itself" → "A survey of this subfield's
+evaluation practice", a pedido del autor (no le gustaba el título en forma de pregunta).
+
+**El pie de la Tabla 3 (`tab:literature_survey`) se vació casi por completo.** El autor
+notó que el bloque `\medskip\par` bajo la tabla (model-free-baseline breakdown, held-out
+edges breakdown, negative-sampling breakdown, protocolo de doble-rating/adjudicación)
+repetía casi palabra por palabra contenido ya presente en tres lugares distintos:
+Related Work §2.2 (prosa), Results §4.2 (los márgenes exactos), y Methods "Literature
+survey protocol" (el proceso de adjudicación con el mismo detalle). Verificado
+comparando contra `main.tex` antes de tocar nada. Se dejó solo el `$\dagger$` mínimo que
+explica los dos "n/a" que siguen apareciendo en el cuerpo de la tabla. **Una cosa sí era
+única** y no sobrevivía en ningún otro lado: "cross-validation over edges: 19/21 yes,
+1/21 no (Orro), 1/21 unclear" -- verificado de nuevo contra `results/literature_survey.tsv`
+(columna `cv_over_edges`, filtrando `counted_as_paper=yes`) antes de reinsertarlo, y
+repuesto como oración en prosa al inicio de §2.2 (no como columna nueva de la tabla, para
+no romper el patrón ya establecido de que "model-free baseline" tampoco es columna,
+solo prosa).
+
+**Methods reordenado: nuestro grafo deja de abrir la sección.** El autor señaló que
+Methods se sentía centrado en nuestro grafo. Diagnóstico: de las 4 subsecciones
+originales, solo "Data and graph construction" es realmente específica de nuestro grafo
+-- "Evaluation protocol", "Baselines" y "Literature survey protocol" ya eran generales.
+El desbalance real era que **el diseño de la comparación (6 grafos reentrenados + 7
+papers contra el piso + 2 benchmarks OGB) nunca tuvo su propia subsección de Methods** --
+vivía implícito, contado por primera vez recién en Results §4.1. Se creó
+"Cross-graph and cross-paper comparison design" (nueva, entre Evaluation protocol y
+Baselines) describiendo ese diseño a nivel de método, reusando solo hechos ya
+verificados en el texto (procedencia de las matrices externas, exclusión de 3 papers sin
+dato recuperable), sin repetir cifras de resultado. Orden final: Evaluation protocol
+(con el estándar de reporte, Tabla 3, adentro -- se queda ahí porque es infraestructura
+compartida por los 6 grafos, no algo de nuestro grafo) → Cross-graph and cross-paper
+comparison design → Baselines → Data and graph construction (bajó al final, ahora abre
+con "Of the graphs compared above, this is the one we built ourselves..." en eco
+deliberado de la frase ya usada en la Introducción) → Literature survey protocol.
+Verificado con diff de líneas ordenadas contra el backup que no se perdió ni se duplicó
+contenido en el movimiento -- solo se reordenaron bloques y se agregó la subsección
+nueva.
+
+**Recortes de longitud, a pedido explícito, todos en §3.1 (Evaluation protocol) tras el
+reorden:** la prosa se condensó (se fusionaron oraciones redundantes sobre por qué se
+verifica el split); el caption de la Figura 1 (`fig:edge_split`) perdió la mención al
+script `test_edge_split.py` -- el autor notó que un nombre de archivo Python no aportaba
+nada al diagrama conceptual, y el dato ya estaba de forma genérica en el cuerpo del
+texto; el caption de la Figura 2 (`fig:neg_sampling_mechanism`) perdió el tie-in de
+valores reales (`gene_degree` = 0.8712/0.5126) por el mismo motivo -- es un resultado,
+no parte del mecanismo del diagrama, y 0.8712 ya está en Results; y la Tabla 3
+(`tab:correct_protocol`, el checklist) se acortó en caption y en las tres filas.
+
+**Pendiente, sin resolver:** el archivo suelto `manuscript/jbi/result_verify.txt`
+(untracked) sigue en el repo, con output de un verify-gates de una sesión anterior al
+retitle del 2026-09-07 -- obsoleto contra el HEAD actual, probablemente para borrar.
+No se commiteó nada de lo de hoy.
+
+---
+
 ## 2026-09-09 — Trim de highlights 3 y 5, y por qué "standard" no se volvió "protocol"
 
 El bullet 3 de los highlights medía 93 caracteres contra el límite de 85 de Elsevier

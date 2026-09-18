@@ -1,0 +1,26 @@
+\begin{table}[h!]
+\caption{Neither failure mode this paper quantifies is novel: both are documented
+independently in the general link-prediction/knowledge-graph literature and,
+separately, in network biology.}
+\label{tab:known_pitfalls}
+\small
+\begin{tabular}{p{2.8cm}p{4.0cm}p{4.0cm}}
+\hline
+Failure mode & General ML / knowledge-graph precedent & Biomedical / network-biology precedent \\
+\hline
+Transductive edge leakage: message passing can see the held-out edge it is later
+scored on. & Inverse-relation leak documented in the FB15k benchmark
+\cite{toutanova2015observed}; actively re-examined in the broader link-prediction
+literature \cite{zhu2023pitfalls,li2023evaluating}. & Independently identified in
+miRNA--disease association prediction \cite{dong2020mirnaleakage}; train/test
+redundancy shown to inflate knowledge-graph-embedding link prediction across several
+biomedical graphs \cite{briere2026kgeleakage}. \\
+Popularity-biased negative sampling: negatives drawn without regard to node degree
+let a model win on popularity alone. & Known, quantified bias in link prediction
+generally \cite{kotnis2017analysis,aiyappa2024implicit}; likely rooted in
+recommender-systems evaluation practice \cite{krichene2020sampled}. & Documented
+specifically in network biology \cite{yilmaz2025biasaware}, the domain this paper's
+graph is drawn from. \\
+\hline
+\end{tabular}
+\end{table}
