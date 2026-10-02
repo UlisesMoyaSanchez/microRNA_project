@@ -23,11 +23,56 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-02 — La primera frase de la Introducción afirmaba más de lo medido
+
+**El hallazgo.** El autor preguntó si era correcto afirmar, en la apertura de la
+Introducción, que los papers de GNN "report inflated performance" con 21 citas, y si ya
+se había comprobado que todos tenían resultados inflados. **No se había comprobado.** Las
+21 citas son los papers de la encuesta de literatura, que midió *prácticas de reporte*
+(split, negative sampling, baseline model-free), no si cada número está inflado: sus AUROC
+headline se toman como reportados y nunca se intentó reproducirlos (ver la entrada del
+2026-09-07). Los siete papers cuya matriz se reentrenó prueban que el protocolo
+convencional infla *un* modelo entrenado sobre esos grafos, no que las cifras de esos
+papers estén infladas. La propia Discusión (limitación 7, `main.tex` ~1091) lo declara
+explícitamente, así que la Introducción contradecía al resto del paper. Además, 6 de 21
+sí reportan baseline model-free y lo superan por 1.7--7.4 puntos: para esos, "inflado" es
+difícil de sostener aun con la lectura laxa.
+
+**La decisión.** De tres redacciones ofrecidas (hecho verificable con el rango AUROC;
+"high performance, often without a model-free baseline"; "performance that may be
+inflated"), el autor eligió la segunda y luego pidió quitar la cláusula "often without a
+model-free baseline" para no repetir la oración siguiente, que ya dice que la auditoría
+encontró que la mayoría omite el baseline. Resultado: *"...report high performance
+\cite{...}."*
+
+**Efecto en cadena, corregido en el mismo commit.** Sin "inflated" antes, la frase de
+cierre del párrafo ("whether the inflated numbers are a property of the evaluation
+protocol") había perdido el antecedente y presuponía justo lo que ya no se afirma. Pasó a
+*"whether these high numbers are inflated by the evaluation protocol, rather than
+reflecting any one model or dataset"*: la inflación deja de ser premisa y vuelve a ser la
+pregunta del paper. Compila limpio (44 pp., 0 refs indefinidas). `2240581`
+
+**Costo aceptado a sabiendas.** "A literature audit found methodological omissions
+*behind* those numbers" sigue sonando más causal que la hipótesis del cierre. Se ofreció
+cambiar "behind" por "in" y el autor no lo pidió; queda como está.
+
+**Mismo día, housekeeping.** Se borró `manuscript/jbi/result_verify.txt` (obsoleto) y se
+pusheó `fix/verify-gates` (`149e8cc..7270c47`), con lo que la entrada del 2026-09-17
+dejó de decir "nada commiteado".
+
+**Pendientes que siguen abiertos** (sin cambio respecto al 2026-09-09 salvo lo anotado):
+"one architecture" en la apertura de Results; etiqueta "HGT (project model)" en la Tabla
+S1; `slurm_heldout_grid.sh:65`; el highlight propio para la auditoría de 21 papers; la
+herramienta ejecutable del reporting standard; compilar con el toolchain de Elsevier;
+integrar la Tabla 7 como anomalía abierta.
+
+---
+
 ## 2026-09-17 — Introducción reescrita, tabla nueva en Related Work, Methods reordenado para bajar el peso de "nuestro grafo"
 
-**Nada de esto está commiteado todavía** — son cambios en el working tree sobre
-`fix/verify-gates`, que sigue en el HEAD de `149e8cc` (el cierre del 2026-09-09). Compila
-limpio en cada paso (`pdflatex`, 0 refs indefinidas); la cuenta de páginas bailó
+**Commiteado como `7270c47`** sobre `fix/verify-gates` (pusheado el 2026-10-02; ver la
+entrada de ese día). Hasta entonces esta entrada decía "nada commiteado", sin ser cierto
+ya. Compila limpio en cada paso (`pdflatex`, 0 refs indefinidas); la cuenta de páginas bailó
 44→45→44 según se agregaba/recortaba contenido. Sigue sin revisarse si `main.tex`
 compila con el toolchain de Elsevier, solo con el local.
 
@@ -116,10 +161,8 @@ valores reales (`gene_degree` = 0.8712/0.5126) por el mismo motivo -- es un resu
 no parte del mecanismo del diagrama, y 0.8712 ya está en Results; y la Tabla 3
 (`tab:correct_protocol`, el checklist) se acortó en caption y en las tres filas.
 
-**Pendiente, sin resolver:** el archivo suelto `manuscript/jbi/result_verify.txt`
-(untracked) sigue en el repo, con output de un verify-gates de una sesión anterior al
-retitle del 2026-09-07 -- obsoleto contra el HEAD actual, probablemente para borrar.
-No se commiteó nada de lo de hoy.
+**Pendiente, resuelto el 2026-10-02:** el archivo suelto `manuscript/jbi/result_verify.txt`
+(untracked), con output de un verify-gates anterior al retitle del 2026-09-07, se borró.
 
 ---
 
