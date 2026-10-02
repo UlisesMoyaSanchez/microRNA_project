@@ -23,6 +23,98 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-02 (cont.) — `lp_audit`: el reporting standard como herramienta ejecutable
+
+**Nada de esto está commiteado.** Vive en la rama `feat/lp-audit` (creada desde
+`fix/verify-gates`, no pusheada). La herramienta, los tests y los scripts de validación son
+archivos nuevos sin trackear; en la DGX están copiados con rsync, no por git.
+
+**Qué es.** El autor pidió una contribución nueva al paper: código que revise los datos de un
+usuario y le advierta de los errores que el paper describe. Es el pendiente "herramienta
+ejecutable del reporting standard" del 2026-09-09. Decisiones del autor: varias formas de
+entrada; entrega = notebook Colab + script en el repo con ejemplos; cuatro checks (fuga de
+aristas, negativos no emparejados, baseline model-free con margen, columnas candidatas
+muertas); validación corriéndola sobre los grafos del paper.
+
+**Diseño.** `lp_audit/` en la raíz, solo numpy/scipy/scikit-learn (sin torch ni PyG). La
+exploración previa mostró que nada de `training/` era reusable por un tercero (PyG,
+YAML del repo, sin paquete ni tests), así que la lógica se **extrajo y reescribió**:
+`pair_keys`/`isin` y `degree_bins` de `splits.py`, `build_scorers` de
+`eval_topology_baseline.py`, las fórmulas OGB de `eval_ogb_topology_baseline.py`, `stats` y
+`gini` de `graph_candidate_stats.py`. Los scorers se calculan por pares (sparse), no como
+matriz densa. Un check sin su insumo se reporta `unchecked`, nunca `ok`. Los umbrales son
+heurísticos y están documentados así; el 0.25 de columnas muertas cae en el hueco entre los
+grafos del paper (0% o 47--92%), no es una rodilla medida. La herramienta imprime siempre
+una nota de alcance: no detecta fuga que no pase por aristas exactas, no distingue un
+sampler correcto con otra semilla, y **no prueba que ningún número publicado esté
+inflado** -- coherente con la limitación 7 y con la corrección de la Introducción de hoy.
+
+**Un bug propio, encontrado antes de gastar cómputo.** Al escribir la validación de OGB
+vi que en modo homogéneo los checks de negativos y de columnas muertas contaban solo el
+extremo `col` de cada arista; en un grafo no dirigido cuentan ambos. Corregido con un test.
+El caso bipartito no cambió (17 tests, misma validación).
+
+**Validación** (`analysis/validate_lp_audit.py`, `analysis/validate_lp_audit_ogb.py`,
+job SLURM **428** en `dgxa100jal`; los 17 tests de `tests/test_lp_audit.py` pasaron también
+en el entorno `mirna_ms` de la DGX). Cuatro celdas por grafo, con la verdad conocida *por
+construcción*: aristas {seen, held-out} × negativos {uniform u oficiales, degree-matched}.
+
+- 5 grafos HMDD/CoupleMDA × 4 celdas × 4 seeds = 80 auditorías. Fuga: 40/40 detectadas, 0
+  falsas alarmas. Negativos: 40/40, 0 falsas alarmas. Ninguna alarma de protocolo en el
+  brazo corregido.
+- ogbl-ddi (homogéneo, 1 seed, 4 celdas): fuga 2/2 y negativos 2/2, 0 falsas alarmas; los
+  negativos oficiales de OGB disparan el warning (se midió, no se asumió). Floor 0.9619
+  (resource_alloc) con negativos oficiales y 0.8607 con degree-matched.
+- **Paridad con el repo en ddi: |ΔAUROC| máximo 7e-10** contra
+  `ogb_ddi_topology_baseline_valid.json`, en las 5 heurísticas. Es la evidencia más fuerte
+  de que la reescritura reproduce el baseline original, porque ahí nada es aleatorio.
+
+**Lo que NO demuestra, y debe decirse así en el paper.** La detección de fuga es una
+comparación de conjuntos de aristas y la de negativos compara histogramas de grado: el
+40/40 valida la *implementación*, no un descubrimiento. `dead_candidates` solo recalcula la
+fracción de columnas muertas que ya reporta `graph_candidate_stats.py`; no está validado de
+forma independiente. No se entrenó ningún modelo, así que el margen solo se ejercitó como
+cálculo del piso.
+
+**Una decisión de criterio que conviene dejar escrita.** El cross-check del piso contra
+`density_sweep` tenía un criterio fijado antes de correr: "dentro de 2 sd del sd por split
+del repo". **Falló en dos de cinco grafos**: digamn (diferencia 0.0106 AUROC) y couplemda
+(0.0018). El criterio era mal diseño -- comparaba el promedio de 4 splits con el sd de
+splits individuales (0.0009 en couplemda). Se añadió una comparación de Welch sobre las dos
+medias (|z| ≤ 1.7 en los cinco). **Se cambió el criterio después de ver el fallo**, y por
+eso los dos quedan en el JSON y en el docstring: si el paper reporta esto, debe decir que
+el primer criterio falló y que la diferencia máxima es 0.011 AUROC, frente a brechas de
+~0.3 que son lo que el paper mide.
+
+**Etiqueta corregida.** El primer reporte llamaba "falsas alarmas" al `dead_candidates`
+disparado en MEAHNE y CoupleMDA en el brazo corregido. No lo son: es propiedad del grafo y
+se espera en cualquier brazo. Ahora se lista aparte y la tabla de confusión cuenta solo los
+checks de protocolo.
+
+**DGX.** Estaba limpia y 14 commits atrás; se hizo `git pull --ff-only` (ahora en
+`7270c47`). Los archivos nuevos se copiaron con rsync. `sacct` falló durante la consulta (la
+base de SLURM no resolvió), pero el log del job 428 cierra con "validation complete" y el
+JSON de ddi se trajo a `results/comparison/lp_audit_validation_ogb_ddi.json`.
+
+**Fuera de alcance de esta pasada:** ogbl-ppa (el baseline original ya necesitó ~31 GB de
+RSS y el scorer por pares no cabe), node classification (el control de cell-typing), y
+cualquier edición de `main.tex`.
+
+**Pendientes abiertos.**
+1. **Decisión del autor, bloquea el manuscrito:** la Tabla 5 (`tab:correct_protocol`) tiene
+   3 filas y **no** incluye columnas muertas ni el margen explícito. Meterlas cambia el
+   estándar de 3 a 4--5 componentes, que está protegido en el highlight 5, la Conclusion y
+   la Discusión. Alternativa recomendada: que la herramienta los marque como diagnósticos
+   adicionales sin tocar el estándar.
+2. Commitear la rama `feat/lp-audit` (hoy todo sin trackear).
+3. El notebook clona `github.com/UlisesMoyaSanchez/microRNA_project`; si el repo es
+   privado, falla en Colab. Sin verificar. Tampoco se abrió el notebook en Colab; solo se
+   ejecutaron sus dos primeras celdas en local.
+4. Integrar al manuscrito: subsección de Methods, tabla de validación generada desde
+   `make_manuscript_tables.py`, y la lista de contribuciones de la Intro (hoy "sixfold").
+
+---
+
 ## 2026-10-02 — La primera frase de la Introducción afirmaba más de lo medido
 
 **El hallazgo.** El autor preguntó si era correcto afirmar, en la apertura de la
