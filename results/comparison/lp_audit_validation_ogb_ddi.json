@@ -1,0 +1,147 @@
+{
+  "generated_utc": "2026-10-02T22:20:21.231810+00:00",
+  "dataset": "ogbl-ddi",
+  "seed": 42,
+  "confusion": {
+    "edge_leakage": {
+      "detected": 2,
+      "missed": 0,
+      "false_alarms": 0,
+      "correctly_silent": 2
+    },
+    "negative_matching": {
+      "detected": 2,
+      "missed": 0,
+      "false_alarms": 0,
+      "correctly_silent": 2
+    }
+  },
+  "parity_with_repo_official_cell": {
+    "node_degree": {
+      "lp_audit": 0.7848414927639078,
+      "repo": 0.7848414927639078,
+      "abs_diff": 0.0
+    },
+    "pref_attach": {
+      "lp_audit": 0.8592433336606945,
+      "repo": 0.8592433336606945,
+      "abs_diff": 0.0
+    },
+    "common_neigh": {
+      "lp_audit": 0.9468993988602736,
+      "repo": 0.9468993988602736,
+      "abs_diff": 0.0
+    },
+    "adamic_adar": {
+      "lp_audit": 0.9498822481449871,
+      "repo": 0.9498822477038147,
+      "abs_diff": 4.411724319197674e-10
+    },
+    "resource_alloc": {
+      "lp_audit": 0.9619372039525746,
+      "repo": 0.9619372032172874,
+      "abs_diff": 7.352872755106432e-10
+    }
+  },
+  "parity_max_abs_diff": 7.352872755106432e-10,
+  "limits": [
+    "one seed, four cells: a smoke-level confirmation, not a rate",
+    "OGB's official negatives are not labelled 'uniform' by OGB; whether the negative_matching check fires on them is a measurement, not an assumption",
+    "ogbl-ppa not run",
+    "dead_candidates is not independently validated"
+  ],
+  "rows": [
+    {
+      "cell": "conventional",
+      "edges_seen": true,
+      "negatives": "official",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.31988682709069943,
+      "dead_column_fraction": 0.0,
+      "floor_reference": 0.9620039728178119,
+      "heuristics_corrected": {
+        "node_degree": 0.7848414927639078,
+        "pref_attach": 0.8592433336606945,
+        "common_neigh": 0.9468993988602736,
+        "adamic_adar": 0.9498822481449871,
+        "resource_alloc": 0.9619372039525746
+      },
+      "best_heuristic": "resource_alloc"
+    },
+    {
+      "cell": "seen_degree_matched",
+      "edges_seen": true,
+      "negatives": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.007708500325869557,
+      "dead_column_fraction": 0.0,
+      "floor_reference": 0.8635499850084261,
+      "heuristics_corrected": {
+        "node_degree": 0.5709232590458614,
+        "pref_attach": 0.5651460194406671,
+        "common_neigh": 0.8082048489303272,
+        "adamic_adar": 0.8180611228959614,
+        "resource_alloc": 0.8611341177857289
+      },
+      "best_heuristic": "resource_alloc"
+    },
+    {
+      "cell": "heldout_official",
+      "edges_seen": false,
+      "negatives": "official",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.31988682709069943,
+      "dead_column_fraction": 0.0,
+      "floor_reference": 0.9619372039525746,
+      "heuristics_corrected": {
+        "node_degree": 0.7848414927639078,
+        "pref_attach": 0.8592433336606945,
+        "common_neigh": 0.9468993988602736,
+        "adamic_adar": 0.9498822481449871,
+        "resource_alloc": 0.9619372039525746
+      },
+      "best_heuristic": "resource_alloc"
+    },
+    {
+      "cell": "corrected",
+      "edges_seen": false,
+      "negatives": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.007899527301875112,
+      "dead_column_fraction": 0.0,
+      "floor_reference": 0.8607335197687612,
+      "heuristics_corrected": {
+        "node_degree": 0.5715617240036713,
+        "pref_attach": 0.5652581737075812,
+        "common_neigh": 0.8078424294612854,
+        "adamic_adar": 0.8177245933698636,
+        "resource_alloc": 0.8607335197687612
+      },
+      "best_heuristic": "resource_alloc"
+    }
+  ]
+}

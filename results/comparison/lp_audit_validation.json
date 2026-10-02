@@ -1,0 +1,1626 @@
+{
+  "generated_utc": "2026-10-02T22:18:57.120840+00:00",
+  "seeds": [
+    42,
+    43,
+    44,
+    45
+  ],
+  "n_audits": 80,
+  "confusion": {
+    "edge_leakage": {
+      "detected": 40,
+      "missed": 0,
+      "false_alarms": 0,
+      "correctly_silent": 40
+    },
+    "negative_matching": {
+      "detected": 40,
+      "missed": 0,
+      "false_alarms": 0,
+      "correctly_silent": 40
+    }
+  },
+  "protocol_alarms_in_corrected_arm": [],
+  "dead_candidates_by_graph": {
+    "canonical5430": {
+      "fraction": 0.0,
+      "flagged": "ok"
+    },
+    "cksnp_gnn": {
+      "fraction": 0.0,
+      "flagged": "ok"
+    },
+    "digamn": {
+      "fraction": 0.0,
+      "flagged": "ok"
+    },
+    "meahne": {
+      "fraction": 0.9242128490197743,
+      "flagged": "warn"
+    },
+    "couplemda": {
+      "fraction": 0.557012542759407,
+      "flagged": "warn"
+    }
+  },
+  "floor_crosscheck_vs_density_sweep": [
+    {
+      "graph": "canonical5430",
+      "lp_audit_floor": 0.870488368622583,
+      "repo_floor_mean": 0.8591136480028763,
+      "repo_floor_std": 0.014108969295985145,
+      "abs_diff": 0.01137472061970679,
+      "within_2sd_of_repo_split_sd": true,
+      "welch_z": 1.1444330010266333,
+      "welch_within_2": true
+    },
+    {
+      "graph": "cksnp_gnn",
+      "lp_audit_floor": 0.8723250559651248,
+      "repo_floor_mean": 0.8725019068706242,
+      "repo_floor_std": 0.006423279816214713,
+      "abs_diff": 0.00017685090549945937,
+      "within_2sd_of_repo_split_sd": true,
+      "welch_z": -0.04072127510004684,
+      "welch_within_2": true
+    },
+    {
+      "graph": "digamn",
+      "lp_audit_floor": 0.871792787047862,
+      "repo_floor_mean": 0.882412016863287,
+      "repo_floor_std": 0.005014127244623227,
+      "abs_diff": 0.010619229815424958,
+      "within_2sd_of_repo_split_sd": false,
+      "welch_z": -1.6859508322465202,
+      "welch_within_2": true
+    },
+    {
+      "graph": "meahne",
+      "lp_audit_floor": 0.9862315934025949,
+      "repo_floor_mean": 0.9853898508891806,
+      "repo_floor_std": 0.0020001466501127167,
+      "abs_diff": 0.0008417425134142897,
+      "within_2sd_of_repo_split_sd": true,
+      "welch_z": 0.6944430561038168,
+      "welch_within_2": true
+    },
+    {
+      "graph": "couplemda",
+      "lp_audit_floor": 0.9457022415581345,
+      "repo_floor_mean": 0.9438787096465753,
+      "repo_floor_std": 0.0009020572327532944,
+      "abs_diff": 0.0018235319115592619,
+      "within_2sd_of_repo_split_sd": false,
+      "welch_z": 0.7402516477360469,
+      "welch_within_2": true
+    }
+  ],
+  "limits": [
+    "dead_candidates re-derives graph_candidate_stats.py and is not independently validated",
+    "no model is trained: the margin check is exercised as a floor computation only",
+    "OGB graphs are not covered here (dataset not on this machine)"
+  ],
+  "rows": [
+    {
+      "graph": "canonical5430",
+      "cell": "conventional",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6243093922651934,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.882477132362667,
+      "floor_reference": 0.8970778262771792,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "conventional",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6022099447513812,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.865071612927295,
+      "floor_reference": 0.8792517525920047,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "conventional",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.576427255985267,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8531739975377227,
+      "floor_reference": 0.8702624055024776,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "conventional",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6151012891344383,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8812307316626476,
+      "floor_reference": 0.8935065067203891,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "seen_degree_matched",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.034990791896869225,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.560317314964609,
+      "floor_reference": 0.5920912060071426,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "seen_degree_matched",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.0294659300184162,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5541327933959417,
+      "floor_reference": 0.5835224131674179,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "seen_degree_matched",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.03314917127071823,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5567849984229216,
+      "floor_reference": 0.5879450159234049,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "seen_degree_matched",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.03314917127071823,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5564085345380178,
+      "floor_reference": 0.5897052389528199,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "heldout_uniform",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6243093922651934,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.882477132362667,
+      "floor_reference": 0.882477132362667,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "heldout_uniform",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6022099447513812,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.865071612927295,
+      "floor_reference": 0.865071612927295,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "heldout_uniform",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.576427255985267,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8531739975377227,
+      "floor_reference": 0.8531739975377227,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "heldout_uniform",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6151012891344383,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8812307316626476,
+      "floor_reference": 0.8812307316626476,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "corrected",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.034990791896869225,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.560317314964609,
+      "floor_reference": 0.560317314964609,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "corrected",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.0294659300184162,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5541327933959417,
+      "floor_reference": 0.5541327933959417,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "corrected",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.03314917127071823,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5567849984229216,
+      "floor_reference": 0.5567849984229216,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "canonical5430",
+      "cell": "corrected",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.03314917127071823,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5564085345380178,
+      "floor_reference": 0.5564085345380178,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "conventional",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5952525867315885,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8808141957858807,
+      "floor_reference": 0.8918232943093203,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "conventional",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5855143031040779,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8675022198974678,
+      "floor_reference": 0.8783586946817665,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "conventional",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6007303712720633,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8699849487802881,
+      "floor_reference": 0.8815347131951743,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "conventional",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5855143031040779,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8709988593968621,
+      "floor_reference": 0.8835008551745189,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "seen_degree_matched",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04930006086427267,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5595119596628794,
+      "floor_reference": 0.5740484447011224,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "seen_degree_matched",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04443091905051735,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5524579275252098,
+      "floor_reference": 0.5675554529831828,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "seen_degree_matched",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04138770541692027,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5524701522421798,
+      "floor_reference": 0.5683265362672161,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "seen_degree_matched",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04686548995739501,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5542592210484436,
+      "floor_reference": 0.569874629970783,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "heldout_uniform",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5952525867315885,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8808141957858807,
+      "floor_reference": 0.8808141957858807,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "heldout_uniform",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5855143031040779,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8675022198974678,
+      "floor_reference": 0.8675022198974678,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "heldout_uniform",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6007303712720633,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8699849487802881,
+      "floor_reference": 0.8699849487802881,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "heldout_uniform",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5855143031040779,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8709988593968621,
+      "floor_reference": 0.8709988593968621,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "corrected",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04930006086427267,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5595119596628794,
+      "floor_reference": 0.5595119596628794,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "corrected",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04443091905051735,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5524579275252098,
+      "floor_reference": 0.5524579275252098,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "corrected",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04138770541692027,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5524701522421798,
+      "floor_reference": 0.5524701522421798,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "cksnp_gnn",
+      "cell": "corrected",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04686548995739501,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5542592210484436,
+      "floor_reference": 0.5542592210484436,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "conventional",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6467353951890034,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8873017560019366,
+      "floor_reference": 0.898487972508591,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "conventional",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.588316151202749,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8640058572761303,
+      "floor_reference": 0.8772945524970183,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "conventional",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5841924398625429,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8620294989430924,
+      "floor_reference": 0.874910310459253,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "conventional",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.606872852233677,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8738340359702885,
+      "floor_reference": 0.8858508992572123,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "seen_degree_matched",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04673539518900342,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5562147353007167,
+      "floor_reference": 0.5748163106245793,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "seen_degree_matched",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04467353951890034,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5580205713206032,
+      "floor_reference": 0.5767310258499546,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "seen_degree_matched",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04054982817869415,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5537334230819192,
+      "floor_reference": 0.5702998311309503,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "seen_degree_matched",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04123711340206185,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5520579586920324,
+      "floor_reference": 0.5698959624945383,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "heldout_uniform",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.6467353951890034,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8873017560019366,
+      "floor_reference": 0.8873017560019366,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "heldout_uniform",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.588316151202749,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8640058572761303,
+      "floor_reference": 0.8640058572761303,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "heldout_uniform",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.5841924398625429,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8620294989430924,
+      "floor_reference": 0.8620294989430924,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "heldout_uniform",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.606872852233677,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.8738340359702885,
+      "floor_reference": 0.8738340359702885,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "digamn",
+      "cell": "corrected",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04673539518900342,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5562147353007167,
+      "floor_reference": 0.5562147353007167,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "corrected",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04467353951890034,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5580205713206032,
+      "floor_reference": 0.5580205713206032,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "corrected",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04054982817869415,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5537334230819192,
+      "floor_reference": 0.5537334230819192,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "digamn",
+      "cell": "corrected",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "ok"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04123711340206185,
+      "dead_column_fraction": 0.0,
+      "floor_corrected": 0.5520579586920324,
+      "floor_reference": 0.5520579586920324,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "conventional",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9326655537006121,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9880162603287679,
+      "floor_reference": 0.9931588122664095,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "conventional",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9257095158597664,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9859498487090801,
+      "floor_reference": 0.9926654638953379,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "conventional",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9273789649415692,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9862659477909297,
+      "floor_reference": 0.9932556239004661,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "conventional",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9137451307735114,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9846943167816019,
+      "floor_reference": 0.9913214428053434,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "seen_degree_matched",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04424040066777961,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.5597669971191088,
+      "floor_reference": 0.5776217565973587,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "seen_degree_matched",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04841402337228713,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.568283014509126,
+      "floor_reference": 0.586536091346209,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "seen_degree_matched",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.0489705063995548,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.569114797153111,
+      "floor_reference": 0.585171941487838,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "seen_degree_matched",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04757929883138564,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.5654579805766675,
+      "floor_reference": 0.5825153311538522,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "heldout_uniform",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9326655537006121,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9880162603287679,
+      "floor_reference": 0.9880162603287679,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "heldout_uniform",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9257095158597664,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9859498487090801,
+      "floor_reference": 0.9859498487090801,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "heldout_uniform",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9273789649415692,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9862659477909297,
+      "floor_reference": 0.9862659477909297,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "heldout_uniform",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.9137451307735114,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.9846943167816019,
+      "floor_reference": 0.9846943167816019,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "meahne",
+      "cell": "corrected",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04424040066777961,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.5597669971191088,
+      "floor_reference": 0.5597669971191088,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "corrected",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04841402337228713,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.568283014509126,
+      "floor_reference": 0.568283014509126,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "corrected",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.0489705063995548,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.569114797153111,
+      "floor_reference": 0.569114797153111,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "meahne",
+      "cell": "corrected",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.04757929883138564,
+      "dead_column_fraction": 0.9242128490197743,
+      "floor_corrected": 0.5654579805766675,
+      "floor_reference": 0.5654579805766675,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "conventional",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.7438456420492349,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9453450605995815,
+      "floor_reference": 0.9518833258300431,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "conventional",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.7524950099800399,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9518835471660361,
+      "floor_reference": 0.9574282351243399,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "conventional",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.729208250166334,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9400440635694678,
+      "floor_reference": 0.9486285800543512,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "conventional",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.7418496340652029,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9455362948974527,
+      "floor_reference": 0.9533060735924469,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "seen_degree_matched",
+      "seed": 42,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05322687957418496,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5667217350617018,
+      "floor_reference": 0.58190339215116,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "seen_degree_matched",
+      "seed": 43,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05123087159015305,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5787909654189072,
+      "floor_reference": 0.5951921838292809,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "seen_degree_matched",
+      "seed": 44,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05123087159015304,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5724507959020968,
+      "floor_reference": 0.5895211130190273,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "seen_degree_matched",
+      "seed": 45,
+      "edges_seen": true,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "error",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 1.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05522288755821689,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5815501399064811,
+      "floor_reference": 0.5979095258141955,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "heldout_uniform",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.7438456420492349,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9453450605995815,
+      "floor_reference": 0.9453450605995815,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "heldout_uniform",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.7524950099800399,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9518835471660361,
+      "floor_reference": 0.9518835471660361,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "heldout_uniform",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.729208250166334,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9400440635694678,
+      "floor_reference": 0.9400440635694678,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "heldout_uniform",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "uniform",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "warn",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.7418496340652029,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.9455362948974527,
+      "floor_reference": 0.9455362948974527,
+      "best_heuristic": "gene_degree"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "corrected",
+      "seed": 42,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05322687957418496,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5667217350617018,
+      "floor_reference": 0.5667217350617018,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "corrected",
+      "seed": 43,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05123087159015305,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5787909654189072,
+      "floor_reference": 0.5787909654189072,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "corrected",
+      "seed": 44,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05123087159015304,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5724507959020968,
+      "floor_reference": 0.5724507959020968,
+      "best_heuristic": "adamic_adar"
+    },
+    {
+      "graph": "couplemda",
+      "cell": "corrected",
+      "seed": 45,
+      "edges_seen": false,
+      "sampler": "degree_matched",
+      "status": {
+        "edge_leakage": "ok",
+        "negative_matching": "ok",
+        "model_free_baseline": "info",
+        "dead_candidates": "warn"
+      },
+      "heldout_in_encoder_fraction": 0.0,
+      "tv_eval_neg_vs_heldout_pos": 0.05522288755821689,
+      "dead_column_fraction": 0.557012542759407,
+      "floor_corrected": 0.5815501399064811,
+      "floor_reference": 0.5815501399064811,
+      "best_heuristic": "adamic_adar"
+    }
+  ]
+}
