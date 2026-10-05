@@ -168,6 +168,29 @@ de calificación. Pide a terceros rehacer a ciegas las afirmaciones C1–C5 por 
 mantenedores antes de enviarla:** commit de congelamiento, contacto, fecha límite y acceso al
 grafo propio (§3).
 
+**`DATA_ACCESS.md` (2026-10-05).** Comandos `curl` con el commit fijado y los hashes para
+bajar los datos de la auditoría; la guía lo enlaza desde §3. Se reverificaron corriendo los
+comandos: digamn, las tres matrices de `canonical5430` (hash parseado idéntico), los
+conteos de CoupleMDA (13,509 / 1,523 / 43 solapados) y el zip de CKSNP (112 MB, SHA-256
+coincide). **Un error propio corregido:** el hash de HLGNN-MDA del manifiesto era el de
+nuestra versión normalizada a comas; el archivo original va separado por espacios y su
+hash es `095a11be…`. No verificado: forma y 17,972 positivos de MEAHNE. El grafo propio
+lo entregan los autores; faltan en la guía el medio de entrega, SHA-256, commit de
+congelamiento, contacto y fecha límite.
+
+**Publicado.** La rama `feat/lp-audit` se pusheó a GitHub (repo público) el 2026-10-05,
+con la guía y `DATA_ACCESS.md` accesibles en
+`github.com/UlisesMoyaSanchez/microRNA_project/blob/feat/lp-audit/audit_independent/`.
+Como los links de rama cambian, hay que fijar un commit o tag antes de enviarlos.
+
+**Pendientes al cierre de 2026-10-05.**
+1. Llenar los campos en blanco de la guía y fijar el commit de congelamiento.
+2. Verificar el abstract contra el límite de 300 palabras de JBI (estimado ~290).
+3. Decisión del autor sobre si la Tabla 5 incorpora columnas muertas y margen (ver
+   2026-10-02 cont.).
+4. Verificar que el notebook de Colab funciona con el repo público.
+5. Decidir el merge de `feat/lp-audit` a `main`.
+
 ---
 
 ## 2026-10-02 — La primera frase de la Introducción afirmaba más de lo medido
