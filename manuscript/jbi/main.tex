@@ -276,13 +276,14 @@ ahmad2026hybridgnn,yu2022hgdti,cao2024ngcn,zhang2024kmerpmtf,orro2026mirnadiseas
 li2025couplemda,zeng2025gonnmda,liu2024digamn,lu2024dgnmda,yu2022hlgnnmda,
 huang2022meahne,li2022cksnpgnn,liang2023hmcda,wang2026higldp,xiong2025gpsdti,
 zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A literature
-audit of 21 papers in this space found three gaps behind those numbers: 15 report no
-model-free baseline, a simple, no-learning scorer such as node degree used as a
-sanity-check floor; 17 draw their negatives from unlabeled pairs without discussion
-\cite{kotnis2017analysis,aiyappa2024implicit,yilmaz2025biasaware}; and in 11 of the 19
-papers where the question applies, it is unclear whether held-out edges are removed from
-the encoder's input (protocol in Methods, full results in Related Work below). The last
-two gaps correspond to two protocol failure modes, popularity-biased negative sampling
+audit of 21 papers in this space found three gaps behind those numbers: 14 report no
+model-free baseline (a simple, no-learning scorer such as node degree, used as a
+sanity-check floor) and one more names one without printing a result; 17 draw their
+negatives from unlabeled pairs without discussion; and for 11 of the 19 papers where
+the question applies (the other two never propagate over an interaction graph), it is
+unclear whether held-out edges are removed from the encoder's input (protocol in
+Methods, full results in Related Work below). The last two
+gaps correspond to two protocol failure modes, popularity-biased negative sampling
 and transductive edge leakage; the first is a reporting omission, and is the check that
 would expose the other two. Neither failure mode is novel: both are already documented
 in the broader link-prediction and knowledge-graph literature, reviewed below. What is
@@ -345,8 +346,9 @@ biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disea
 lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
 full rather than inferring its evaluation protocol from the abstract. Nearly all
 cross-validate over edges rather than some other unit (19 of the 21; the exception,
-Orro, holds out miRNAs rather than associations). 15 of the 21
-report no model-free baseline; the six that do -- NIMGSA, NGCN, Orro, HLGNN-MDA,
+Orro, holds out miRNAs rather than associations). 14 of the 21
+report no model-free baseline and one more, DTI-MHAPR, names an untrained comparator
+(FSI) but prints no result for it; the six that do -- NIMGSA, NGCN, Orro, HLGNN-MDA,
 CKSNP-GNN and ModulePred -- report one of this subfield's classical untrained
 propagation or scoring methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR) as one more
 competitor in a comparison table, never as a floor: no paper remarks on how narrow its

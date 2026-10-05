@@ -42,6 +42,16 @@ a model-free baseline, but not both" atribuía la super-aditividad a fuga × bas
 El experimento solo probó fuga × negativos. Se reescribió, y el rol del baseline se dice
 aparte: no entra en la interacción, pero es lo que la hace visible.
 
+**Corrección de cifras (misma fecha).** Al reverificar contra `results/literature_survey.tsv`
+y `literature_survey_d4_reaudit.tsv`: "15 de 21 no reportan baseline" era inexacto. Son **14
+sin ninguno**, 1 (DTI-MHAPR) que nombra un comparador sin entrenar (FSI) pero no imprime
+resultado, y 6 que sí lo reportan. Se corrigió en la Introducción y en Related Work. Las
+otras dos cifras sí cuadran: 17/21 negativos de pares sin etiqueta (14 uniformes + 3 "todos
+los no etiquetados") y 11/19 sin aclarar si quitan las aristas de prueba (el denominador es
+19 porque iNGNN-DTI y GPS-DTI no propagan sobre un grafo de interacciones; 7 sí, 1 no).
+Se quitaron las tres citas de la frase de los 17 papers: respaldaban la literatura sobre
+negativos, no el conteo, que sale de la Tabla 3.
+
 Además: la Introducción describía la auditoría con dos "omisiones" (baseline, negativos) y
 dejaba fuera la fuga (11 de 19 papers no aclaran si quitan las aristas de prueba); ahora
 la describe en los tres ejes. La Tabla 5 decía "the two failure modes" sobre tres filas;
