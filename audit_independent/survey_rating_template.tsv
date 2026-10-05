@@ -1,0 +1,22 @@
+paper	venue_year	task	url	cv_over_edges	testedges_removed_from_encoder_graph	negative_sampling	model_free_baseline	mf_comparator	mf_margin	evidence_quote
+CKSNP-GNN (Li et al.)	Genes 2022	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC9602123/							
+CoupleMDA (Li et al.)	IJMS 2025	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC12112494/							
+DGNMDA (Lu et al.)	Bioengineering 2024	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC11591469/							
+DiGAMN (Liu et al.)	BMC Genomics 2024	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC11610307/							
+DTI-MHAPR (Yang et al.)	BMC Bioinformatics 2025	drug-target	https://pmc.ncbi.nlm.nih.gov/articles/PMC11726937/							
+GONNMDA (Zeng et al.)	Genes 2025	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC12027447/							
+GPS-DTI (Xiong et al.)	BMC Biology 2025	drug-target	https://pmc.ncbi.nlm.nih.gov/articles/PMC12659342/							
+HGDTI	BMC Bioinformatics 2022	drug-target	https://pmc.ncbi.nlm.nih.gov/articles/PMC9004085/							
+HiGLDP (Wang et al.)	BMC Biology 2026	lncRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC13032502/							
+HLGNN-MDA (Yu et al.)	IJMS 2022	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC9657597/							
+HMCDA (Liang et al.)	BMC Bioinformatics 2023	circRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC10494331/							
+HybridGNN	Bioinformatics 2026	miRNA-disease	https://academic.oup.com/bioinformatics/article/42/5/btag171/8586881							
+iNGNN-DTI (Sun et al.)	Bioinformatics 2024	drug-target	https://pmc.ncbi.nlm.nih.gov/articles/PMC10957515/							
+kmerPMTF	PeerJ 2024	plant miRNA-target	https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11122044/							
+MEAHNE (Huang et al.)	Life 2022	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC9655430/							
+MGCNSS	Briefings in Bioinformatics 2024	miRNA-disease	https://academic.oup.com/bib/article/25/3/bbae168/7645839							
+ModulePred (Jia et al.)	BMC Bioinformatics 2024	gene-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC11549817/							
+NGCN	2024	drug-target	https://pmc.ncbi.nlm.nih.gov/articles/PMC10955156/							
+NIMGSA	2022	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC8774034/							
+Orro (single-author)	Biomedicines 2026	miRNA-disease	https://pmc.ncbi.nlm.nih.gov/articles/PMC12938369/							
+SaeGraphDTI (Zhang et al.)	BMC Bioinformatics 2025	drug-target	https://pmc.ncbi.nlm.nih.gov/articles/PMC12265306/							
