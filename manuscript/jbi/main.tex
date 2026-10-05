@@ -112,8 +112,8 @@ reported performance, across ten cases spanning eight distinct graphs, to help
 correct how link prediction is evaluated on biomedical interaction graphs.
 
 \textbf{Methods:} The same topological heuristics and a graph transformer, trained
-under a conventional evaluation protocol and one correcting edge leakage and
-negative-sampling bias, were compared across ten cases spanning eight distinct
+under a conventional evaluation protocol and one correcting transductive edge
+leakage and popularity-biased negative sampling, were compared across ten cases spanning eight distinct
 graphs: two Open Graph Benchmark (OGB) datasets, seven survey-paper datasets, and
 our own graph (a single-cell RNA-seq cohort with miRDB v6.0 interactions). On our
 own graph only, five further models -- a homogeneous Graph Convolutional Network
@@ -298,7 +298,7 @@ papers themselves) and by comparing nine further externally-sourced cases agains
 no-learning floor: two public link-prediction benchmarks, and seven of the 21 papers
 from that audit, evaluated on their own datasets. Concretely, this paper's
 contribution is sixfold: it shows the conventional protocol inflates a trained model
-by 0.26--0.37 AUROC on every graph tested, not only on ours; shows the two pitfalls
+by 0.26--0.37 AUROC on every graph tested, not only on ours; shows the two failure modes
 compound rather than simply add; shows the cost recurs across independently trained
 models rather than being an artifact of any single model; shows the same model-free
 floor is high enough to matter when measured directly on other papers' own data (on
@@ -313,7 +313,7 @@ baseline with its margin stated, and matched negative sampling.
 
 \subsection{Known evaluation pitfalls in link prediction}
 Neither failure mode we quantify in this paper is novel to machine learning in general.
-Transductive, seen-edge leakage traces at least to the inverse-relation leak documented
+Transductive edge leakage traces at least to the inverse-relation leak documented
 in the FB15k knowledge-graph benchmark \cite{toutanova2015observed}, and is actively
 being re-examined in the broader link-prediction literature
 \cite{zhu2023pitfalls,li2023evaluating}. The same failure recurs closer to this paper's
@@ -372,8 +372,8 @@ own -- all seven papers that do strip held-out edges from the graph still draw t
 negatives from unlabeled pairs, six uniformly at random and one wholesale, none of them
 degree-matched, and four of the seven report no model-free baseline
 (Table~\ref{tab:literature_survey}). The two failure modes are
-independent: fixing the split is not evidence against the popularity shortcut this
-paper identifies, which is precisely why, as Results shows, correcting both is
+independent: fixing the split is not evidence against the popularity-biased negative
+sampling this paper identifies, which is precisely why, as Results shows, correcting both is
 super-additive rather than redundant.
 
 \input{tables/table3_literature_survey.tex}
@@ -382,7 +382,7 @@ super-additive rather than redundant.
 \label{sec:methods}
 
 \subsection{Evaluation protocol}
-We use \emph{transductive evaluation} for the specific condition audited here: a
+We use \emph{transductive edge leakage} for the specific condition audited here: a
 held-out edge left in the message-passing graph when its score is computed, so the
 encoder can, in effect, observe the edge it is later asked to predict -- narrower than
 the general transductive/inductive distinction in graph learning, which is not itself a
@@ -951,15 +951,16 @@ discriminating rather than indiscriminate.
 \label{sec:discussion}
 
 Each half of the inflation we measure already has a name in the broader link-prediction
-literature, and neither is specific to microRNAs. The edge-split half is an instance of
-what \cite{zhu2023pitfalls} call \emph{target-link inclusion} -- the target edge remains
+literature, and neither is specific to microRNAs. The edge-split half is transductive edge
+leakage, which \cite{zhu2023pitfalls} call \emph{target-link inclusion} -- the target edge remains
 reachable to the encoder through message passing at evaluation time, so the model can, in
 effect, recover the label from the neighborhood it was never supposed to have. Its
 lineage traces to the WN18/FB15k inverse-relation leak documented by
 \cite{toutanova2015observed}, which was serious enough to motivate a replacement
 benchmark (FB15k-237) rather than a footnote; Figure~\ref{fig:edge_split} is the same
 mechanism restated for a bipartite miRNA--gene graph with explicit reverse relations
-in place of duplicated inverse triples. The negative-sampling half is \emph{degree bias}
+in place of duplicated inverse triples. The negative-sampling half is popularity-biased
+negative sampling, which the literature calls \emph{degree bias}
 (also \emph{popularity bias}): \cite{aiyappa2024implicit} name and quantify it generally,
 and \cite{yilmaz2025biasaware} document the identical pattern in network biology
 specifically, the domain this graph is drawn from. Mechanistically, degree bias is a
@@ -975,15 +976,15 @@ in recommender systems \cite{krichene2020sampled}, a convention that migrated in
 prediction without a matching re-derivation of when it is and is not valid.
 
 What we have not found named in the literature is the interaction between the two: every
-prior treatment we are aware of studies target-link inclusion or degree bias in
-isolation. Table~\ref{tab:headline_grid} and Figure~\ref{fig:protocol_grid} show they are
+prior treatment we are aware of studies transductive edge leakage or popularity-biased negative
+sampling in isolation. Table~\ref{tab:headline_grid} and Figure~\ref{fig:protocol_grid} show they are
 super-additive on this graph -- correcting either alone leaves the number substantially
 inflated, and the cross-architecture grid (Table~\ref{tab:architecture_grid},
 Figure~\ref{fig:architecture_inflation}) shows the same compounding recurs across six
 independently-trained architectures, including a graph-free MLP, with the untrained
 control the only one that does not move. We propose calling this \emph{compounded
-evaluation inflation} to distinguish it from either pitfall reported alone: the
-practical implication is that auditing a paper for target-link inclusion \emph{or} for a
+evaluation inflation} to distinguish it from either failure mode reported alone: the
+practical implication is that auditing a paper for transductive edge leakage \emph{or} for a
 model-free baseline, but not both, can still miss a substantially inflated headline
 number.
 
@@ -1134,7 +1135,7 @@ Five of those graphs are other groups' published association matrices, sharing n
 with ours, so the inflation is not a property of any one dataset. On the graph we built
 and can instrument in full, the same two corrections take 0.9867 to 0.6276, within 3.6
 points of a one-line, no-learning topological heuristic, and they are super-additive, so
-auditing for either pitfall alone is not sufficient to catch the inflation. The same
+auditing for either failure mode alone is not sufficient to catch the inflation. The same
 compounding recurs across six independently trained architectures, including a
 graph-free MLP, while an untrained control does not move, and a structurally similar
 but genuinely unaffected cell-typing control task survives the identical audit by a

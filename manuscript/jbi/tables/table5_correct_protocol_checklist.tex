@@ -8,7 +8,7 @@ only one still permits an inflated headline number (Results, Discussion).}
 \hline
 Requirement & Failure mode it prevents & How this study implements it \\
 \hline
-Leak-free edge split & Target-link inclusion: the encoder can recover a held-out
+Leak-free edge split & Transductive edge leakage: the encoder can recover a held-out
 edge from its own neighborhood (Figure~\ref{fig:edge_split}). & Held-out edges and
 their reverse relation are stripped from the message-passing graph; an automated
 test verifies none is reachable. \\
