@@ -50,7 +50,7 @@ Fases, en orden:
 
 ## 3. Materiales y procedencia de los datos
 
-`data/raw/` está en `.gitignore`: **las matrices no viajan con el repositorio**. Eso es una ventaja para la independencia: se obtienen de las fuentes originales y se verifican con hash. Los scripts `data/01_download/download_hmdd_survey_*.py` documentan cómo las obtuvimos (léanse en Fase 3, o úsense solo los hashes de abajo).
+`data/raw/` está en `.gitignore`: **las matrices no viajan con el repositorio**. Eso es una ventaja para la independencia: se obtienen de las fuentes originales y se verifican con hash. Los scripts `data/01_download/download_hmdd_survey_*.py` documentan cómo las obtuvimos (léanse en Fase 3, o úsense solo los hashes de abajo). **Los comandos exactos de descarga y los hashes verificados están en [`DATA_ACCESS.md`](DATA_ACCESS.md).**
 
 | Grafo | Papers de la encuesta que lo usan | Fuente | Forma · positivos |
 |---|---|---|---|
