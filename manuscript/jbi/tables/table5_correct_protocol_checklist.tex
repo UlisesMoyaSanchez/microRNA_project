@@ -1,23 +1,25 @@
 \begin{table}[h!]
 \caption{Minimum reporting checklist for evaluating link-prediction models on
-biomedical interaction graphs; the two failure modes are independent, so satisfying
-only one still permits an inflated headline number (Results, Discussion).}
+biomedical interaction graphs. The first two requirements prevent two protocol failure
+modes that are independent, so satisfying only one still permits an inflated headline
+number (Results, Discussion); the third is a reporting requirement, which inflates
+nothing itself but exposes a number that the other two have inflated.}
 \label{tab:correct_protocol}
 \small
 \begin{tabular}{p{3.1cm}p{4.7cm}p{5.4cm}}
 \hline
-Requirement & Failure mode it prevents & How this study implements it \\
+Requirement & Problem it prevents & How this study implements it \\
 \hline
 Leak-free edge split & Transductive edge leakage: the encoder can recover a held-out
 edge from its own neighborhood (Figure~\ref{fig:edge_split}). & Held-out edges and
 their reverse relation are stripped from the message-passing graph; an automated
 test verifies none is reachable. \\
-Matched train/eval negative distribution & The ``mismatch trap'': evaluating
-against a different negative distribution than trained on produces an artifact,
-not a difficulty measurement (Figure~\ref{fig:neg_sampling_mechanism}). & The same
+Matched train/eval negative distribution & Popularity-biased negative sampling and
+the ``mismatch trap'': evaluating against a different negative distribution than
+trained on produces an artifact, not a difficulty measurement (Figure~\ref{fig:neg_sampling_mechanism}). & The same
 sampler (uniform-random or degree-matched) is enforced at training and evaluation
 for every reported number. \\
-Model-free baseline & Without a no-learning comparator, a model that learned a
+Model-free baseline & Reporting omission: without a no-learning comparator, a model that learned a
 trivial shortcut (e.g.\ popularity) is indistinguishable from one that learned the
 task (Table~\ref{tab:model_free_baselines}). & A topological heuristic (link
 prediction) or non-graph classifier (node classification) is reported alongside

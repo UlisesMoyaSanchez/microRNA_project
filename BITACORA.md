@@ -23,6 +23,34 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-05 — Dos fallas de protocolo y una omisión de reporte: un solo vocabulario
+
+Al revisar la Introducción se vio que el paper nombraba lo mismo de varias formas y que
+mezclaba, bajo "tres errores", cosas de naturaleza distinta. Vocabulario canónico, ya
+aplicado en `main.tex` y la Tabla 5:
+
+- **Dos fallas de protocolo** (inflan el número; son los dos ejes del grid 2×2):
+  *transductive edge leakage* y *popularity-biased negative sampling*.
+- **Una omisión de reporte** (no infla nada, es lo que hace visible el resto):
+  *missing model-free baseline*. No es un "failure mode".
+- `target-link inclusion` queda solo como término atribuido a Zhu et al.; `degree bias` /
+  `popularity bias` como nombres que la literatura da a la segunda falla. Los niveles del
+  grid (`edges seen`, `held-out`, `uniform`, `degree-matched`) no cambian.
+
+**Un error que había en la Discusión.** La frase sobre auditar "target-link inclusion *or*
+a model-free baseline, but not both" atribuía la super-aditividad a fuga × baseline.
+El experimento solo probó fuga × negativos. Se reescribió, y el rol del baseline se dice
+aparte: no entra en la interacción, pero es lo que la hace visible.
+
+Además: la Introducción describía la auditoría con dos "omisiones" (baseline, negativos) y
+dejaba fuera la fuga (11 de 19 papers no aclaran si quitan las aristas de prueba); ahora
+la describe en los tres ejes. La Tabla 5 decía "the two failure modes" sobre tres filas;
+ahora separa las dos fallas de la omisión. El estándar sigue siendo de **tres**
+componentes (protegido en el highlight 5, la Conclusion y la Discusión). No cambió
+ninguna cifra. Commits en la rama `feat/lp-audit`, junto al trabajo de `lp_audit`.
+
+---
+
 ## 2026-10-02 (cont.) — `lp_audit`: el reporting standard como herramienta ejecutable
 
 **Estado (corregido el 2026-10-05).** Esta entrada se escribió antes de commitear y decía
