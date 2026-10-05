@@ -25,9 +25,11 @@ trabajo, no por commit.
 
 ## 2026-10-02 (cont.) — `lp_audit`: el reporting standard como herramienta ejecutable
 
-**Nada de esto está commiteado.** Vive en la rama `feat/lp-audit` (creada desde
-`fix/verify-gates`, no pusheada). La herramienta, los tests y los scripts de validación son
-archivos nuevos sin trackear; en la DGX están copiados con rsync, no por git.
+**Estado (corregido el 2026-10-05).** Esta entrada se escribió antes de commitear y decía
+"nada commiteado"; ya no es cierto. Vive en la rama `feat/lp-audit` (creada desde
+`fix/verify-gates`, no pusheada), en tres commits: `e22bbfb` (herramienta, tests y notebook
+`notebooks/lp_audit_colab.ipynb`), `a9e7467` (esta entrada) y `01c58f6` (scripts y JSON de
+validación). En la DGX los archivos se copiaron con rsync, no por git.
 
 **Qué es.** El autor pidió una contribución nueva al paper: código que revise los datos de un
 usuario y le advierta de los errores que el paper describe. Es el pendiente "herramienta
@@ -106,12 +108,19 @@ cualquier edición de `main.tex`.
    estándar de 3 a 4--5 componentes, que está protegido en el highlight 5, la Conclusion y
    la Discusión. Alternativa recomendada: que la herramienta los marque como diagnósticos
    adicionales sin tocar el estándar.
-2. Commitear la rama `feat/lp-audit` (hoy todo sin trackear).
+2. ~~Commitear la rama `feat/lp-audit`~~ Hecho (ver arriba). Falta pushearla y decidir el merge a `main`.
 3. El notebook clona `github.com/UlisesMoyaSanchez/microRNA_project`; si el repo es
    privado, falla en Colab. Sin verificar. Tampoco se abrió el notebook en Colab; solo se
    ejecutaron sus dos primeras celdas en local.
 4. Integrar al manuscrito: subsección de Methods, tabla de validación generada desde
    `make_manuscript_tables.py`, y la lista de contribuciones de la Intro (hoy "sixfold").
+
+**Guía de auditoría independiente (`audit_independent/`, añadida 2026-10-05).** Se redactó el
+2026-10-02 sobre el commit base `01c58f6`: guía, codebook ciego de la encuesta y plantilla
+de calificación. Pide a terceros rehacer a ciegas las afirmaciones C1–C5 por fases
+(pre-registro, implementación ciega, revelación). **Campos en blanco que deben llenar los
+mantenedores antes de enviarla:** commit de congelamiento, contacto, fecha límite y acceso al
+grafo propio (§3).
 
 ---
 
