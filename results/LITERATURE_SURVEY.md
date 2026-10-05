@@ -20,7 +20,7 @@ and agreement computed by [`analysis/interrater_agreement.py`](../analysis/inter
 → [`interrater_agreement.json`](interrater_agreement.json). **It overturned the model-free-baseline
 headline** — see below.
 
-**Last updated:** 2026-09-01
+**Last updated:** 2026-10-05 (evidence table and counts synced to the 2026-09-06 adjudication; model-free-baseline count corrected)
 
 ---
 
@@ -100,26 +100,26 @@ anyone of leakage.
 | # | Paper | Venue / Year | CV over edges? | Test edges removed from message-passing graph? | Negatives | Model-free baseline? | Headline AUROC |
 |---|---|---|:--:|:--:|---|:--:|:--:|
 | 1 | **MGCNSS** | Brief. Bioinform. 2024 | yes | **NO** — graph/similarity matrices unchanged | distance-based selection (their contribution) | **NO** | **0.9874** |
-| 2 | **NIMGSA** | 2022 | yes | **unclear** — never stated | **not described at all** | **YES** — SPM (structural perturbation), 0.8960 vs 0.9354 (+3.9 pts) | **0.9354** |
+| 2 | **NIMGSA** | 2022 | unclear *(adjudicated 2026-09-06)* | **unclear** — never stated | all unlabeled pairs (implicit: full-matrix loss) *(adjudicated 2026-09-06)* | **YES** — SPM (structural perturbation), 0.8960 vs 0.9354 (+3.9 pts) | **0.9354** |
 | 3 | **HybridGNN** | Bioinformatics 2026 | yes | **YES** — PyG `RandomLinkSplit` | uniform random from unknown pairs | **NO** | **0.9715** |
-| 4 | **HGDTI** | BMC Bioinform. 2022 | yes | **NO** — test edges retained in network | "reliable" score-filtered (non-uniform) | **NO** | **~0.979** |
-| 5 | **NGCN** | 2024 | yes | **unclear** — not confirmed | uniform random, 1:10 ("an unknown pair is generally viewed as a negative sample") | **YES** — HNM (heterogeneous network model), 0.940 vs 0.957 (+1.7 pts) | **0.910** |
-| 6 | **kmerPMTF** | PeerJ 2024 | yes | **YES** — similarity matrices built from training split only | all unlabeled pairs, count-matched | **NO** | **0.80–0.91** |
+| 4 | **HGDTI** | BMC Bioinform. 2022 | yes | **unclear** — the network and the 10-fold CV are described separately and never connected *(adjudicated 2026-09-06)* | "reliable" score-filtered (non-uniform) | **NO** | **~0.979** |
+| 5 | **NGCN** | 2024 | yes | **YES** — the heterogeneous network is built from the 90% training pairs of each fold *(adjudicated 2026-09-06)* | uniform random, 1:10 ("an unknown pair is generally viewed as a negative sample") | **YES** — HNM (heterogeneous network model), 0.940 vs 0.957 (+1.7 pts) | **0.910** |
+| 6 | **kmerPMTF** | PeerJ 2024 | yes | **unclear** — similarities come from sequence (k-mer frequency), so the question is not answered by them *(adjudicated 2026-09-06)* | all unlabeled pairs, count-matched | **NO** | **0.80–0.91** |
 | 7 | *DTI field convention* | (multiple) | yes | — | "a drug–target pair with an unknown interaction is generally viewed as a negative sample", typically 10× positives | — *(not a paper; excluded from all denominators)* | — |
-| 8 | **Orro** | Biomedicines 2026 | yes | **YES** — miRNA-level holdout (stronger than edge-level) | uniform random from unannotated pairs | **YES** — TCRWMDA (also WBSMDA, ICFMDA), 92.09 vs 97.10 (+5.0 pts) | ~0.98 |
+| 8 | **Orro** | Biomedicines 2026 | **no** — miRNA-level holdout *(adjudicated 2026-09-06)* | **YES** — miRNA-level holdout (stronger than edge-level) | uniform random from unannotated pairs | **YES** — TCRWMDA (also WBSMDA, ICFMDA), 92.09 vs 97.10 (+5.0 pts) | ~0.98 |
 | 9 | **CoupleMDA** | IJMS 2025 | yes | **YES** — train/val/test edges strictly partitioned | uniform random, 1:1 | **NO** | 0.9536 (Table 3) |
 | 10 | **GONNMDA** | Genes 2025 | yes | **unclear** | uniform random, 1:1 | **NO** | 0.9541 |
 | 11 | **DiGAMN** | BMC Genomics 2024 | yes | **YES** — 20% masked to prevent leakage | uniform random, 1:1 / 1:5 / 1:10 | **NO** | 0.9635 |
-| 12 | **DGNMDA** | Bioengineering 2024 | yes | **unclear** | undersampling (ratio unspecified) | **NO** | 0.9455 |
-| 13 | **HLGNN-MDA** | IJMS 2022 | unclear | **YES** — positive test-set samples removed from the adjacency matrix each round | uniform random, 1:1 | **YES** — BNPMDA (bipartite projection), 0.85648 vs 0.93086 (+7.4 pts) | 0.93086 (10-fold CV) |
+| 12 | **DGNMDA** | Bioengineering 2024 | yes | **unclear** | uniform random from 0-labeled pairs, 1:1 *(adjudicated 2026-09-06)* | **NO** | 0.9455 |
+| 13 | **HLGNN-MDA** | IJMS 2022 | yes *(adjudicated 2026-09-06)* | **YES** — positive test-set samples removed from the adjacency matrix each round | uniform random, 1:1 | **YES** — BNPMDA (bipartite projection), 0.85648 vs 0.93086 (+7.4 pts) | 0.93086 (10-fold CV) |
 | 14 | **MEAHNE** | Life 2022 | yes | **unclear** | uniform random, 1:1 | **NO** | 0.9520 (Table 3) |
 | 15 | **CKSNP-GNN** | Genes 2022 | yes | **unclear** | uniform random, 1:1 (16,427 negatives) | **YES** — LLCMDA (also PBMDA), 91.90 vs 93.71 (+1.8 pts) | 0.9371 (5-fold CV mean) |
 | 16 | **HMCDA** | BMC Bioinform. 2023 | yes | **unclear** | uniform random, 5:1 | **NO** | 0.9135 |
-| 17 | **HiGLDP** | BMC Biology 2026 | yes | **YES** — strictly excluded from training folds | uniform random, 1:1 | **NO** | 0.9696 |
-| 18 | **GPS-DTI** | BMC Biology 2025 | yes | **unclear** | balanced pos/neg (curation unclear) | **NO** | not extracted |
-| 19 | **SaeGraphDTI** | BMC Bioinform. 2025 | yes | **unclear** | all unlabeled pairs (unsampled) | **NO** | not extracted |
+| 17 | **HiGLDP** | BMC Biology 2026 | yes | **unclear** — only the folds are described *(adjudicated 2026-09-06)* | not described (1:1 ratio only) *(adjudicated 2026-09-06)* | **NO** | 0.9696 |
+| 18 | **GPS-DTI** | BMC Biology 2025 | yes | **n/a** — no association graph in the encoder *(adjudicated 2026-09-06)* | not described (balanced; 1–20× in the COVID-19 arm only) *(adjudicated 2026-09-06)* | **NO** | not extracted |
+| 19 | **SaeGraphDTI** | BMC Bioinform. 2025 | yes | **YES** — interaction pairs are excluded from the computation *(adjudicated 2026-09-06)* | all unlabeled pairs (unsampled) | **NO** | not extracted |
 | 20 | **DTI-MHAPR** | BMC Bioinform. 2025 | yes | **unclear** | uniform random, 1:1 | **unclear** — an eighth comparator is mentioned but cannot be identified | not extracted |
-| 21 | **iNGNN-DTI** | Bioinformatics 2024 | yes | **unclear** | uniform random, 1:1 | **NO** | 0.931–0.934 |
+| 21 | **iNGNN-DTI** | Bioinformatics 2024 | yes | **n/a** — no association graph in the encoder *(adjudicated 2026-09-06)* | uniform random, 1:1 | **NO** | 0.931–0.934 |
 | 22 | **ModulePred** | BMC Bioinform. 2024 | yes | **unclear** | uniform random, 50:1 | **YES** — RWR and RWRH reported as compared methods (the L3 score is augmentation-only, but it is not the only untrained method in the paper) | 0.834 |
 
 Rows 8–22 (2026-08-12 expansion): all open-access (PMC), verified via the paper's own PMC JATS
@@ -148,7 +148,7 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 **We CAN say, with evidence:**
 
-1. **A model-free control is missing from 15 of 21 papers, and is never read as a floor by
+1. **A model-free control is missing from 14 of 21 papers (a fifteenth, DTI-MHAPR, names an untrained comparator but prints no result), and is never read as a floor by
    any of the 6 that do report one.** The field has no routine way of knowing whether its
    numbers beat a popularity heuristic — and where the comparison is on the page, the margin
    (1.7–7.4 AUROC points) passes without comment. We show, on a real graph, that under this
@@ -187,8 +187,8 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 **The honest framing for the manuscript's motivation section:**
 
-> *Across 21 papers surveyed, edge-level cross-validation is near-universal (19/21), but **15
-> report no model-free baseline and the 6 that do never remark on the 1.7–7.4-point margin
+> *Across 21 papers surveyed, edge-level cross-validation is near-universal (19/21), but **14
+> report no model-free baseline, one more names one without a result, and the 6 that do never remark on the 1.7–7.4-point margin
 > their own tables show**, unlabeled pairs are treated as negatives in the
 > majority (17/21), and in the majority of cases (11/19) the methods section does not permit
 > the reader to determine whether held-out edges were visible to the encoder. We show that
@@ -223,8 +223,8 @@ own graph's finding. See that document for the full results, tiering, and caveat
   The prior 2026-08-13 same-rater spot-check of 14 "unclear" cells (11/14 held up, 3/14
   corrected) stands as a separate, weaker check. **The one D4 disagreement is what exposed the
   criterion defect and overturned the 0/22 headline** — see the top of this document.
-  **Open follow-up:** the 6 D2 and 5 D3 disagreements listed in the JSON have *not* yet been
-  adjudicated one by one; the tallies above still carry rater 1's calls on those cells.
+  **Follow-up, DONE 2026-09-06:** the 14 disagreements were adjudicated one by one against the
+  primary source (see the section below); the evidence table and tallies carry the adjudicated calls.
 - **Record the exact quoted sentence** supporting each classification, in the TSV. **DONE** for
   all 21 rows.
 - **Check the two "did it right" papers (HybridGNN, kmerPMTF) for negative sampling and

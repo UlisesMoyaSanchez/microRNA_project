@@ -52,6 +52,14 @@ los no etiquetados") y 11/19 sin aclarar si quitan las aristas de prueba (el den
 Se quitaron las tres citas de la frase de los 17 papers: respaldaban la literatura sobre
 negativos, no el conteo, que sale de la Tabla 3.
 
+`results/LITERATURE_SURVEY.md` también estaba desfasado: su tabla de evidencia conservaba
+las llamadas del primer calificador en 11 celdas que la adjudicación del 2026-09-06 cambió
+(held-out de HGDTI, NGCN, kmerPMTF, HiGLDP, GPS-DTI, SaeGraphDTI, iNGNN-DTI; CV de Orro,
+HLGNN-MDA, NIMGSA; negativos de NIMGSA, DGNMDA, HiGLDP, GPS-DTI), aunque los conteos del
+resumen ya eran los correctos. Se sincronizó con `literature_survey.tsv` (0 discrepancias
+al recontar), se corrigió el mismo "15 de 21" sin baseline y se quitó una nota que decía que
+las discrepancias seguían sin adjudicar.
+
 Además: la Introducción describía la auditoría con dos "omisiones" (baseline, negativos) y
 dejaba fuera la fuga (11 de 19 papers no aclaran si quitan las aristas de prueba); ahora
 la describe en los tres ejes. La Tabla 5 decía "the two failure modes" sobre tres filas;
