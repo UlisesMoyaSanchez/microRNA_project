@@ -49,6 +49,7 @@
 \usepackage{cmap}
 \usepackage{lmodern}
 \usepackage{lineno}
+\usepackage{array}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -313,7 +314,7 @@ whether their data are ready before reporting a number.
 
 \subsection{Known evaluation pitfalls in link prediction}
 Neither failure mode we quantify in this paper is novel to machine learning in general.
-Transductive edge leakage traces at least to the inverse-relation leak documented
+Transductive edge leakage, where a held-out edge stays in the graph the encoder propagates over (Figure~\ref{fig:edge_split}), traces at least to the inverse-relation leak documented
 in the FB15k knowledge-graph benchmark \cite{toutanova2015observed}, and is actively
 being re-examined in the broader link-prediction literature
 \cite{zhu2023pitfalls,li2023evaluating}. The same failure recurs closer to this paper's
@@ -322,16 +323,67 @@ identified in miRNA--disease association prediction \cite{dong2020mirnaleakage},
 contemporaneously, train/test redundancy has been shown to inflate knowledge-graph-embedding
 link prediction across several biomedical graphs, although that study's own permutation
 test found no evidence its models exploit node degree specifically, a useful contrast to
-the degree-driven bias we quantify below \cite{briere2026kgeleakage}. Popularity-biased negative sampling is a
-known, quantified bias in link prediction generally \cite{kotnis2017analysis,
+the degree-driven bias we quantify below \cite{briere2026kgeleakage}. Popularity-biased negative sampling (Figure~\ref{fig:neg_sampling_mechanism}) is a known, quantified bias in link prediction generally \cite{kotnis2017analysis,
 aiyappa2024implicit}, and has been documented specifically in network biology
 \cite{yilmaz2025biasaware}, the domain this paper's graph is drawn from. Its likely
 historical root is recommender-systems evaluation practice, where sampling a small set
 of negatives per positive was adopted for computational convenience and only later
 shown to distort ranking metrics \cite{krichene2020sampled}. Table~\ref{tab:known_pitfalls}
-summarizes both precedents. The third element of the reporting standard, the model-free
-baseline, has no row there because it is a reporting omission rather than a failure
-mode. Its prevalence is measured in the survey below.
+summarizes the precedents. The third element of the reporting standard, the model-free baseline, is a reporting omission rather than a failure mode. It has precedent too, and its prevalence in this subfield is measured in the survey below.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+\node[font=\small, align=center] at (1.5,3.3) {\textbf{Leaky: target edge visible}\\(``edges seen'')};
+\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m1) at (0,1.5) {$u$};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1a) at (3.0,2.4) {$v_1$};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1b) at (3.0,0.6) {$v_2$};
+\draw[-{Latex[length=2mm]}, thick] (m1) -- (g1a);
+\draw[-{Latex[length=2mm]}, thick, red, bend right=18] (m1) to (g1b);
+\draw[-{Latex[length=2mm]}, thick, red, bend right=18] (g1b) to (m1);
+\node[font=\scriptsize, text=red] at (1.5,-0.05) {target edge and its reverse};
+\node[align=center, text width=4.2cm] at (1.5,-1.05) {message passing sees both, so the score can be read off the graph};
+
+\node[font=\small, align=center] at (9.5,3.3) {\textbf{Leak-free: target edge removed}\\(``edges held out'')};
+\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m2) at (8,1.5) {$u$};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2a) at (11.0,2.4) {$v_1$};
+\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2b) at (11.0,0.6) {$v_2$};
+\draw[-{Latex[length=2mm]}, thick] (m2) -- (g2a);
+\draw[dashed, thick, red, bend right=18] (m2) to (g2b);
+\draw[dashed, thick, red, bend right=18] (g2b) to (m2);
+\node[font=\scriptsize, text=red] at (9.5,-0.05) {target edge and its reverse};
+\node[align=center, text width=4.2cm] at (9.5,-1.05) {message passing never sees either, they only supply the loss and the metric};
+\end{tikzpicture}
+\caption{Transductive edge leakage. A held-out edge and its reverse relation are either
+visible to message passing (left) or removed before it (right). In our graph $u$ is a
+miRNA and $v$ a gene.}
+\label{fig:edge_split}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+\node[draw, circle, fill=blue!10, minimum size=0.7cm] (mm1) at (0,0) {$u$};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg1) at (4.4,2.1) {$v_1$};
+\node[font=\tiny] at (5.3,2.1) {deg=3};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg2) at (4.4,0.2) {$v_2$};
+\node[font=\tiny] at (5.3,0.2) {deg=1};
+\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg5) at (4.4,-2.1) {$v_3$};
+\node[font=\tiny] at (5.3,-2.1) {deg=3};
+\draw[-{Latex[length=2mm]}, thick, blue] (mm1) -- (gg1);
+\node[font=\scriptsize, text=blue] at (1.9,1.55) {positive};
+\draw[dashed, thick, orange] (mm1) -- (gg2);
+\node[font=\scriptsize, text=orange] at (2.3,-0.35) {uniform negative};
+\draw[dashed, thick, red!70!black] (mm1) -- (gg5);
+\node[font=\scriptsize, text=red!70!black] at (1.3,-1.65) {degree-matched negative};
+\node[align=left, text width=3.6cm] at (8.2,0.2) {$\deg(v_1){=}3$ against $\deg(v_2){=}1$: the positive wins almost for free};
+\node[align=left, text width=3.6cm] at (8.2,-2.1) {$\deg(v_1){=}3$ against $\deg(v_3){=}3$: a tie, worth 0.5 AUROC};
+\end{tikzpicture}
+\caption{Popularity-biased negative sampling. For a scorer $\mathrm{score}(u,v)=\deg(v)$, a
+uniform negative usually has lower degree than the positive's node and loses for free, while
+a degree-matched negative ties.}
+\label{fig:neg_sampling_mechanism}
+\end{figure}
 
 \input{tables/table_known_pitfalls.tex}
 
@@ -405,71 +457,6 @@ typing, averaged over four random seeds where feasible. The six-architecture gri
 single run per architecture, on one GPU, by a driver separate from the multi-GPU
 headline runs -- Results gives the effect-size argument for the single run and the
 comparability limit the driver difference imposes.
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[every node/.style={font=\scriptsize}]
-\node[font=\small] at (1.3,3.0) {\textbf{Conventional (edges seen)}};
-\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m1) at (0,1.5) {m};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1a) at (3.0,2.4) {g1};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g1b) at (3.0,0.6) {g2};
-\draw[-{Latex[length=2mm]}, thick] (m1) -- (g1a);
-\draw[-{Latex[length=2mm]}, thick, red] (m1) -- (g1b);
-\node[font=\scriptsize, text=red] at (1.5,0.35) {test edge};
-\node[align=center, text width=3.6cm] at (1.3,-0.8) {message passing sees the test edge};
-
-\node[font=\small] at (9.3,3.0) {\textbf{Corrected (edges held out)}};
-\node[draw, circle, fill=blue!10, minimum size=0.75cm] (m2) at (8,1.5) {m};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2a) at (11.0,2.4) {g1};
-\node[draw, circle, fill=green!10, minimum size=0.75cm] (g2b) at (11.0,0.6) {g2};
-\draw[-{Latex[length=2mm]}, thick] (m2) -- (g2a);
-\draw[dashed, thick, red] (m2) -- (g2b);
-\node[font=\scriptsize, text=red] at (9.5,0.35) {test edge};
-\node[align=center, text width=3.6cm] at (9.3,-0.8) {message passing never sees the test edge};
-\end{tikzpicture}
-\caption{The evaluation-protocol split. \emph{Left (conventional):} the held-out edge
-stays visible to the encoder during message passing. \emph{Right (corrected):} the edge
-and its reverse relation are stripped before message passing, used only to compute the
-loss/metric.}
-\label{fig:edge_split}
-\end{figure}
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[every node/.style={font=\scriptsize}]
-\node[draw, circle, fill=blue!10, minimum size=0.7cm] (mm1) at (0,0) {m1};
-\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg1) at (4.4,2.1) {g1};
-\node[font=\tiny] at (5.3,2.1) {deg=3};
-\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg2) at (4.4,0.2) {g2};
-\node[font=\tiny] at (5.3,0.2) {deg=1};
-\node[draw, circle, fill=green!10, minimum size=0.7cm] (gg5) at (4.4,-2.1) {g5};
-\node[font=\tiny] at (5.3,-2.1) {deg=3};
-\draw[-{Latex[length=2mm]}, thick, blue] (mm1) -- (gg1);
-\node[font=\scriptsize, text=blue] at (1.9,1.55) {positive};
-\draw[dashed, thick, orange] (mm1) -- (gg2);
-\node[font=\scriptsize, text=orange] at (2.3,-0.35) {uniform negative};
-\draw[dashed, thick, red!70!black] (mm1) -- (gg5);
-\node[font=\scriptsize, text=red!70!black] at (2.5,-1.75) {degree-matched negative};
-\end{tikzpicture}
-\vspace{0.3em}
-
-\small
-\begin{tabular}{lccl}
-\hline
-Negative type & score(pos) & score(neg) & outcome \\
-\hline
-uniform (m1,g2, deg=1) & $\deg(g1){=}3$ & $\deg(g2){=}1$ & positive wins almost for free \\
-degree-matched (m1,g5, deg=3) & $\deg(g1){=}3$ & $\deg(g5){=}3$ & tie -- AUROC contribution 0.5 \\
-\hline
-\end{tabular}
-\caption{Why uniform negative sampling inflates AUROC for a scorer as trivial as
-$\mathrm{score}(m,g)=\deg(g)$. The negative gene is drawn without regard to degree, so
-in a heavy-tailed graph it usually has lower degree than the positive's gene, and the
-heuristic wins nearly for free. Degree-matching removes this by construction, forcing
-the signal back onto \emph{which} miRNA regulates the gene rather than \emph{how
-popular} it is.}
-\label{fig:neg_sampling_mechanism}
-\end{figure}
 
 \input{tables/table5_correct_protocol_checklist.tex}
 
@@ -940,9 +927,7 @@ reachable to the encoder through message passing at evaluation time, so the mode
 effect, recover the label from the neighborhood it was never supposed to have. Its
 lineage traces to the WN18/FB15k inverse-relation leak documented by
 \cite{toutanova2015observed}, which was serious enough to motivate a replacement
-benchmark (FB15k-237) rather than a footnote. Figure~\ref{fig:edge_split} is the same
-mechanism restated for a bipartite miRNA--gene graph with explicit reverse relations
-in place of duplicated inverse triples. The negative-sampling half is popularity-biased
+benchmark (FB15k-237) rather than a footnote. Figure~\ref{fig:edge_split} illustrates the same mechanism for a bipartite graph with explicit reverse relations, in place of duplicated inverse triples. The negative-sampling half is popularity-biased
 negative sampling, which the literature calls \emph{degree bias}
 (also \emph{popularity bias}): \cite{aiyappa2024implicit} name and quantify it generally,
 and \cite{yilmaz2025biasaware} document the identical pattern in network biology

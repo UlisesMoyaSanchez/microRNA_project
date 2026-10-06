@@ -1,12 +1,11 @@
 \begin{table}[h!]
-\caption{Neither failure mode this paper quantifies is novel: both are documented
-independently in the general link-prediction/knowledge-graph literature and,
-separately, in network biology.}
+\caption{Precedents for each element of the reporting standard. The first two pitfalls inflate a
+reported number. The third is a reporting omission that leaves the inflation unseen.}
 \label{tab:known_pitfalls}
 \small
-\begin{tabular}{p{2.8cm}p{4.0cm}p{4.0cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.9cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{4.0cm}}
 \hline
-Failure mode & General ML / knowledge-graph precedent & Biomedical / network-biology precedent \\
+Pitfall & General ML / knowledge-graph precedent & Biomedical / network-biology precedent \\
 \hline
 Transductive edge leakage: message passing can see the held-out edge it is later
 scored on. & Inverse-relation leak documented in the FB15k benchmark
@@ -21,6 +20,11 @@ generally \cite{kotnis2017analysis,aiyappa2024implicit}; likely rooted in
 recommender-systems evaluation practice \cite{krichene2020sampled}. & Documented
 specifically in network biology \cite{yilmaz2025biasaware}, the domain this paper's
 graph is drawn from. \\
+Missing model-free baseline (a reporting omission): no no-learning comparator, so a shortcut looks like learning. &
+Topology-only methods can outperform GNN link predictors \cite{huang2023gelato}; OGB
+publishes heuristic baselines on its leaderboards \cite{hu2020ogb}. & Common Neighbours
+competitive with graph-embedding methods on small or sparse biomedical graphs
+\cite{crichton2018realistic}. \\
 \hline
 \end{tabular}
 \end{table}
