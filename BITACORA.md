@@ -23,6 +23,16 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-05 (cont.) — `lp_audit` pasa a llamarse `protocheck`
+
+Renombrado en todo el repo (directorio, tests, notebook, scripts de validación, JSON de
+resultados, README, manuscrito), incluidas las entradas anteriores de esta bitácora, que
+ahora dicen `protocheck` aunque en su día se llamaba `lp_audit`.
+La DGX no estaba accesible por ssh al hacer el cambio: allí el directorio sigue como
+`lp_audit/` hasta el próximo rsync, y el job 428 corrió con ese nombre.
+
+---
+
 ## 2026-10-05 — Dos fallas de protocolo y una omisión de reporte: un solo vocabulario
 
 Al revisar la Introducción se vio que el paper nombraba lo mismo de varias formas y que
@@ -65,16 +75,16 @@ dejaba fuera la fuga (11 de 19 papers no aclaran si quitan las aristas de prueba
 la describe en los tres ejes. La Tabla 5 decía "the two failure modes" sobre tres filas;
 ahora separa las dos fallas de la omisión. El estándar sigue siendo de **tres**
 componentes (protegido en el highlight 5, la Conclusion y la Discusión). No cambió
-ninguna cifra. Commits en la rama `feat/lp-audit`, junto al trabajo de `lp_audit`.
+ninguna cifra. Commits en la rama `feat/protocheck`, junto al trabajo de `protocheck`.
 
 ---
 
-## 2026-10-02 (cont.) — `lp_audit`: el reporting standard como herramienta ejecutable
+## 2026-10-02 (cont.) — `protocheck`: el reporting standard como herramienta ejecutable
 
 **Estado (corregido el 2026-10-05).** Esta entrada se escribió antes de commitear y decía
-"nada commiteado"; ya no es cierto. Vive en la rama `feat/lp-audit` (creada desde
+"nada commiteado"; ya no es cierto. Vive en la rama `feat/protocheck` (creada desde
 `fix/verify-gates`, no pusheada), en tres commits: `e22bbfb` (herramienta, tests y notebook
-`notebooks/lp_audit_colab.ipynb`), `a9e7467` (esta entrada) y `01c58f6` (scripts y JSON de
+`notebooks/protocheck_colab.ipynb`), `a9e7467` (esta entrada) y `01c58f6` (scripts y JSON de
 validación). En la DGX los archivos se copiaron con rsync, no por git.
 
 **Qué es.** El autor pidió una contribución nueva al paper: código que revise los datos de un
@@ -84,7 +94,7 @@ entrada; entrega = notebook Colab + script en el repo con ejemplos; cuatro check
 aristas, negativos no emparejados, baseline model-free con margen, columnas candidatas
 muertas); validación corriéndola sobre los grafos del paper.
 
-**Diseño.** `lp_audit/` en la raíz, solo numpy/scipy/scikit-learn (sin torch ni PyG). La
+**Diseño.** `protocheck/` en la raíz, solo numpy/scipy/scikit-learn (sin torch ni PyG). La
 exploración previa mostró que nada de `training/` era reusable por un tercero (PyG,
 YAML del repo, sin paquete ni tests), así que la lógica se **extrajo y reescribió**:
 `pair_keys`/`isin` y `degree_bins` de `splits.py`, `build_scorers` de
@@ -102,8 +112,8 @@ vi que en modo homogéneo los checks de negativos y de columnas muertas contaban
 extremo `col` de cada arista; en un grafo no dirigido cuentan ambos. Corregido con un test.
 El caso bipartito no cambió (17 tests, misma validación).
 
-**Validación** (`analysis/validate_lp_audit.py`, `analysis/validate_lp_audit_ogb.py`,
-job SLURM **428** en `dgxa100jal`; los 17 tests de `tests/test_lp_audit.py` pasaron también
+**Validación** (`analysis/validate_protocheck.py`, `analysis/validate_protocheck_ogb.py`,
+job SLURM **428** en `dgxa100jal`; los 17 tests de `tests/test_protocheck.py` pasaron también
 en el entorno `mirna_ms` de la DGX). Cuatro celdas por grafo, con la verdad conocida *por
 construcción*: aristas {seen, held-out} × negativos {uniform u oficiales, degree-matched}.
 
@@ -142,7 +152,7 @@ checks de protocolo.
 **DGX.** Estaba limpia y 14 commits atrás; se hizo `git pull --ff-only` (ahora en
 `7270c47`). Los archivos nuevos se copiaron con rsync. `sacct` falló durante la consulta (la
 base de SLURM no resolvió), pero el log del job 428 cierra con "validation complete" y el
-JSON de ddi se trajo a `results/comparison/lp_audit_validation_ogb_ddi.json`.
+JSON de ddi se trajo a `results/comparison/protocheck_validation_ogb_ddi.json`.
 
 **Fuera de alcance de esta pasada:** ogbl-ppa (el baseline original ya necesitó ~31 GB de
 RSS y el scorer por pares no cabe), node classification (el control de cell-typing), y
@@ -154,7 +164,7 @@ cualquier edición de `main.tex`.
    estándar de 3 a 4--5 componentes, que está protegido en el highlight 5, la Conclusion y
    la Discusión. Alternativa recomendada: que la herramienta los marque como diagnósticos
    adicionales sin tocar el estándar.
-2. ~~Commitear la rama `feat/lp-audit`~~ Hecho (ver arriba). Falta pushearla y decidir el merge a `main`.
+2. ~~Commitear la rama `feat/protocheck`~~ Hecho (ver arriba). Falta pushearla y decidir el merge a `main`.
 3. El notebook clona `github.com/UlisesMoyaSanchez/microRNA_project`; si el repo es
    privado, falla en Colab. Sin verificar. Tampoco se abrió el notebook en Colab; solo se
    ejecutaron sus dos primeras celdas en local.
@@ -178,9 +188,9 @@ hash es `095a11be…`. No verificado: forma y 17,972 positivos de MEAHNE. El gra
 lo entregan los autores; faltan en la guía el medio de entrega, SHA-256, commit de
 congelamiento, contacto y fecha límite.
 
-**Publicado.** La rama `feat/lp-audit` se pusheó a GitHub (repo público) el 2026-10-05,
+**Publicado.** La rama `feat/protocheck` se pusheó a GitHub (repo público) el 2026-10-05,
 con la guía y `DATA_ACCESS.md` accesibles en
-`github.com/UlisesMoyaSanchez/microRNA_project/blob/feat/lp-audit/audit_independent/`.
+`github.com/UlisesMoyaSanchez/microRNA_project/blob/feat/protocheck/audit_independent/`.
 Como los links de rama cambian, hay que fijar un commit o tag antes de enviarlos.
 
 **Pendientes al cierre de 2026-10-05.**
@@ -189,7 +199,7 @@ Como los links de rama cambian, hay que fijar un commit o tag antes de enviarlos
 3. Decisión del autor sobre si la Tabla 5 incorpora columnas muertas y margen (ver
    2026-10-02 cont.).
 4. Verificar que el notebook de Colab funciona con el repo público.
-5. Decidir el merge de `feat/lp-audit` a `main`.
+5. Decidir el merge de `feat/protocheck` a `main`.
 
 ---
 

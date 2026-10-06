@@ -133,9 +133,7 @@ trained models beat the topology floor by 4.7 points per paper (3.9 per graph), 
 the heuristic wins outright on the sparsest.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
-any one model or dataset. We propose a minimum reporting standard: an automated
-leak-free split check, a model-free baseline whose margin is stated, and matched
-negative sampling.
+any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, an open-source tool that checks it.
 \end{abstract}
 %% 2026-09-09: Objective's closing clause added ("...to help correct how link
 %% prediction is evaluated on biomedical interaction graphs") so the Abstract's first
@@ -179,7 +177,7 @@ negative sampling.
 \item A no-learning topological heuristic nearly matches the corrected trained model.
 \item Six models tested on our graph data: AUROC inflates 0.24--0.31, except untrained.
 \item A cell-typing control task shows the audit is not indiscriminate.
-\item Standard: leak-free splits, margin-stated model-free baselines, matched negatives.
+\item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
 %% 2026-09-07: former highlights 1 and 2 merged. The second ("on our own graph the same
@@ -276,42 +274,52 @@ ahmad2026hybridgnn,yu2022hgdti,cao2024ngcn,zhang2024kmerpmtf,orro2026mirnadiseas
 li2025couplemda,zeng2025gonnmda,liu2024digamn,lu2024dgnmda,yu2022hlgnnmda,
 huang2022meahne,li2022cksnpgnn,liang2023hmcda,wang2026higldp,xiong2025gpsdti,
 zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A literature
-audit of 21 papers in this space found three gaps behind those numbers: 14 report no
+audit of 21 papers in this space found three gaps behind those numbers. First, 14 report no
 model-free baseline (a simple, no-learning scorer such as node degree, used as a
-sanity-check floor) and one more names one without printing a result; 17 draw their
-negatives from unlabeled pairs without discussion; and for 11 of the 19 papers where
-the question applies (the other two never propagate over an interaction graph), it is
-unclear whether held-out edges are removed from the encoder's input (protocol in
-Methods, full results in Related Work below). The last two
-gaps correspond to two protocol failure modes, popularity-biased negative sampling
-and transductive edge leakage; the first is a reporting omission, and is the check that
-would expose the other two. Neither failure mode is novel: both are already documented
+sanity-check floor). Second, 17 draw their negatives from unlabeled pairs without
+discussion. Third, for 11 of the 19 papers where the question applies (the other two never
+propagate over an interaction graph), it is unclear whether held-out edges are removed from
+the encoder's input (protocol in Methods, full results in Related Work below). The last two
+gaps correspond to two protocol failure modes: popularity-biased negative sampling and
+transductive edge leakage. The first gap is a reporting omission. It is the check that
+would expose the other two. Neither failure mode is novel. Both are already documented
 in the broader link-prediction and knowledge-graph literature, reviewed below. What is
 missing is the connection between that general literature and this subfield's own
-reporting practice: the general-ML literature already knows how to check for these
-failure modes, but this subfield's papers do not apply the check. This paper asks
-whether these high numbers are inflated by the evaluation protocol, rather than reflecting any one model or dataset, and tests that question two
-ways: across eight distinct graphs, and across six independently trained models on
-our own graph. It also proposes a minimum reporting standard for the subfield to
-adopt, with two protocol corrections and one reporting requirement: leak-free splits,
-matched negative sampling, and model-free baselines.
+reporting practice. The general-ML literature already knows how to check for these
+failure modes, but this subfield's papers do not apply the check.
+
+This paper asks whether these high numbers are inflated by the evaluation protocol, rather
+than reflecting any one model or dataset. We test that question two ways: across eight
+distinct graphs, and across six independently trained models on
+our own graph.
 
 This paper is structured as an audit of that gap, not a single case report. We measure
 what the gap costs by retraining one architecture under both protocols on six graphs
 (our own, which we built and can instrument in full, and five taken from the surveyed
-papers themselves) and by comparing nine further externally-sourced cases against a
+papers themselves). We also compare nine further externally-sourced cases against a
 no-learning floor: two public link-prediction benchmarks, and seven of the 21 papers
-from that audit, evaluated on their own datasets. Concretely, this paper's
-contribution is sixfold: it shows the conventional protocol inflates a trained model
-by 0.26--0.37 AUROC on every graph tested, not only on ours; shows the two failure modes
-compound rather than simply add; shows the cost recurs across independently trained
-models rather than being an artifact of any single model; shows the same model-free
-floor is high enough to matter when measured directly on other papers' own data (on
-two of the seven, decisive) rather than only inferred by analogy; shows a
-structurally similar cell-typing task survives the identical audit by a wide margin,
-so the audit is discriminating rather than indiscriminate; and proposes a minimum
-reporting standard for the subfield to adopt: a leak-free split check, a model-free
-baseline with its margin stated, and matched negative sampling.
+from that audit, evaluated on their own datasets. Concretely, this paper makes seven contributions.
+\begin{enumerate}
+\item It shows the conventional protocol inflates a trained model by 0.26--0.37 AUROC on
+every graph tested, not only on ours.
+\item It shows the two failure modes compound rather than simply add.
+\item It shows the cost recurs across independently trained models rather than being an
+artifact of any single model.
+\item It shows the same model-free floor is high enough to matter when measured directly on
+other papers' own data (on two of the seven, decisive) rather than only inferred by
+analogy.
+\item It shows a structurally similar cell-typing task survives the identical audit by a
+wide margin, so the audit is discriminating rather than indiscriminate.
+\item It proposes a minimum reporting standard for the subfield with three requirements:
+a leak-free edge split, matched negative sampling, and a model-free baseline with its
+margin stated. The first two are protocol corrections and the third is a reporting
+requirement (Table~\ref{tab:correct_protocol}).
+\item It releases \texttt{protocheck}, an open-source tool that runs these checks on a
+user's own data. Given the train and held-out pairs of a link-prediction experiment, it
+reports whether held-out edges reach the encoder, whether the evaluation negatives match
+the training negatives, and how far the model's AUROC sits above a no-learning floor.
+Anyone can use it to check whether their data are ready before they report a number.
+\end{enumerate}
 
 \section{Related Work}
 \label{sec:related}
@@ -325,7 +333,7 @@ being re-examined in the broader link-prediction literature
 own domain: a leakage problem inflating reported performance has been independently
 identified in miRNA--disease association prediction \cite{dong2020mirnaleakage}, and,
 contemporaneously, train/test redundancy has been shown to inflate knowledge-graph-embedding
-link prediction across several biomedical graphs -- though that study's own permutation
+link prediction across several biomedical graphs, although that study's own permutation
 test found no evidence its models exploit node degree specifically, a useful contrast to
 the degree-driven bias we quantify below \cite{briere2026kgeleakage}. Popularity-biased negative sampling is a
 known, quantified bias in link prediction generally \cite{kotnis2017analysis,
@@ -336,7 +344,7 @@ of negatives per positive was adopted for computational convenience and only lat
 shown to distort ranking metrics \cite{krichene2020sampled}. Table~\ref{tab:known_pitfalls}
 summarizes both precedents. The third element of the reporting standard, the model-free
 baseline, has no row there because it is a reporting omission rather than a failure
-mode; its prevalence is measured in the survey below.
+mode. Its prevalence is measured in the survey below.
 
 \input{tables/table_known_pitfalls.tex}
 
@@ -344,45 +352,40 @@ mode; its prevalence is measured in the survey below.
 Against that backdrop, we surveyed 21 papers in the miRNA-target and adjacent
 biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disease,
 lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
-full rather than inferring its evaluation protocol from the abstract. Nearly all
-cross-validate over edges rather than some other unit (19 of the 21; the exception,
-Orro, holds out miRNAs rather than associations). 14 of the 21
+full rather than inferring its evaluation protocol from the abstract. 19 of the
+21 cross-validate over edges rather than some other unit. Orro holds out miRNAs rather
+than associations, and NIMGSA does not say. 14 of the 21
 report no model-free baseline and one more, DTI-MHAPR, names an untrained comparator
-(FSI) but prints no result for it; the six that do -- NIMGSA, NGCN, Orro, HLGNN-MDA,
-CKSNP-GNN and ModulePred -- report one of this subfield's classical untrained
+(FSI) but prints no result for it. The six that do (NIMGSA, NGCN, Orro, HLGNN-MDA,
+CKSNP-GNN and ModulePred) report one of this subfield's classical untrained
 propagation or scoring methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR) as one more
 competitor in a comparison table, never as a floor: no paper remarks on how narrow its
 own margin over that comparator is (\S\ref{sec:generalization} measures those margins,
 and what they look like against a floor measured independently). 17 of the 21 draw
 their negatives from unlabeled pairs, uniformly sampled or taken wholesale, without
-discussing the alternative; only two deviate, MGCNSS and HGDTI, each selecting negatives
-by a distance or reliability criterion of its own devising -- an implicit admission that
-the default is known to be inadequate -- and the remaining two never say where their
+discussing the alternative. Only two deviate, MGCNSS and HGDTI, each selecting negatives
+by a distance or reliability criterion of its own devising, and the remaining two never say where their
 negatives come from. Whether
 held-out edges are removed from the encoder's input is unclear from the methods section
-in 11 of the 19 papers where the question applies -- the other two encode drug and
+in 11 of the 19 papers where the question applies (the other two encode drug and
 protein separately and never propagate over an interaction graph at all, so a held-out
-association cannot reach their encoder through graph structure -- up from 3 of the
-original 6; this reporting gap, not confirmed leakage,
-is now the dominant finding on that dimension. Table~\ref{tab:literature_survey}
+association cannot reach their encoder through graph structure). This reporting gap, not
+confirmed leakage, is the dominant finding on that dimension. Table~\ref{tab:literature_survey}
 summarizes the full sample.
 
 We deliberately do not claim that this subfield routinely leaks edges: after
-adjudication only 1 of the 19 clearly does -- MGCNSS, whose propagated
-matrix is defined globally from all 5,430 known associations -- 7 clearly strip test
-edges correctly, and our own project's
-original split was worse than the norm we observed. The claim we make is narrower: no
-paper in the sample reads an untrained comparator as a floor. Most report none at all,
-and the six that do put one on the page treat it as a method to beat rather than as a
-sanity check on their own number, none of them commenting on how small the margin it
-leaves them is (\S\ref{sec:generalization}). Getting the split right is not protective on its
-own -- all seven papers that do strip held-out edges from the graph still draw their
-negatives from unlabeled pairs, six uniformly at random and one wholesale, none of them
-degree-matched, and four of the seven report no model-free baseline
-(Table~\ref{tab:literature_survey}). The two failure modes are
-independent: fixing the split is not evidence against the popularity-biased negative
-sampling this paper identifies, which is precisely why, as Results shows, correcting both is
-super-additive rather than redundant.
+adjudication only 1 of the 19 clearly does (MGCNSS, whose propagated matrix is defined
+globally from all 5,430 known associations), 7 clearly strip test edges correctly, and our
+own project's original split was worse than the norm we observed. The claim we make is
+narrower: no paper in the sample reads an untrained comparator as a floor
+(\S\ref{sec:generalization}). Getting the split right is not protective on its own: all
+seven papers that do strip held-out edges from the graph still draw their negatives from
+unlabeled pairs, six uniformly at random and one wholesale, none of them degree-matched,
+and four of the seven report no model-free baseline
+(Table~\ref{tab:literature_survey}). The two failure modes are independent, so fixing the
+split is not evidence against the popularity-biased negative sampling this paper
+identifies, which is why, as Results shows, correcting both is super-additive rather than
+redundant.
 
 \input{tables/table3_literature_survey.tex}
 
@@ -396,7 +399,7 @@ encoder can, in effect, observe the edge it is later asked to predict -- narrowe
 the general transductive/inductive distinction in graph learning, which is not itself a
 source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out
 edge, and its automatically-added reverse relation, from the message-passing graph in
-both directions; this leak-free property is verified by an automated battery of checks
+both directions. This leak-free property is verified by an automated battery of checks
 before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same logic
 applies within the training set: a fraction of training edges are withheld from the
 encoder's own input and used only as supervision targets, so the model cannot read a
@@ -411,7 +414,7 @@ both requirements, together with the model-free-baseline requirement described b
 as a minimum reporting checklist.
 
 We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
-typing, averaged over four random seeds where feasible; the six-architecture grid is a
+typing, averaged over four random seeds where feasible. The six-architecture grid is a
 single run per architecture, on one GPU, by a driver separate from the multi-GPU
 headline runs -- Results gives the effect-size argument for the single run and the
 comparability limit the driver difference imposes.
@@ -496,7 +499,7 @@ obtain -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a byte-identical canonical
 matrix, so those seven papers span five distinct graphs. Each external matrix comes
 from the paper's own bundled repository, or a shared institutional mirror where none
 exists (CKSNP-GNN), and is verified against that paper's own reported node, edge and
-positive counts before use; three further papers -- GONNMDA, Orro and DGNMDA -- were
+positive counts before use. Three further papers (GONNMDA, Orro and DGNMDA) were
 excluded because no usable data was recoverable (Discussion).
 
 Second, for the same seven papers we apply the topological heuristics defined below,
@@ -511,7 +514,7 @@ runtime by the same check used throughout this paper (Figure~\ref{fig:edge_split
 giving an external check on the floor's behavior outside the literature this paper
 otherwise audits.
 
-Across all three comparisons, ten cases span eight distinct graphs; Results reports
+Across all three comparisons, ten cases span eight distinct graphs. Results reports
 what each one finds.
 
 \subsection{Baselines}
@@ -536,7 +539,7 @@ data provenance: it never enters the graph structure, the model input, the train
 objective, or any scoring head, so nothing in this paper's predictions can depend on
 it. During preparation of this study we identified and fixed two bugs in the
 graph-construction pipeline, in co-expression gene selection and in the cell-to-gene
-expression threshold; every headline number reported here was re-measured on the
+expression threshold. Every headline number reported here was re-measured on the
 corrected graph, independently verified, and shown to replicate the pre-fix figures
 within one standard deviation.
 
@@ -568,10 +571,7 @@ gene$\leftrightarrow$gene (\texttt{coexpressed\_with}) & 828 \\
 \hline
 \end{tabular}
 \caption{Heterogeneous graph schema. Three node types and three edge types, each with
-an automatic reverse relation added for bidirectional message passing. Node features:
-miRNA -- a learnable 64-dimensional embedding (no prior biological signal); gene --
-1-dimensional mean log-normalized expression; cell -- a 50-dimensional PCA projection
-of its expression profile. Counts are post-fix, i.e.\ from the corrected graph
+an automatic reverse relation added for bidirectional message passing. Node features: miRNA nodes carry a learnable 64-dimensional embedding (no prior biological signal). Gene nodes carry 1-dimensional mean log-normalized expression. Cell nodes carry a 50-dimensional PCA projection of their expression profile. Counts are post-fix, i.e.\ from the corrected graph
 construction described above.}
 \label{fig:graph_schema}
 \end{figure}
@@ -599,13 +599,12 @@ explicit codebook (\texttt{results/SURVEY\_CODEBOOK.md}), and a second pass over
 papers was made from the primary sources alone, blind to the first pass. Raw agreement
 was 95\% on model-free-baseline reporting, 86\% on the cross-validation unit, 76\% on
 negative sampling and 71\% on whether held-out edges are removed from the encoder's
-graph; Cohen's $\kappa$ is 0.49 and 0.44 on the latter two, and is uninformative on the
+graph. Cohen's $\kappa$ is 0.49 and 0.44 on the latter two, and is uninformative on the
 former two, whose marginals are too skewed for chance-correction to behave. All 14 disagreements were adjudicated one at a time
 against the primary source rather than averaged away, each call recorded with the
 codebook rule that decided it and the verbatim sentence it rests on
 (\texttt{results/interrater\_agreement.json},
-\texttt{results/literature\_survey\_adjudication.tsv}); 11 went to the second rater and
-3 upheld the first. Two of them were settled by a quote the first rater had already
+\texttt{results/literature\_survey\_adjudication.tsv}). Of these, 11 went to the second rater and 3 upheld the first. Two of them were settled by a quote the first rater had already
 recorded and classified against, and two exposed gaps in the codebook itself rather than
 in either reading: it had no rule for a paper that samples negatives one way for training
 and another for evaluation, nor for one that describes its negatives for a case study but
@@ -628,8 +627,7 @@ on the same metric and dataset, so that the margin between them could be read of
 used throughout this paper.
 
 The second was on whether held-out edges are removed from the encoder's input. The first
-rater had recorded HGDTI as retaining them, on a paraphrase rather than on a quote; the
-codebook requires a \emph{yes} or a \emph{no} to carry a verbatim sentence that supports
+rater had recorded HGDTI as retaining them, on a paraphrase rather than on a quote. The codebook requires a \emph{yes} or a \emph{no} to carry a verbatim sentence that supports
 it alone, and no such sentence exists in that paper -- it describes its heterogeneous
 network and its cross-validation separately and never connects them. The cell became
 \emph{unclear}, and the number of surveyed papers that clearly do \emph{not} remove
@@ -638,7 +636,7 @@ propagates over explicitly, and that matrix is the full set of 5,430 known assoc
 An earlier 2026-08-13 re-read of the first rater's own
 "unclear" classifications against each paper's primary source, undertaken to check
 whether "unclear" reflected a genuine reporting gap or overly conservative extraction,
-corrected 3 of 14 spot-checked cells; those corrections are also reflected throughout.
+corrected 3 of 14 spot-checked cells. Those corrections are also reflected throughout.
 
 \section{Results}
 \label{sec:results}
@@ -662,15 +660,13 @@ but near its upper end: only MEAHNE's $+0.365$ exceeds it. It is a member of thi
 distribution rather than the outlier a reader might reasonably suspect a single
 self-reported graph of being -- though it is not the median member either, and we do not
 claim it is. It is also the one graph in the set whose construction and training we
-control, so \S\ref{sec:mechanism} uses it to ask why the collapse happens; the effect
-itself is the one measured here on all six.
+control, so \S\ref{sec:mechanism} uses it to ask why the collapse happens. The effect itself is the one measured here on all six.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
 \caption{The same protocol collapse on six graphs. This paper's architecture trained on
 each graph (mean over 4 seeds), under the conventional protocol (edges seen + uniform
-negatives) and the corrected one (edges held out + degree-matched negatives). Rows sorted
-by inflation; our own graph in bold. The shaded band marks the 0.618--0.641 interval every
+negatives) and the corrected one (edges held out + degree-matched negatives). Rows sorted by inflation. Our own graph in bold. The shaded band marks the 0.618--0.641 interval every
 graph falls into once the protocol is corrected. Deliberately the same visual form as
 Figure~\ref{fig:architecture_inflation}, which shows the same collapse across six
 architectures on one graph.}
@@ -691,8 +687,7 @@ cost above was ordinary but high. The decomposition, however, differs from ours:
 carries almost the entire effect ($\approx 0.30$) while the edge-split axis adds only
 $0.01$--$0.02$, whereas on our own graph the two axes were comparable and compounded
 super-additively. Held-out edges matter less here because these association matrices are
-small and their heuristics lean on node degree, which a handful of masked edges barely
-moves; the pattern is the same, its internal balance is not.
+small and their heuristics lean on node degree, which a handful of masked edges barely moves. The pattern is the same, but its internal balance is not.
 
 \input{tables/table6_protocol_grid.tex}
 
@@ -734,11 +729,7 @@ separate rows because each is a separate paper reporting a separate number on th
 shared benchmark, and we report the mean gap both per paper ($-0.047$) and per graph
 ($-0.039$). That a substantial share of this subfield validates on one shared dataset
 is itself a fact about its evaluation practice, not a defect of this audit.
-Three lines of evidence answer the question, ordered from what this literature has already
-published to what we measured ourselves: the six surveyed papers whose own comparison tables
-already carry an untrained comparator; an independent re-measurement of that same floor on
-their own association matrices; and then the two public benchmarks with open leaderboards and
-the seven papers' own data that fill the table in.
+Three lines of evidence answer the question, ordered from what this literature has already published to what we measured ourselves. First, we read the six surveyed papers whose own comparison tables already carry an untrained comparator. Second, we re-measure that same floor independently on their own association matrices. Third, we turn to the two public benchmarks with open leaderboards and the seven papers' own data that fill the table in.
 
 \input{tables/table5_hmdd_survey_audit.tex}
 
@@ -746,7 +737,7 @@ the seven papers' own data that fill the table in.
 papers do report a comparator that fits nothing: NIMGSA (SPM), NGCN (HNM), Orro (TCRWMDA),
 HLGNN-MDA (BNPMDA), CKSNP-GNN (LLCMDA, with PBMDA a second untrained row) and ModulePred
 (RWR and RWRH). In the five whose numbers can be read from the text, the paper's own headline
-clears its own untrained comparator by 1.7, 1.8, 3.9, 5.0 and 7.4 AUROC points; ModulePred's
+clears its own untrained comparator by 1.7, 1.8, 3.9, 5.0 and 7.4 AUROC points. ModulePred's
 appears only in a figure. None of the six remarks on the size of that margin. In every case
 the untrained method is presented as one more competitor in a ranking to be won, not as a
 floor the headline should be read against -- which is the practice this paper argues is
@@ -793,7 +784,7 @@ literature survey, OGB already reports these heuristics alongside trained
 submissions -- exactly the practice we recommend -- yet on ogbl-ppa a formula with no
 learned parameters still holds its own against a substantial fraction of the trained
 methods evaluated against it. Taken together, the two benchmarks show the model-free
-floor is not uniformly high or uniformly low across graphs; whether it matters is an
+floor is not uniformly high or uniformly low across graphs. Whether it matters is an
 empirical question each graph answers differently, which is precisely why it must be
 checked rather than assumed.
 
@@ -801,15 +792,14 @@ checked rather than assumed.
 surveyed papers (Table~\ref{tab:literature_survey}), all from its miRNA-disease
 cluster, whose data could be independently obtained: their own bundled repositories,
 or a shared institutional mirror for one (CKSNP-GNN), each verified against the
-paper's own reported node/edge counts before use (three further papers -- GONNMDA,
-Orro, DGNMDA -- were excluded because no usable data was recoverable; see Discussion).
+paper's own reported node/edge counts before use (three further papers, GONNMDA, Orro and DGNMDA, were excluded because no usable data was recoverable, as Discussion explains).
 Applying the same topology-only scorers, unmodified, to each paper's own association
 matrix under uniform-random negatives at that paper's stated ratio
 (Table~\ref{tab:validation_cases}), the trained models beat the topology floor by 4.7
 AUROC points on average per paper -- a real, externally-measured gap, not merely our
 own graph's finding restated. Three of the seven papers (MGCNSS, NIMGSA, HLGNN-MDA)
 turn out to evaluate on a byte-identical canonical HMDD matrix, so the seven papers
-span five distinct graphs; averaging per graph instead of per paper gives 3.9 points.
+span five distinct graphs. Averaging per graph instead of per paper gives 3.9 points.
 But the gap is highly graph-dependent, ranging from $-9.2$
 points (DiGAMN) to $+3.3$ points: on MEAHNE's graph, the topology-only heuristic
 outright \emph{beats} the paper's own trained model (0.9848 vs.\ 0.9520), and on
@@ -820,7 +810,7 @@ uniform-negative numbers reflect a genuine popularity ceiling rather than a data
 \subsection{What separates these graphs: dead candidate columns}
 \label{sec:dead_columns}
 The two papers where the trained model adds the least are also the two sparsest graphs
-audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes; CoupleMDA:
+audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes, and CoupleMDA:
 $\sim$15{,}000 edges over 2{,}090 $\times$ 1{,}754 nodes). Sparsity itself, however, is
 not the mechanism. Subsampling positives from each graph in turn (100\% down to 10\%
 retention, five seeds per point) moves the model-free floor in the \emph{opposite}
@@ -833,13 +823,13 @@ never be positive. MEAHNE's matrix carries 11{,}783 disease columns of which 92.
 degree zero, and CoupleMDA's 55.7\%, while the other three graphs have none. Across
 graphs this is only suggestive and we do not rest the claim on it: with six graphs no
 descriptive statistic separates them significantly (dead-column fraction $\rho = +0.70$,
-$p = 0.12$; column-degree Gini $\rho = +0.77$, $p = 0.07$), and our own graph is a
+$p = 0.12$, and column-degree Gini $\rho = +0.77$, $p = 0.07$), and our own graph is a
 counterexample to the simplest version of the story, carrying 47.5\% dead columns yet a
 floor indistinguishable from the graphs with none. The evidence is instead a direct
 manipulation. Padding the
 canonical HMDD matrix -- which has no dead columns -- with empty ones, adding no edges,
 no features, nothing but candidate slots that can never be positive, raises its
-model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$; at 92.9\% dead columns,
+model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$. At 92.9\% dead columns,
 MEAHNE's own level, it reaches $0.979$, reproducing MEAHNE's outlying $0.9848$ from a
 graph sharing none of its data. An AUROC reported under uniform negatives is therefore
 partly a measure of how a dataset padded its candidate space, and a padded dataset
@@ -883,8 +873,7 @@ AUROC points.}
 
 What the trained model learns under the conventional protocol is gene popularity. Under
 that protocol a heuristic that never looks at the miRNA at all, gene in-degree, reaches
-0.8712 and outperforms the trained model (0.8056);
-Table~\ref{tab:model_free_baselines} reports all four heuristics against both
+0.8712 and outperforms the trained model (0.8056). Table~\ref{tab:model_free_baselines} reports all four heuristics against both
 negative-sampling regimes. The mechanism behind that reversal is directly testable: a
 model trained with uniform negatives and then evaluated against degree-matched negatives
 collapses to AUROC 0.5352 $\pm$ 0.0202, indistinguishable from the gene-degree
@@ -897,8 +886,7 @@ every trained architecture in the grid.
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
 \caption{The mismatch mechanism: every architecture trained with uniform negatives,
 evaluated under both negative regimes. Matched-negative evaluation collapses every
-trained model toward the gene-degree heuristic's floor; the untrained control does not
-move.}
+trained model toward the gene-degree heuristic's floor. The untrained control does not move.}
 \label{fig:negative_sampler_collapse}
 \end{figure}
 
@@ -915,7 +903,7 @@ architecture is a single training run rather than a seed average, and the inflat
 order of magnitude larger than the seed spread measured elsewhere here (0.005--0.02), so
 the pattern does not depend on averaging away noise. A second caveat governs how the grid
 may be read. Every row of it is trained by the same driver on a single GPU, which is what
-makes the comparison across architectures controlled; the levels, however, are not
+makes the comparison across architectures controlled. The levels, however, are not
 comparable to Table~\ref{tab:headline_grid}. The grid's transformer reaches 0.9222 under
 the conventional protocol, against 0.9867 for the four-GPU run of the identical
 configuration reported there. That gap is a training-regime difference, not a protocol or
@@ -931,7 +919,7 @@ that ordering survives the headline training regime is untested.
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
 \caption{Inflation between the conventional and corrected protocols, across five
-architectures plus an untrained control. Single seed (42); the inflation magnitude
+architectures plus an untrained control. Single seed (42). The inflation magnitude
 (0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). All six rows are
 trained on one GPU by the same driver, so they are comparable with one another but not
 with Table~\ref{tab:headline_grid} -- see the text. Full numeric
@@ -965,7 +953,7 @@ reachable to the encoder through message passing at evaluation time, so the mode
 effect, recover the label from the neighborhood it was never supposed to have. Its
 lineage traces to the WN18/FB15k inverse-relation leak documented by
 \cite{toutanova2015observed}, which was serious enough to motivate a replacement
-benchmark (FB15k-237) rather than a footnote; Figure~\ref{fig:edge_split} is the same
+benchmark (FB15k-237) rather than a footnote. Figure~\ref{fig:edge_split} is the same
 mechanism restated for a bipartite miRNA--gene graph with explicit reverse relations
 in place of duplicated inverse triples. The negative-sampling half is popularity-biased
 negative sampling, which the literature calls \emph{degree bias}
@@ -976,7 +964,7 @@ textbook case of \emph{shortcut learning} \cite{geirhos2020shortcut}: a model tr
 under uniform negatives has no incentive to learn miRNA-specific regulatory signal when
 gene in-degree alone -- a feature that does not even require knowing which miRNA is
 being scored -- separates positives from negatives almost for free
-(Figure~\ref{fig:neg_sampling_mechanism}); collapsing to chance the moment that shortcut
+(Figure~\ref{fig:neg_sampling_mechanism}). Collapsing to chance the moment that shortcut
 is closed off (Table~\ref{tab:model_free_baselines}) is the signature of a model that
 learned the shortcut and nothing else, not of a harder evaluation. The historical root of
 treating unlabeled pairs as negatives at all traces to sampled-metric evaluation practice
@@ -1029,18 +1017,17 @@ raise the bar the field treats as meaningful progress.
 
 Seven limitations qualify these results. First, the cross-architecture grid reports a
 single measurement per architecture rather than an average over multiple training
-runs; we consider this justified because the inflation effect size is far larger than
+runs. We consider this justified because the inflation effect size is far larger than
 the run-to-run variability established elsewhere in this study, but a fully repeated
 version of the grid would still strengthen the claim. Second, the task's information
 ceiling is bounded by what the graph and its labels can support: the graph itself
 carries no miRNA or gene sequence information, and the interaction label source, miRDB,
 is itself the output of a seed-complementarity prediction model rather than an
-experimentally confirmed interaction. This ceiling would not be resolved by a better
-architecture; it would require predicting \emph{experimentally validated} interactions
+experimentally confirmed interaction. This ceiling would not be resolved by a better architecture. It would require predicting \emph{experimentally validated} interactions
 -- for example, from miRTarBase -- instead of another predictor's output. Third, the
 model-free baselines reported here are local neighborhood-overlap heuristics -- gene
 degree, preferential attachment, common neighbours, and Adamic--Adar -- computed only
-from the miRNA-to-gene adjacency; we did not evaluate global, path-integrating
+from the miRNA-to-gene adjacency. We did not evaluate global, path-integrating
 heuristics such as the Katz index or rooted PageRank, which are known to outperform
 local heuristics on sparse graphs and which the trained model's multi-hop,
 multi-relation message passing more closely resembles. The 3.6-point gap between the
@@ -1048,7 +1035,7 @@ best local heuristic and the trained model should therefore be read as an upper 
 on how much the model exceeds a no-learning topological floor, not a tight one. Fourth,
 the six trained architectures compared here (Table~\ref{tab:architecture_grid}) are all
 either generic message-passing networks (the project HGT, a homogeneous GCN) or a
-graph-free MLP; none explicitly encodes pairwise structural signal -- shared neighbors,
+graph-free MLP. None explicitly encodes pairwise structural signal -- shared neighbors,
 enclosing-subgraph structure, or path distance -- the way link-prediction-specific
 architectures such as SEAL \cite{zhang2018seal}, NBFNet \cite{zhu2021nbfnet}, Neo-GNN
 \cite{yun2021neognn}, or BUDDY \cite{chamberlain2023buddy} do. Architectures of that
@@ -1056,7 +1043,7 @@ family place above local heuristics on properly-audited external leaderboards,
 including the OGB benchmarks discussed above, where BUDDY narrowly outperforms
 Resource Allocation on ogbl-ppa. The 3.6-point gap measured here should therefore not be read as a ceiling on
 what any trained model could achieve on this graph under the corrected protocol -- only
-on what the generic message-passing architectures tested here achieve; whether a
+on what the generic message-passing architectures tested here achieve. Whether a
 structure-aware architecture closes it is an open question this study does not
 answer. Fifth, the 21-paper literature survey (Table~\ref{tab:literature_survey}) is a
 two-rater instrument with imperfect agreement, not a settled measurement. Both raters
@@ -1085,12 +1072,10 @@ from the audit entirely rather than approximated further: GONNMDA's linked repos
 contains no code or data, Orro's data-availability statement provides no public
 repository, and DGNMDA's cited data source was unreachable at the time of this audit.
 This audit was further scoped, by design, to the miRNA-disease cluster of the 21-paper
-survey -- 10 of its 11 miRNA-disease papers, of which 7 yielded usable data; the
-eleventh (HybridGNN) was not carried into the audit. The other 10 surveyed papers span
+survey. It covered 10 of its 11 miRNA-disease papers, of which 7 yielded usable data. The eleventh (HybridGNN) was not carried into the audit. The other 10 surveyed papers span
 drug-target (6 papers), circRNA-disease, lncRNA-disease, gene-disease, and plant
 miRNA-target interactions, each keyed to a different reference
-database (e.g.\ DrugBank, BindingDB) that this audit did not attempt to acquire;
-extending the same protocol to those domains is future work, not a gap left
+database (e.g.\ DrugBank, BindingDB) that this audit did not attempt to acquire. Extending the same protocol to those domains is future work, not a gap left
 unexplained. The floor-convergence check in Table~\ref{tab:floor_convergence} is narrower
 still: three papers over two distinct graphs, one of which (CKSNP-GNN) reports a comparator
 number transferred from that comparator's own paper rather than measured on its data, so the
@@ -1124,24 +1109,19 @@ the context variable is present in the training data at all, whether the scoring
 receives it as an input, and whether the reported evaluation actually varies with it. The
 scoring head used here fails the second by construction, taking only the concatenated
 miRNA and gene embeddings, so its score for a given pair is identical in every cell type
-however long it is trained; we therefore attach no context-specific narrative to these
+however long it is trained. We therefore attach no context-specific narrative to these
 results. The check costs nothing to run and, like a model-free baseline, is most valuable
 exactly where it is least likely to be run.
 
-Given how directly the inflation problem responds to a small set of checks, we propose
-these as a minimum reporting standard for evaluation methodology in this subfield: an
-automated, leak-free split check that verifies held-out edges are unreachable to the
-encoder during message passing; at least one model-free baseline reported alongside any
-trained model, \emph{and the margin over it stated} -- six of the surveyed papers
-report such a comparator and none reads its own margin; and negative-sampling distributions that are matched between training
-and evaluation rather than assumed compatible (summarized as a checklist in
-Table~\ref{tab:correct_protocol}).
+Given how directly the inflation problem responds to a small set of checks, we propose these as a minimum reporting standard for evaluation methodology in this subfield. First, a leak-free edge split, with an automated check that held-out edges are unreachable to the encoder during message passing. Second, matched negative sampling: negative-sampling distributions that are matched between training and evaluation rather than assumed compatible. Third, at least one model-free baseline reported alongside any trained model, \emph{and the margin over it stated}. Six of the surveyed papers report such a comparator and none reads its own margin. Table~\ref{tab:correct_protocol} summarizes the three requirements as a checklist.
+
+We release \texttt{protocheck} so that this checklist can be run rather than only read. It takes the train and held-out pairs of a link-prediction experiment and reports on each requirement. It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. A check whose input the user did not supply is reported as unchecked, never as passed. The tool inspects only the pairs it is given. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs.
 
 \section{Conclusion}
 \label{sec:conclusion}
 Evaluating a trained link predictor under conventions common in this subfield -- edges
 visible to the encoder during message passing, negatives sampled uniformly at random --
-reports AUROC between 0.879 and 0.992 on six biomedical interaction graphs; correcting
+reports AUROC between 0.879 and 0.992 on six biomedical interaction graphs. Correcting
 both conventions simultaneously drops every one of them into the range 0.618--0.641.
 Five of those graphs are other groups' published association matrices, sharing no data
 with ours, so the inflation is not a property of any one dataset. On the graph we built
@@ -1153,11 +1133,7 @@ graph-free MLP, while an untrained control does not move, and a structurally sim
 but genuinely unaffected cell-typing control task survives the identical audit by a
 wide margin -- together showing that the inflation is a property of the evaluation
 protocol itself, not of any one architecture, and that the audit is discriminating
-rather than indiscriminate. Beyond this specific graph, we contribute a reusable
-methodology: an automated leak-free split check, model-free baselines for both link
-prediction and node classification, and a cross-architecture protocol grid, released
-alongside this paper so that other groups working on biomedical interaction graphs can
-run the same audit on their own models before reporting a headline number.
+rather than indiscriminate. Beyond this specific graph, we propose a minimum reporting standard with three requirements: a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated. We release \texttt{protocheck}, an open-source tool that runs these checks on a user's own splits, so that other groups working on biomedical interaction graphs can audit their models before reporting a headline number.
 
 \section*{Declaration of competing interest}
 The authors declare that they have no known competing financial interests or personal
@@ -1168,7 +1144,7 @@ relationships that could have appeared to influence the work reported in this pa
 (Conceptualization, Methodology, Software, Validation, Writing, ...).]
 
 \section*{Data availability}
-Code: this repository. Large data/checkpoints are intentionally untracked -- the public
+Code: this repository. The reporting-standard checker is in \texttt{protocheck/}, with a Colab notebook at \texttt{notebooks/protocheck\_colab.ipynb}. Large data/checkpoints are intentionally untracked -- the public
 source (cellxgene accession, miRDB version) and the exact build scripts are documented
 so the graph is reconstructible, rather than distributing large binaries in-repo.
 [STAGE: finalize exact accession numbers / DOIs / repository URL before submission.]
