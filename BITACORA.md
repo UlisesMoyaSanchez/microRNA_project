@@ -23,6 +23,68 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-05 (noche) — Las contribuciones realineadas, `protocheck`, y la sección 2
+
+Sesión larga sobre `manuscript/jbi/main.tex`. Commits `0a1b13d`, `99136f9`, `73df540`
+(más `92c5920` del renombrado), todos pusheados a `feat/lp-audit`.
+
+**El problema de fondo.** Las siete contribuciones seguían contando el paper desde nuestro
+grafo: "los dos fallos se componen" y "seis modelos" solo se demostraron ahí, y la auditoría
+de los 21 papers no figuraba. Además "se componen" no generaliza: en los otros cinco grafos
+los negativos aportan ≈0.30 y el split solo 0.01--0.02 (rejilla sin aprendizaje, Tabla 6).
+Decisión del autor: nuestro grafo es **un caso más de seis**, y la auditoría no es solo
+leer papers sino cuantificar cuánto cambia y por qué.
+
+**Cinco contribuciones** (lista numerada en la Introducción): (1) el costo en seis grafos,
+0.26--0.37 AUROC cada uno, todos a 0.62--0.64; (2) de dónde viene: reparto entre los dos
+fallos según el grafo y columnas candidatas muertas (el piso sube de 0.859 a 0.982 solo
+añadiendo columnas vacías); (3) el piso sin aprendizaje sobre datos ajenos, 7 papers + 2 OGB;
+(4) protocolo-no-modelo, en el único grafo instrumentado (seis arquitecturas, control sin
+entrenar, cell-typing); (5) estándar de tres requisitos + `protocheck`. La encuesta de 21
+papers quedó como motivación en la frase de apertura, no como contribución. Abstract
+(Results), Introducción, Conclusion y los cinco highlights se reescribieron a esa lista; la
+oración 0.9867→0.6276 salió del Abstract. Abstract en 300 exactas con etiquetas.
+
+**Un solo vocabulario para el estándar**, mismo nombre y orden en todo el paper y en la
+Tabla 5: *leak-free edge split*, *matched negative sampling*, *model-free baseline with its
+margin stated* (dos correcciones de protocolo + un requisito de reporte). La Conclusion
+listaba como tercer elemento un "cross-architecture protocol grid" y omitía los negativos:
+era texto viejo.
+
+**`protocheck`** (antes `lp_audit`): contribución explícita, párrafo en Discusión con sus
+límites (solo ve los pares que recibe, no detecta fuga que no pase por aristas exactas, no
+prueba que un número publicado esté inflado, umbrales heurísticos), Conclusion, Data
+availability, pie de la Tabla 5. Las columnas muertas son un cuarto check diagnóstico, fuera
+del estándar. Nombre: `protocheck` libre como usuario/repo en GitHub, **tomado en PyPI**
+(0.1.0, otro dominio); decisión del autor: no publicar en PyPI.
+
+**Sección 2.** Cifra corregida: 19/21 hacen CV sobre aristas, **NIMGSA es unclear** y Orro
+no (el texto nombraba solo a Orro). Quitados "implicit admission" (inferencia sin fuente) y
+"up from 3 of the original 6" (piloto muerto). Se reemplazó `;` por `.` en toda la prosa
+(preferencia del autor) y se quitó "and one more names one without printing a result" de la
+Introducción. Las Figuras 1 (fuga de aristas) y 2 (negativos) pasaron de Methods a §2.1,
+redibujadas con nodos neutros y paneles "Leaky/Leak-free" (los nombres de la rejilla entre
+paréntesis); la 1 ahora muestra la relación inversa; la tabla de la 2 se plegó al dibujo
+(se salía del margen) y los pies se acortaron. Tabla 1 ganó una tercera fila, el baseline
+faltante, marcada como omisión de reporte (no falla), con Gelato, OGB y Crichton como
+antecedentes; pie de dos frases. Se cargó `array` en el preámbulo.
+
+**Pendientes, sin tocar:**
+- La DGX sigue con `lp_audit/` y sin estos commits: ssh falló al negociar (`ssh-rsa` como
+  único host key); hay que traer los commits y hacer rsync de `protocheck/`.
+- La validación de `protocheck` (80 auditorías, 40/40 fugas y negativos, paridad 7e-10 en
+  ddi) **no está en el paper**; el cuerpo está al tope de 6000 palabras.
+- Highlight 4 dejó fuera el cell-typing por el límite de 85 caracteres. Los highlights 2 y
+  5 llevan `;`. El comentario `%% STAGE` de los highlights describe la versión anterior.
+- Quedan `;` en celdas y pies de `tables/*.tex` (~11) y varios ` -- ` en la prosa.
+- La Discusión no se reescribió con la nueva lista (su párrafo del efecto compuesto ya
+  dice "en este grafo", así que no contradice); falta releerla.
+- Methods (§3) y lo que sigue de la revisión: sin hacer. Siguiente paso natural.
+- Sin verificar de nuevo contra la fuente primaria: `crichton2018realistic` y
+  `huang2023gelato`, ahora citados también en la Tabla 1.
+
+---
+
 ## 2026-10-05 (cont.) — `lp_audit` pasa a llamarse `protocheck`
 
 Renombrado en todo el repo (directorio, tests, notebook, scripts de validación, JSON de
