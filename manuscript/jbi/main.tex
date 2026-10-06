@@ -122,15 +122,8 @@ control -- and an unrelated cell-typing task with two no-graph controls were als
 tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
-graphs -- ours and five from surveyed papers -- collapses the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641. On our own graph the two
-protocols report 0.9867 $\pm$ 0.0011 and 0.6276 $\pm$ 0.0070, the latter within 3.6
-points of a no-learning heuristic (0.5912); the inflation recurs across six
-models and is super-additive, while an untrained control does not move. A
-cell-typing task reaches 0.9916 accuracy, surviving an analogous control by 32
-points. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against the seven papers' own reported numbers,
-trained models beat the topology floor by 4.7 points per paper (3.9 per graph), though
-the heuristic wins outright on the sparsest.
+graphs (ours and five from surveyed papers) collapses the Area Under the
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on every graph. For no-learning scorers, negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns alone raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' own numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins outright on the sparsest. On our graph the inflation recurs across six models, and an untrained control does not move.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
 any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, an open-source tool that checks it.
@@ -173,10 +166,10 @@ any one model or dataset. We propose a minimum reporting standard (a leak-free e
 %% RNA-seq deliberately left unexpanded (standard term for this readership).
 
 \begin{highlights}
-\item Correcting the protocol drops our model from 0.88--0.99 to 0.62--0.64 on six graphs.
-\item A no-learning topological heuristic nearly matches the corrected trained model.
-\item Six models tested on our graph data: AUROC inflates 0.24--0.31, except untrained.
-\item A cell-typing control task shows the audit is not indiscriminate.
+\item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
+\item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
+\item On seven papers' own data, trained models beat a no-learning floor by 4.7 points.
+\item On our graph, six models inflate by 0.24--0.31; an untrained control does not move.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
@@ -289,36 +282,30 @@ reporting practice. The general-ML literature already knows how to check for the
 failure modes, but this subfield's papers do not apply the check.
 
 This paper asks whether these high numbers are inflated by the evaluation protocol, rather
-than reflecting any one model or dataset. We test that question two ways: across eight
-distinct graphs, and across six independently trained models on
-our own graph.
-
-This paper is structured as an audit of that gap, not a single case report. We measure
-what the gap costs by retraining one architecture under both protocols on six graphs
-(our own, which we built and can instrument in full, and five taken from the surveyed
-papers themselves). We also compare nine further externally-sourced cases against a
-no-learning floor: two public link-prediction benchmarks, and seven of the 21 papers
-from that audit, evaluated on their own datasets. Concretely, this paper makes seven contributions.
+than reflecting any one model or dataset. The survey of 21 papers shows what they leave
+unreported. We then measure what that costs. We retrain one architecture under both
+protocols on six graphs (our own, which we built, and five taken from the surveyed
+papers), separate the two failure modes on each with no-learning scorers, and compare nine
+further cases against a no-learning floor: two public link-prediction benchmarks, and seven
+of the surveyed papers, evaluated on their own datasets. Our own graph is one of the six.
+Because we built it, it is also the one on which we can dissect the mechanism in full.
+This paper makes five contributions.
 \begin{enumerate}
-\item It shows the conventional protocol inflates a trained model by 0.26--0.37 AUROC on
-every graph tested, not only on ours.
-\item It shows the two failure modes compound rather than simply add.
-\item It shows the cost recurs across independently trained models rather than being an
-artifact of any single model.
-\item It shows the same model-free floor is high enough to matter when measured directly on
-other papers' own data (on two of the seven, decisive) rather than only inferred by
-analogy.
-\item It shows a structurally similar cell-typing task survives the identical audit by a
-wide margin, so the audit is discriminating rather than indiscriminate.
-\item It proposes a minimum reporting standard for the subfield with three requirements:
-a leak-free edge split, matched negative sampling, and a model-free baseline with its
-margin stated. The first two are protocol corrections and the third is a reporting
-requirement (Table~\ref{tab:correct_protocol}).
-\item It releases \texttt{protocheck}, an open-source tool that runs these checks on a
-user's own data. Given the train and held-out pairs of a link-prediction experiment, it
-reports whether held-out edges reach the encoder, whether the evaluation negatives match
-the training negatives, and how far the model's AUROC sits above a no-learning floor.
-Anyone can use it to check whether their data are ready before they report a number.
+\item It quantifies the cost on six graphs. The conventional protocol overstates AUROC by
+0.26--0.37 on every one of them, and the corrected protocol leaves all six at 0.62--0.64.
+\item It explains where the cost comes from. It separates the two failure modes, whose
+relative weight depends on the graph, and shows that candidate columns which can never be
+positive raise the no-learning floor on their own.
+\item It measures the no-learning floor on other papers' own data: seven surveyed papers and
+two OGB benchmarks.
+\item On the one graph we can instrument in full (ours), it shows the effect follows the
+protocol and not the model. It recurs across six architectures, an untrained control does
+not move, and a cell-typing task survives the same audit.
+\item It proposes a minimum reporting standard with three requirements (a leak-free edge
+split, matched negative sampling, and a model-free baseline with its margin stated;
+Table~\ref{tab:correct_protocol}) and releases \texttt{protocheck}, an open-source tool
+that runs these checks on a user's own train and held-out pairs, so that anyone can check
+whether their data are ready before reporting a number.
 \end{enumerate}
 
 \section{Related Work}
@@ -1119,21 +1106,25 @@ We release \texttt{protocheck} so that this checklist can be run rather than onl
 
 \section{Conclusion}
 \label{sec:conclusion}
-Evaluating a trained link predictor under conventions common in this subfield -- edges
-visible to the encoder during message passing, negatives sampled uniformly at random --
+Evaluating a trained link predictor under conventions common in this subfield (edges
+visible to the encoder during message passing, negatives sampled uniformly at random)
 reports AUROC between 0.879 and 0.992 on six biomedical interaction graphs. Correcting
-both conventions simultaneously drops every one of them into the range 0.618--0.641.
-Five of those graphs are other groups' published association matrices, sharing no data
-with ours, so the inflation is not a property of any one dataset. On the graph we built
-and can instrument in full, the same two corrections take 0.9867 to 0.6276, within 3.6
-points of a one-line, no-learning topological heuristic, and they are super-additive, so
-auditing for either failure mode alone is not sufficient to catch the inflation. The same
-compounding recurs across six independently trained architectures, including a
-graph-free MLP, while an untrained control does not move, and a structurally similar
-but genuinely unaffected cell-typing control task survives the identical audit by a
-wide margin -- together showing that the inflation is a property of the evaluation
-protocol itself, not of any one architecture, and that the audit is discriminating
-rather than indiscriminate. Beyond this specific graph, we propose a minimum reporting standard with three requirements: a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated. We release \texttt{protocheck}, an open-source tool that runs these checks on a user's own splits, so that other groups working on biomedical interaction graphs can audit their models before reporting a headline number.
+both conventions drops every one of them into the range 0.618--0.641, a loss of 0.26--0.37
+on each. Five of those graphs are other groups' published association matrices, sharing no
+data with ours, so the inflation is not a property of any one dataset. How much each
+convention contributes depends on the graph: negative sampling carries most of the loss on
+the five surveyed graphs, while on ours the two compound. Candidate columns that can never
+be positive raise the no-learning floor on their own. Against seven surveyed papers' own numbers, trained models beat that floor by 4.7 points per paper on average, and the heuristic wins outright on the sparsest graph. On the graph we can instrument in full, the inflation recurs across
+six independently trained architectures while an untrained control does not move, and a
+structurally similar cell-typing control task survives the same audit by a wide margin.
+The effect therefore follows the evaluation protocol, not the model, and the audit is
+discriminating rather than indiscriminate.
+
+We propose a minimum reporting standard with three requirements: a leak-free edge split,
+matched negative sampling, and a model-free baseline with its margin stated. We release
+\texttt{protocheck}, an open-source tool that runs these checks on a user's own splits, so
+that other groups working on biomedical interaction graphs can audit their models before
+reporting a headline number.
 
 \section*{Declaration of competing interest}
 The authors declare that they have no known competing financial interests or personal
