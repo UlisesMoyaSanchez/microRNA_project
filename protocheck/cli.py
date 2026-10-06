@@ -1,5 +1,5 @@
 """
-Command line: python -m lp_audit ...
+Command line: python -m protocheck ...
 
 Three ways to describe a dataset (pair files are N x 2 (row, col), .npy or CSV):
 
@@ -66,7 +66,7 @@ def _build(a: argparse.Namespace) -> dict:
 
 
 def main(argv=None) -> int:
-    p = argparse.ArgumentParser(prog="python -m lp_audit", description=__doc__,
+    p = argparse.ArgumentParser(prog="python -m protocheck", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     for f in ("train-pos", "heldout-pos", "encoder-edges", "encoder-edges-rev", "train-neg",
               "eval-neg", "matrix", "labeled-train", "labeled-test"):

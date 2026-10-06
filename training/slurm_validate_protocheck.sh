@@ -1,16 +1,16 @@
 #!/bin/bash
 # =============================================================================
-# slurm_validate_lp_audit.sh -- lp_audit validation on the paper's graphs.
-#   1. pytest tests/test_lp_audit.py (parity with the torch scorers, on the DGX env)
-#   2. analysis/validate_lp_audit.py      (5 HMDD/CoupleMDA graphs, 2x2 protocol grid)
-#   3. analysis/validate_lp_audit_ogb.py  (ogbl-ddi, homogeneous mode)
+# slurm_validate_protocheck.sh -- protocheck validation on the paper's graphs.
+#   1. pytest tests/test_protocheck.py (parity with the torch scorers, on the DGX env)
+#   2. analysis/validate_protocheck.py      (5 HMDD/CoupleMDA graphs, 2x2 protocol grid)
+#   3. analysis/validate_protocheck_ogb.py  (ogbl-ddi, homogeneous mode)
 #
-# Usage: sbatch training/slurm_validate_lp_audit.sh
+# Usage: sbatch training/slurm_validate_protocheck.sh
 # =============================================================================
-#SBATCH --job-name=lp_audit_validate
+#SBATCH --job-name=protocheck_validate
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32gb
-#SBATCH --output=logs/lp_audit_validate_%j.out
+#SBATCH --output=logs/protocheck_validate_%j.out
 #SBATCH --nodelist=dgxa100jal
 #SBATCH --partition=dgx_large
 
@@ -28,8 +28,8 @@ set -u
 echo "Job: ${SLURM_JOB_ID:-local}  Node: $(hostname)  Date: $(date)"
 echo "Git: $(git rev-parse --short HEAD)  Python: $(python --version)"
 
-python -m pytest tests/test_lp_audit.py -q
-python analysis/validate_lp_audit.py
-python analysis/validate_lp_audit_ogb.py
+python -m pytest tests/test_protocheck.py -q
+python analysis/validate_protocheck.py
+python analysis/validate_protocheck_ogb.py
 
-echo "lp_audit validation complete: $(date)"
+echo "protocheck validation complete: $(date)"

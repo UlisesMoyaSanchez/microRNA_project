@@ -1,4 +1,4 @@
-# lp_audit
+# protocheck
 
 Warns about the evaluation errors described in the paper *The Protocol, Not the Model*,
 given the data of a link-prediction experiment. Depends on numpy, scipy and scikit-learn
@@ -12,13 +12,13 @@ only (no torch, no PyG).
 | `dead_candidates` | candidate columns with no positive anywhere, and evaluation negatives that land on them | held-out + train positives |
 
 A check whose input you did not supply is reported as `unchecked`, never as `ok`.
-Thresholds are heuristics (`lp_audit.DEFAULT_THRESHOLDS`), not validated cut-offs; read the
+Thresholds are heuristics (`protocheck.DEFAULT_THRESHOLDS`), not validated cut-offs; read the
 numbers in each finding rather than the status word.
 
 ## Use
 
 ```python
-from lp_audit import audit
+from protocheck import audit
 report = audit(n_rows, n_cols, train_pos, heldout_pos,      # (2, N) arrays of (row, col)
                encoder_edges=train_pos, train_neg=train_neg, eval_neg=eval_neg,
                model_auroc=0.91)
@@ -26,22 +26,22 @@ print(report.render()); report.save("audit.json")
 ```
 
 ```bash
-python -m lp_audit --train-pos train_pos.npy --heldout-pos heldout_pos.npy \
+python -m protocheck --train-pos train_pos.npy --heldout-pos heldout_pos.npy \
     --encoder-edges encoder_edges.npy --eval-neg eval_neg.npy --train-neg train_neg.npy \
     --n-rows 495 --n-cols 383 --model-auroc 0.91 --json audit.json
 ```
 
-Other input layouts (`python -m lp_audit -h`): an HMDD-style 0/1 matrix plus the held-out
+Other input layouts (`python -m protocheck -h`): an HMDD-style 0/1 matrix plus the held-out
 pairs (`--matrix M.csv --heldout-pos F --encoder-edges matrix`), (row, col, label) triples
-(`--labeled-train/--labeled-test`), OGB `split_edge` (`lp_audit.io.from_ogb_split_edge`) and
-this repo's `EdgeSplit` (`lp_audit.io.from_pyg_edge_split`). Homogeneous undirected graphs:
+(`--labeled-train/--labeled-test`), OGB `split_edge` (`protocheck.io.from_ogb_split_edge`) and
+this repo's `EdgeSplit` (`protocheck.io.from_pyg_edge_split`). Homogeneous undirected graphs:
 `--mode homogeneous`. Exit status 1 if any check fails, 2 on a usage error.
 
 ## Examples
 
-`python -m lp_audit.examples.make_examples` writes five synthetic datasets, each triggering
+`python -m protocheck.examples.make_examples` writes five synthetic datasets, each triggering
 one failure mode (or none: `clean`). They are fictional: `model_auroc` is a made-up number.
-`notebooks/lp_audit_colab.ipynb` runs them and has a cell for your own files.
+`notebooks/protocheck_colab.ipynb` runs them and has a cell for your own files.
 
 ## What it cannot tell you
 
@@ -52,7 +52,7 @@ any published number is inflated.
 
 ## Verification
 
-`pytest tests/test_lp_audit.py` checks that each example triggers its own check and no
+`pytest tests/test_protocheck.py` checks that each example triggers its own check and no
 other, and that the scorers reproduce `training/eval_topology_baseline.py::build_scorers`
-and the OGB formulas. `python analysis/validate_lp_audit.py` runs the tool on the paper's
+and the OGB formulas. `python analysis/validate_protocheck.py` runs the tool on the paper's
 graphs under the 2x2 protocol grid; read its docstring for what that does and does not show.

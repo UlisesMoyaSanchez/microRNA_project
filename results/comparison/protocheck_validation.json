@@ -47,7 +47,7 @@
   "floor_crosscheck_vs_density_sweep": [
     {
       "graph": "canonical5430",
-      "lp_audit_floor": 0.870488368622583,
+      "protocheck_floor": 0.870488368622583,
       "repo_floor_mean": 0.8591136480028763,
       "repo_floor_std": 0.014108969295985145,
       "abs_diff": 0.01137472061970679,
@@ -57,7 +57,7 @@
     },
     {
       "graph": "cksnp_gnn",
-      "lp_audit_floor": 0.8723250559651248,
+      "protocheck_floor": 0.8723250559651248,
       "repo_floor_mean": 0.8725019068706242,
       "repo_floor_std": 0.006423279816214713,
       "abs_diff": 0.00017685090549945937,
@@ -67,7 +67,7 @@
     },
     {
       "graph": "digamn",
-      "lp_audit_floor": 0.871792787047862,
+      "protocheck_floor": 0.871792787047862,
       "repo_floor_mean": 0.882412016863287,
       "repo_floor_std": 0.005014127244623227,
       "abs_diff": 0.010619229815424958,
@@ -77,7 +77,7 @@
     },
     {
       "graph": "meahne",
-      "lp_audit_floor": 0.9862315934025949,
+      "protocheck_floor": 0.9862315934025949,
       "repo_floor_mean": 0.9853898508891806,
       "repo_floor_std": 0.0020001466501127167,
       "abs_diff": 0.0008417425134142897,
@@ -87,7 +87,7 @@
     },
     {
       "graph": "couplemda",
-      "lp_audit_floor": 0.9457022415581345,
+      "protocheck_floor": 0.9457022415581345,
       "repo_floor_mean": 0.9438787096465753,
       "repo_floor_std": 0.0009020572327532944,
       "abs_diff": 0.0018235319115592619,

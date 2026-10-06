@@ -18,27 +18,27 @@
   },
   "parity_with_repo_official_cell": {
     "node_degree": {
-      "lp_audit": 0.7848414927639078,
+      "protocheck": 0.7848414927639078,
       "repo": 0.7848414927639078,
       "abs_diff": 0.0
     },
     "pref_attach": {
-      "lp_audit": 0.8592433336606945,
+      "protocheck": 0.8592433336606945,
       "repo": 0.8592433336606945,
       "abs_diff": 0.0
     },
     "common_neigh": {
-      "lp_audit": 0.9468993988602736,
+      "protocheck": 0.9468993988602736,
       "repo": 0.9468993988602736,
       "abs_diff": 0.0
     },
     "adamic_adar": {
-      "lp_audit": 0.9498822481449871,
+      "protocheck": 0.9498822481449871,
       "repo": 0.9498822477038147,
       "abs_diff": 4.411724319197674e-10
     },
     "resource_alloc": {
-      "lp_audit": 0.9619372039525746,
+      "protocheck": 0.9619372039525746,
       "repo": 0.9619372032172874,
       "abs_diff": 7.352872755106432e-10
     }

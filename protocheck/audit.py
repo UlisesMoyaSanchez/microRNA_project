@@ -1,4 +1,4 @@
-"""lp_audit.audit -- run the four checks on one dataset and collect a Report."""
+"""protocheck.audit -- run the four checks on one dataset and collect a Report."""
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ class Report:
 
     def render(self) -> str:
         d = self.dataset
-        lines = [f"lp_audit  {d['n_rows']:,} x {d['n_cols']:,} candidates, mode={d['mode']}, "
+        lines = [f"protocheck  {d['n_rows']:,} x {d['n_cols']:,} candidates, mode={d['mode']}, "
                  f"train_pos={d['n_train_pos']:,}, heldout_pos={d['n_heldout_pos']:,}", ""]
         for f in self.findings:
             lines.append(f"{_MARK[f.status]} {f.check}: {f.message}")

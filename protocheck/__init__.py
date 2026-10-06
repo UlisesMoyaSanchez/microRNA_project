@@ -1,6 +1,6 @@
-"""lp_audit -- warns about the evaluation errors described in the paper.
+"""protocheck -- warns about the evaluation errors described in the paper.
 
-    from lp_audit import audit
+    from protocheck import audit
     report = audit(n_rows, n_cols, train_pos, heldout_pos, encoder_edges=..., eval_neg=...)
     print(report.render())
 

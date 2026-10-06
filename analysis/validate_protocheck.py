@@ -1,5 +1,5 @@
 """
-validate_lp_audit.py -- Does lp_audit flag the failure modes it claims to, on the paper's graphs?
+validate_protocheck.py -- Does protocheck flag the failure modes it claims to, on the paper's graphs?
 
 Runs the tool on every distinct graph in analysis/density_sweep.py::GRAPHS under the
 paper's 2x2 protocol grid. The ground truth is known by construction, not judged:
@@ -13,7 +13,7 @@ paper's 2x2 protocol grid. The ground truth is known by construction, not judged
 so each cell has an expected status for edge_leakage and for negative_matching, and the
 output is a confusion table (detections / misses / false alarms) per check. Train and eval
 negatives always use the same sampler, so the train-vs-eval mismatch branch is exercised by
-tests/test_lp_audit.py instead, not here.
+tests/test_protocheck.py instead, not here.
 
 Two honest limits, repeated in the output JSON:
   * dead_candidates is NOT independently validated: it re-derives the same dead-column
@@ -27,7 +27,7 @@ Two honest limits, repeated in the output JSON:
     switch is disclosed, not hidden: both numbers are in the output.
 
 Usage:
-  python analysis/validate_lp_audit.py            # writes results/comparison/lp_audit_validation.json
+  python analysis/validate_protocheck.py            # writes results/comparison/protocheck_validation.json
 """
 
 from __future__ import annotations
@@ -44,8 +44,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from analysis.density_sweep import GRAPHS, load_positives  # noqa: E402
-from lp_audit import audit  # noqa: E402
-from lp_audit.checks import (  # noqa: E402
+from protocheck import audit  # noqa: E402
+from protocheck.checks import (  # noqa: E402
     column_degree, degree_bins, degree_matched_negatives, uniform_negatives,
 )
 
@@ -55,7 +55,7 @@ CELLS = {  # name -> (edges_seen, sampler)
     "heldout_uniform": (False, "uniform"),
     "corrected": (False, "degree_matched"),
 }
-log = logging.getLogger("validate_lp_audit")
+log = logging.getLogger("validate_protocheck")
 
 
 def run_cell(pos, n_rows, n_cols, test_fraction, seed, seen, sampler):
@@ -77,7 +77,7 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--seeds", type=int, default=4)
-    p.add_argument("--out", default="results/comparison/lp_audit_validation.json")
+    p.add_argument("--out", default="results/comparison/protocheck_validation.json")
     args = p.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     seeds = [42 + i for i in range(args.seeds)]
@@ -142,7 +142,7 @@ def main() -> None:
         m = float(mine.mean())
         se = float(np.sqrt(mine.var(ddof=1) / len(mine) + theirs.var(ddof=1) / len(theirs)))
         z = (m - float(theirs.mean())) / se
-        xcheck.append({"graph": gname, "lp_audit_floor": m, "repo_floor_mean": ref["mean"],
+        xcheck.append({"graph": gname, "protocheck_floor": m, "repo_floor_mean": ref["mean"],
                        "repo_floor_std": ref["std"], "abs_diff": abs(m - ref["mean"]),
                        "within_2sd_of_repo_split_sd": bool(abs(m - ref["mean"]) <= 2 * max(ref["std"], 1e-4)),
                        "welch_z": z, "welch_within_2": bool(abs(z) <= 2)})

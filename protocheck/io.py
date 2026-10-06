@@ -1,4 +1,4 @@
-"""lp_audit.io -- loaders that turn common dataset layouts into (2, N) (row, col) arrays.
+"""protocheck.io -- loaders that turn common dataset layouts into (2, N) (row, col) arrays.
 
 File convention for pair files: one pair per line / row, columns = (row_index, col_index),
 .npy or delimited text. A (2, N) .npy is also accepted (unambiguous unless N == 2).
@@ -55,7 +55,7 @@ def subtract_pairs(a: np.ndarray, b: np.ndarray, n_cols: int) -> np.ndarray:
 
 
 def from_ogb_split_edge(split_edge: dict, num_nodes: int) -> dict:
-    """OGB link-prediction `split_edge` (ogbl-ddi style) -> kwargs for lp_audit.audit.
+    """OGB link-prediction `split_edge` (ogbl-ddi style) -> kwargs for protocheck.audit.
 
     Uses the validation split as the held-out set. ogbl-ddi's encoder sees only the
     training edges, which is what encoder_edges is set to here; override if yours differs.
@@ -72,7 +72,7 @@ def from_ogb_split_edge(split_edge: dict, num_nodes: int) -> dict:
 
 
 def from_pyg_edge_split(split, fwd=("miRNA", "regulates", "gene"), which: str = "test") -> dict:
-    """training.splits.EdgeSplit -> kwargs for lp_audit.audit (lazy: needs torch only here).
+    """training.splits.EdgeSplit -> kwargs for protocheck.audit (lazy: needs torch only here).
 
     Lets this repo's own pipeline be audited: encoder_edges are the message-passing graph's
     forward edges, so a regression in the leak-free split shows up as a failing check.

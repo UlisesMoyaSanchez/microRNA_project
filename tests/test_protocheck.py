@@ -1,4 +1,4 @@
-"""pytest tests/test_lp_audit.py"""
+"""pytest tests/test_protocheck.py"""
 
 import json
 import os
@@ -9,13 +9,13 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from lp_audit import audit  # noqa: E402
-from lp_audit import io as lio  # noqa: E402
-from lp_audit.checks import (  # noqa: E402
+from protocheck import audit  # noqa: E402
+from protocheck import io as lio  # noqa: E402
+from protocheck.checks import (  # noqa: E402
     TopologyScorer, check_leakage, degree_bins, degree_matched_negatives, uniform_negatives,
 )
-from lp_audit.cli import main as cli_main  # noqa: E402
-from lp_audit.examples.make_examples import N_COLS, N_ROWS, build  # noqa: E402
+from protocheck.cli import main as cli_main  # noqa: E402
+from protocheck.examples.make_examples import N_COLS, N_ROWS, build  # noqa: E402
 
 # scenario -> {check: expected status}. Checks not listed must be "ok".
 EXPECTED = {
@@ -195,7 +195,7 @@ def test_cli_usage_error_is_exit_2(capsys):
 
 def test_homogeneous_degree_counts_both_endpoints():
     """A node that only ever appears as the FIRST endpoint is not dead in an undirected graph."""
-    from lp_audit.checks import check_dead_columns, column_degree
+    from protocheck.checks import check_dead_columns, column_degree
     pairs = np.array([[0, 0, 1], [1, 2, 2]])
     assert column_degree(pairs, 4).tolist() == [0, 1, 2, 0]
     assert column_degree(pairs, 4, undirected=True).tolist() == [2, 2, 2, 0]

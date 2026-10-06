@@ -1,14 +1,14 @@
 # Guía de auditoría independiente
 
 **Proyecto:** *The Protocol, Not the Model: Evaluation Bias Inflates Link Prediction on Biomedical Interaction Graphs* (manuscrito JBI, en preparación).
-**Escrita:** 2026-10-02. **Commit base al escribirla:** `01c58f6` (rama `feat/lp-audit`, no pusheada).
+**Escrita:** 2026-10-02. **Commit base al escribirla:** `01c58f6` (rama `feat/protocheck`, no pusheada).
 **Pendiente antes de enviarla a los auditores** (los mantenedores completan): commit de congelamiento `________`, contacto `________`, fecha límite `________`, acceso al grafo propio (§3).
 
 ---
 
 ## 0. Qué se pide y por qué
 
-Hicimos una auditoría de cómo se evalúa la predicción de enlaces en grafos biomédicos y construimos una herramienta (`lp_audit`) que advierte de los errores que describimos. **Quienes escribimos esto somos los menos indicados para saber si está bien.** Esta guía pide que otras personas rehagan el trabajo *sin ver primero nuestras respuestas*, y que intenten romperlo.
+Hicimos una auditoría de cómo se evalúa la predicción de enlaces en grafos biomédicos y construimos una herramienta (`protocheck`) que advierte de los errores que describimos. **Quienes escribimos esto somos los menos indicados para saber si está bien.** Esta guía pide que otras personas rehagan el trabajo *sin ver primero nuestras respuestas*, y que intenten romperlo.
 
 Lo que se audita son **cinco afirmaciones** (§1). Para cada una hay una pista de trabajo (§4) con su método, su regla de decisión y las condiciones bajo las cuales **estaríamos equivocados**. Un resultado que contradiga el paper es un resultado útil, no un problema: se reporta tal cual.
 
@@ -24,7 +24,7 @@ Lo que se audita son **cinco afirmaciones** (§1). Para cada una hay una pista d
 | **C2** | En nuestro grafo el protocolo convencional da 0.9867 ± 0.0011 y el corregido 0.6276 ± 0.0070, a 3.6 puntos de una heurística sin aprendizaje (0.5912). La inflación es **super-aditiva** (corregir solo una de las dos fallas subestima el daño) y reaparece en seis modelos (+0.24 a +0.31 AUROC) salvo en un control sin entrenar. | B |
 | **C3** | En los seis grafos de C1, las heurísticas sin aprendizaje (grado, vecinos comunes, Adamic–Adar…) dan un piso alto bajo el protocolo convencional y ~0.55–0.59 bajo el corregido. Sobre dos benchmarks OGB reproducen el leaderboard. | A |
 | **C4** | En una encuesta de 21 papers de GNN, la mayoría no reporta un baseline sin aprendizaje; los que sí lo reportan le ganan por pocos puntos; y casi todos validan sobre aristas. Los detalles de cada dimensión se dan en la pista D, no aquí, para no anclar. | D |
-| **C5** | `lp_audit` detecta los cuatro problemas que dice detectar, no dispara sobre un protocolo corregido, y sus límites son los declarados. | E |
+| **C5** | `protocheck` detecta los cuatro problemas que dice detectar, no dispara sobre un protocolo corregido, y sus límites son los declarados. | E |
 
 Las cifras de C1–C3 vienen del Abstract del manuscrito. **No se entregan** nuestros artefactos intermedios hasta la Fase 3 (§2).
 
@@ -42,7 +42,7 @@ Fases, en orden:
 | **3. Comparación y apertura** | Se entregan nuestros artefactos y código; se comparan; las discrepancias se discuten con ambas partes. | Todo |
 | **4. Reporte final** | Reporte con las discrepancias resueltas y las que no. | Todo |
 
-**Se retiene hasta la Fase 3:** `results/` (cifras y artefactos), `BITACORA.md`, `results/EVALUATION_AUDIT.md`, `results/literature_survey*.tsv` (nuestras calificaciones), `training/eval_*.py` y `lp_audit/` (nuestras implementaciones; leerlas antes de implementar la pista A o B anula la independencia). Quien haga la pista **E** necesita `lp_audit/`: idealmente es una persona distinta de quien haga A/B; si es la misma, E va al final.
+**Se retiene hasta la Fase 3:** `results/` (cifras y artefactos), `BITACORA.md`, `results/EVALUATION_AUDIT.md`, `results/literature_survey*.tsv` (nuestras calificaciones), `training/eval_*.py` y `protocheck/` (nuestras implementaciones; leerlas antes de implementar la pista A o B anula la independencia). Quien haga la pista **E** necesita `protocheck/`: idealmente es una persona distinta de quien haga A/B; si es la misma, E va al final.
 
 **Pista D:** no leer §2.2 ni la Tabla 3 del manuscrito antes de calificar (contienen nuestros conteos).
 
@@ -130,16 +130,16 @@ Reproducir con un ejemplo mínimo (grafo pequeño sintético) que (a) la fuga po
 
 **Regla de decisión (propuesta).** C4 se considera **reproducida** si, tras resolver las discrepancias contra la fuente, los conteos de cada dimensión difieren de los nuestros en ≤ 2 papers y la dirección de la conclusión no cambia (la mayoría no reporta baseline sin aprendizaje; los que lo reportan lo superan por pocos puntos). **Estaríamos equivocados** si ≥ 5 de nuestras calificaciones cambian al leer la fuente, o si la mayoría de los papers sí reporta un baseline sin aprendizaje en su tabla de resultados.
 
-### Pista E — Poner a prueba `lp_audit` (C5)
+### Pista E — Poner a prueba `protocheck` (C5)
 
-**Instalación:** `git clone <repo> && cd <repo> && git checkout <commit de congelamiento> && pip install -r lp_audit/requirements.txt`. Luego `pytest tests/test_lp_audit.py` (17 tests) y `python -m lp_audit.examples.make_examples` para generar cinco conjuntos sintéticos. Léase `lp_audit/README.md`.
+**Instalación:** `git clone <repo> && cd <repo> && git checkout <commit de congelamiento> && pip install -r protocheck/requirements.txt`. Luego `pytest tests/test_protocheck.py` (17 tests) y `python -m protocheck.examples.make_examples` para generar cinco conjuntos sintéticos. Léase `protocheck/README.md`.
 
 **Tareas, en orden:**
 1. **Caja negra.** Con los ejemplos sintéticos, ¿cada uno dispara exactamente su advertencia? ¿El `clean` no dispara ninguna?
 2. **Formatos reales.** Pasar los grafos de §3 por el CLI en al menos dos formatos de entrada (pares de aristas y matriz + pares de prueba). ¿El resultado coincide con lo que la pista A calculó por su cuenta?
 3. **Adversarial.** Construyan conjuntos que *deberían* disparar cada check pero de una forma que no anticipamos, y conjuntos que **no** deberían disparar pero sí lo hacen. Ideas (no exhaustivas): aristas duplicadas o auto-lazos; la fuga por la relación inversa en el modo bipartito; negativos emparejados con contenedores calculados sobre **todas** las aristas (no solo entrenamiento); fuga a través de *features* de nodo derivadas de las etiquetas de prueba (la herramienta declara que no la detecta: ¿cuán fácil es hacerlo sin querer?); un grafo con columnas muertas pero una razón de negativos distinta; casos con muy pocos positivos de prueba; índices en base 1 frente a base 0.
-4. **Umbrales.** Los umbrales por defecto (`lp_audit.DEFAULT_THRESHOLDS`) son heurísticos. ¿Hay un grafo realista donde produzcan un veredicto claramente absurdo? Reporten el número, no solo el veredicto.
-5. **Paridad.** Comparar los scorers de `lp_audit` contra su propia implementación de la pista A, en `ogbl-ddi` (celda determinista).
+4. **Umbrales.** Los umbrales por defecto (`protocheck.DEFAULT_THRESHOLDS`) son heurísticos. ¿Hay un grafo realista donde produzcan un veredicto claramente absurdo? Reporten el número, no solo el veredicto.
+5. **Paridad.** Comparar los scorers de `protocheck` contra su propia implementación de la pista A, en `ogbl-ddi` (celda determinista).
 
 **Regla de decisión (propuesta).** C5 se considera **reproducida** si pasan 1 y 2, la paridad de 5 es ≤ 1e-3, y los hallazgos de 3–4 se reportan y clasifican. Una falla de detección real (un conjunto con fuga que la herramienta marca `ok`) es un **hallazgo de severidad alta** aunque la herramienta ya lo declare en su nota de alcance, si el caso es plausible en la práctica.
 
@@ -161,7 +161,7 @@ Ordenado de lo que más nos preocupa a lo que menos. Declararlo aquí no sustitu
 4. **Anomalía abierta (Tabla 7).** El margen de discriminación de nuestro grafo se *cierra* bajo el protocolo corregido mientras que el de los cinco grafos externos se *abre*. Probamos que no es sobreajuste (está presente en los seis) y no tenemos explicación. Es la parte menos entendida del trabajo.
 5. **Encuesta:** dos calificadores humanos, acuerdo moderado en dos dimensiones, n = 21; en una dimensión (aristas de prueba removidas del grafo del encoder) 11 de 21 quedan `unclear`. Un titular previo ("0/22 sin baseline") resultó falso y se corrigió tras una segunda calificación ciega.
 6. **Etiquetas de tipo celular:** `cell_type` es el `argmax` de un puntaje de marcadores; nunca se validó contra una anotación independiente. El control descarta "cualquier clasificador trivial llega a 0.99", no la pregunta biológica.
-7. **`lp_audit`:** los umbrales son heurísticos; su validación es casi tautológica para fuga y negativos (compara conjuntos de aristas e histogramas de grado: valida la implementación, no un descubrimiento); `dead_candidates` re-deriva una estadística que ya calculábamos y **no está validado de forma independiente**; en la comparación con nuestro pipeline en torch, el criterio fijado de antemano ("dentro de 2 sd") **falló en 2 de 5 grafos** y añadimos una comparación de Welch después de verlo (diferencia máxima de 0.011 AUROC); `ogbl-ppa` no se probó.
+7. **`protocheck`:** los umbrales son heurísticos; su validación es casi tautológica para fuga y negativos (compara conjuntos de aristas e histogramas de grado: valida la implementación, no un descubrimiento); `dead_candidates` re-deriva una estadística que ya calculábamos y **no está validado de forma independiente**; en la comparación con nuestro pipeline en torch, el criterio fijado de antemano ("dentro de 2 sd") **falló en 2 de 5 grafos** y añadimos una comparación de Welch después de verlo (diferencia máxima de 0.011 AUROC); `ogbl-ppa` no se probó.
 8. **El grafo propio no está versionado** (§3): su reproducción depende de que los autores lo entreguen.
 
 ---

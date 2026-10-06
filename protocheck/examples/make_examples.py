@@ -3,11 +3,11 @@ Synthetic datasets that each trigger one failure mode from the paper -- and one 
 triggers none. Fictional data: the graph is random with a skewed column-degree profile,
 and `model_auroc` is a made-up number standing in for "the AUROC you would report".
 
-    python -m lp_audit.examples.make_examples            # writes lp_audit/examples/data/
-    python -m lp_audit --train-pos lp_audit/examples/data/leak/train_pos.npy \
-        --heldout-pos lp_audit/examples/data/leak/heldout_pos.npy \
-        --encoder-edges lp_audit/examples/data/leak/encoder_edges.npy \
-        --eval-neg lp_audit/examples/data/leak/eval_neg.npy \
+    python -m protocheck.examples.make_examples            # writes protocheck/examples/data/
+    python -m protocheck --train-pos protocheck/examples/data/leak/train_pos.npy \
+        --heldout-pos protocheck/examples/data/leak/heldout_pos.npy \
+        --encoder-edges protocheck/examples/data/leak/encoder_edges.npy \
+        --eval-neg protocheck/examples/data/leak/eval_neg.npy \
         --n-rows 300 --n-cols 250
 
 Scenario -> what it should flag
@@ -25,7 +25,7 @@ import os
 
 import numpy as np
 
-from lp_audit.checks import (
+from protocheck.checks import (
     column_degree, degree_bins, degree_matched_negatives, model_free_floor, uniform_negatives,
 )
 
@@ -97,7 +97,7 @@ def write(seed: int = 0) -> None:
 
 
 def load_scenario(name: str) -> dict:
-    """Read a written scenario back as kwargs for lp_audit.audit."""
+    """Read a written scenario back as kwargs for protocheck.audit."""
     d = os.path.join(DATA, name)
     with open(os.path.join(d, "scenario.json")) as fh:
         kw = json.load(fh)
