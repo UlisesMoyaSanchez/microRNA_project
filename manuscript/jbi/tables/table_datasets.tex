@@ -1,0 +1,23 @@
+\begin{table}[h!]
+\caption{The eight distinct graphs used in this paper. Matrix size is rows $\times$ columns of the association matrix, and positives are its known associations; for the two OGB benchmarks, which are not bipartite matrices, the node count and the total number of edges are given instead, so the last two columns are not comparable across groups. ``Retrained'' means this paper's architecture is trained from scratch under both protocol arms; ``heuristics'' means the model-free baselines are applied. Counts for our own graph are post-fix (miRNAs $\times$ genes; positives are the miRNA$\to$gene edges).}
+\label{tab:datasets}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccl}
+\hline
+Graph & Domain & Size & Positives & Used for \\
+\hline
+Our graph (miRDB v6.0~\cite{chen2020mirdb} + CELLxGENE scRNA-seq~\cite{czi2025cellxgene}) & miRNA--target & $2{,}460 \times 3{,}000$ & 44,186 & retrained, heuristics \\
+\hline
+Canonical HMDD~\cite{li2014hmdd} (MGCNSS~\cite{tian2024mgcnss}, NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}) & miRNA--disease & $495 \times 383$ & 5,430 & retrained, heuristics \\
+CKSNP-GNN~\cite{li2022cksnpgnn} & miRNA--disease & $901 \times 877$ & 16,427 & retrained, heuristics \\
+DiGAMN~\cite{liu2024digamn} & miRNA--disease & $917 \times 792$ & 14,550 & retrained, heuristics \\
+CoupleMDA~\cite{li2025couplemda} & miRNA--disease & $2{,}090 \times 1{,}754$ & 15,032 & retrained, heuristics \\
+MEAHNE~\cite{huang2022meahne} & miRNA--disease & $1{,}296 \times 11{,}783$ & 17,972 & retrained, heuristics \\
+\hline
+ogbl-ddi \cite{hu2020ogb} & drug--drug & 4,267 nodes & 1,334,889 edges & heuristics \\
+ogbl-ppa \cite{hu2020ogb} & protein--protein & 576,289 nodes & 30,326,273 edges & heuristics \\
+\hline
+\end{tabular}
+}
+\end{table}

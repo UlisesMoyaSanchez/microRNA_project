@@ -53,7 +53,7 @@ CoupleMDA) — `results/literature_survey.tsv` and `LITERATURE_SURVEY.md` update
 **MGCNSS, NIMGSA and HLGNN-MDA evaluate on the same matrix.** Their three `matrix.csv` files
 differ only in float formatting (`1,0,0` vs `1.000000000000000000e+00`), so their md5s differ,
 but the parsed tensors are `torch.equal` — 495 x 383, 5,430 associations, the canonical
-HMDD v3.2 benchmark. This was known at download time and is stated in
+HMDD v2.0-derived benchmark (per HLGNN-MDA and download_hmdd_survey_canonical5430.py; an earlier draft said v3.2). This was known at download time and is stated in
 `data/01_download/download_hmdd_survey_canonical5430.py` ("One fetch of the canonical matrix
 serves all three"); what was missing is that it never reached the manuscript, whose Table 3 and
 prose read as seven independent graphs.

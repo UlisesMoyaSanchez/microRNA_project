@@ -420,81 +420,30 @@ redundant.
 \section{Data and methods}
 \label{sec:methods}
 
-\subsection{Evaluation protocol}
-We use \emph{transductive edge leakage} for the specific condition audited here: a
-held-out edge left in the message-passing graph when its score is computed, so the
-encoder can, in effect, observe the edge it is later asked to predict -- narrower than
-the general transductive/inductive distinction in graph learning, which is not itself a
-source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out
-edge, and its automatically-added reverse relation, from the message-passing graph in
-both directions. This leak-free property is verified by an automated battery of checks
-before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same logic
-applies within the training set: a fraction of training edges are withheld from the
-encoder's own input and used only as supervision targets, so the model cannot read a
-training edge off the graph while being asked to predict it.
+\subsection{Datasets}
+\label{sec:data}
+The claims in this paper rest on eight distinct graphs in three groups
+(Table~\ref{tab:datasets}); \S\ref{sec:comparison_design} describes how each is used.
 
-For negative sampling we compare two regimes, uniform-random and degree-matched, and
-enforce the same sampler at training and evaluation time within any single reported
-number. Mixing the two produces the ``mismatch trap'': an apparent difficulty
-measurement that is in fact an artifact of the distribution mismatch
-(Figure~\ref{fig:neg_sampling_mechanism}). Table~\ref{tab:correct_protocol} summarizes
-both requirements, together with the model-free-baseline requirement described below,
-as a minimum reporting checklist.
+\input{tables/table_datasets.tex}
 
-We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
-typing, averaged over four random seeds where feasible. The six-row model grid is a
-single run per model, on one GPU, by a driver separate from the multi-GPU
-headline runs -- Results gives the effect-size argument for the single run and the
-comparability limit the driver difference imposes.
-
-\input{tables/table5_correct_protocol_checklist.tex}
-
-\subsection{Cross-graph and cross-paper comparison design}
-The protocol defined above is applied identically across three comparisons, so that
-whether the inflation is a property of the protocol rather than of any single graph or model
-can be measured rather than assumed. Our own graph, described below, is one case among
-these, not the case the comparisons are built around.
-
-First, we retrain this paper's architecture from scratch, under both protocol arms, on
-six graphs: our own, and five distinct association matrices recovered from among the
-papers surveyed in \S\ref{sec:related}. Three of the seven papers whose data we could
-obtain -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a byte-identical canonical HMDD
-matrix, so those seven papers span five distinct graphs. Each external matrix comes
-from the paper's own bundled repository, or a shared institutional mirror where none
+\paragraph{External miRNA--disease matrices.} Five distinct association matrices were
+recovered from among the papers surveyed in \S\ref{sec:related}. Three of the seven papers
+whose data we could obtain -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a byte-identical
+canonical HMDD matrix, so those seven papers span five distinct graphs. Each matrix comes
+from the paper's own bundled repository, or from a shared institutional mirror where none
 exists (CKSNP-GNN), and is verified against that paper's own reported node, edge and
-positive counts before use. Three further papers (GONNMDA, Orro and DGNMDA) were
-excluded because no usable data was recoverable (Discussion).
+positive counts before use. Three further papers (GONNMDA, Orro and DGNMDA) were excluded
+because no usable data was recoverable (Discussion).
 
-Second, for the same seven papers we apply the topological heuristics defined below,
-unmodified, directly to each paper's own association matrix under that paper's stated
-negative-sampling ratio, and read the result against the paper's own published number:
-a model-free floor measured independently of any protocol correction, on each paper's
-own data rather than on ours.
+\paragraph{Open Graph Benchmark.} ogbl-ddi (drug--drug interactions) and ogbl-ppa
+(protein--protein associations) \cite{hu2020ogb} are public link-prediction benchmarks with
+open leaderboards. We use them only as an external check on the model-free baselines.
 
-Third, the same heuristics are applied to two public link-prediction benchmarks with
-open leaderboards, ogbl-ddi and ogbl-ppa \cite{hu2020ogb}, both verified leak-free at
-runtime by the same check used throughout this paper (Figure~\ref{fig:edge_split}),
-giving an external check on the floor's behavior outside the literature this paper
-otherwise audits.
-
-Across all three comparisons, ten cases span eight distinct graphs. Results reports
-what each one finds.
-
-\subsection{Baselines}
-A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
-For link prediction we report four model-free topological heuristics -- gene
-in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
-computed purely from training-visible edge topology. For cell typing we report two
-no-learning or graph-free controls, nearest-centroid and logistic regression, both
-trained directly on the raw PCA features without any message passing. Against these
-controls we compare four trained models -- a heterogeneous graph transformer, a
-homogeneous GCN, a co-expression-ablation variant of the transformer, and a graph-free
-MLP -- plus an untrained random-weight control and a no-miRNA-input ablation that is
-link-prediction-incapable by construction and retained only as a smoke test.
-
-\subsection{Data and graph construction}
-Of the graphs compared above, this is the one we built ourselves and can instrument in full. We build a heterogeneous graph from a public single-cell RNA-seq cohort combined with
-miRDB v6.0 miRNA--target interactions. The graph has three node types -- miRNA, gene,
+\paragraph{Our graph.} The sixth retrained graph is the one we built ourselves. We build a heterogeneous graph from public multiple-sclerosis single-cell RNA-seq data
+(blood, brain and cerebrospinal fluid) queried from the CZ CELLxGENE Census
+\cite{czi2025cellxgene}, combined with miRDB v6.0 \cite{chen2020mirdb} miRNA--target
+interactions. The graph has three node types -- miRNA, gene,
 and cell -- connected by a miRNA-to-gene regulatory edge, a cell-to-gene expression
 edge, and a gene-to-gene co-expression edge, each with an automatically-added reverse
 relation for bidirectional message passing (Figure~\ref{fig:graph_schema}). The
@@ -539,6 +488,73 @@ an automatic reverse relation added for bidirectional message passing. Node feat
 construction described above.}
 \label{fig:graph_schema}
 \end{figure}
+
+\subsection{Evaluation protocol}
+We use \emph{transductive edge leakage} for the specific condition audited here: a
+held-out edge left in the message-passing graph when its score is computed, so the
+encoder can, in effect, observe the edge it is later asked to predict -- narrower than
+the general transductive/inductive distinction in graph learning, which is not itself a
+source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out
+edge, and its automatically-added reverse relation, from the message-passing graph in
+both directions. This leak-free property is verified by an automated battery of checks
+before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same logic
+applies within the training set: a fraction of training edges are withheld from the
+encoder's own input and used only as supervision targets, so the model cannot read a
+training edge off the graph while being asked to predict it.
+
+For negative sampling we compare two regimes, uniform-random and degree-matched, and
+enforce the same sampler at training and evaluation time within any single reported
+number. Mixing the two produces the ``mismatch trap'': an apparent difficulty
+measurement that is in fact an artifact of the distribution mismatch
+(Figure~\ref{fig:neg_sampling_mechanism}). Table~\ref{tab:correct_protocol} summarizes
+both requirements, together with the model-free-baseline requirement described below,
+as a minimum reporting checklist.
+
+We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
+typing, averaged over four random seeds where feasible. The six-row model grid is a
+single run per model, on one GPU, by a driver separate from the multi-GPU
+headline runs -- Results gives the effect-size argument for the single run and the
+comparability limit the driver difference imposes.
+
+\input{tables/table5_correct_protocol_checklist.tex}
+
+\subsection{Cross-graph and cross-paper comparison design}
+\label{sec:comparison_design}
+The protocol defined above is applied identically across three comparisons, so that
+whether the inflation is a property of the protocol rather than of any single graph or model
+can be measured rather than assumed. Our own graph (\S\ref{sec:data}) is one case among
+these, not the case the comparisons are built around.
+
+First, we retrain this paper's architecture from scratch, under both protocol arms, on
+six graphs: our own, and the five distinct association matrices described in
+\S\ref{sec:data}.
+
+Second, for the same seven papers we apply the topological heuristics defined below,
+unmodified, directly to each paper's own association matrix under that paper's stated
+negative-sampling ratio, and read the result against the paper's own published number:
+a model-free floor measured independently of any protocol correction, on each paper's
+own data rather than on ours.
+
+Third, the same heuristics are applied to two public link-prediction benchmarks with
+open leaderboards, ogbl-ddi and ogbl-ppa \cite{hu2020ogb}, both verified leak-free at
+runtime by the same check used throughout this paper (Figure~\ref{fig:edge_split}),
+giving an external check on the floor's behavior outside the literature this paper
+otherwise audits.
+
+Across all three comparisons, ten cases span eight distinct graphs. Results reports
+what each one finds.
+
+\subsection{Baselines}
+A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
+For link prediction we report four model-free topological heuristics -- gene
+in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
+computed purely from training-visible edge topology. For cell typing we report two
+no-learning or graph-free controls, nearest-centroid and logistic regression, both
+trained directly on the raw PCA features without any message passing. Against these
+controls we compare four trained models -- a heterogeneous graph transformer, a
+homogeneous GCN, a co-expression-ablation variant of the transformer, and a graph-free
+MLP -- plus an untrained random-weight control and a no-miRNA-input ablation that is
+link-prediction-incapable by construction and retained only as a smoke test.
 
 \subsection{Literature survey protocol}
 The literature survey referenced throughout this paper covers 21 papers, each read in
@@ -1111,9 +1127,11 @@ relationships that could have appeared to influence the work reported in this pa
 
 \section*{Data availability}
 Code: this repository. The reporting-standard checker is in \texttt{protocheck/}, with a Colab notebook at \texttt{notebooks/protocheck\_colab.ipynb}. Large data/checkpoints are intentionally untracked -- the public
-source (cellxgene accession, miRDB version) and the exact build scripts are documented
-so the graph is reconstructible, rather than distributing large binaries in-repo.
-[STAGE: finalize exact accession numbers / DOIs / repository URL before submission.]
+source (a CZ CELLxGENE Census query, retrieved 2026-05-28 with the release not pinned; the
+download log reports the stable release as 2025-11-08; and miRDB v6.0) and the exact build
+scripts are documented so the graph is reconstructible, rather than distributing large
+binaries in-repo.
+[STAGE: pin the Census release and finalize the repository URL / DOI before submission.]
 
 \section*{Funding}
 [STAGE / TODO -- fill in funding source(s), or ``Not applicable'' if none.]
