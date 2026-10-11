@@ -124,7 +124,7 @@ tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
 graphs (ours and five from surveyed papers) collapses the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free scorers (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across six models, and an untrained control does not move.
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free scorers (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
 any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, a tool that checks it.
@@ -170,7 +170,7 @@ any one model or dataset. We propose a minimum reporting standard (a leak-free e
 \item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
 \item On seven papers' own data, trained models beat a model-free floor by 4.7 points.
-\item On our graph, six models inflate by 0.24--0.31; an untrained control does not move.
+\item On our graph, four trained models inflate by 0.24--0.31; an untrained control does not move.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
@@ -299,8 +299,8 @@ relative weight depends on the graph, and shows that candidate columns which can
 positive raise the model-free floor on their own.
 \item It measures the model-free floor on other papers' own data: seven surveyed papers and
 two Open Graph Benchmark (OGB) datasets.
-\item On the one graph we can instrument in full (ours), it shows the effect follows the
-protocol and not the model. It recurs across six architectures, an untrained control does
+\item On a proposed graph, it shows the effect follows the
+protocol and not the model. It recurs across four trained models, an untrained control does
 not move, and a cell-typing task survives the same audit.
 \item It proposes a minimum reporting standard with three requirements (a leak-free edge
 split, matched negative sampling, and a model-free baseline with its margin stated;
@@ -453,8 +453,8 @@ both requirements, together with the model-free-baseline requirement described b
 as a minimum reporting checklist.
 
 We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
-typing, averaged over four random seeds where feasible. The six-architecture grid is a
-single run per architecture, on one GPU, by a driver separate from the multi-GPU
+typing, averaged over four random seeds where feasible. The six-row model grid is a
+single run per model, on one GPU, by a driver separate from the multi-GPU
 headline runs -- Results gives the effect-size argument for the single run and the
 comparability limit the driver difference imposes.
 
@@ -498,9 +498,9 @@ in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
 computed purely from training-visible edge topology. For cell typing we report two
 no-learning or graph-free controls, nearest-centroid and logistic regression, both
 trained directly on the raw PCA features without any message passing. Against these
-controls we compare six trained architectures: a heterogeneous graph transformer, a
-homogeneous GCN, a co-expression-ablation variant of the transformer, a graph-free MLP,
-an untrained random-weight control, and a no-miRNA-input ablation that is
+controls we compare four trained models -- a heterogeneous graph transformer, a
+homogeneous GCN, a co-expression-ablation variant of the transformer, and a graph-free
+MLP -- plus an untrained random-weight control and a no-miRNA-input ablation that is
 link-prediction-incapable by construction and retained only as a smoke test.
 
 \subsection{Data and graph construction}
@@ -643,8 +643,8 @@ control, so \S\ref{sec:mechanism} uses it to ask why the collapse happens. The e
 each graph (mean over 4 seeds), under the conventional protocol (edges seen + uniform
 negatives) and the corrected one (edges held out + degree-matched negatives). Rows sorted by inflation. Our own graph in bold. The shaded band marks the 0.618--0.641 interval every
 graph falls into once the protocol is corrected. Deliberately the same visual form as
-Figure~\ref{fig:architecture_inflation}, which shows the same collapse across six
-architectures on one graph.}
+Figure~\ref{fig:architecture_inflation}, which shows the same collapse across four
+trained models on one graph.}
 \label{fig:cross_graph_collapse}
 \end{figure}
 
@@ -868,13 +868,13 @@ trained model toward the gene-degree heuristic's floor. The untrained control do
 \input{tables/table2_model_free_baselines.tex}
 
 Nor is the inflation a property of any single model. Extending the protocol grid across
-six independently trained architectures -- the heterogeneous graph transformer, a
-homogeneous GCN, a co-expression ablation, a graph-free MLP, an untrained random-weight
-control, and a no-miRNA-input ablation retained as a smoke test -- every trained
-architecture inflates by 0.24--0.31 AUROC points between the two protocols, the
+four independently trained models -- the heterogeneous graph transformer, a
+homogeneous GCN, a co-expression ablation, and a graph-free MLP -- plus an untrained
+random-weight control and a no-miRNA-input ablation retained as a smoke test, every
+trained model inflates by 0.24--0.31 AUROC points between the two protocols, the
 graph-free MLP included, while the untrained control does not move ($-0.004$)
 (Figure~\ref{fig:architecture_inflation}, Table~\ref{tab:architecture_grid}). Each
-architecture is a single training run rather than a seed average, and the inflation is an
+model is a single training run rather than a seed average, and the inflation is an
 order of magnitude larger than the seed spread measured elsewhere here (0.005--0.02), so
 the pattern does not depend on averaging away noise. A second caveat governs how the grid
 may be read. Every row of it is trained by the same driver on a single GPU, which is what
@@ -893,9 +893,9 @@ that ordering survives the headline training regime is untested.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
-\caption{Inflation between the conventional and corrected protocols, across five
-architectures plus an untrained control. Single seed (42). The inflation magnitude
-(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). All six rows are
+\caption{Inflation between the conventional and corrected protocols, across four
+trained models plus an untrained control. Single seed (42). The inflation magnitude
+(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). All rows are
 trained on one GPU by the same driver, so they are comparable with one another but not
 with Table~\ref{tab:headline_grid} -- see the text. Full numeric
 grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}.}
@@ -949,9 +949,9 @@ prior treatment we are aware of studies transductive edge leakage or popularity-
 sampling in isolation. Table~\ref{tab:headline_grid} and Figure~\ref{fig:protocol_grid} show they are
 super-additive on this graph -- correcting either alone leaves the number substantially
 inflated, and the cross-architecture grid (Table~\ref{tab:architecture_grid},
-Figure~\ref{fig:architecture_inflation}) shows the same compounding recurs across six
-independently-trained architectures, including a graph-free MLP, with the untrained
-control the only one that does not move. We propose calling this \emph{compounded
+Figure~\ref{fig:architecture_inflation}) shows the same compounding recurs across four
+independently trained models, including a graph-free MLP, with the untrained
+control the only comparator that does not move. We propose calling this \emph{compounded
 evaluation inflation} to distinguish it from either failure mode reported alone: the
 practical implication is that auditing a paper for transductive edge leakage \emph{or} for
 popularity-biased negative sampling, but not both, can still miss a substantially
@@ -1006,8 +1006,8 @@ local heuristics on sparse graphs and which the trained model's multi-hop,
 multi-relation message passing more closely resembles. The 3.6-point gap between the
 best local heuristic and the trained model should therefore be read as an upper bound
 on how much the model exceeds a model-free topological floor, not a tight one. Fourth,
-the six trained architectures compared here (Table~\ref{tab:architecture_grid}) are all
-either generic message-passing networks (the project HGT, a homogeneous GCN) or a
+the four trained models compared here (Table~\ref{tab:architecture_grid}) are all
+either generic message-passing networks (the project HGT and its ablation, a homogeneous GCN) or a
 graph-free MLP. None explicitly encodes pairwise structural signal -- shared neighbors,
 enclosing-subgraph structure, or path distance -- the way link-prediction-specific
 architectures such as SEAL \cite{zhang2018seal}, NBFNet \cite{zhu2021nbfnet}, Neo-GNN
@@ -1101,7 +1101,7 @@ data with ours, so the inflation is not a property of any one dataset. How much 
 convention contributes depends on the graph: negative sampling carries most of the loss on
 the five surveyed graphs, while on ours the two compound. Candidate columns that can never
 be positive raise the model-free floor on their own. Against seven surveyed papers' own numbers, trained models beat that floor by 4.7 points per paper on average, and the heuristic wins outright on the sparsest graph. On the graph we can instrument in full, the inflation recurs across
-six independently trained architectures while an untrained control does not move, and a
+four independently trained models while an untrained control does not move, and a
 structurally similar cell-typing control task survives the same audit by a wide margin.
 The effect therefore follows the evaluation protocol, not the model, and the audit is
 discriminating rather than indiscriminate.
