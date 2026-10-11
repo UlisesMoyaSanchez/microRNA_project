@@ -422,39 +422,33 @@ redundant.
 
 \subsection{Datasets}
 \label{sec:data}
-The claims in this paper rest on eight distinct graphs in three groups
-(Table~\ref{tab:datasets}); \S\ref{sec:comparison_design} describes how each is used.
+The claims in this paper rest on eight distinct graphs (Table~\ref{tab:datasets}).
+The OGB counts are nodes and edges rather than matrix dimensions and positives, so those
+columns are not comparable across groups. ``Retrained'' means our architecture is trained
+under both protocol arms and ``heuristics'' that the model-free baselines are applied;
+\S\ref{sec:comparison_design} describes how each graph is used.
 
 \input{tables/table_datasets.tex}
 
-\paragraph{External miRNA--disease matrices.} Five distinct association matrices were
-recovered from among the papers surveyed in \S\ref{sec:related}. Three of the seven papers
-whose data we could obtain -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a byte-identical
-canonical HMDD matrix, so those seven papers span five distinct graphs. Each matrix comes
-from the paper's own bundled repository, or from a shared institutional mirror where none
-exists (CKSNP-GNN), and is verified against that paper's own reported node, edge and
-positive counts before use. Three further papers (GONNMDA, Orro and DGNMDA) were excluded
-because no usable data was recoverable (Discussion).
+\paragraph{External matrices and OGB.} The five miRNA--disease matrices were recovered
+from the papers surveyed in \S\ref{sec:related}; three of the seven papers whose data we
+could obtain (MGCNSS, NIMGSA and HLGNN-MDA) share a byte-identical HMDD matrix. Each comes
+from the paper's own repository, or a shared mirror for CKSNP-GNN, and was verified against
+that paper's reported counts. Three further papers were excluded because no usable data was
+recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
+open leaderboards, used only as an external check on the model-free baselines.
 
-\paragraph{Open Graph Benchmark.} ogbl-ddi (drug--drug interactions) and ogbl-ppa
-(protein--protein associations) \cite{hu2020ogb} are public link-prediction benchmarks with
-open leaderboards. We use them only as an external check on the model-free baselines.
-
-\paragraph{Our graph.} The sixth retrained graph is the one we built ourselves. We build a heterogeneous graph from public multiple-sclerosis single-cell RNA-seq data
-(blood, brain and cerebrospinal fluid) queried from the CZ CELLxGENE Census
-(release 2025-11-08) \cite{czi2025cellxgene}, combined with miRDB v6.0 \cite{chen2020mirdb} miRNA--target
-interactions. The graph has three node types -- miRNA, gene,
-and cell -- connected by a miRNA-to-gene regulatory edge, a cell-to-gene expression
-edge, and a gene-to-gene co-expression edge, each with an automatically-added reverse
-relation for bidirectional message passing (Figure~\ref{fig:graph_schema}). The
-disease/cohort label attached to each cell (case vs.\ control) is retained purely as
-data provenance: it never enters the graph structure, the model input, the training
-objective, or any scoring head, so nothing in this paper's predictions can depend on
-it. During preparation of this study we identified and fixed two bugs in the
-graph-construction pipeline, in co-expression gene selection and in the cell-to-gene
-expression threshold. Every headline number reported here was re-measured on the
-corrected graph, independently verified, and shown to replicate the pre-fix figures
-within one standard deviation.
+\paragraph{Our graph.} We build a heterogeneous graph from public multiple-sclerosis
+single-cell RNA-seq data (blood, brain and cerebrospinal fluid) queried from the CZ
+CELLxGENE Census (release 2025-11-08) \cite{czi2025cellxgene}, combined with miRDB v6.0
+\cite{chen2020mirdb} miRNA--target interactions. It has three node types -- miRNA, gene
+and cell -- joined by regulatory, expression and co-expression edges, each with a reverse
+relation (Figure~\ref{fig:graph_schema}); Table~\ref{tab:datasets} counts miRNAs
+$\times$ genes, with the miRNA$\to$gene edges as positives. The disease label attached to each cell is kept
+only as provenance and never enters the graph, the model input, the objective or any
+scoring head. We fixed two bugs in the graph-construction pipeline (co-expression gene
+selection and the cell-to-gene expression threshold) and re-measured every headline number
+on the corrected graph; all replicate the pre-fix figures within one standard deviation.
 
 \begin{figure}[h!]
 \centering
