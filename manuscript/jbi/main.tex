@@ -475,9 +475,8 @@ We use \emph{transductive edge leakage} for the specific condition audited here:
 held-out edge left in the message-passing graph when its score is computed, so the
 encoder can, in effect, observe the edge it is later asked to predict -- narrower than
 the general transductive/inductive distinction in graph learning, which is not itself a
-source of leakage. We split edges with \texttt{RandomLinkSplit} and strip each held-out
-edge, and its automatically-added reverse relation, from the message-passing graph in
-both directions. This leak-free property is verified by an automated battery of checks
+source of leakage. We split the edges at random and strip each held-out edge, and its
+automatically-added reverse relation, from the message-passing graph in both directions. This leak-free property is verified by an automated battery of checks
 before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same logic
 applies within the training set: a fraction of training edges are withheld from the
 encoder's own input and used only as supervision targets, so the model cannot read a
@@ -487,9 +486,11 @@ For negative sampling we compare two regimes, uniform-random and degree-matched,
 enforce the same sampler at training and evaluation time within any single reported
 number. Mixing the two produces the ``mismatch trap'': an apparent difficulty
 measurement that is in fact an artifact of the distribution mismatch
-(Figure~\ref{fig:neg_sampling_mechanism}). Table~\ref{tab:correct_protocol} summarizes
-both requirements, together with the model-free-baseline requirement described below,
-as a minimum reporting checklist.
+(Figure~\ref{fig:neg_sampling_mechanism}). The third requirement concerns reporting
+rather than the protocol itself: a model-free baseline, whose margin over the trained
+model is stated alongside the headline number (\S\ref{sec:baselines}).
+Table~\ref{tab:correct_protocol} summarizes the three requirements as a minimum reporting
+checklist.
 
 We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
 typing, averaged over four random seeds where feasible. The six-row model grid is a
@@ -526,6 +527,7 @@ Across all three comparisons, ten cases span eight distinct graphs. Results repo
 what each one finds.
 
 \subsection{Baselines}
+\label{sec:baselines}
 A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
 For link prediction we report four model-free topological heuristics -- gene
 in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
