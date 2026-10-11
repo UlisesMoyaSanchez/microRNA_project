@@ -12,7 +12,7 @@ E1 & Does the inflation occur on other graphs? & The six graphs & Our architectu
 E2 & How much does each failure contribute without a trained model? & The six graphs & The four model-free heuristics across the full grid & \S\ref{sec:collapse_general} \\
 E3 & How far above a model-free floor are published numbers? & The five external matrices, i.e.\ the seven surveyed papers (MGCNSS, NIMGSA, HLGNN-MDA, CKSNP-GNN, DiGAMN, CoupleMDA, MEAHNE) & The heuristics, unmodified, under each paper's negative ratio, read against its published number & \S\ref{sec:generalization} \\
 E4 & Does the floor behave the same outside this literature? & ogbl-ddi, ogbl-ppa & The same heuristics after a runtime leak-free check, read against the public leaderboards & \S\ref{sec:generalization} \\
-E5 & What separates the graphs? & The five external matrices (thinning); the canonical HMDD matrix (padding) & Positives thinned from 100\% to 10\% (five seeds per point); empty candidate columns added; model-free floor measured & \S\ref{sec:dead_columns} \\
+E5 & Why is the floor high on some graphs? & The five external matrices (thinning); the canonical HMDD matrix (padding) & Positives thinned from 100\% to 10\% (five seeds per point); empty candidate columns added; model-free floor measured & \S\ref{sec:dead_columns} \\
 E6 & Does the inflation follow the protocol or the model? & Our graph (CZ CELLxGENE Census scRNA-seq with miRDB v6.0) & The transformer over the full grid (four seeds); four trained models and an untrained control over the grid (one run each) & \S\ref{sec:mechanism} \\
 E7 & Does the audit deflate a task that is not leaky? & Our graph, cell-type labels of its cells & The trained model against two graph-free controls & \S\ref{sec:celltype} \\
 \hline

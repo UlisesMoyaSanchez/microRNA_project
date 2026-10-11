@@ -642,42 +642,26 @@ essentially tied with the entry just above it, BUDDY \cite{chamberlain2023buddy}
 
 \input{tables/table5_hmdd_survey_audit.tex}
 
-\subsection{Empty candidate columns (E5)}
+\subsection{Why the floor is high on some graphs: empty columns (E5)}
 \label{sec:dead_columns}
-The two papers where the trained model adds the least are also the two sparsest graphs
-audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes, and CoupleMDA:
-$\sim$15{,}000 edges over 2{,}090 $\times$ 1{,}754 nodes). Sparsity itself, however, is
-not the mechanism. Subsampling positives from each graph in turn (100\% down to 10\%
-retention, five seeds per point) moves the model-free floor in the \emph{opposite}
-direction: it falls monotonically as the graph is thinned, on all five graphs
-(Spearman $\rho = +0.60$ to $+1.00$ against density), and the degree-matched control
-falls with it, so thinning simply makes every degree estimate noisier.
+In a miRNA--disease matrix the columns are the diseases a miRNA can be paired with, and a
+column is \emph{empty} when no association is known for it, so it can never be a positive.
+Under uniform negatives such columns supply negatives that any scorer aware of degree
+rejects for free. MEAHNE has 11{,}783 disease columns, 92.4\% of them empty, and CoupleMDA
+55.7\%, while the other three external graphs have none (Table~\ref{tab:protocol_grid}).
 
 \input{tables/table6_protocol_grid.tex}
 
-What separates these graphs appears instead to be how much of their candidate space can
-never be positive. MEAHNE's matrix carries 11{,}783 disease columns of which 92.4\% have
-degree zero, and CoupleMDA's 55.7\%, while the other three graphs have none. Across
-graphs this is only suggestive and we do not rest the claim on it: with six graphs no
-descriptive statistic separates them significantly (dead-column fraction $\rho = +0.70$,
-$p = 0.12$, and column-degree Gini $\rho = +0.77$, $p = 0.07$), and our own graph is a
-counterexample to the simplest version of the story, carrying 47.5\% dead columns yet a
-floor indistinguishable from the graphs with none. The evidence is instead a direct
-manipulation. Padding the
-canonical HMDD matrix, which has no dead columns, with empty ones, adding no edges,
-no features, nothing but candidate slots that can never be positive, raises its
-model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$. At 92.9\% dead columns,
-MEAHNE's own level, it reaches $0.979$, reproducing MEAHNE's outlying $0.9848$ from a
-graph sharing none of its data. An AUROC reported under uniform negatives is therefore
-partly a measure of how a dataset padded its candidate space, and a padded dataset
-hands that inflation to a trained model and to a one-line heuristic alike. We do not
-conclude that these five other trained models learned nothing: five of seven still
-clearly separate from the topology floor.
-
-Across all nine external cases, the claim is narrower than "the field's models learn
-nothing" and already sufficient: \emph{the popularity floor this literature never
-checks for is frequently high enough to matter, and on some of its own graphs,
-decisive.}
+Sparsity is not the explanation: thinning the positives of each graph lowers the
+model-free floor on all five external graphs (Spearman $\rho = +0.60$ to $+1.00$ against
+density) instead of raising it. Across the six graphs no descriptive statistic separates
+them significantly (empty-column fraction $\rho = +0.70$, $p = 0.12$; column-degree Gini
+$\rho = +0.77$, $p = 0.07$), and our own graph is a counterexample, with 47.5\% empty columns
+and a floor indistinguishable from the graphs with none. The direct evidence is a
+manipulation. Adding empty columns to the canonical HMDD matrix, which has none, and nothing
+else, raises its model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$. At 92.9\%
+empty columns, MEAHNE's own level, it reaches $0.979$, reproducing MEAHNE's outlying $0.9848$
+from a graph that shares none of its data.
 
 \subsection{Sources of the inflation on our graph (E6)}
 \label{sec:mechanism}
