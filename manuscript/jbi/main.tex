@@ -169,7 +169,7 @@ any one model or dataset. We propose a minimum reporting standard (a leak-free e
 \begin{highlights}
 \item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
-\item On seven papers' own data, trained models beat a no-learning floor by 4.7 points.
+\item On seven papers' own data, trained models beat a model-free floor by 4.7 points.
 \item On our graph, six models inflate by 0.24--0.31; an untrained control does not move.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
@@ -269,7 +269,7 @@ li2025couplemda,zeng2025gonnmda,liu2024digamn,lu2024dgnmda,yu2022hlgnnmda,
 huang2022meahne,li2022cksnpgnn,liang2023hmcda,wang2026higldp,xiong2025gpsdti,
 zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A literature
 audit of 21 papers in this space found three gaps behind those numbers. First, 14 report no
-model-free baseline (a simple, no-learning scorer such as node degree, used as a
+model-free baseline (a simple scorer with no trained parameters, such as node degree, used as a
 sanity-check floor). Second, 17 draw their negatives from unlabeled pairs without
 discussion. Third, for 11 of the 19 papers where the question applies (the other two never
 propagate over an interaction graph), it is unclear whether held-out edges are removed from
@@ -286,8 +286,8 @@ This paper asks whether these high numbers are inflated by the evaluation protoc
 than reflecting any one model or dataset. The survey of 21 papers shows what they leave
 unreported. We then measure what that costs. We retrain one architecture under both
 protocols on six graphs (our own, which we built, and five taken from the surveyed
-papers), separate the two failure modes on each with no-learning scorers, and compare nine
-further cases against a no-learning floor: two public link-prediction benchmarks, and seven
+papers), separate the two failure modes on each with model-free scorers, and compare nine
+further cases against a model-free floor: two public link-prediction benchmarks, and seven
 of the surveyed papers, evaluated on their own datasets. Our own graph is one of the six.
 Because we built it, it is also the one on which we can dissect the mechanism in full.
 This paper makes five contributions.
@@ -296,8 +296,8 @@ This paper makes five contributions.
 0.26--0.37 on every one of them, and the corrected protocol leaves all six at 0.62--0.64.
 \item It explains where the cost comes from. It separates the two failure modes, whose
 relative weight depends on the graph, and shows that candidate columns which can never be
-positive raise the no-learning floor on their own.
-\item It measures the no-learning floor on other papers' own data: seven surveyed papers and
+positive raise the model-free floor on their own.
+\item It measures the model-free floor on other papers' own data: seven surveyed papers and
 two OGB benchmarks.
 \item On the one graph we can instrument in full (ours), it shows the effect follows the
 protocol and not the model. It recurs across six architectures, an untrained control does
@@ -479,7 +479,7 @@ excluded because no usable data was recoverable (Discussion).
 Second, for the same seven papers we apply the topological heuristics defined below,
 unmodified, directly to each paper's own association matrix under that paper's stated
 negative-sampling ratio, and read the result against the paper's own published number:
-a no-learning floor measured independently of any protocol correction, on each paper's
+a model-free floor measured independently of any protocol correction, on each paper's
 own data rather than on ours.
 
 Third, the same heuristics are applied to two public link-prediction benchmarks with
@@ -493,7 +493,7 @@ what each one finds.
 
 \subsection{Baselines}
 A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
-For link prediction we report four no-learning topological heuristics -- gene
+For link prediction we report four model-free topological heuristics -- gene
 in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
 computed purely from training-visible edge topology. For cell typing we report two
 no-learning or graph-free controls, nearest-centroid and logistic regression, both
@@ -685,11 +685,11 @@ correlation in \S\ref{sec:dead_columns}. It does not affect the figures themselv
 checkpoint reported here is selected at peak validation AUROC, before that divergence
 begins.
 
-\subsection{Each paper's own reported number against a no-learning floor}
+\subsection{Each paper's own reported number against a model-free floor}
 \label{sec:generalization}
 The collapse in \S\ref{sec:collapse_general} is measured with our architecture on other
 people's graphs. A separate question is how each paper's \emph{own} reported number stands
-against a no-learning floor. The literature survey (Section~\ref{sec:related}) raises that
+against a model-free floor. The literature survey (Section~\ref{sec:related}) raises that
 question without settling it: most surveyed papers report no model-free control at all, and
 the six that do report one never read it as a floor, so the survey establishes the reporting
 practice but not what such a control is worth on these graphs.
@@ -958,7 +958,7 @@ popularity-biased negative sampling, but not both, can still miss a substantiall
 inflated headline number. The model-free baseline plays a different role: it is not a
 third source of inflation and does not enter the super-additive interaction, but it is
 what makes either one visible, since a headline number within a few points of a
-no-learning floor (Tables~\ref{tab:model_free_baselines} and~\ref{tab:floor_convergence})
+model-free floor (Tables~\ref{tab:model_free_baselines} and~\ref{tab:floor_convergence})
 is hard to read as evidence of learning.
 
 Neither result above is confined to our own graph. The compounded inflation itself
@@ -1005,7 +1005,7 @@ heuristics such as the Katz index or rooted PageRank, which are known to outperf
 local heuristics on sparse graphs and which the trained model's multi-hop,
 multi-relation message passing more closely resembles. The 3.6-point gap between the
 best local heuristic and the trained model should therefore be read as an upper bound
-on how much the model exceeds a no-learning topological floor, not a tight one. Fourth,
+on how much the model exceeds a model-free topological floor, not a tight one. Fourth,
 the six trained architectures compared here (Table~\ref{tab:architecture_grid}) are all
 either generic message-passing networks (the project HGT, a homogeneous GCN) or a
 graph-free MLP. None explicitly encodes pairwise structural signal -- shared neighbors,
@@ -1100,7 +1100,7 @@ on each. Five of those graphs are other groups' published association matrices, 
 data with ours, so the inflation is not a property of any one dataset. How much each
 convention contributes depends on the graph: negative sampling carries most of the loss on
 the five surveyed graphs, while on ours the two compound. Candidate columns that can never
-be positive raise the no-learning floor on their own. Against seven surveyed papers' own numbers, trained models beat that floor by 4.7 points per paper on average, and the heuristic wins outright on the sparsest graph. On the graph we can instrument in full, the inflation recurs across
+be positive raise the model-free floor on their own. Against seven surveyed papers' own numbers, trained models beat that floor by 4.7 points per paper on average, and the heuristic wins outright on the sparsest graph. On the graph we can instrument in full, the inflation recurs across
 six independently trained architectures while an untrained control does not move, and a
 structurally similar cell-typing control task survives the same audit by a wide margin.
 The effect therefore follows the evaluation protocol, not the model, and the audit is
