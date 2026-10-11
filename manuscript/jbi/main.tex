@@ -471,26 +471,38 @@ on the corrected graph; all replicate the pre-fix figures within one standard de
 \end{figure}
 
 \subsection{Evaluation protocol}
+We evaluate every model under two protocols. The \emph{conventional} protocol keeps all
+edges in the message-passing graph (``edges seen'') and draws negatives uniformly at
+random. The \emph{corrected} protocol holds test edges out of the message-passing graph and
+draws degree-matched negatives. Crossing the two choices gives a $2\times2$ grid of edge
+split by negative sampler, which lets us attribute the inflation to each failure
+separately (\S\ref{sec:mechanism}).
+
 We use \emph{transductive edge leakage} for the specific condition audited here: a
 held-out edge left in the message-passing graph when its score is computed, so the
 encoder can, in effect, observe the edge it is later asked to predict -- narrower than
 the general transductive/inductive distinction in graph learning, which is not itself a
-source of leakage. We split the edges at random and strip each held-out edge, and its
-automatically-added reverse relation, from the message-passing graph in both directions. This leak-free property is verified by an automated battery of checks
-before any downstream number is trusted (Figure~\ref{fig:edge_split}). The same logic
-applies within the training set: a fraction of training edges are withheld from the
-encoder's own input and used only as supervision targets, so the model cannot read a
-training edge off the graph while being asked to predict it.
+source of leakage. In the corrected protocol, 10\% of the miRNA$\to$gene edges are held
+out for validation and 10\% for testing at random, and each held-out edge, with its
+automatically-added reverse relation, is removed from the message-passing graph in both
+directions. An automated battery of checks verifies this before any downstream number is
+trusted (Figure~\ref{fig:edge_split}). The same logic applies within the training set: 30\%
+of the training edges are withheld from the encoder's input and used only as supervision
+targets, so the model cannot read a training edge off the graph while being asked to
+predict it.
 
-For negative sampling we compare two regimes, uniform-random and degree-matched, and
-enforce the same sampler at training and evaluation time within any single reported
-number. Mixing the two produces the ``mismatch trap'': an apparent difficulty
-measurement that is in fact an artifact of the distribution mismatch
-(Figure~\ref{fig:neg_sampling_mechanism}). The third requirement concerns reporting
-rather than the protocol itself: a model-free baseline, whose margin over the trained
-model is stated alongside the headline number (\S\ref{sec:baselines}).
-Table~\ref{tab:correct_protocol} summarizes the three requirements as a minimum reporting
-checklist.
+A uniform negative pairs a positive miRNA with a gene drawn uniformly at random. A
+degree-matched negative pairs it instead with a non-target gene of similar popularity:
+genes are placed in eight log-spaced bins of in-degree, computed from training edges only,
+and each positive $(m,g)$ receives a negative $(m,g')$ with $g'$ in the same bin as $g$.
+When no valid candidate is found in 16 draws the sampler falls back to any non-target of
+$m$, and the fraction of fallbacks is logged. Within any single reported number the same
+sampler is used at training and at evaluation; mixing the two produces the ``mismatch
+trap'', an apparent difficulty measurement that is in fact an artifact of the distribution
+mismatch (Figure~\ref{fig:neg_sampling_mechanism}). The third requirement of the standard we
+propose concerns reporting rather than the protocol itself: a model-free baseline, whose
+margin over the trained model is stated alongside the headline number
+(\S\ref{sec:baselines}).
 
 We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
 typing, averaged over four random seeds where feasible. The six-row model grid is a
@@ -498,7 +510,10 @@ single run per model, on one GPU, by a driver separate from the multi-GPU
 headline runs -- Results gives the effect-size argument for the single run and the
 comparability limit the driver difference imposes.
 
-\input{tables/table5_correct_protocol_checklist.tex}
+%% PENDING (user, 2026-10-10): the minimum-reporting checklist (tab:correct_protocol) was
+%% moved out of this subsection to the Discussion, next to where the standard is proposed;
+%% not yet convinced it belongs there either. Decide: keep in Discussion, merge with the
+%% precedents table, or drop.
 
 \subsection{Cross-graph and cross-paper comparison design}
 \label{sec:comparison_design}
@@ -1077,6 +1092,8 @@ results. The check costs nothing to run and, like a model-free baseline, is most
 exactly where it is least likely to be run.
 
 Given how directly the inflation problem responds to a small set of checks, we propose these as a minimum reporting standard for evaluation methodology in this subfield. First, a leak-free edge split, with an automated check that held-out edges are unreachable to the encoder during message passing. Second, matched negative sampling: negative-sampling distributions that are matched between training and evaluation rather than assumed compatible. Third, at least one model-free baseline reported alongside any trained model, \emph{and the margin over it stated}. Six of the surveyed papers report such a comparator and none reads its own margin. Table~\ref{tab:correct_protocol} summarizes the three requirements as a checklist.
+
+\input{tables/table5_correct_protocol_checklist.tex}
 
 We release \texttt{protocheck} so that this checklist can be run rather than only read. It takes the train and held-out pairs of a link-prediction experiment and reports on each requirement. It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. A check whose input the user did not supply is reported as unchecked, never as passed. The tool inspects only the pairs it is given. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs.
 

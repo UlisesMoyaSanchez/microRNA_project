@@ -62,7 +62,17 @@ GPU, no en el driver de 1 GPU de la Tabla S1; y la afirmación GCN > HGT, que es
 de 0.016 dentro del spread) está en `manuscript/jbi/pending/ddp_confound_fix.patch`, **sin
 aplicar**. Reaplicar con `git apply manuscript/jbi/pending/ddp_confound_fix.patch`.
 
-**Pendiente.** Tabla 7 como anomalía abierta; decidir el parche de DDP; fijar URL/DOI del
+**3.2 reescrita y la checklist movida (pendiente de decidir).** 3.2 describía el protocolo como
+buenas prácticas, sin los dos brazos (convencional = aristas vistas + negativos uniformes;
+corregido = aristas retenidas + negativos pareados por grado), sin la rejilla 2x2 y sin el
+pareo (8 bins log de in-degree sobre aristas de entrenamiento, hasta 16 intentos, fallback a
+cualquier no-objetivo; val/test 10%/10%, 30% de las aristas de entrenamiento solo como
+supervisión). Ahora lo dice. La Tabla 4 (checklist del estándar mínimo) duplicaba esa prosa y
+la Tabla 1, así que se movió a la Discusión, junto a donde se propone el estándar; el autor no
+está convencido de que deba estar ahí tampoco: hay un comentario `%% PENDING` en `main.tex`.
+Opciones: dejarla en Discusión, fusionarla con la Tabla 1 (precedentes) o quitarla.
+
+**Pendiente.** Decidir dónde va la checklist (Tabla 4); Tabla 7 como anomalía abierta; decidir el parche de DDP; fijar URL/DOI del
 repositorio en Data availability.
 
 ---
