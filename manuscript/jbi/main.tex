@@ -120,7 +120,7 @@ graphs: two Open Graph Benchmark (OGB) datasets, seven survey-paper datasets, an
 our own graph (public single-cell RNA-seq data with miRDB v6.0 interactions). On our
 own graph only, five further models -- a homogeneous Graph Convolutional Network
 (GCN), two ablations, a graph-free Multi-Layer Perceptron (MLP), and an untrained
-control -- and an unrelated cell-typing task with two no-graph controls were
+control -- and an unrelated cell-typing task with two graph-free controls were
 tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
@@ -569,11 +569,15 @@ link-prediction-incapable by construction and retained only as a smoke test.
 
 \section{Results}
 \label{sec:results}
+Table~\ref{tab:results_summary} gives the main result of each of the seven experiments; the
+subsections below follow the same order.
 
-\subsection{The protocol collapse is a property of the protocol, not of our graph}
+\input{tables/table_results_summary.tex}
+
+\subsection{The protocol collapse is a property of the protocol, not of our graph (E1, E2)}
 \label{sec:collapse_general}
-The central measurement of this paper -- what a conventional evaluation protocol costs a
-trained model -- can be made on any graph whose association matrix can be obtained, and we
+The central measurement of this paper -- how much a conventional evaluation protocol
+inflates a trained model's AUROC -- can be made on any graph whose association matrix can be obtained, and we
 make it on six. Training this paper's architecture from scratch on each of the five
 distinct graphs behind the seven surveyed papers, under a protocol we control rather than
 each paper's own, reproduces the same collapse every time
@@ -639,7 +643,7 @@ correlation in \S\ref{sec:dead_columns}. It does not affect the figures themselv
 checkpoint reported here is selected at peak validation AUROC, before that divergence
 begins.
 
-\subsection{Each paper's own reported number against a model-free floor}
+\subsection{Each paper's own reported number against a model-free floor (E3, E4)}
 \label{sec:generalization}
 The collapse in \S\ref{sec:collapse_general} is measured with our architecture on other
 people's graphs. A separate question is how each paper's \emph{own} reported number stands
@@ -650,15 +654,13 @@ practice but not what such a control is worth on these graphs.
 Table~\ref{tab:validation_cases} closes that gap across all ten cases examined: our own
 miRNA-target graph, two public OGB link-prediction benchmarks (ogbl-ddi, ogbl-ppa)
 \cite{hu2020ogb}, and seven of the 21 surveyed papers' own miRNA-disease datasets
-(Table~\ref{tab:literature_survey}). Ten cases are not ten independent graphs: three
-of the seven surveyed papers -- MGCNSS, NIMGSA and HLGNN-MDA -- evaluate on a
-byte-identical HMDD-derived association matrix (495 miRNAs $\times$ 383 diseases,
-5,430 associations), so the ten rows span eight distinct graphs. We keep them as
-separate rows because each is a separate paper reporting a separate number on that
-shared benchmark, and we report the mean gap both per paper ($-0.047$) and per graph
-($-0.039$). That a substantial share of this subfield validates on one shared dataset
-is itself a fact about its evaluation practice, not a defect of this audit.
-Three lines of evidence answer the question, ordered from what this literature has already published to what we measured ourselves. First, we read the six surveyed papers whose own comparison tables already carry an untrained comparator. Second, we re-measure that same floor independently on their own association matrices. Third, we turn to the two public benchmarks with open leaderboards and the seven papers' own data that fill the table in.
+(Table~\ref{tab:literature_survey}). Ten cases are not ten independent graphs: three of the
+seven papers (MGCNSS, NIMGSA and HLGNN-MDA) share one HMDD matrix (\S\ref{sec:data}), so we
+report the mean gap both per paper ($-0.047$) and per graph ($-0.039$). Three lines of
+evidence answer the question, from what this literature has already published to what we
+measured ourselves: the six surveyed papers' own comparison tables, the same floor
+re-measured on their matrices, and the two OGB benchmarks together with the seven papers'
+own data in the table.
 
 \input{tables/table5_hmdd_survey_audit.tex}
 
@@ -717,26 +719,19 @@ floor is not uniformly high or uniformly low across graphs. Whether it matters i
 empirical question each graph answers differently, which is precisely why it must be
 checked rather than assumed.
 
-\textbf{Seven of the 21 surveyed papers.} We closed the same gap for seven of the 21
-surveyed papers (Table~\ref{tab:literature_survey}), all from its miRNA-disease
-cluster, whose data could be independently obtained: their own bundled repositories,
-or a shared institutional mirror for one (CKSNP-GNN), each verified against the
-paper's own reported node/edge counts before use (three further papers, GONNMDA, Orro and DGNMDA, were excluded because no usable data was recoverable, as Discussion explains).
-Applying the same topology-only heuristics, unmodified, to each paper's own association
-matrix under uniform-random negatives at that paper's stated ratio
-(Table~\ref{tab:validation_cases}), the trained models beat the topology floor by 4.7
-AUROC points on average per paper -- a real, externally-measured gap, not merely our
-own graph's finding restated. Three of the seven papers (MGCNSS, NIMGSA, HLGNN-MDA)
-turn out to evaluate on a byte-identical canonical HMDD matrix, so the seven papers
-span five distinct graphs. Averaging per graph instead of per paper gives 3.9 points.
-But the gap is highly graph-dependent, ranging from $-9.2$
-points (DiGAMN) to $+3.3$ points: on MEAHNE's graph, the topology-only heuristic
-outright \emph{beats} the paper's own trained model (0.9848 vs.\ 0.9520), and on
-CoupleMDA's the two are within 1.3 points. Sanity-checking with degree-matched
-negatives collapses every heuristic on every paper to 0.55--0.58, confirming the
-uniform-negative numbers reflect a genuine popularity ceiling rather than a data error.
+\textbf{Seven of the 21 surveyed papers.} We applied the topology-only heuristics,
+unmodified, to the association matrix of each of the seven papers whose data we could
+obtain (\S\ref{sec:data}), under uniform-random negatives at that paper's stated ratio
+(Table~\ref{tab:validation_cases}). The trained models beat the topology floor by 4.7 AUROC
+points on average per paper, or 3.9 averaging per graph -- a real, externally measured gap,
+not merely our own graph's finding restated. But the gap is highly graph-dependent, ranging
+from $-9.2$ points (DiGAMN) to $+3.3$ points: on MEAHNE's graph the topology-only heuristic
+outright \emph{beats} the paper's own trained model (0.9848 vs.\ 0.9520), and on CoupleMDA's
+the two are within 1.3 points. Sanity-checking with degree-matched negatives collapses every
+heuristic on every paper to 0.55--0.58, confirming the uniform-negative numbers reflect a
+genuine popularity ceiling rather than a data error.
 
-\subsection{What separates these graphs: dead candidate columns}
+\subsection{What separates these graphs: dead candidate columns (E5)}
 \label{sec:dead_columns}
 The two papers where the trained model adds the least are also the two sparsest graphs
 audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes, and CoupleMDA:
@@ -771,7 +766,7 @@ nothing" and already sufficient: \emph{the popularity floor this literature neve
 checks for is frequently high enough to matter, and on some of its own graphs,
 decisive.}
 
-\subsection{Why the collapse happens}
+\subsection{Why the collapse happens (E6)}
 \label{sec:mechanism}
 One graph in the set is ours, and it is the one whose construction, features and training
 we can vary at will. We use it for the question the other five cannot answer: not whether
@@ -781,9 +776,11 @@ produces it.
 The two corrections are not redundant. Crossing them independently
 (Figure~\ref{fig:protocol_grid}, Table~\ref{tab:headline_grid}) leaves a substantially
 inflated number when either is applied alone, and only correcting both reaches 0.6276
-$\pm$ 0.0070: the pair is super-additive (the exact per-term attribution is
-convention-sensitive, as \S\ref{sec:methods} discusses, so we report the total rather than a
-decomposition). Neither figure is an artifact of one snapshot of the graph -- an
+$\pm$ 0.0070: the pair is super-additive. From the conventional 0.9867, matched
+negatives alone lower AUROC by 0.062 and held-out edges alone by 0.177, a sum of 0.239,
+while together they lower it by 0.359. How the total splits between the two depends on
+which is applied first (the effect of the negatives is 0.062 with edges seen but 0.182 with
+edges held out), so we report the total rather than a decomposition. Neither figure is an artifact of one snapshot of the graph -- an
 independently applied fix to two graph-construction bugs reproduces both within 0.1
 standard deviations, and leaves the topology-only floor numerically identical, since it
 touched only co-expression and cell-expression edges rather than the miRNA-to-gene
@@ -793,8 +790,8 @@ topology the floor is computed from.
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig1_protocol_grid.pdf}
 \caption{The headline protocol grid. AUROC (mean $\pm$ std, 4 seeds) crossing edge
 split (seen during message passing vs.\ held out) with negative-sampling regime
-(uniform-random vs.\ degree-matched). Correcting both flaws simultaneously costs 0.359
-AUROC points.}
+(uniform-random vs.\ degree-matched). Correcting both flaws simultaneously lowers
+AUROC by 0.359.}
 \label{fig:protocol_grid}
 \end{figure}
 
@@ -856,14 +853,12 @@ grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}
 \label{fig:architecture_inflation}
 \end{figure}
 
-\input{tables/tableS1_architecture_grid.tex}
-
-\subsection{A control task that survives the same audit}
+\subsection{A control task that survives the same audit (E7)}
 \label{sec:celltype}
 The audit does not deflate every number it touches. Applying the same
-no-learning-control logic to a structurally different task on the same graph --
+model-free-comparator logic to a structurally different task on the same graph --
 cell-type classification, 0.9916 test accuracy, carrying a circularity risk analogous to
-the miRNA-target task's own dependence on miRDB -- two no-graph controls on the raw PCA
+the miRNA-target task's own dependence on miRDB -- two graph-free controls on the raw PCA
 features alone, nearest-centroid and logistic regression, reach 0.4654 and 0.6692
 (Table~\ref{tab:celltype_control}). That 32-point gap is an order of magnitude larger
 than the 3.6 points the corrected link-prediction protocol leaves between the trained
@@ -1068,6 +1063,12 @@ matched negative sampling, and a model-free baseline with its margin stated. We 
 \texttt{protocheck}, an open-source tool that runs these checks on a user's own splits, so
 that other groups working on biomedical interaction graphs can audit their models before
 reporting a headline number.
+
+\appendix
+\setcounter{table}{0}
+\section{Full architecture grid}
+\label{app:grid}
+\input{tables/tableS1_architecture_grid.tex}
 
 \section*{Declaration of competing interest}
 The authors declare that they have no known competing financial interests or personal

@@ -72,6 +72,14 @@ la Tabla 1, así que se movió a la Discusión, junto a donde se propone el est�
 está convencido de que deba estar ahí tampoco: hay un comentario `%% PENDING` en `main.tex`.
 Opciones: dejarla en Discusión, fusionarla con la Tabla 1 (precedentes) o quitarla.
 
+**Resultados (2026-10-10, tarde).** Revisión de la sección 4: se añadió una tabla "Results at
+a glance" (E1--E7) al inicio, etiquetas E1--E7 en los títulos, se recortó la duplicación de 4.2
+con 3.1/3.3, la Tabla S1 pasó a un Apéndice A, y la atribución "convention-sensitive" (que
+apuntaba a una explicación que ya no existía) se sustituyó por la cuenta explícita: negativos
+solos 0.062, aristas retenidas solas 0.177, juntos 0.359. Se descartó separar los resultados
+por factor (held-out / negativos / model-free): los dos primeros son ejes de la misma rejilla
+y el tercero es un método.
+
 **Pendiente.** Decidir dónde va la checklist (Tabla 4); Tabla 7 como anomalía abierta; decidir el parche de DDP; fijar URL/DOI del
 repositorio en Data availability.
 
