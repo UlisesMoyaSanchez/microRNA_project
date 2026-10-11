@@ -430,7 +430,7 @@ under both protocol arms and ``heuristics'' that the model-free baselines are ap
 
 \input{tables/table_datasets.tex}
 
-\paragraph{External matrices and OGB.} The five miRNA--disease matrices were recovered
+\paragraph{External matrices and OGB} The five miRNA--disease matrices were recovered
 from the papers surveyed in \S\ref{sec:related}; three of the seven papers whose data we
 could obtain (MGCNSS, NIMGSA and HLGNN-MDA) share a byte-identical HMDD matrix. Each comes
 from the paper's own repository, or a shared mirror for CKSNP-GNN, and was verified against
@@ -438,7 +438,7 @@ that paper's reported counts. Three further papers were excluded because no usab
 recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
 open leaderboards, used only as an external check on the model-free baselines.
 
-\paragraph{Our graph.} We build a heterogeneous graph from public multiple-sclerosis
+\paragraph{Our graph} We build a heterogeneous graph from public multiple-sclerosis
 single-cell RNA-seq data (blood, brain and cerebrospinal fluid) queried from the CZ
 CELLxGENE Census (release 2025-11-08) \cite{czi2025cellxgene}, combined with miRDB v6.0
 \cite{chen2020mirdb} miRNA--target interactions. It has three node types -- miRNA, gene
@@ -543,19 +543,28 @@ deflates a task that is not leaky.
 
 \input{tables/table_experiments.tex}
 
-\subsection{Baselines}
+\subsection{Baselines and models}
 \label{sec:baselines}
-A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
-For link prediction we report four model-free topological heuristics -- gene
-in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
-computed purely from training-visible edge topology. We call these four rules the
-model-free heuristics, and the model-free floor on a given graph is the AUROC of the best
-of them. For cell typing we report two
-graph-free controls, nearest-centroid and logistic regression, both
-trained directly on the raw PCA features without any message passing. Against these
-controls we compare four trained models -- a heterogeneous graph transformer, a
-homogeneous GCN, a co-expression-ablation variant of the transformer, and a graph-free
-MLP -- plus an untrained random-weight control and a no-miRNA-input ablation that is
+\paragraph{Model-free baselines} A model-free baseline is a comparator that does not use
+the machinery of the model under test. Its score is the floor a trained model must clear,
+and the margin is the model's score minus that floor. In link prediction it is a
+parameter-free topological heuristic: it ranks candidate pairs from the training-visible
+structure of the graph alone, so it measures how much of a reported AUROC the topology
+already provides. We use four (Table~\ref{tab:heuristics}), computed on the training edges
+only, and call them the model-free heuristics; the model-free floor on a graph is the AUROC
+of the best of them. Gene in-degree doubles as a sanity check: against degree-matched
+negatives it should sit near 0.5 by construction. On the external matrices the floor is an
+AUROC, and on OGB it is Hits@$K$, the metric of the public leaderboards. For cell typing
+the equivalent comparator is a graph-free classifier on the same input features: nearest
+centroid, which has no fitted parameters beyond the class means, and logistic regression, a
+fitted linear model, both trained directly on the raw PCA features without message passing.
+
+\input{tables/table_heuristics.tex}
+
+\paragraph{Models} The link-prediction experiments compare these baselines with four
+trained models -- a heterogeneous graph transformer, a homogeneous GCN, a
+co-expression-ablation variant of the transformer, and a graph-free MLP -- plus an
+untrained random-weight control and a no-miRNA-input ablation that is
 link-prediction-incapable by construction and retained only as a smoke test.
 
 \subsection{Literature survey protocol}

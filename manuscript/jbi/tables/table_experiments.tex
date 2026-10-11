@@ -1,9 +1,10 @@
-\begin{table}[h!]
+\begin{table}[!p]
 \caption{The seven experiments (E1--E7 are experiments 1--7), in the order Results reports them. ``Six graphs'' are ours, the canonical HMDD matrix (shared by MGCNSS, NIMGSA and HLGNN-MDA), CKSNP-GNN, DiGAMN, CoupleMDA and MEAHNE; the five external matrices are the last five. The grid is the $2\times2$ of edge split by negative sampler.}
 \label{tab:experiments}
 \footnotesize
 {\setlength{\tabcolsep}{3pt}
-\begin{tabular}{p{0.5cm}p{2.8cm}p{3.3cm}p{3.2cm}p{0.9cm}}
+\newcolumntype{R}[1]{>{\raggedright\arraybackslash}p{#1}}
+\begin{tabular}{R{0.5cm}R{2.8cm}R{3.3cm}R{3.2cm}R{0.9cm}}
 \hline
  & Question & Data & What is run & Results \\
 \hline
