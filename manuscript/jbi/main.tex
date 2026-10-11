@@ -54,6 +54,7 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning}
+\usepackage[colorlinks=true,citecolor=blue!60!black,linkcolor=black,urlcolor=blue!60!black]{hyperref}
 \modulolinenumbers[5]
 
 \journal{Journal of Biomedical Informatics}
@@ -273,7 +274,7 @@ model-free baseline (a simple scorer with no trained parameters, such as node de
 sanity-check floor). Second, 17 draw their negatives from unlabeled pairs without
 discussion. Third, for 11 of the 19 papers where the question applies (the other two never
 propagate over an interaction graph), it is unclear whether held-out edges are removed from
-the encoder's input (protocol in Methods, full results in Related Work below). The last two
+the encoder's input (protocol in \S\ref{sec:methods}, full results in Related Work below). The last two
 gaps correspond to two protocol failure modes: popularity-biased negative sampling and
 transductive edge leakage. The first gap is a reporting omission. It is the check that
 would expose the other two. Neither failure mode is novel. Both are already documented
@@ -393,44 +394,30 @@ a degree-matched negative ties.}
 Against that backdrop, we surveyed 21 papers in the miRNA-target and adjacent
 biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disease,
 lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
-full rather than inferring its evaluation protocol from the abstract. 19 of the
-21 cross-validate over edges rather than some other unit. Orro holds out miRNAs rather
-than associations, and NIMGSA does not say. 14 of the 21
-report no model-free baseline and one more, DTI-MHAPR, names an untrained comparator
-(FSI) but prints no result for it. The six that do (NIMGSA, NGCN, Orro, HLGNN-MDA,
-CKSNP-GNN and ModulePred) report one of this subfield's classical untrained
-propagation or scoring methods (SPM, HNM, TCRWMDA, BNPMDA, LLCMDA, RWR) as one more
-competitor in a comparison table, never as a floor: no paper remarks on how narrow its
-own margin over that comparator is (\S\ref{sec:generalization} measures those margins,
-and what they look like against a floor measured independently). 17 of the 21 draw
-their negatives from unlabeled pairs, uniformly sampled or taken wholesale, without
-discussing the alternative. Only two deviate, MGCNSS and HGDTI, each selecting negatives
-by a distance or reliability criterion of its own devising, and the remaining two never say where their
-negatives come from. Whether
-held-out edges are removed from the encoder's input is unclear from the methods section
-in 11 of the 19 papers where the question applies (the other two encode drug and
-protein separately and never propagate over an interaction graph at all, so a held-out
-association cannot reach their encoder through graph structure). This reporting gap, not
-confirmed leakage, is the dominant finding on that dimension. Table~\ref{tab:literature_survey}
-summarizes the full sample.
+full rather than inferring its protocol from the abstract
+(Table~\ref{tab:literature_survey}). Three findings matter here. First, 14 of the 21
+report no model-free baseline. The six that do report a classical untrained method as one
+more competitor in a comparison table, never as a floor, and none remarks on how narrow
+its margin over that comparator is (\S\ref{sec:generalization} measures those margins).
+Second, 17 draw their negatives from unlabeled pairs, uniformly sampled or taken wholesale,
+without discussing the alternative; only MGCNSS~\cite{tian2024mgcnss} and
+HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and two papers never say.
+Third, in 11 of the 19 papers where the question applies, it is unclear from the methods
+section whether held-out edges are removed from the encoder's input. This is a reporting
+gap, not confirmed leakage: after adjudication only MGCNSS clearly leaks and 7 clearly strip
+test edges correctly, and our own project's original split was worse than the norm we
+observed.
 
-We deliberately do not claim that this subfield routinely leaks edges: after
-adjudication only 1 of the 19 clearly does (MGCNSS, whose propagated matrix is defined
-globally from all 5,430 known associations), 7 clearly strip test edges correctly, and our
-own project's original split was worse than the norm we observed. The claim we make is
-narrower: no paper in the sample reads an untrained comparator as a floor
-(\S\ref{sec:generalization}). Getting the split right is not protective on its own: all
-seven papers that do strip held-out edges from the graph still draw their negatives from
-unlabeled pairs, six uniformly at random and one wholesale, none of them degree-matched,
-and four of the seven report no model-free baseline
-(Table~\ref{tab:literature_survey}). The two failure modes are independent, so fixing the
-split is not evidence against the popularity-biased negative sampling this paper
+Getting the split right is not protective on its own. All seven papers that strip held-out
+edges still draw their negatives from unlabeled pairs, none of them degree-matched, and four
+of the seven report no model-free baseline. The two failure modes are independent, so fixing
+the split is not evidence against the popularity-biased negative sampling this paper
 identifies, which is why, as Results shows, correcting both is super-additive rather than
 redundant.
 
 \input{tables/table3_literature_survey.tex}
 
-\section{Methods}
+\section{Data and methods}
 \label{sec:methods}
 
 \subsection{Evaluation protocol}
@@ -746,7 +733,7 @@ than of the graph alone: under the corrected protocol the same two floors fall t
 
 \textbf{Two public OGB benchmarks.} On ogbl-ddi (drug--drug interaction) and ogbl-ppa
 (protein--protein association), both verified leak-free at runtime by the same check
-used throughout this paper, the model-free heuristics from Methods reproduce the Open
+used throughout this paper, the model-free heuristics from \S\ref{sec:methods} reproduce the Open
 Graph Benchmark's own published leaderboard numbers exactly (Table~\ref{tab:validation_cases}).
 The two benchmarks disagree sharply. On ogbl-ddi, the best heuristic (Adamic--Adar,
 Hits@20 0.1861) ranks 30th of 32 leaderboard entries, far behind the best trained
@@ -830,7 +817,7 @@ The two corrections are not redundant. Crossing them independently
 (Figure~\ref{fig:protocol_grid}, Table~\ref{tab:headline_grid}) leaves a substantially
 inflated number when either is applied alone, and only correcting both reaches 0.6276
 $\pm$ 0.0070: the pair is super-additive (the exact per-term attribution is
-convention-sensitive, as Methods discusses, so we report the total rather than a
+convention-sensitive, as \S\ref{sec:methods} discusses, so we report the total rather than a
 decomposition). Neither figure is an artifact of one snapshot of the graph -- an
 independently applied fix to two graph-construction bugs reproduces both within 0.1
 standard deviations, and leaves the topology-only floor numerically identical, since it
@@ -1032,7 +1019,7 @@ would recover with certainty. We report the double-rating as a limitation and no
 resolution because it changed a headline: the first rater's classification, from which
 this paper's earlier drafts concluded that no surveyed paper reports a model-free
 baseline at all, was overturned to six of 21 once the raters' one disagreement on that
-dimension exposed a defect in the criterion itself (Methods). A criterion defect of
+dimension exposed a defect in the criterion itself (\S\ref{sec:methods}). A criterion defect of
 that kind is precisely what a second rater is for, and we cannot rule out another one
 in the dimensions where agreement is only moderate. What the correction did not do is
 weaken the survey's argument: it replaced a claim about an absence with a claim about a

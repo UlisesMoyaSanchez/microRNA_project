@@ -1,40 +1,40 @@
 \begin{table}[h!]
-\caption{Literature survey (n=21 papers): each paper's methods section was read in full and classified on whether held-out edges are removed from the message-passing / similarity-computation graph, how negative pairs are chosen, and whether any model-free baseline is reported. The first six rows are the original pilot sample; the remaining 15 are the 2026-08-12 expansion, sourced from open-access (PMC) papers only.}
+\caption{Literature survey (n=21): whether each paper removes held-out edges from the graph its model propagates over, how it chooses negative pairs, and whether it reports a model-free baseline. When it does, the cell names the untrained comparator and cites that method's original paper, not the surveyed one. The first six rows are the pilot sample; the other 15 are open-access (PMC) papers added later.}
 \label{tab:literature_survey}
 \footnotesize
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lllcl}
+\begin{tabular}{llcll}
 \hline
-Paper & Venue/year & Task & Held-out edges & Negative sampling \\
- & & & removed from graph? & \\
+Paper & Task & Held-out edges & Negative sampling & Model-free \\
+ & & removed from graph? & & baseline \\
 \hline
-MGCNSS \cite{tian2024mgcnss} & Briefings in Bioinformatics 2024 & miRNA-disease & no & distance-based selection (paper's own contribution) \\
-NIMGSA \cite{jin2022nimgsa} & 2022 & miRNA-disease & unclear & all unlabeled pairs (implicit: full-matrix loss) \\
-HybridGNN \cite{ahmad2026hybridgnn} & Bioinformatics 2026 & miRNA-disease & yes & uniform random from unknown pairs \\
-HGDTI \cite{yu2022hgdti} & BMC Bioinformatics 2022 & drug-target & unclear & reliable score-filtered (non-uniform) \\
-NGCN \cite{cao2024ngcn} & 2024 & drug-target & yes & uniform random from unknown pairs, 1:10 \\
-kmerPMTF \cite{zhang2024kmerpmtf} & PeerJ 2024 & plant miRNA-target & unclear & all unlabeled pairs, count-matched \\
+MGCNSS \cite{tian2024mgcnss} & miRNA-disease & no & distance-based selection (paper's own contribution) & no \\
+NIMGSA \cite{jin2022nimgsa} & miRNA-disease & unclear & all unlabeled pairs (implicit: full-matrix loss) & SPM~\cite{lu2015spm} \\
+HybridGNN \cite{ahmad2026hybridgnn} & miRNA-disease & yes & uniform random from unknown pairs & no \\
+HGDTI \cite{yu2022hgdti} & drug-target & unclear & reliable score-filtered (non-uniform) & no \\
+NGCN \cite{cao2024ngcn} & drug-target & yes & uniform random from unknown pairs, 1:10 & HNM~\cite{wang2014hnm} \\
+kmerPMTF \cite{zhang2024kmerpmtf} & plant miRNA-target & unclear & all unlabeled pairs, count-matched & no \\
 \hline
-Orro \cite{orro2026mirnadisease} & Biomedicines 2026 & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs \\
-CoupleMDA \cite{li2025couplemda} & IJMS 2025 & miRNA-disease & yes & uniform random, 1:1 \\
-GONNMDA \cite{zeng2025gonnmda} & Genes 2025 & miRNA-disease & unclear & uniform random, 1:1 \\
-DiGAMN \cite{liu2024digamn} & BMC Genomics 2024 & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 \\
-DGNMDA \cite{lu2024dgnmda} & Bioengineering 2024 & miRNA-disease & unclear & uniform random from 0-labeled pairs, 1:1 \\
-HLGNN-MDA \cite{yu2022hlgnnmda} & IJMS 2022 & miRNA-disease & yes & uniform random, 1:1 \\
-MEAHNE \cite{huang2022meahne} & Life 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
-CKSNP-GNN \cite{li2022cksnpgnn} & Genes 2022 & miRNA-disease & unclear & uniform random, 1:1 \\
-HMCDA \cite{liang2023hmcda} & BMC Bioinformatics 2023 & circRNA-disease & unclear & uniform random, 5:1 \\
-HiGLDP \cite{wang2026higldp} & BMC Biology 2026 & lncRNA-disease & unclear & not described (1:1 ratio only) \\
-GPS-DTI \cite{xiong2025gpsdti} & BMC Biology 2025 & drug-target & n/a$^{\dagger}$ & not described (balanced; 1--20$\times$ in the COVID-19 arm only) \\
-SaeGraphDTI \cite{zhang2025saegraphdti} & BMC Bioinformatics 2025 & drug-target & yes & all unlabeled pairs (unsampled) \\
-DTI-MHAPR \cite{yang2025dtimhapr} & BMC Bioinformatics 2025 & drug-target & unclear & uniform random, 1:1 \\
-iNGNN-DTI \cite{sun2024ingnndti} & Bioinformatics 2024 & drug-target & n/a$^{\dagger}$ & uniform random, 1:1 \\
-ModulePred \cite{jia2024modulepred} & BMC Bioinformatics 2024 & gene-disease & unclear & uniform random, 50:1 \\
+Orro \cite{orro2026mirnadisease} & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs & TCRWMDA~\cite{yu2020tcrwmda} \\
+CoupleMDA \cite{li2025couplemda} & miRNA-disease & yes & uniform random, 1:1 & no \\
+GONNMDA \cite{zeng2025gonnmda} & miRNA-disease & unclear & uniform random, 1:1 & no \\
+DiGAMN \cite{liu2024digamn} & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 & no \\
+DGNMDA \cite{lu2024dgnmda} & miRNA-disease & unclear & uniform random from 0-labeled pairs, 1:1 & no \\
+HLGNN-MDA \cite{yu2022hlgnnmda} & miRNA-disease & yes & uniform random, 1:1 & BNPMDA~\cite{chen2018bnpmda} \\
+MEAHNE \cite{huang2022meahne} & miRNA-disease & unclear & uniform random, 1:1 & no \\
+CKSNP-GNN \cite{li2022cksnpgnn} & miRNA-disease & unclear & uniform random, 1:1 & LLCMDA~\cite{qu2018llcmda} \\
+HMCDA \cite{liang2023hmcda} & circRNA-disease & unclear & uniform random, 5:1 & no \\
+HiGLDP \cite{wang2026higldp} & lncRNA-disease & unclear & not described (1:1 ratio only) & no \\
+GPS-DTI \cite{xiong2025gpsdti} & drug-target & n/a$^{\dagger}$ & not described (balanced; 1--20$\times$ in the COVID-19 arm only) & no \\
+SaeGraphDTI \cite{zhang2025saegraphdti} & drug-target & yes & all unlabeled pairs (unsampled) & no \\
+DTI-MHAPR \cite{yang2025dtimhapr} & drug-target & unclear & uniform random, 1:1 & named (FSI), no result \\
+iNGNN-DTI \cite{sun2024ingnndti} & drug-target & n/a$^{\dagger}$ & uniform random, 1:1 & no \\
+ModulePred \cite{jia2024modulepred} & gene-disease & unclear & uniform random, 50:1 & RWR~\cite{tong2006rwr} \\
 \hline
 \end{tabular}
 }
 
-\medskip\par $^{\dagger}$iNGNN-DTI and GPS-DTI encode drug and protein separately and never
+\medskip\par $^{\dagger}$iNGNN-DTI~\cite{sun2024ingnndti} and GPS-DTI~\cite{xiong2025gpsdti} encode drug and protein separately and never
 propagate over a graph containing the predicted associations, so the held-out-edges
-question does not apply to them (Methods, \S\ref{sec:methods}).
+question does not apply to them (\S\ref{sec:methods}).
 \end{table}
