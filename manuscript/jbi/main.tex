@@ -315,7 +315,7 @@ whether their data are ready before reporting a number.
 \subsection{Known evaluation pitfalls in link prediction}
 Neither failure mode we quantify in this paper is novel to machine learning in general.
 Transductive edge leakage, where a held-out edge stays in the graph the encoder propagates over (Figure~\ref{fig:edge_split}), traces at least to the inverse-relation leak documented
-in the FB15k knowledge-graph benchmark \cite{toutanova2015observed}, and is actively
+in FB15k, a knowledge-graph benchmark derived from Freebase \cite{toutanova2015observed}, and is actively
 being re-examined in the broader link-prediction literature
 \cite{zhu2023pitfalls,li2023evaluating}. The same failure recurs closer to this paper's
 own domain: a leakage problem inflating reported performance has been independently
@@ -926,7 +926,7 @@ literature, and neither is specific to microRNAs. The edge-split half is transdu
 leakage, which \cite{zhu2023pitfalls} call \emph{target-link inclusion} -- the target edge remains
 reachable to the encoder through message passing at evaluation time, so the model can, in
 effect, recover the label from the neighborhood it was never supposed to have. Its
-lineage traces to the WN18/FB15k inverse-relation leak documented by
+lineage traces to the inverse-relation leak in WN18 (a WordNet-derived benchmark) and FB15k, documented by
 \cite{toutanova2015observed}, which was serious enough to motivate a replacement
 benchmark (FB15k-237) rather than a footnote. Figure~\ref{fig:edge_split} illustrates the same mechanism for a bipartite graph with explicit reverse relations, in place of duplicated inverse triples. The negative-sampling half is popularity-biased
 negative sampling, which the literature calls \emph{degree bias}
