@@ -274,7 +274,7 @@ model-free baseline (a simple scorer with no trained parameters, such as node de
 sanity-check floor). Second, 17 draw their negatives from unlabeled pairs without
 discussion. Third, for 11 of the 19 papers where the question applies (the other two never
 propagate over an interaction graph), it is unclear whether held-out edges are removed from
-the encoder's input (protocol in \S\ref{sec:methods}, full results in Related Work below). The last two
+the encoder's input (full results in Related Work below). The last two
 gaps correspond to two protocol failure modes: popularity-biased negative sampling and
 transductive edge leakage. The first gap is a reporting omission. It is the check that
 would expose the other two. Neither failure mode is novel. Both are already documented
@@ -566,68 +566,6 @@ trained models -- a heterogeneous graph transformer, a homogeneous GCN, a
 co-expression-ablation variant of the transformer, and a graph-free MLP -- plus an
 untrained random-weight control and a no-miRNA-input ablation that is
 link-prediction-incapable by construction and retained only as a smoke test.
-
-\subsection{Literature survey protocol}
-The literature survey referenced throughout this paper covers 21 papers, each read in
-full at the methods-section level rather than judged from its abstract, and classified
-along four dimensions: whether it cross-validates over edges, whether it removes
-held-out edges from the encoder's input, how it selects negative examples, and whether
-it reports any model-free baseline. This is an expansion, completed 2026-08-12, of an
-initial six-paper pilot. The second dimension admits a fourth value, \emph{not
-applicable}: two papers encode drug and protein separately -- one as a molecular graph
-of atoms and bonds, the other from a contact map or a sequence embedding -- and fuse the
-two representations with attention, never propagating over a graph that contains the
-associations being predicted. A held-out association cannot reach an encoder of that
-shape through graph structure, so the question has no answer to give rather than an
-undisclosed one, and those two are excluded from that dimension's denominator instead of
-being counted among its \emph{unclear} calls. A twenty-second row of the original survey sheet recorded a
-general drug-target field convention rather than a paper, and is excluded from every
-denominator reported here.
-
-Every cell was subsequently double-rated. The decision rules, which until then existed
-only in the first rater's head and in the evidence quotes, were written up as an
-explicit codebook (\texttt{results/SURVEY\_CODEBOOK.md}), and a second pass over all 21
-papers was made from the primary sources alone, blind to the first pass. Raw agreement
-was 95\% on model-free-baseline reporting, 86\% on the cross-validation unit, 76\% on
-negative sampling and 71\% on whether held-out edges are removed from the encoder's
-graph. Cohen's $\kappa$ is 0.49 and 0.44 on the latter two, and is uninformative on the
-former two, whose marginals are too skewed for chance-correction to behave. All 14 disagreements were adjudicated one at a time
-against the primary source rather than averaged away, each call recorded with the
-codebook rule that decided it and the verbatim sentence it rests on
-(\texttt{results/interrater\_agreement.json},
-\texttt{results/literature\_survey\_adjudication.tsv}). Of these, 11 went to the second rater and 3 upheld the first. Two of them were settled by a quote the first rater had already
-recorded and classified against, and two exposed gaps in the codebook itself rather than
-in either reading: it had no rule for a paper that samples negatives one way for training
-and another for evaluation, nor for one that describes its negatives for a case study but
-not for the benchmark carrying its headline number. Both rules are now written down, and
-the affected cells are classified on the arm the reported metric comes from.
-
-Two adjudications changed a headline number. The first was on model-free-baseline
-reporting. The raters split on whether ModulePred
-reports a model-free baseline, and the disagreement exposed a defect in the original
-criterion rather than in either reading: the criterion gave a definition -- a comparator
-whose predictions require no parameters fitted to the association data -- and then an
-enumerated list of qualifying baselines, and the list omitted this subfield's own
-classical untrained methods (random walk with restart, structural perturbation,
-path-based and bipartite-projection scoring). The first rater had applied the list, and
-recorded \emph{no} for six papers that the definition admits. All 21 papers were
-therefore re-audited on that dimension alone under the definition, recording for each
-qualifying comparator its name, its reported score, and the surveying paper's own score
-on the same metric and dataset, so that the margin between them could be read off
-(\texttt{results/literature\_survey\_d4\_reaudit.tsv}). The corrected tallies are the ones
-used throughout this paper.
-
-The second was on whether held-out edges are removed from the encoder's input. The first
-rater had recorded HGDTI as retaining them, on a paraphrase rather than on a quote. The codebook requires a \emph{yes} or a \emph{no} to carry a verbatim sentence that supports
-it alone, and no such sentence exists in that paper -- it describes its heterogeneous
-network and its cross-validation separately and never connects them. The cell became
-\emph{unclear}, and the number of surveyed papers that clearly do \emph{not} remove
-held-out edges fell from two to one. The surviving one, MGCNSS, states the matrix it
-propagates over explicitly, and that matrix is the full set of 5,430 known associations.
-An earlier 2026-08-13 re-read of the first rater's own
-"unclear" classifications against each paper's primary source, undertaken to check
-whether "unclear" reflected a genuine reporting gap or overly conservative extraction,
-corrected 3 of 14 spot-checked cells. Those corrections are also reflected throughout.
 
 \section{Results}
 \label{sec:results}
@@ -1047,7 +985,7 @@ would recover with certainty. We report the double-rating as a limitation and no
 resolution because it changed a headline: the first rater's classification, from which
 this paper's earlier drafts concluded that no surveyed paper reports a model-free
 baseline at all, was overturned to six of 21 once the raters' one disagreement on that
-dimension exposed a defect in the criterion itself (\S\ref{sec:methods}). A criterion defect of
+dimension exposed that the criterion's list of qualifying baselines omitted this subfield's own classical untrained methods. A criterion defect of
 that kind is precisely what a second rater is for, and we cannot rule out another one
 in the dimensions where agreement is only moderate. What the correction did not do is
 weaken the survey's argument: it replaced a claim about an absence with a claim about a
