@@ -529,31 +529,19 @@ comparability limit the driver difference imposes.
 %% not yet convinced it belongs there either. Decide: keep in Discussion, merge with the
 %% precedents table, or drop.
 
-\subsection{Cross-graph and cross-paper comparison design}
+\subsection{Experimental design}
 \label{sec:comparison_design}
-The protocol defined above is applied identically across three comparisons, so that
-whether the inflation is a property of the protocol rather than of any single graph or model
-can be measured rather than assumed. Our own graph (\S\ref{sec:data}) is one case among
-these, not the case the comparisons are built around.
+The protocol defined above is applied in seven experiments (Table~\ref{tab:experiments}),
+ordered as Results reports them. E1--E4 compare graphs and papers, so that whether the
+inflation is a property of the protocol rather than of any single graph or model can be
+measured rather than assumed; our own graph (\S\ref{sec:data}) is one case among them, not
+the case they are built around. Together they cover ten cases (our graph, seven surveyed
+papers and two OGB benchmarks) on eight distinct graphs, because three of the papers
+share one matrix. E5 asks what separates the graphs, and E6 and E7 use the one graph whose
+construction and training we control to ask why the collapse happens and whether the audit
+deflates a task that is not leaky.
 
-First, we retrain this paper's architecture from scratch, under both protocol arms, on
-six graphs: our own, and the five distinct association matrices described in
-\S\ref{sec:data}.
-
-Second, for the same seven papers we apply the topological heuristics defined below,
-unmodified, directly to each paper's own association matrix under that paper's stated
-negative-sampling ratio, and read the result against the paper's own published number:
-a model-free floor measured independently of any protocol correction, on each paper's
-own data rather than on ours.
-
-Third, the same heuristics are applied to two public link-prediction benchmarks with
-open leaderboards, ogbl-ddi and ogbl-ppa \cite{hu2020ogb}, both verified leak-free at
-runtime by the same check used throughout this paper (Figure~\ref{fig:edge_split}),
-giving an external check on the floor's behavior outside the literature this paper
-otherwise audits.
-
-Across all three comparisons, ten cases span eight distinct graphs. Results reports
-what each one finds.
+\input{tables/table_experiments.tex}
 
 \subsection{Baselines}
 \label{sec:baselines}
@@ -924,6 +912,7 @@ grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}
 \input{tables/tableS1_architecture_grid.tex}
 
 \subsection{A control task that survives the same audit}
+\label{sec:celltype}
 The audit does not deflate every number it touches. Applying the same
 no-learning-control logic to a structurally different task on the same graph --
 cell-type classification, 0.9916 test accuracy, carrying a circularity risk analogous to
