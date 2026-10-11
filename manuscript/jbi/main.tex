@@ -323,7 +323,9 @@ identified in miRNA--disease association prediction \cite{dong2020mirnaleakage},
 contemporaneously, train/test redundancy has been shown to inflate knowledge-graph-embedding
 link prediction across several biomedical graphs, although that study's own permutation
 test found no evidence its models exploit node degree specifically, a useful contrast to
-the degree-driven bias we quantify below \cite{briere2026kgeleakage}. Popularity-biased negative sampling (Figure~\ref{fig:neg_sampling_mechanism}) is a known, quantified bias in link prediction generally \cite{kotnis2017analysis,
+the degree-driven bias we quantify below \cite{briere2026kgeleakage}.
+
+Popularity-biased negative sampling (Figure~\ref{fig:neg_sampling_mechanism}) is a known, quantified bias in link prediction generally \cite{kotnis2017analysis,
 aiyappa2024implicit}, and has been documented specifically in network biology
 \cite{yilmaz2025biasaware}, the domain this paper's graph is drawn from. Its likely
 historical root is recommender-systems evaluation practice, where sampling a small set
