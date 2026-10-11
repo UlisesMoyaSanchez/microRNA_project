@@ -665,25 +665,12 @@ from a graph that shares none of its data.
 
 \subsection{Sources of the inflation on our graph (E6)}
 \label{sec:mechanism}
-One graph in the set is ours, and it is the one whose construction, features and training
-we can vary at will. We use it for the question the other five cannot answer: not whether
-the inflation occurs (\S\ref{sec:collapse_general} settles that on all six) but what
-produces it.
-
-The two corrections are not redundant. Crossing them independently
-(Figure~\ref{fig:protocol_grid}, Table~\ref{tab:headline_grid}) leaves a substantially
-inflated number when either is applied alone, and only correcting both reaches 0.6276
-$\pm$ 0.0070: the pair is super-additive. From the conventional 0.9867, matched
-negatives alone lower AUROC by 0.062 and held-out edges alone by 0.177, a sum of 0.239,
-while together they lower it by 0.359. How the total splits between the two depends on
-which is applied first (the effect of the negatives is 0.062 with edges seen but 0.182 with
-edges held out), so we report the total rather than a decomposition. Neither figure is an artifact of one snapshot of the graph: an
-independently applied fix to two graph-construction bugs reproduces both within 0.1
-standard deviations, and leaves the topology-only floor numerically identical, since it
-touched only co-expression and cell-expression edges rather than the miRNA-to-gene
-topology the floor is computed from. In Table~\ref{tab:headline_grid}, the edges-seen row
-reports the uniform-negative-trained model under both evaluation regimes, and the
-edges-held-out row reports each model scored with the negative type it was trained on.
+The two corrections are not redundant. From the conventional 0.9867, matched negatives alone
+lower AUROC by 0.062 and held-out edges alone by 0.177, a sum of 0.239, while together they
+lower it by 0.359 (Figure~\ref{fig:protocol_grid}, Table~\ref{tab:headline_grid}): the pair
+is super-additive. How the total divides depends on which is applied first (the negatives
+lower it by 0.062 with edges seen but 0.182 with edges held out), so we report the total
+rather than a decomposition.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig1_protocol_grid.pdf}
@@ -696,16 +683,13 @@ AUROC by 0.359.}
 
 \input{tables/table1_headline_grid.tex}
 
-What the trained model learns under the conventional protocol is gene popularity. Under
-that protocol a heuristic that never looks at the miRNA at all, gene in-degree, reaches
-0.8712 and outperforms the trained model (0.8056). Table~\ref{tab:model_free_baselines} reports all four heuristics against both
-negative-sampling regimes. The mechanism behind that reversal is directly testable: a
-model trained with uniform negatives and then evaluated against degree-matched negatives
-collapses to AUROC 0.5352 $\pm$ 0.0202, indistinguishable from the gene-degree
-heuristic's floor, direct evidence that uniform-negative training teaches popularity
-rather than miRNA-specific target information. Figure~\ref{fig:negative_sampler_collapse}
-shows the collapse is not specific to the heterogeneous transformer: it recurs across
-every trained architecture in the grid.
+Under the conventional protocol the trained model learns gene popularity. A heuristic that
+never looks at the miRNA, gene in-degree, reaches 0.8712 and outperforms the trained model
+(0.8056; Table~\ref{tab:model_free_baselines}). A model trained with uniform negatives and
+scored against degree-matched ones falls to AUROC $0.5352 \pm 0.0202$, indistinguishable from
+the in-degree floor, so uniform-negative training teaches popularity rather than
+miRNA-specific target information. The same fall occurs in every trained architecture in the
+grid (Figure~\ref{fig:negative_sampler_collapse}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
@@ -717,29 +701,18 @@ trained model toward the gene-degree heuristic's floor. The untrained control do
 
 \input{tables/table2_model_free_baselines.tex}
 
-Nor is the inflation a property of any single model. Extending the protocol grid across
-four independently trained models (the heterogeneous graph transformer, a
-homogeneous GCN, a co-expression ablation, and a graph-free MLP) plus an untrained
-random-weight control and a no-miRNA-input ablation retained as a smoke test, every
-trained model inflates by 0.24--0.31 AUROC points between the two protocols, the
-graph-free MLP included, while the untrained control does not move ($-0.004$)
-(Figure~\ref{fig:architecture_inflation}, Table~\ref{tab:architecture_grid}). Each
-model is a single training run rather than a seed average, and the inflation is an
-order of magnitude larger than the seed spread measured elsewhere here (0.005--0.02), so
-the pattern does not depend on averaging away noise. A second caveat governs how the grid
-may be read. Every row of it is trained by the same driver on a single GPU, which is what
-makes the comparison across architectures controlled. The levels, however, are not
-comparable to Table~\ref{tab:headline_grid}. The grid's transformer reaches 0.9222 under
-the conventional protocol, against 0.9867 for the four-GPU run of the identical
-configuration reported there. That gap is a training-regime difference, not a protocol or
-a measurement one: both were scored on the same split and the same 44,186 edges, and the
-headline checkpoint moves by 0.00004 AUROC between the validation and test splits. Rows of
-the grid may therefore be compared with one another, and not with the headline numbers.
-One secondary finding falls out of the same grid: under the corrected protocol a plain
-homogeneous GCN (0.6236) outperforms the heterogeneous transformer (0.6080), so under
-identical single-GPU training the architectural complexity this project was originally
-built around does not earn its keep against the simplest graph-based baseline. Whether
-that ordering survives the headline training regime is untested.
+Nor is the inflation specific to one model. Four trained models (the transformer, a
+homogeneous GCN, a co-expression ablation and a graph-free MLP) inflate by 0.24--0.31 AUROC
+between the two protocols, the MLP included, while an untrained random-weight control does
+not move ($-0.004$; Figure~\ref{fig:architecture_inflation}, Appendix~\ref{app:grid}). Each
+is a single run on one GPU, so the seed spread reported elsewhere (0.005--0.02), measured on
+the four-GPU headline model, is only an indicative scale for these rows. The inflation is an
+order of magnitude larger, with the same sign and similar size in all four models, which is
+not what noise in a single run would produce. These levels are comparable with one another
+but not with Table~\ref{tab:headline_grid}: the grid's transformer reaches 0.9222 under the
+conventional protocol against 0.9867 for the four-GPU run of the same configuration
+(Appendix~\ref{app:grid}). The GCN (0.6236) and the transformer (0.6080) differ by 0.016
+under the corrected protocol, within that scale, so we do not read it as an ordering.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
@@ -958,6 +931,14 @@ reporting a headline number.
 \setcounter{table}{0}
 \section{Full architecture grid}
 \label{app:grid}
+Every row is trained by the same driver on one GPU, which makes the rows comparable with
+one another but not with the headline numbers: the \emph{HGT} row is a single-GPU retraining
+of this paper's architecture, not the headline model. The 0.9222 against 0.9867 gap in the
+conventional cell is a difference of training regime, not of protocol or measurement. Both
+runs were scored on the same split and the same 44,186 edges, and the headline checkpoint
+moves by 0.00004 AUROC between the validation and test splits. The no-miRNA-input ablation
+has no link-prediction head and is retained only as a smoke test.
+
 \input{tables/tableS1_architecture_grid.tex}
 
 \section*{Declaration of competing interest}

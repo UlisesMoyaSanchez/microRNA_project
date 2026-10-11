@@ -57,10 +57,12 @@ baseline* y sin Venue/year; `hyperref` activado (citas con hipervínculo; hay qu
 `main.aux`/`main.bbl` si cambia); "Methods" renombrada "Data and methods" con referencias por
 `\S\ref`; el esquema del grafo (Fig. 3) sin tabla interna; `RandomLinkSplit` fuera del texto.
 
-**Aparcado a petición.** El arreglo del confound de DDP (seed-spread medido en el modelo de 4
-GPU, no en el driver de 1 GPU de la Tabla S1; y la afirmación GCN > HGT, que es una diferencia
-de 0.016 dentro del spread) está en `manuscript/jbi/pending/ddp_confound_fix.patch`, **sin
-aplicar**. Reaplicar con `git apply manuscript/jbi/pending/ddp_confound_fix.patch`.
+**Confound de DDP, resuelto después (2026-10-10, noche).** Al compactar 4.4 se incorporó el parche
+que estaba aparcado: el spread de seeds (0.005--0.02) se midió en el modelo headline de 4 GPU,
+no en el driver de 1 GPU de la rejilla, así que es solo una escala indicativa; la diferencia GCN
+vs HGT (0.016, corridas únicas) ya no se lee como un orden; el detalle del driver (0.9222 vs
+0.9867, 0.00004 entre val y test) pasó al Apéndice A. El archivo `pending/ddp_confound_fix.patch`
+se borró.
 
 **3.2 reescrita y la checklist movida (pendiente de decidir).** 3.2 describía el protocolo como
 buenas prácticas, sin los dos brazos (convencional = aristas vistas + negativos uniformes;
