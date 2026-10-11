@@ -119,15 +119,15 @@ graphs: two Open Graph Benchmark (OGB) datasets, seven survey-paper datasets, an
 our own graph (a single-cell RNA-seq cohort with miRDB v6.0 interactions). On our
 own graph only, five further models -- a homogeneous Graph Convolutional Network
 (GCN), two ablations, a graph-free Multi-Layer Perceptron (MLP), and an untrained
-control -- and an unrelated cell-typing task with two no-graph controls were also
+control -- and an unrelated cell-typing task with two no-graph controls were
 tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
 graphs (ours and five from surveyed papers) collapses the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on every graph. For no-learning scorers, negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns alone raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' own numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins outright on the sparsest. On our graph the inflation recurs across six models, and an untrained control does not move.
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free scorers (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across six models, and an untrained control does not move.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
-any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, an open-source tool that checks it.
+any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, a tool that checks it.
 \end{abstract}
 %% 2026-09-09: Objective's closing clause added ("...to help correct how link
 %% prediction is evaluated on biomedical interaction graphs") so the Abstract's first
@@ -492,6 +492,7 @@ Across all three comparisons, ten cases span eight distinct graphs. Results repo
 what each one finds.
 
 \subsection{Baselines}
+A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
 For link prediction we report four no-learning topological heuristics -- gene
 in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
 computed purely from training-visible edge topology. For cell typing we report two
