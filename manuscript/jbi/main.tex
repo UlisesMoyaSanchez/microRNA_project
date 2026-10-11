@@ -443,8 +443,12 @@ single-cell RNA-seq data (blood, brain and cerebrospinal fluid) queried from the
 CELLxGENE Census (release 2025-11-08) \cite{czi2025cellxgene}, combined with miRDB v6.0
 \cite{chen2020mirdb} miRNA--target interactions. It has three node types -- miRNA, gene
 and cell -- joined by regulatory, expression and co-expression edges, each with a reverse
-relation (Figure~\ref{fig:graph_schema}); Table~\ref{tab:datasets} counts miRNAs
-$\times$ genes, with the miRNA$\to$gene edges as positives. The disease label attached to each cell is kept
+relation (Figure~\ref{fig:graph_schema}). After the fixes described below it has 2,460
+miRNAs, 3,000 genes and 110,798 cells, with 44,186 miRNA$\to$gene, 16,682,321
+cell$\to$gene and 828 gene--gene edges; Table~\ref{tab:datasets} counts miRNAs $\times$
+genes, with the miRNA$\to$gene edges as positives. miRNA nodes carry a learnable
+64-dimensional embedding (no prior biological signal), gene nodes the mean log-normalized
+expression, and cell nodes a 50-dimensional PCA projection of their expression profile. The disease label attached to each cell is kept
 only as provenance and never enters the graph, the model input, the objective or any
 scoring head. We fixed two bugs in the graph-construction pipeline (co-expression gene
 selection and the cell-to-gene expression threshold) and re-measured every headline number
@@ -462,24 +466,7 @@ on the corrected graph; all replicate the pre-fix figures within one standard de
 \draw[-{Latex[length=2mm]}, thick, bend left=25] (g) to node[right, font=\scriptsize] {expressed\_in} (c);
 \draw[-{Latex[length=2mm]}, thick, bend left=35] (g) to node[above, font=\scriptsize] {coexpressed\_with} +(2.4,0.5);
 \end{tikzpicture}
-\vspace{0.5em}
-
-\small
-\begin{tabular}{lr}
-\hline
-Entity / edge type & Count \\
-\hline
-genes & 3,000 \\
-cells & 110,798 \\
-miRNAs & 2,460 \\
-miRNA$\to$gene (\texttt{regulates}) & 44,186 \\
-cell$\to$gene (\texttt{expresses}) & 16,682,321 \\
-gene$\leftrightarrow$gene (\texttt{coexpressed\_with}) & 828 \\
-\hline
-\end{tabular}
-\caption{Heterogeneous graph schema. Three node types and three edge types, each with
-an automatic reverse relation added for bidirectional message passing. Node features: miRNA nodes carry a learnable 64-dimensional embedding (no prior biological signal). Gene nodes carry 1-dimensional mean log-normalized expression. Cell nodes carry a 50-dimensional PCA projection of their expression profile. Counts are post-fix, i.e.\ from the corrected graph
-construction described above.}
+\caption{Schema of our heterogeneous graph: three node types and three edge types, each with an automatically added reverse relation.}
 \label{fig:graph_schema}
 \end{figure}
 
