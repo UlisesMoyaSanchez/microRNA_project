@@ -576,29 +576,15 @@ subsections below follow the same order.
 
 \subsection{Inflation across six graphs (E1, E2)}
 \label{sec:collapse_general}
-The central measurement of this paper, how much a conventional evaluation protocol
-inflates a trained model's AUROC, can be made on any graph whose association matrix can be obtained, and we
-make it on six. Training this paper's architecture from scratch on each of the five
-distinct graphs behind the seven surveyed papers, under a protocol we control rather than
-each paper's own, reproduces the same inflation every time
-(Figure~\ref{fig:cross_graph_collapse}, Table~\ref{tab:discrimination}): AUROC between
-0.8789 and 0.9919 under the conventional protocol (edges visible to the encoder during
-message passing, negatives drawn uniformly at random), falling to between 0.6182 and
-0.6406 once test edges are held out and negatives are degree-matched. Six graphs that
-share no data, no node types and no size land inside the same 0.023-wide band the moment
-the protocol is corrected.
-
-The inflation is $+0.256$ to $+0.365$ AUROC. Our own graph's $+0.359$ sits inside that range
-but near its upper end: only MEAHNE's $+0.365$ exceeds it. It is a member of this
-distribution rather than the outlier a reader might reasonably suspect a single
-self-reported graph of being, though it is not the median member either, and we do not
-claim it is. It is also the one graph in the set whose construction and training we
-control, so \S\ref{sec:mechanism} uses it to ask where the inflation comes from. The effect itself is the one measured here on all six. The trained arm is our architecture
-on their graphs, not each paper's own model, so Table~\ref{tab:discrimination} is evidence
-about the protocol, not about their reported numbers (Discussion). Its conventional and
-corrected corners are the \emph{seen} column of Table~\ref{tab:protocol_grid} and the
-corrected corner, not the held-out uniform column that Table~\ref{tab:validation_cases}
-reports.
+We retrain this paper's architecture from scratch under both protocols on six graphs
+(Figure~\ref{fig:cross_graph_collapse}, Table~\ref{tab:discrimination}). AUROC falls from
+0.879--0.992 under the conventional protocol to 0.618--0.641 once test edges are held out
+and negatives are degree-matched, an inflation of 0.256 to 0.365 on every graph. Six graphs
+that share no data, no node types and no size land in the same 0.023-wide band. Our own
+graph's $+0.359$ is inside that range, near its upper end: it is a member of the
+distribution, not an outlier. The trained arm is our architecture on their graphs, not each
+paper's own model, so the table is evidence about the protocol, not about their reported
+numbers (Discussion).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
@@ -608,44 +594,29 @@ reports.
 
 \input{tables/table7_discrimination.tex}
 
-Closing the same grid with the four unmodified topology heuristics instead of a trained
-model gives the model-free half of the same experiment on every one of these graphs
-(Table~\ref{tab:protocol_grid}), and shows the inflation is not something only a trained
-model does. Within each row the split and the negatives are held identical across all
-four cells and only the adjacency the heuristics may see changes, so the inflation is attributable to the
-protocol alone. That inflation is $+0.316$ to
-$+0.426$ across the six graphs with a full grid, and here our own graph's $+0.342$ sits
-inside the range without approaching either edge. It is squarely ordinary here, whereas its
-trained inflation above was ordinary but high. The decomposition, however, differs from ours: on these graphs the negative-sampling axis
-carries almost the entire effect ($\approx 0.30$) while the edge-split axis adds only
-$0.01$--$0.02$, whereas on our own graph the two axes were comparable and compounded
-super-additively. Held-out edges matter less here because these association matrices are
-small and their heuristics lean on node degree, which a handful of masked edges barely moves. The pattern is the same, but its internal balance is not. The canonical HMDD matrix appears
-twice in Table~\ref{tab:protocol_grid} because MGCNSS is scored on its own bundled split
-and NIMGSA and HLGNN-MDA on a generated one; MGCNSS carries the paper's own negatives, so
-it has no negative-sampling axis. ``Gini'' is the inequality of the column-degree
-distribution (\S\ref{sec:dead_columns}).
+Running the same grid with the four unmodified heuristics instead of a trained model
+(Table~\ref{tab:protocol_grid}, in \S\ref{sec:dead_columns}) shows the inflation is not something only a trained model
+produces. Within a row only the adjacency the heuristics may see changes, so the inflation
+is attributable to the protocol alone: $+0.316$ to $+0.426$ across the six graphs, with our
+graph's $+0.342$ inside the range. How it divides between the two failures differs. On the
+five surveyed graphs the negative-sampling axis carries almost the whole effect
+($\approx 0.30$) and the edge split only $0.01$--$0.02$, because these association matrices
+are small and their heuristics lean on node degree, which a handful of masked edges barely
+moves. On our own graph the two axes are comparable and compound super-additively. The
+canonical HMDD matrix appears twice because MGCNSS is scored on its own bundled split, and
+MGCNSS has no negative-sampling axis because it carries the paper's own negatives.
 
-\input{tables/table6_protocol_grid.tex}
-
-One asymmetry in Table~\ref{tab:discrimination} we can measure but cannot explain. The
-\emph{margin} between the trained model and the model-free floor behaves differently on
-our graph than on the other five. On all five surveyed graphs the conventional protocol
-leaves the two within 1.3 points of each other, and puts the one-line heuristic ahead
-on three of them, while the corrected protocol opens that margin to between 4.3 and 8.3
-points: the conventional protocol cannot tell a trained model from a degree count, and
-the corrected one can. On our own graph the margin moves the other way, narrowing from
-$+0.053$ to $+0.036$. The obvious candidate explanation is that our graph, unlike the five
-bare association matrices, carries real node features and learnable miRNA embeddings, so
-the conventional protocol lets the model memorise training edges in a way the corrected
-protocol strips, an advantage the other five graphs have nothing to reproduce. We tested
-it and it does not hold: logging training and validation loss per epoch across all six
-runs shows the same divergence signature on every graph, including the five with nothing
-to memorise. We therefore report the asymmetry as an open observation rather than attach a
-mechanism the data does not support, on the same footing as the candidate-space
-correlation in \S\ref{sec:dead_columns}. It does not affect the figures themselves: every
-checkpoint reported here is selected at peak validation AUROC, before that divergence
-begins.
+One asymmetry in Table~\ref{tab:discrimination} is measured but not explained. On the five
+surveyed graphs the conventional protocol leaves the trained model within 1.3 points of the
+best heuristic, behind it on three, and the corrected protocol opens that margin to between
+4.3 and 8.3 points, so only the corrected one can tell a trained model from a degree count.
+On our graph the margin narrows from $+0.053$ to $+0.036$. The obvious explanation, that our
+node features and miRNA embeddings let the model memorise training edges under the
+conventional protocol, does not hold: per-epoch training and validation loss show the same
+divergence on all six graphs, including the five with nothing to memorise. We report it as an
+open observation, like the candidate-space correlation in \S\ref{sec:dead_columns}. It does
+not affect the figures, since every checkpoint is selected at peak validation AUROC, before
+that divergence begins.
 
 \subsection{Published results against a model-free floor (E3, E4)}
 \label{sec:generalization}
@@ -753,6 +724,8 @@ retention, five seeds per point) moves the model-free floor in the \emph{opposit
 direction: it falls monotonically as the graph is thinned, on all five graphs
 (Spearman $\rho = +0.60$ to $+1.00$ against density), and the degree-matched control
 falls with it, so thinning simply makes every degree estimate noisier.
+
+\input{tables/table6_protocol_grid.tex}
 
 What separates these graphs appears instead to be how much of their candidate space can
 never be positive. MEAHNE's matrix carries 11{,}783 disease columns of which 92.4\% have
