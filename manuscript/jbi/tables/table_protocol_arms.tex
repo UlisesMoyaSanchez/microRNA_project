@@ -1,0 +1,14 @@
+\begin{table}[h!]
+\caption{What differs between the two protocols. $E$ is the set of target edges (the links to predict), $E_{\mathrm{tr}}$, $E_{\mathrm{va}}$ and $E_{\mathrm{te}}$ its training, validation and test parts, and $b(\cdot)$ the degree bin of a node (Eq.~\ref{eq:matched}). Data, labels, model and metric are identical.}
+\label{tab:protocol_arms}
+\small
+\begin{tabular}{p{3.4cm}p{4.2cm}p{5.2cm}}
+\hline
+ & Conventional & Corrected \\
+\hline
+Message-passing graph & all of $E$ & $E_{\mathrm{tr}}$ only; $E_{\mathrm{va}}$, $E_{\mathrm{te}}$ and their reverse relations removed \\
+Positives scored & all of $E$, which are also the training targets & $E_{\mathrm{te}}$, never seen by the encoder \\
+Negative $(u,v')$ for a positive $(u,v)$ & $v'$ drawn uniformly at random & $v'$ with $b(v')=b(v)$ \\
+\hline
+\end{tabular}
+\end{table}

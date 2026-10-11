@@ -471,18 +471,25 @@ on the corrected graph; all replicate the pre-fix figures within one standard de
 \end{figure}
 
 \subsection{Evaluation protocol}
-We evaluate every model under two protocols. The \emph{conventional} protocol keeps all
-edges in the message-passing graph (``edges seen'') and draws negatives uniformly at
-random. The \emph{corrected} protocol holds test edges out of the message-passing graph and
-draws degree-matched negatives. Crossing the two choices gives a $2\times2$ grid of edge
+Link prediction scores node pairs $(u,v)$. Let $E$ be the set of target edges, the links
+to predict: miRNA$\to$gene edges in our graph, miRNA--disease associations in the surveyed
+matrices, and the benchmark's own edges in OGB. Any other edge types a graph has (in ours,
+cell$\to$gene and gene--gene) are never held out. We evaluate every model under two
+protocols. The \emph{conventional} protocol holds nothing out: every edge of $E$ stays in
+the message-passing graph and is also a supervision and evaluation target (``edges
+seen''), and negatives are drawn uniformly at random. The \emph{corrected} protocol holds test edges out of the message-passing graph and
+draws degree-matched negatives. The data, labels, model and metric are the same in both. Crossing the two choices gives a $2\times2$ grid of edge
 split by negative sampler, which lets us attribute the inflation to each failure
-separately (\S\ref{sec:mechanism}).
+separately (\S\ref{sec:mechanism}). Table~\ref{tab:protocol_arms} gives the
+difference between the two arms.
+
+\input{tables/table_protocol_arms.tex}
 
 We use \emph{transductive edge leakage} for the specific condition audited here: a
 held-out edge left in the message-passing graph when its score is computed, so the
 encoder can, in effect, observe the edge it is later asked to predict -- narrower than
 the general transductive/inductive distinction in graph learning, which is not itself a
-source of leakage. In the corrected protocol, 10\% of the miRNA$\to$gene edges are held
+source of leakage. In the corrected protocol, 10\% of the edges of $E$ are held
 out for validation and 10\% for testing at random, and each held-out edge, with its
 automatically-added reverse relation, is removed from the message-passing graph in both
 directions. An automated battery of checks verifies this before any downstream number is
@@ -491,12 +498,19 @@ of the training edges are withheld from the encoder's input and used only as sup
 targets, so the model cannot read a training edge off the graph while being asked to
 predict it.
 
-A uniform negative pairs a positive miRNA with a gene drawn uniformly at random. A
-degree-matched negative pairs it instead with a non-target gene of similar popularity:
-genes are placed in eight log-spaced bins of in-degree, computed from training edges only,
-and each positive $(m,g)$ receives a negative $(m,g')$ with $g'$ in the same bin as $g$.
+A uniform negative pairs the source node $u$ of a positive with a target node drawn
+uniformly at random. A degree-matched negative pairs it instead with a non-target node of
+similar popularity: target nodes are placed in eight log-spaced bins of in-degree,
+computed from training edges only, and each positive $(u,v)$ receives a negative $(u,v')$
+with $v'$ in the same bin as $v$:
+\begin{equation}
+v' \sim \mathcal{U}\bigl\{\, j : b(j) = b(v),\ (u,j)\notin E \,\bigr\},
+\qquad b(j)=\mathrm{bin}_8\bigl(\log(1+d_{\mathrm{tr}}(j))\bigr),
+\label{eq:matched}
+\end{equation}
+where $d_{\mathrm{tr}}(j)$ is the in-degree of node $j$ among training edges.
 When no valid candidate is found in 16 draws the sampler falls back to any non-target of
-$m$, and the fraction of fallbacks is logged. Within any single reported number the same
+$u$, and the fraction of fallbacks is logged. Within any single reported number the same
 sampler is used at training and at evaluation; mixing the two produces the ``mismatch
 trap'', an apparent difficulty measurement that is in fact an artifact of the distribution
 mismatch (Figure~\ref{fig:neg_sampling_mechanism}). The third requirement of the standard we
