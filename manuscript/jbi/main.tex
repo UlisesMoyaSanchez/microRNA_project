@@ -519,7 +519,10 @@ When no valid candidate is found in 16 draws the sampler falls back to any non-t
 $u$, and the fraction of fallbacks is logged. Within any single reported number the same
 sampler is used at training and at evaluation; mixing the two produces the ``mismatch
 trap'', an apparent difficulty measurement that is in fact an artifact of the distribution
-mismatch (Figure~\ref{fig:neg_sampling_mechanism}). The third requirement of the standard we
+mismatch (Figure~\ref{fig:neg_sampling_mechanism}). In the headline grid
+(Table~\ref{tab:headline_grid}), the edges-seen row reports the uniform-negative-trained model
+under both evaluation regimes, and the edges-held-out row each model scored with the negative
+type it was trained on. The third requirement of the standard we
 propose concerns reporting rather than the protocol itself: a model-free baseline, whose
 margin over the trained model is stated alongside the headline number
 (\S\ref{sec:baselines}).
@@ -674,10 +677,7 @@ rather than a decomposition.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig1_protocol_grid.pdf}
-\caption{The headline protocol grid. AUROC (mean $\pm$ std, 4 seeds) crossing edge
-split (seen during message passing vs.\ held out) with negative-sampling regime
-(uniform-random vs.\ degree-matched). Correcting both flaws simultaneously lowers
-AUROC by 0.359.}
+\caption{Headline protocol grid: AUROC (mean $\pm$ std, 4 seeds) by edge split and negative sampler.}
 \label{fig:protocol_grid}
 \end{figure}
 
@@ -693,9 +693,7 @@ grid (Figure~\ref{fig:negative_sampler_collapse}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
-\caption{The mismatch mechanism: every architecture trained with uniform negatives,
-evaluated under both negative regimes. Matched-negative evaluation collapses every
-trained model toward the gene-degree heuristic's floor. The untrained control does not move.}
+\caption{Every architecture trained with uniform negatives and scored under both negative regimes; the untrained control does not move.}
 \label{fig:negative_sampler_collapse}
 \end{figure}
 
@@ -716,7 +714,7 @@ under the corrected protocol, within that scale, so we do not read it as an orde
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
-\caption{Inflation between the conventional and corrected protocols across four trained models and an untrained control (single seed, one GPU). Full grid: Table~\ref{tab:architecture_grid}.}
+\caption{Inflation across four trained models and an untrained control (single seed, one GPU; Appendix~\ref{app:grid}).}
 \label{fig:architecture_inflation}
 \end{figure}
 

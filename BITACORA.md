@@ -23,67 +23,84 @@ trabajo, no por commit.
 
 ---
 
-## 2026-10-10 — Terminología unificada, sección de Datasets, y el confound de DDP aparcado
+## 2026-10-10 → 11 — Pulido del manuscrito: secciones 2 a 4 revisadas, hasta 4.4
 
-Sesión de pulido de `manuscript/jbi/main.tex`. Commits `0cfe262`…`09987da` más el de cierre,
-todos en `feat/lp-audit`.
+Sesión larga sobre `manuscript/jbi/main.tex`. Commits `0cfe262`…`84e81a1` (más el de cierre de
+captions de 4.4 y de esta entrada), todos en `feat/lp-audit`.
 
-**Terminología (volver aquí si reaparece la duda).** El paper nombraba lo mismo de cuatro
-maneras. Quedó así: *heurístico* = cada una de las cuatro reglas (gene in-degree,
-preferential attachment, common neighbours, Adamic--Adar); *model-free baseline* = el papel
-que cumplen; *model-free floor* = el AUROC del mejor de ellos en un grafo dado; *margin* =
-AUROC del modelo menos ese piso. Se eliminó "no-learning" (confundía con el control sin
-entrenar, que es otra cosa; quedan dos usos legítimos en el control de cell typing) y "cost"
-como nombre del fenómeno (ahora *inflation*; "cost" suena a precio del protocolo corregido y
-choca con el costo computacional de L985). "Scorer" solo en la definición. La frase que lo
-fija está en 3.4 (Baselines).
+### DÓNDE NOS QUEDAMOS
 
-**"Seis arquitecturas" era falso.** La Tabla S1 tiene seis filas, pero solo **cuatro modelos
-entrenados** inflan (HGT, GCN, HGT sin co-expresión, MLP); el control sin entrenar no se mueve
-y el smoke test sin miRNA no tiene cabeza de enlace (n/a). Corregido en Abstract, highlights,
-contribuciones, Métodos, Resultados, Discusión y Conclusión.
+- **Revisadas y recortadas, sección por sección:** 2.2, 3.1 a 3.4, 4.1, 4.2, 4.3 y 4.4 (incluidos
+  los captions de 4.4). La 3.5 (protocolo de la encuesta) se eliminó por completo.
+- **Siguiente en la fila:** **4.5** (control de cell typing, E7), luego **Discusión**,
+  **Conclusión**, y una pasada final de Abstract/highlights contra las cifras que quedaron.
+- **El autor tiene comentarios pendientes de dar sobre la Tabla 11 y sobre el AUPRC.** Tabla 11 =
+  la rejilla model-free (cuatro celdas por grafo, columnas Empty/Gini/Inflation), que ahora vive
+  en 4.3. AUPRC aparece solo en la Tabla 12 (rejilla headline); el texto de Resultados habla solo
+  de AUROC. **Retomar por ahí: pedirle los comentarios antes de tocar nada.**
+- **Decisiones abiertas:** (1) dónde va la checklist del estándar mínimo (hoy en Discusión, con un
+  comentario `%% PENDING` en `main.tex`): dejarla, fusionarla con la Tabla 1 de precedentes o
+  quitarla; (2) fijar URL/DOI del repositorio en Data availability.
+- **Sin verificar contra los resultados originales** (se tomaron del texto previo del paper): las
+  cifras de la tabla "Results at a glance" y de 4.1 a 4.4; que E5 use las cinco matrices externas
+  para el adelgazamiento; cómo se aplican los heurísticos a OGB (grafo no bipartito); si el
+  sampler uniforme excluye aristas verdaderas.
 
-**Datasets.** Nueva subsección 3.1 con tabla de los ocho grafos (nuestro, cinco matrices
-miRNA--enfermedad, ogbl-ddi, ogbl-ppa) y citas. Hallazgos al verificar en la DGX y en las
-fuentes: la matriz canónica de 5,430 asociaciones es **HMDD v2.0** (no v3.2; corregido en
-`results/HMDD_TOPOLOGY_AUDIT.md`); las células salen de una consulta al **CZ CELLxGENE Census,
-release 2025-11-08** (job 5012, 2026-05-28; el script lo fija en la línea 113), no de una
-"cohorte"; GSE289530 es un accession de miRNA de GEO y no es la fuente de las células. RWR se
-cita con Tong et al. 2006 por elección nuestra (la referencia de ModulePred para RWR es un
-artículo sobre PageRank).
+### Qué se hizo hoy
 
-**Otros cambios.** §2.2 compactada y la Tabla 2 de la encuesta con columna *model-free
-baseline* y sin Venue/year; `hyperref` activado (citas con hipervínculo; hay que borrar
-`main.aux`/`main.bbl` si cambia); "Methods" renombrada "Data and methods" con referencias por
-`\S\ref`; el esquema del grafo (Fig. 3) sin tabla interna; `RandomLinkSplit` fuera del texto.
+**Terminología (volver aquí si reaparece la duda).** *Heurístico* = cada una de las cuatro reglas
+(gene in-degree, preferential attachment, common neighbours, Adamic--Adar); *model-free baseline*
+= el papel que cumplen; *model-free floor* = el AUROC del mejor de ellos en un grafo dado;
+*margin* = AUROC del modelo menos ese piso. Se eliminó "no-learning" (quedan dos usos legítimos
+en el control de cell typing), "cost" y casi todo "collapse" como nombre del fenómeno: ahora es
+*inflation*. "Scorer" solo en la definición. La definición de baseline ya no dice "sin etiquetas
+de entrenamiento" (era falso: los heurísticos usan las aristas de entrenamiento); los controles
+de cell typing son *graph-free*, no model-free. "Dead" pasó a "empty" en todo el paper.
 
-**Confound de DDP, resuelto después (2026-10-10, noche).** Al compactar 4.4 se incorporó el parche
-que estaba aparcado: el spread de seeds (0.005--0.02) se midió en el modelo headline de 4 GPU,
-no en el driver de 1 GPU de la rejilla, así que es solo una escala indicativa; la diferencia GCN
-vs HGT (0.016, corridas únicas) ya no se lee como un orden; el detalle del driver (0.9222 vs
-0.9867, 0.00004 entre val y test) pasó al Apéndice A. El archivo `pending/ddp_confound_fix.patch`
-se borró.
+**"Seis arquitecturas" era falso.** La rejilla tiene seis filas, pero solo **cuatro modelos
+entrenados** inflan (HGT, GCN, HGT sin co-expresión, MLP); el control sin entrenar no se mueve y
+el smoke test sin miRNA no tiene cabeza de enlace.
 
-**3.2 reescrita y la checklist movida (pendiente de decidir).** 3.2 describía el protocolo como
-buenas prácticas, sin los dos brazos (convencional = aristas vistas + negativos uniformes;
-corregido = aristas retenidas + negativos pareados por grado), sin la rejilla 2x2 y sin el
-pareo (8 bins log de in-degree sobre aristas de entrenamiento, hasta 16 intentos, fallback a
-cualquier no-objetivo; val/test 10%/10%, 30% de las aristas de entrenamiento solo como
-supervisión). Ahora lo dice. La Tabla 4 (checklist del estándar mínimo) duplicaba esa prosa y
-la Tabla 1, así que se movió a la Discusión, junto a donde se propone el estándar; el autor no
-está convencido de que deba estar ahí tampoco: hay un comentario `%% PENDING` en `main.tex`.
-Opciones: dejarla en Discusión, fusionarla con la Tabla 1 (precedentes) o quitarla.
+**Estructura de Métodos y Resultados.** 3.1 Datasets (tabla de los ocho grafos, con citas);
+3.2 Evaluation protocol (dos brazos, rejilla 2x2, tabla de qué difiere y la ecuación del negativo
+pareado, con notación general (u,v)); 3.3 Experimental design (tabla de E1--E7); 3.4 Baselines
+and models (definición corregida y tabla de los cuatro heurísticos). Resultados abre con una
+tabla "Results at a glance" y cada subsección lleva su etiqueta E. Se descartó separar los
+resultados por factor (held-out / negativos / model-free): los dos primeros son ejes de la misma
+rejilla y el tercero es un método. Títulos de Resultados neutros y cortos.
 
-**Resultados (2026-10-10, tarde).** Revisión de la sección 4: se añadió una tabla "Results at
-a glance" (E1--E7) al inicio, etiquetas E1--E7 en los títulos, se recortó la duplicación de 4.2
-con 3.1/3.3, la Tabla S1 pasó a un Apéndice A, y la atribución "convention-sensitive" (que
-apuntaba a una explicación que ya no existía) se sustituyó por la cuenta explícita: negativos
-solos 0.062, aristas retenidas solas 0.177, juntos 0.359. Se descartó separar los resultados
-por factor (held-out / negativos / model-free): los dos primeros son ejes de la misma rejilla
-y el tercero es un método.
+**Hechos verificados al rehacer Datasets.** La matriz canónica de 5,430 asociaciones es **HMDD
+v2.0** (no v3.2; corregido en `results/HMDD_TOPOLOGY_AUDIT.md`). Las células salen de una
+consulta al **CZ CELLxGENE Census, release 2025-11-08** (job 5012, 2026-05-28; el script lo fija
+en la línea 113), no de una "cohorte". GSE289530 es un accession de miRNA de GEO y no es la
+fuente de las células. RWR se cita con Tong et al. 2006 por elección nuestra (la referencia de
+ModulePred para RWR es un artículo sobre PageRank).
 
-**Pendiente.** Decidir dónde va la checklist (Tabla 4); Tabla 7 como anomalía abierta; decidir el parche de DDP; fijar URL/DOI del
-repositorio en Data availability.
+**Qué es cada sección de Resultados** (para no volver a confundirlas). 4.1 (E1, E2) cambia el
+protocolo y deja el modelo fijo: nuestra arquitectura reentrenada en seis grafos. 4.2 (E3, E4)
+no toca nada: lee los números ya publicados contra un piso model-free. 4.3 (E5) explica por qué
+el piso es alto en algunos grafos: las columnas vacías (enfermedades sin ninguna asociación
+conocida regalan negativos fáciles). 4.4 (E6) es el análisis sobre nuestro grafo: la
+super-aditividad (0.062 + 0.177 = 0.239 < 0.359), que el modelo aprende popularidad (0.8712 del
+grado contra 0.8056 del modelo) y que no es solo del transformer.
+
+**Confound de DDP, resuelto.** Al compactar 4.4 se incorporó lo que estaba aparcado: el spread de
+seeds (0.005--0.02) se midió en el modelo headline de 4 GPU, no en el driver de 1 GPU de la
+rejilla, así que es solo una escala indicativa; la diferencia GCN vs HGT (0.016, corridas únicas)
+ya no se lee como un orden; el detalle del driver (0.9222 vs 0.9867; 0.00004 entre val y test)
+está en el Apéndice A.
+
+**Tablas.** Se eliminó la tabla "floor convergence" (duplicaba la Tabla 8 y la de diez casos), la
+Tabla S1 pasó a Apéndice A, la rejilla model-free pasó de 4.1 a 4.3, y todos los captions se
+acortaron moviendo las notas de lectura al texto. La numeración cambia cada vez que se mueve algo;
+usar siempre `\ref`.
+
+**Notas de herramienta.** Compilar con `manuscript/jbi/compile.sh` (no hay `latexmk`). Si cambia
+algo con `hyperref`, borrar `main.aux` y `main.bbl` antes. La clase `elsarticle` ya añade el punto
+tras `\paragraph{...}`: no ponerlo en el título. Un `_` en una `note` del `.bib` rompe la
+compilación. **Al editar captions por script, anclar cada uno a su `\label` y no buscar el primer
+`\caption`**: una regex ingenua borró media sección en una pasada (se detectó y se revirtió
+antes de commitear).
 
 ---
 
