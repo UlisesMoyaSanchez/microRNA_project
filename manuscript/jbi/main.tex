@@ -442,7 +442,7 @@ open leaderboards. We use them only as an external check on the model-free basel
 
 \paragraph{Our graph.} The sixth retrained graph is the one we built ourselves. We build a heterogeneous graph from public multiple-sclerosis single-cell RNA-seq data
 (blood, brain and cerebrospinal fluid) queried from the CZ CELLxGENE Census
-\cite{czi2025cellxgene}, combined with miRDB v6.0 \cite{chen2020mirdb} miRNA--target
+(release 2025-11-08) \cite{czi2025cellxgene}, combined with miRDB v6.0 \cite{chen2020mirdb} miRNA--target
 interactions. The graph has three node types -- miRNA, gene,
 and cell -- connected by a miRNA-to-gene regulatory edge, a cell-to-gene expression
 edge, and a gene-to-gene co-expression edge, each with an automatically-added reverse
@@ -1127,11 +1127,10 @@ relationships that could have appeared to influence the work reported in this pa
 
 \section*{Data availability}
 Code: this repository. The reporting-standard checker is in \texttt{protocheck/}, with a Colab notebook at \texttt{notebooks/protocheck\_colab.ipynb}. Large data/checkpoints are intentionally untracked -- the public
-source (a CZ CELLxGENE Census query, retrieved 2026-05-28 with the release not pinned; the
-download log reports the stable release as 2025-11-08; and miRDB v6.0) and the exact build
-scripts are documented so the graph is reconstructible, rather than distributing large
-binaries in-repo.
-[STAGE: pin the Census release and finalize the repository URL / DOI before submission.]
+source (a CZ CELLxGENE Census query, release 2025-11-08, retrieved 2026-05-28; and miRDB
+v6.0) and the exact build scripts are documented so the graph is reconstructible, rather
+than distributing large binaries in-repo.
+[STAGE: finalize the repository URL / DOI before submission.]
 
 \section*{Funding}
 [STAGE / TODO -- fill in funding source(s), or ``Not applicable'' if none.]
