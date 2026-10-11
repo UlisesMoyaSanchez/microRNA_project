@@ -292,9 +292,9 @@ of the surveyed papers, evaluated on their own datasets. Our own graph is one of
 Because we built it, it is also the one on which we can dissect the mechanism in full.
 This paper makes five contributions.
 \begin{enumerate}
-\item It quantifies the cost on six graphs. The conventional protocol overstates AUROC by
+\item It quantifies the inflation on six graphs. The conventional protocol overstates AUROC by
 0.26--0.37 on every one of them, and the corrected protocol leaves all six at 0.62--0.64.
-\item It explains where the cost comes from. It separates the two failure modes, whose
+\item It explains where the inflation comes from. It separates the two failure modes, whose
 relative weight depends on the graph, and shows that candidate columns which can never be
 positive raise the model-free floor on their own.
 \item It measures the model-free floor on other papers' own data: seven surveyed papers and
@@ -462,7 +462,7 @@ comparability limit the driver difference imposes.
 
 \subsection{Cross-graph and cross-paper comparison design}
 The protocol defined above is applied identically across three comparisons, so that
-whether its cost is a property of the protocol rather than of any single graph or model
+whether the inflation is a property of the protocol rather than of any single graph or model
 can be measured rather than assumed. Our own graph, described below, is one case among
 these, not the case the comparisons are built around.
 
@@ -630,7 +630,7 @@ message passing, negatives drawn uniformly at random -- falling to between 0.618
 share no data, no node types and no size land inside the same 0.023-wide band the moment
 the protocol is corrected.
 
-The cost is $+0.256$ to $+0.365$ AUROC. Our own graph's $+0.359$ sits inside that range
+The inflation is $+0.256$ to $+0.365$ AUROC. Our own graph's $+0.359$ sits inside that range
 but near its upper end: only MEAHNE's $+0.365$ exceeds it. It is a member of this
 distribution rather than the outlier a reader might reasonably suspect a single
 self-reported graph of being -- though it is not the median member either, and we do not
@@ -654,11 +654,11 @@ Closing the same grid with the four unmodified topology scorers instead of a tra
 model gives the model-free half of the same experiment on every one of these graphs
 (Table~\ref{tab:protocol_grid}), and shows the collapse is not something only a trained
 model does. Within each row the split and the negatives are held identical across all
-four cells and only the adjacency the scorers may see changes, so the cost of the
-corrected protocol is attributable to the protocol alone. That cost is $+0.316$ to
+four cells and only the adjacency the scorers may see changes, so the inflation is attributable to the
+protocol alone. That inflation is $+0.316$ to
 $+0.426$ across the six graphs with a full grid, and here our own graph's $+0.342$ sits
 inside the range without approaching either edge -- squarely ordinary, where its trained
-cost above was ordinary but high. The decomposition, however, differs from ours: on these graphs the negative-sampling axis
+inflation above was ordinary but high. The decomposition, however, differs from ours: on these graphs the negative-sampling axis
 carries almost the entire effect ($\approx 0.30$) while the edge-split axis adds only
 $0.01$--$0.02$, whereas on our own graph the two axes were comparable and compounded
 super-additively. Held-out edges matter less here because these association matrices are
