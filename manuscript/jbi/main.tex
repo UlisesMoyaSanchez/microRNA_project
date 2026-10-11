@@ -124,7 +124,7 @@ control -- and an unrelated cell-typing task with two graph-free controls were
 tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
-graphs (ours and five from surveyed papers) collapses the Area Under the
+graphs (ours and five from surveyed papers) lowers the Area Under the
 Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
@@ -390,7 +390,7 @@ a degree-matched negative ties.}
 
 \input{tables/table_known_pitfalls.tex}
 
-\subsection{A survey of this subfield's evaluation practice}
+\subsection{Evaluation practice in the literature}
 Against that backdrop, we surveyed 21 papers in the miRNA-target and adjacent
 biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disease,
 lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
@@ -538,7 +538,7 @@ measured rather than assumed; our own graph (\S\ref{sec:data}) is one case among
 the case they are built around. Together they cover ten cases (our graph, seven surveyed
 papers and two OGB benchmarks) on eight distinct graphs, because three of the papers
 share one matrix. E5 asks what separates the graphs, and E6 and E7 use the one graph whose
-construction and training we control to ask why the collapse happens and whether the audit
+construction and training we control to ask why the inflation arises and whether the audit
 deflates a task that is not leaky.
 
 \input{tables/table_experiments.tex}
@@ -574,13 +574,13 @@ subsections below follow the same order.
 
 \input{tables/table_results_summary.tex}
 
-\subsection{The protocol collapse is a property of the protocol, not of our graph (E1, E2)}
+\subsection{Inflation across six graphs (E1, E2)}
 \label{sec:collapse_general}
 The central measurement of this paper -- how much a conventional evaluation protocol
 inflates a trained model's AUROC -- can be made on any graph whose association matrix can be obtained, and we
 make it on six. Training this paper's architecture from scratch on each of the five
 distinct graphs behind the seven surveyed papers, under a protocol we control rather than
-each paper's own, reproduces the same collapse every time
+each paper's own, reproduces the same inflation every time
 (Figure~\ref{fig:cross_graph_collapse}, Table~\ref{tab:discrimination}): AUROC between
 0.8789 and 0.9919 under the conventional protocol -- edges visible to the encoder during
 message passing, negatives drawn uniformly at random -- falling to between 0.6182 and
@@ -593,7 +593,7 @@ but near its upper end: only MEAHNE's $+0.365$ exceeds it. It is a member of thi
 distribution rather than the outlier a reader might reasonably suspect a single
 self-reported graph of being -- though it is not the median member either, and we do not
 claim it is. It is also the one graph in the set whose construction and training we
-control, so \S\ref{sec:mechanism} uses it to ask why the collapse happens. The effect itself is the one measured here on all six. The trained arm is our architecture
+control, so \S\ref{sec:mechanism} uses it to ask where the inflation comes from. The effect itself is the one measured here on all six. The trained arm is our architecture
 on their graphs, not each paper's own model, so Table~\ref{tab:discrimination} is evidence
 about the protocol, not about their reported numbers (Discussion). Its conventional and
 corrected corners are the \emph{seen} column of Table~\ref{tab:protocol_grid} and the
@@ -602,7 +602,7 @@ reports.
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
-\caption{The same protocol collapse on six graphs: this paper's architecture under the conventional and corrected protocols (mean over 4 seeds). Rows are sorted by inflation, our graph is in bold, and the band marks 0.618--0.641.}
+\caption{The same inflation on six graphs: this paper's architecture under the conventional and corrected protocols (mean over 4 seeds). Rows are sorted by inflation, our graph is in bold, and the band marks 0.618--0.641.}
 \label{fig:cross_graph_collapse}
 \end{figure}
 
@@ -610,7 +610,7 @@ reports.
 
 Closing the same grid with the four unmodified topology heuristics instead of a trained
 model gives the model-free half of the same experiment on every one of these graphs
-(Table~\ref{tab:protocol_grid}), and shows the collapse is not something only a trained
+(Table~\ref{tab:protocol_grid}), and shows the inflation is not something only a trained
 model does. Within each row the split and the negatives are held identical across all
 four cells and only the adjacency the heuristics may see changes, so the inflation is attributable to the
 protocol alone. That inflation is $+0.316$ to
@@ -647,9 +647,9 @@ correlation in \S\ref{sec:dead_columns}. It does not affect the figures themselv
 checkpoint reported here is selected at peak validation AUROC, before that divergence
 begins.
 
-\subsection{Each paper's own reported number against a model-free floor (E3, E4)}
+\subsection{Published results against a model-free floor (E3, E4)}
 \label{sec:generalization}
-The collapse in \S\ref{sec:collapse_general} is measured with our architecture on other
+The inflation in \S\ref{sec:collapse_general} is measured with our architecture on other
 people's graphs. A separate question is how each paper's \emph{own} reported number stands
 against a model-free floor. The literature survey (Section~\ref{sec:related}) raises that
 question without settling it: most surveyed papers report no model-free control at all, and
@@ -743,7 +743,7 @@ CoupleMDA's positive edges are exact but its negatives are not (Tier 1/2); the r
 five HMDD rows use an exact association matrix with a self-generated split at the paper's
 stated ratio (Tier 2).
 
-\subsection{What separates these graphs: dead candidate columns (E5)}
+\subsection{Empty candidate columns (E5)}
 \label{sec:dead_columns}
 The two papers where the trained model adds the least are also the two sparsest graphs
 audited (MEAHNE: 17{,}972 edges over 1{,}296 $\times$ 11{,}783 nodes, and CoupleMDA:
@@ -778,11 +778,11 @@ nothing" and already sufficient: \emph{the popularity floor this literature neve
 checks for is frequently high enough to matter, and on some of its own graphs,
 decisive.}
 
-\subsection{Why the collapse happens (E6)}
+\subsection{Sources of the inflation on our graph (E6)}
 \label{sec:mechanism}
 One graph in the set is ours, and it is the one whose construction, features and training
 we can vary at will. We use it for the question the other five cannot answer: not whether
-the collapse happens -- \S\ref{sec:collapse_general} settles that on all six -- but what
+the inflation occurs -- \S\ref{sec:collapse_general} settles that on all six -- but what
 produces it.
 
 The two corrections are not redundant. Crossing them independently
@@ -862,7 +862,7 @@ that ordering survives the headline training regime is untested.
 \label{fig:architecture_inflation}
 \end{figure}
 
-\subsection{A control task that survives the same audit (E7)}
+\subsection{Cell-type classification control (E7)}
 \label{sec:celltype}
 The audit does not deflate every number it touches. Applying the same
 model-free-comparator logic to a structurally different task on the same graph --
