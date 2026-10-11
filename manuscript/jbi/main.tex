@@ -398,7 +398,10 @@ full rather than inferring its protocol from the abstract
 (Table~\ref{tab:literature_survey}). Three findings matter here. First, 14 of the 21
 report no model-free baseline. The six that do report a classical untrained method as one
 more competitor in a comparison table, never as a floor, and none remarks on how narrow
-its margin over that comparator is (\S\ref{sec:generalization} measures those margins).
+its margin over that comparator is. In the five papers whose numbers can be read from
+the text, the headline clears the comparator by 1.7 to 7.4 AUROC points; NIMGSA's SPM
+comparator (0.8960) comes within 3.9 points of NIMGSA itself (0.9354) and outscores IMCMDA
+(0.8329), a trained baseline in the same table.
 Second, 17 draw their negatives from unlabeled pairs, uniformly sampled or taken wholesale,
 without discussing the alternative; only MGCNSS~\cite{tian2024mgcnss} and
 HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and two papers never say.
@@ -436,7 +439,10 @@ could obtain (MGCNSS, NIMGSA and HLGNN-MDA) share a byte-identical HMDD matrix. 
 from the paper's own repository, or a shared mirror for CKSNP-GNN, and was verified against
 that paper's reported counts. Three further papers were excluded because no usable data was
 recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
-open leaderboards, used only as an external check on the model-free baselines.
+open leaderboards, used only as an external check on the model-free baselines. In the
+results table, only MGCNSS uses the paper's own exact test split (Tier 1); CoupleMDA's
+positive edges are exact but its negatives are not (Tier 1/2); the other five HMDD rows use
+an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2).
 
 \paragraph{Our graph} We build a heterogeneous graph from public multiple-sclerosis
 single-cell RNA-seq data (blood, brain and cerebrospinal fluid) queried from the CZ
@@ -620,99 +626,21 @@ that divergence begins.
 
 \subsection{Published results against a model-free floor (E3, E4)}
 \label{sec:generalization}
-The inflation in \S\ref{sec:collapse_general} is measured with our architecture on other
-people's graphs. A separate question is how each paper's \emph{own} reported number stands
-against a model-free floor. The literature survey (Section~\ref{sec:related}) raises that
-question without settling it: most surveyed papers report no model-free control at all, and
-the six that do report one never read it as a floor, so the survey establishes the reporting
-practice but not what such a control is worth on these graphs.
-Table~\ref{tab:validation_cases} closes that gap across all ten cases examined: our own
-miRNA-target graph, two public OGB link-prediction benchmarks (ogbl-ddi, ogbl-ppa)
-\cite{hu2020ogb}, and seven of the 21 surveyed papers' own miRNA-disease datasets
-(Table~\ref{tab:literature_survey}). Ten cases are not ten independent graphs: three of the
-seven papers (MGCNSS, NIMGSA and HLGNN-MDA) share one HMDD matrix (\S\ref{sec:data}), so we
-report the mean gap both per paper ($-0.047$) and per graph ($-0.039$). Three lines of
-evidence answer the question, from what this literature has already published to what we
-measured ourselves: the six surveyed papers' own comparison tables, the same floor
-re-measured on their matrices, and the two OGB benchmarks together with the seven papers'
-own data in the table.
+Table~\ref{tab:validation_cases} gives the ten cases, and three results stand out. First, on
+the seven surveyed papers' own matrices the trained models beat the model-free floor by 4.7
+AUROC points on average per paper (3.9 per distinct graph), but the gap runs from $-9.2$
+points (DiGAMN) to $+3.3$: on MEAHNE's graph the heuristic beats the paper's own model
+(0.9848 vs.\ 0.9520), and with degree-matched negatives every heuristic falls to
+0.55--0.58. Second, the floor replicates. The untrained comparators that NIMGSA, HLGNN-MDA
+and CKSNP-GNN report (0.8960, 0.8565 and 0.9190) sit beside the 0.8842 and 0.8924 that our
+best heuristic reaches on their matrices under the conventional protocol, and CKSNP-GNN's
+is a number transferred from other papers, not measured on its own data. Third, on OGB the
+heuristics reproduce the leaderboards exactly and the floor is not uniform: on ogbl-ddi the
+best heuristic ranks 30th of 32, while on ogbl-ppa a zero-parameter formula ranks 14th of 27,
+essentially tied with the entry just above it, BUDDY \cite{chamberlain2023buddy} (0.4933 vs.\
+0.4934 Hits@100).
 
 \input{tables/table5_hmdd_survey_audit.tex}
-
-\textbf{What the six surveyed papers' own tables already report.} Six of the 21 surveyed
-papers do report a comparator that fits nothing: NIMGSA (SPM), NGCN (HNM), Orro (TCRWMDA),
-HLGNN-MDA (BNPMDA), CKSNP-GNN (LLCMDA, with PBMDA a second untrained row) and ModulePred
-(RWR and RWRH). In the five whose numbers can be read from the text, the paper's own headline
-clears its own untrained comparator by 1.7, 1.8, 3.9, 5.0 and 7.4 AUROC points. ModulePred's
-appears only in a figure. None of the six remarks on the size of that margin. In every case
-the untrained method is presented as one more competitor in a ranking to be won, not as a
-floor the headline should be read against, which is the practice this paper argues is
-missing, stated here in the form its own literature has already published. NIMGSA's table
-carries the sharpest instance: its SPM comparator (0.8960) comes within 3.9 points of NIMGSA
-itself (0.9354) and outscores IMCMDA (0.8329), a trained matrix-completion baseline in the
-same table. One caveat belongs with these numbers and is itself a finding about evaluation
-practice: CKSNP-GNN did not run its comparators, but reports ``the optimal AUC recorded in
-each paper'', so its floor is a number transferred across papers and dataset versions rather
-than measured on its own data.
-
-\textbf{The same floor, measured independently.} Three of those six evaluate on an
-association matrix we could re-measure, which lets a floor they published be checked against
-a floor computed here by a different method (Table~\ref{tab:floor_convergence}). The two
-agree. Against untrained comparators those papers report at 0.8960, 0.8565 and 0.9190, our
-own best heuristic reaches 0.8842 on the canonical HMDD matrix and 0.8924 on CKSNP-GNN's,
-both under the conventional protocol. An untrained heuristic reaches 0.86--0.92 on these graphs
-however it is built, and that is what makes the papers' own margins interpretable: they are
-margins over a floor that replicates across methods and across research groups. Three
-qualifications. The trained columns of Table~\ref{tab:floor_convergence} are \emph{not}
-comparable (ours is this paper's architecture, not theirs, under a different fold count and
-negative ratio) so the table is evidence about the floor, not a reproduction of any reported
-number. The three papers span two distinct graphs, since NIMGSA and HLGNN-MDA both evaluate
-on the canonical 5,430-association matrix. And the floor is a property of the protocol rather
-than of the graph alone: under the corrected protocol the same two floors fall to 0.5683 and
-0.5591 (Table~\ref{tab:discrimination}).
-
-\input{tables/table8_floor_convergence.tex}
-
-\textbf{Two public OGB benchmarks.} On ogbl-ddi (drug--drug interaction) and ogbl-ppa
-(protein--protein association), both verified leak-free at runtime by the same check
-used throughout this paper, the model-free heuristics from \S\ref{sec:methods} reproduce the Open
-Graph Benchmark's own published leaderboard numbers exactly (Table~\ref{tab:validation_cases}).
-The two benchmarks disagree sharply. On ogbl-ddi, the best heuristic (Adamic--Adar,
-Hits@20 0.1861) ranks 30th of 32 leaderboard entries, far behind the best trained
-submission (HyperFusion, 0.9972), a graph where learning clearly earns its keep. On
-ogbl-ppa, Resource Allocation, a zero-parameter formula, ranks 14th of 27 leaderboard
-entries (Hits@100 0.4933), essentially tied with the next-best entry, the trained
-model BUDDY \cite{chamberlain2023buddy} (0.4934), and outperforms the eleven trained
-or learned methods ranked below it, including canonical graph neural network
-architectures such as GCN (0.1867) and GraphSAGE (0.1655), the same architecture
-family compared in our own cross-architecture grid. Unlike the papers in our
-literature survey, OGB already reports these heuristics alongside trained
-submissions, exactly the practice we recommend, yet on ogbl-ppa a formula with no
-learned parameters still holds its own against a substantial fraction of the trained
-methods evaluated against it. Taken together, the two benchmarks show the model-free
-floor is not uniformly high or uniformly low across graphs. Whether it matters is an
-empirical question each graph answers differently, which is precisely why it must be
-checked rather than assumed.
-
-\textbf{Seven of the 21 surveyed papers.} We applied the topology-only heuristics,
-unmodified, to the association matrix of each of the seven papers whose data we could
-obtain (\S\ref{sec:data}), under uniform-random negatives at that paper's stated ratio
-(Table~\ref{tab:validation_cases}). The trained models beat the topology floor by 4.7 AUROC
-points on average per paper, or 3.9 averaging per graph, a real, externally measured gap,
-not merely our own graph's finding restated. But the gap is highly graph-dependent, ranging
-from $-9.2$ points (DiGAMN) to $+3.3$ points: on MEAHNE's graph the topology-only heuristic
-outright \emph{beats} the paper's own trained model (0.9848 vs.\ 0.9520), and on CoupleMDA's
-the two are within 1.3 points. Sanity-checking with degree-matched negatives collapses every
-heuristic on every paper to 0.55--0.58, confirming the uniform-negative numbers reflect a
-genuine popularity ceiling rather than a data error. In Table~\ref{tab:validation_cases}
-the model-free figure is the held-out uniform column of Table~\ref{tab:protocol_grid}, which
-is why it sits slightly below the \emph{seen} column used for the conventional corner of
-Table~\ref{tab:discrimination}. The own-graph row reports the corrected protocol, since that
-is this paper's headline number, so it is not comparable with the external rows and is
-excluded from both means. Only MGCNSS uses the paper's own exact test split (Tier 1);
-CoupleMDA's positive edges are exact but its negatives are not (Tier 1/2); the remaining
-five HMDD rows use an exact association matrix with a self-generated split at the paper's
-stated ratio (Tier 2).
 
 \subsection{Empty candidate columns (E5)}
 \label{sec:dead_columns}
@@ -889,7 +817,7 @@ popularity-biased negative sampling, but not both, can still miss a substantiall
 inflated headline number. The model-free baseline plays a different role: it is not a
 third source of inflation and does not enter the super-additive interaction, but it is
 what makes either one visible, since a headline number within a few points of a
-model-free floor (Tables~\ref{tab:model_free_baselines} and~\ref{tab:floor_convergence})
+model-free floor (Tables~\ref{tab:model_free_baselines} and~\ref{tab:validation_cases})
 is hard to read as evidence of learning.
 
 Neither result above is confined to our own graph. The compounded inflation itself
@@ -906,7 +834,7 @@ cases (seven distinct graphs) that make up this paper's validation set
 not only ours to measure: six of the surveyed papers put an untrained comparator in their
 own comparison tables and clear it by 1.7 to 7.4 AUROC points without comment, over a floor
 that replicates when the same matrices are scored here by a different method
-(Table~\ref{tab:floor_convergence}). Topological heuristics have also been shown
+(\S\ref{sec:generalization}). Topological heuristics have also been shown
 competitive with, or superior to, trained neural link predictors elsewhere in the
 literature, corroborating the pattern from an independent direction: on realistic
 biomedical graphs, a plain Common Neighbours baseline holds its own against
@@ -978,7 +906,7 @@ survey. It covered 10 of its 11 miRNA-disease papers, of which 7 yielded usable 
 drug-target (6 papers), circRNA-disease, lncRNA-disease, gene-disease, and plant
 miRNA-target interactions, each keyed to a different reference
 database (e.g.\ DrugBank, BindingDB) that this audit did not attempt to acquire. Extending the same protocol to those domains is future work, not a gap left
-unexplained. The floor-convergence check in Table~\ref{tab:floor_convergence} is narrower
+unexplained. The floor-convergence check in \S\ref{sec:generalization} is narrower
 still: three papers over two distinct graphs, one of which (CKSNP-GNN) reports a comparator
 number transferred from that comparator's own paper rather than measured on its data, so the
 agreement between the published and the re-measured floor rests on two independent matrices,
