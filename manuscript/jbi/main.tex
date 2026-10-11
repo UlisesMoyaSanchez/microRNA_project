@@ -125,7 +125,7 @@ tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
 graphs (ours and five from surveyed papers) collapses the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free scorers (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move.
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
 any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, a tool that checks it.
@@ -287,7 +287,7 @@ This paper asks whether these high numbers are inflated by the evaluation protoc
 than reflecting any one model or dataset. The survey of 21 papers shows what they leave
 unreported. We then measure what that costs. We retrain one architecture under both
 protocols on six graphs (our own, which we built, and five taken from the surveyed
-papers), separate the two failure modes on each with model-free scorers, and compare nine
+papers), separate the two failure modes on each with model-free heuristics, and compare nine
 further cases against a model-free floor: two public link-prediction benchmarks, and seven
 of the surveyed papers, evaluated on their own datasets. Our own graph is one of the six.
 Because we built it, it is also the one on which we can dissect the mechanism in full.
@@ -531,8 +531,10 @@ what each one finds.
 A model-free baseline is a scorer that uses no trained parameters and no labels from the training set: it ranks candidate pairs from the graph's visible structure alone, so it measures how much of a reported AUROC the topology already provides. Its AUROC is the floor a trained model must clear, and the margin is the model's AUROC minus that floor.
 For link prediction we report four model-free topological heuristics -- gene
 in-degree, preferential attachment, common neighbours, and Adamic--Adar -- each
-computed purely from training-visible edge topology. For cell typing we report two
-no-learning or graph-free controls, nearest-centroid and logistic regression, both
+computed purely from training-visible edge topology. We call these four rules the
+model-free heuristics, and the model-free floor on a given graph is the AUROC of the best
+of them. For cell typing we report two
+graph-free controls, nearest-centroid and logistic regression, both
 trained directly on the raw PCA features without any message passing. Against these
 controls we compare four trained models -- a heterogeneous graph transformer, a
 homogeneous GCN, a co-expression-ablation variant of the transformer, and a graph-free
@@ -638,11 +640,11 @@ trained models on one graph.}
 
 \input{tables/table7_discrimination.tex}
 
-Closing the same grid with the four unmodified topology scorers instead of a trained
+Closing the same grid with the four unmodified topology heuristics instead of a trained
 model gives the model-free half of the same experiment on every one of these graphs
 (Table~\ref{tab:protocol_grid}), and shows the collapse is not something only a trained
 model does. Within each row the split and the negatives are held identical across all
-four cells and only the adjacency the scorers may see changes, so the inflation is attributable to the
+four cells and only the adjacency the heuristics may see changes, so the inflation is attributable to the
 protocol alone. That inflation is $+0.316$ to
 $+0.426$ across the six graphs with a full grid, and here our own graph's $+0.342$ sits
 inside the range without approaching either edge -- squarely ordinary, where its trained
@@ -717,7 +719,7 @@ association matrix we could re-measure, which lets a floor they published be che
 a floor computed here by a different method (Table~\ref{tab:floor_convergence}). The two
 agree. Against untrained comparators those papers report at 0.8960, 0.8565 and 0.9190, our
 own best heuristic reaches 0.8842 on the canonical HMDD matrix and 0.8924 on CKSNP-GNN's,
-both under the conventional protocol. An untrained scorer reaches 0.86--0.92 on these graphs
+both under the conventional protocol. An untrained heuristic reaches 0.86--0.92 on these graphs
 however it is built, and that is what makes the papers' own margins interpretable: they are
 margins over a floor that replicates across methods and across research groups. Three
 qualifications. The trained columns of Table~\ref{tab:floor_convergence} are \emph{not}
@@ -756,7 +758,7 @@ surveyed papers (Table~\ref{tab:literature_survey}), all from its miRNA-disease
 cluster, whose data could be independently obtained: their own bundled repositories,
 or a shared institutional mirror for one (CKSNP-GNN), each verified against the
 paper's own reported node/edge counts before use (three further papers, GONNMDA, Orro and DGNMDA, were excluded because no usable data was recoverable, as Discussion explains).
-Applying the same topology-only scorers, unmodified, to each paper's own association
+Applying the same topology-only heuristics, unmodified, to each paper's own association
 matrix under uniform-random negatives at that paper's stated ratio
 (Table~\ref{tab:validation_cases}), the trained models beat the topology floor by 4.7
 AUROC points on average per paper -- a real, externally-measured gap, not merely our

@@ -23,6 +23,50 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-10 — Terminología unificada, sección de Datasets, y el confound de DDP aparcado
+
+Sesión de pulido de `manuscript/jbi/main.tex`. Commits `0cfe262`…`09987da` más el de cierre,
+todos en `feat/lp-audit`.
+
+**Terminología (volver aquí si reaparece la duda).** El paper nombraba lo mismo de cuatro
+maneras. Quedó así: *heurístico* = cada una de las cuatro reglas (gene in-degree,
+preferential attachment, common neighbours, Adamic--Adar); *model-free baseline* = el papel
+que cumplen; *model-free floor* = el AUROC del mejor de ellos en un grafo dado; *margin* =
+AUROC del modelo menos ese piso. Se eliminó "no-learning" (confundía con el control sin
+entrenar, que es otra cosa; quedan dos usos legítimos en el control de cell typing) y "cost"
+como nombre del fenómeno (ahora *inflation*; "cost" suena a precio del protocolo corregido y
+choca con el costo computacional de L985). "Scorer" solo en la definición. La frase que lo
+fija está en 3.4 (Baselines).
+
+**"Seis arquitecturas" era falso.** La Tabla S1 tiene seis filas, pero solo **cuatro modelos
+entrenados** inflan (HGT, GCN, HGT sin co-expresión, MLP); el control sin entrenar no se mueve
+y el smoke test sin miRNA no tiene cabeza de enlace (n/a). Corregido en Abstract, highlights,
+contribuciones, Métodos, Resultados, Discusión y Conclusión.
+
+**Datasets.** Nueva subsección 3.1 con tabla de los ocho grafos (nuestro, cinco matrices
+miRNA--enfermedad, ogbl-ddi, ogbl-ppa) y citas. Hallazgos al verificar en la DGX y en las
+fuentes: la matriz canónica de 5,430 asociaciones es **HMDD v2.0** (no v3.2; corregido en
+`results/HMDD_TOPOLOGY_AUDIT.md`); las células salen de una consulta al **CZ CELLxGENE Census,
+release 2025-11-08** (job 5012, 2026-05-28; el script lo fija en la línea 113), no de una
+"cohorte"; GSE289530 es un accession de miRNA de GEO y no es la fuente de las células. RWR se
+cita con Tong et al. 2006 por elección nuestra (la referencia de ModulePred para RWR es un
+artículo sobre PageRank).
+
+**Otros cambios.** §2.2 compactada y la Tabla 2 de la encuesta con columna *model-free
+baseline* y sin Venue/year; `hyperref` activado (citas con hipervínculo; hay que borrar
+`main.aux`/`main.bbl` si cambia); "Methods" renombrada "Data and methods" con referencias por
+`\S\ref`; el esquema del grafo (Fig. 3) sin tabla interna; `RandomLinkSplit` fuera del texto.
+
+**Aparcado a petición.** El arreglo del confound de DDP (seed-spread medido en el modelo de 4
+GPU, no en el driver de 1 GPU de la Tabla S1; y la afirmación GCN > HGT, que es una diferencia
+de 0.016 dentro del spread) está en `manuscript/jbi/pending/ddp_confound_fix.patch`, **sin
+aplicar**. Reaplicar con `git apply manuscript/jbi/pending/ddp_confound_fix.patch`.
+
+**Pendiente.** Tabla 7 como anomalía abierta; decidir el parche de DDP; fijar URL/DOI del
+repositorio en Data availability.
+
+---
+
 ## 2026-10-05 (noche) — Las contribuciones realineadas, `protocheck`, y la sección 2
 
 Sesión larga sobre `manuscript/jbi/main.tex`. Commits `0a1b13d`, `99136f9`, `73df540`
