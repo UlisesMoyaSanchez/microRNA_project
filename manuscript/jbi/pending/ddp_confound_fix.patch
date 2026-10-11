@@ -1,8 +1,8 @@
 diff --git a/manuscript/jbi/main.tex b/manuscript/jbi/main.tex
-index 6e3e8db..7423f26 100644
+index 64e66a8..7f0f687 100644
 --- a/manuscript/jbi/main.tex
 +++ b/manuscript/jbi/main.tex
-@@ -879,9 +879,12 @@ random-weight control and a no-miRNA-input ablation retained as a smoke test, ev
+@@ -839,9 +839,12 @@ random-weight control and a no-miRNA-input ablation retained as a smoke test, ev
  trained model inflates by 0.24--0.31 AUROC points between the two protocols, the
  graph-free MLP included, while the untrained control does not move ($-0.004$)
  (Figure~\ref{fig:architecture_inflation}, Table~\ref{tab:architecture_grid}). Each
@@ -18,7 +18,7 @@ index 6e3e8db..7423f26 100644
  may be read. Every row of it is trained by the same driver on a single GPU, which is what
  makes the comparison across architectures controlled. The levels, however, are not
  comparable to Table~\ref{tab:headline_grid}. The grid's transformer reaches 0.9222 under
-@@ -891,16 +894,19 @@ a measurement one: both were scored on the same split and the same 44,186 edges,
+@@ -851,10 +854,12 @@ a measurement one: both were scored on the same split and the same 44,186 edges,
  headline checkpoint moves by 0.00004 AUROC between the validation and test splits. Rows of
  the grid may therefore be compared with one another, and not with the headline numbers.
  One secondary finding falls out of the same grid: under the corrected protocol a plain
@@ -35,11 +35,3 @@ index 6e3e8db..7423f26 100644
  
  \begin{figure}[h!]
  \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
- \caption{Inflation between the conventional and corrected protocols, across four
- trained models plus an untrained control. Single seed (42). The inflation magnitude
--(0.24--0.31) dwarfs the seed spread measured elsewhere (0.005--0.02). All rows are
-+(0.24--0.31) is an order of magnitude above the seed spread measured on the headline
-+model (0.005--0.02), which is an indicative scale only for these rows. All rows are
- trained on one GPU by the same driver, so they are comparable with one another but not
- with Table~\ref{tab:headline_grid} -- see the text. Full numeric
- grid, including the no-miRNA-input smoke test: Table~\ref{tab:architecture_grid}.}
