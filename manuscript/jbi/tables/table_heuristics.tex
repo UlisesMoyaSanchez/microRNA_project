@@ -7,9 +7,9 @@
 Heuristic & Score of a pair $(u,v)$ & Reads as \\
 \hline
 Gene in-degree & $d(v)$ & the popularity of $v$ \\
-Preferential attachment & $d(u)\,d(v)$ & popularity of both ends \\
-Common neighbours & $\sum_{u'\neq u} |N(u)\cap N(u')|\,A_{u'v}$ & how much $u$ shares targets with the nodes that reach $v$ \\
-Adamic--Adar & $\sum_{u'\neq u}\sum_{w\in N(u)\cap N(u')} A_{u'v}/\log d(w)$ & the same, down-weighting shared targets that everything reaches \\
+Preferential attachment~\cite{barabasi1999scaling,liben2007link} & $d(u)\,d(v)$ & popularity of both ends \\
+Common neighbours~\cite{liben2007link} & $\sum_{u'\neq u} |N(u)\cap N(u')|\,A_{u'v}$ & how much $u$ shares targets with the nodes that reach $v$ \\
+Adamic--Adar~\cite{adamic2003friends} & $\sum_{u'\neq u}\sum_{w\in N(u)\cap N(u')} A_{u'v}/\log d(w)$ & the same, down-weighting shared targets that everything reaches \\
 \hline
 \end{tabular}
 \end{table}

@@ -568,7 +568,7 @@ fitted linear model, both trained directly on the raw PCA features without messa
 
 \input{tables/table_heuristics.tex}
 
-On the two OGB graphs, which are homogeneous and undirected, we use the textbook one-hop forms of the same scores on the symmetrized training edges, plus Resource Allocation, the strongest heuristic on ogbl-ppa's leaderboard; negatives are OGB's official ones.
+On the two OGB graphs, which are homogeneous and undirected, we use the textbook one-hop forms of the same scores on the symmetrized training edges, plus Resource Allocation \cite{zhou2009local}, the strongest heuristic on ogbl-ppa's leaderboard; negatives are OGB's official ones.
 
 \paragraph{Models} The link-prediction experiments compare these baselines with four
 trained models (a heterogeneous graph transformer, a homogeneous GCN, a
@@ -772,8 +772,8 @@ computation, and the empty-column check is not independently validated.
 \subsection{Limitations}
 \label{sec:limitations}
 (i) The cross-architecture grid is one run per model; the inflation is an order of magnitude above the seed
-spread, but a repeated grid would strengthen it. (ii) Our heuristics are local; global ones (Katz, rooted
-PageRank) may sit higher, so the 3.6-point margin is an upper bound on how far the model exceeds a floor.
+spread, but a repeated grid would strengthen it. (ii) Our heuristics are local; global ones (Katz \cite{katz1953status}, rooted
+PageRank \cite{liben2007link}) may sit higher, so the 3.6-point margin is an upper bound on how far the model exceeds a floor.
 (iii) None of the four trained models encodes pairwise structure as SEAL \cite{zhang2018seal}, NBFNet
 \cite{zhu2021nbfnet} or BUDDY \cite{chamberlain2023buddy} do, so 3.6 points is not a ceiling for trained models,
 and whether a structure-aware architecture closes it is open. (iv) The six-graph experiment retrains our
