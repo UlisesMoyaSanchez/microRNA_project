@@ -371,7 +371,7 @@ without discussing the alternative; only MGCNSS~\cite{tian2024mgcnss} and
 HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and two papers never say.
 Third, in 11 of the 19 papers where the question applies, it is unclear from the methods
 section whether held-out edges are removed from the encoder's input. This is a reporting
-gap, not confirmed leakage: after adjudication only MGCNSS clearly leaks and 7 clearly strip
+gap, not confirmed leakage: after adjudication only MGCNSS~\cite{tian2024mgcnss} clearly leaks and 7 clearly strip
 test edges correctly, and our own project's original split was worse than the norm we
 observed.
 
@@ -406,7 +406,7 @@ that paper's reported counts. Three further papers were excluded because no usab
 recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
 open leaderboards, used only as an external check on the model-free baselines. In the
 results table, only MGCNSS uses the paper's own exact test split (Tier 1); CoupleMDA's~\cite{li2025couplemda}
-positive edges are exact but its negatives are not (Tier 1/2); the other five HMDD rows use
+positive edges are exact but its negatives are not (Tier 1/2); the other five rows (NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}, DiGAMN~\cite{liu2024digamn}, MEAHNE~\cite{huang2022meahne} and CKSNP-GNN~\cite{li2022cksnpgnn}) use
 an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2).
 
 \paragraph{Our graph} We build a heterogeneous graph from public multiple-sclerosis
@@ -440,6 +440,8 @@ on the corrected graph; all replicate the pre-fix figures within one standard de
 \caption{Schema of our heterogeneous graph: three node types and three edge types, each with an automatically added reverse relation.}
 \label{fig:graph_schema}
 \end{figure}
+
+\paragraph{Candidate columns} For each graph we report two properties of its candidate columns, the diseases or genes a row can be paired with. A column is \emph{empty} when no association is known for it, and \emph{Empty} is the fraction of such columns. \emph{Gini} is the Gini coefficient of the column degrees, taken over all columns including the empty ones: 0 when every column is equally connected, 1 when all edges fall on one column.
 
 \subsection{Evaluation protocol}
 Link prediction scores node pairs $(u,v)$. Let $E$ be the set of target edges, the links
