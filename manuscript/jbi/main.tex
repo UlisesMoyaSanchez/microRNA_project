@@ -298,7 +298,7 @@ This paper makes five contributions.
 relative weight depends on the graph, and shows that candidate columns which can never be
 positive raise the model-free floor on their own.
 \item It measures the model-free floor on other papers' own data: seven surveyed papers and
-two Open Graph Benchmark (OGB) datasets.
+two Open Graph Benchmark (OGB) datasets \cite{hu2020ogb}.
 \item On a proposed graph, it shows the effect follows the
 protocol and not the model. It recurs across four trained models, an untrained control does
 not move, and a cell-typing task survives the same audit.
@@ -398,7 +398,7 @@ full rather than inferring its protocol from the abstract
 report no model-free baseline. The six that do report a classical untrained method as one
 more competitor in a comparison table, never as a floor, and none remarks on how narrow
 its margin over that comparator is. In the five papers whose numbers can be read from
-the text, the headline clears the comparator by 1.7 to 7.4 AUROC points; NIMGSA's SPM
+the text, the headline clears the comparator by 1.7 to 7.4 AUROC points; NIMGSA's \cite{jin2022nimgsa} SPM
 comparator (0.8960) comes within 3.9 points of NIMGSA itself (0.9354) and outscores IMCMDA
 (0.8329), a trained baseline in the same table.
 Second, 17 draw their negatives from unlabeled pairs, uniformly sampled or taken wholesale,
@@ -434,12 +434,13 @@ under both protocol arms and ``heuristics'' that the model-free baselines are ap
 
 \paragraph{External matrices and OGB} The five miRNA--disease matrices were recovered
 from the papers surveyed in \S\ref{sec:related}; three of the seven papers whose data we
-could obtain (MGCNSS, NIMGSA and HLGNN-MDA) share a byte-identical HMDD matrix. Each comes
-from the paper's own repository, or a shared mirror for CKSNP-GNN, and was verified against
+could obtain (MGCNSS~\cite{tian2024mgcnss}, NIMGSA~\cite{jin2022nimgsa} and
+HLGNN-MDA~\cite{yu2022hlgnnmda}) share a byte-identical HMDD~\cite{li2014hmdd} matrix. Each comes
+from the paper's own repository, or a shared mirror for CKSNP-GNN~\cite{li2022cksnpgnn}, and was verified against
 that paper's reported counts. Three further papers were excluded because no usable data was
 recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
 open leaderboards, used only as an external check on the model-free baselines. In the
-results table, only MGCNSS uses the paper's own exact test split (Tier 1); CoupleMDA's
+results table, only MGCNSS uses the paper's own exact test split (Tier 1); CoupleMDA's~\cite{li2025couplemda}
 positive edges are exact but its negatives are not (Tier 1/2); the other five HMDD rows use
 an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2).
 
@@ -609,7 +610,7 @@ five surveyed graphs the negative-sampling axis carries almost the whole effect
 ($0.29$--$0.41$) and the edge split only $0.01$--$0.02$, because these association matrices
 are small and their heuristics lean on node degree, which a handful of masked edges barely
 moves. On our own graph both contribute and compound super-additively: the two axes sum to $0.272$ against a total of $0.342$. The
-canonical HMDD matrix appears twice because MGCNSS is scored on its own bundled split, and
+canonical HMDD~\cite{li2014hmdd} matrix appears twice because MGCNSS~\cite{tian2024mgcnss} is scored on its own bundled split, and
 MGCNSS has no negative-sampling axis because it carries the paper's own negatives.
 
 One asymmetry in Table~\ref{tab:discrimination} is measured but not explained. On the five
@@ -629,10 +630,10 @@ that divergence begins.
 Table~\ref{tab:validation_cases} gives the ten cases, and three results stand out. First, on
 the seven surveyed papers' own matrices the trained models beat the model-free floor by 4.7
 AUROC points on average per paper (3.9 per distinct graph), but the gap runs from $-9.2$
-points (DiGAMN) to $+3.3$: on MEAHNE's graph the heuristic beats the paper's own model
+points (DiGAMN~\cite{liu2024digamn}) to $+3.3$: on MEAHNE's~\cite{huang2022meahne} graph the heuristic beats the paper's own model
 (0.9848 vs.\ 0.9520), and with degree-matched negatives every heuristic falls to
-0.55--0.58. Second, the floor replicates. The untrained comparators that NIMGSA, HLGNN-MDA
-and CKSNP-GNN report (0.8960, 0.8565 and 0.9190) sit beside the 0.8842 and 0.8924 that our
+0.55--0.58. Second, the floor replicates. The untrained comparators that NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}
+and CKSNP-GNN~\cite{li2022cksnpgnn} report (0.8960, 0.8565 and 0.9190) sit beside the 0.8842 and 0.8924 that our
 best heuristic reaches on their matrices under the conventional protocol, and CKSNP-GNN's
 is a number transferred from other papers, not measured on its own data. Third, on OGB the
 heuristics reproduce the leaderboards exactly and the floor is not uniform: on ogbl-ddi the
@@ -647,7 +648,7 @@ essentially tied with the entry just above it, BUDDY \cite{chamberlain2023buddy}
 In a miRNA--disease matrix the columns are the diseases a miRNA can be paired with, and a
 column is \emph{empty} when no association is known for it, so it can never be a positive.
 Under uniform negatives such columns supply negatives that any scorer aware of degree
-rejects for free. MEAHNE has 11{,}783 disease columns, 92.4\% of them empty, and CoupleMDA
+rejects for free. MEAHNE~\cite{huang2022meahne} has 11{,}783 disease columns, 92.4\% of them empty, and CoupleMDA~\cite{li2025couplemda}
 55.7\%, while the other three external graphs have none (Table~\ref{tab:protocol_grid}).
 
 \input{tables/table6_protocol_grid.tex}
@@ -658,7 +659,7 @@ density) instead of raising it. Across the six graphs no descriptive statistic s
 them significantly (empty-column fraction $\rho = +0.70$, $p = 0.12$; column-degree Gini
 $\rho = +0.77$, $p = 0.07$), and our own graph is a counterexample, with 47.5\% empty columns
 and a floor indistinguishable from the graphs with none. The direct evidence is a
-manipulation. Adding empty columns to the canonical HMDD matrix, which has none, and nothing
+manipulation. Adding empty columns to the canonical HMDD~\cite{li2014hmdd} matrix, which has none, and nothing
 else, raises its model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$. At 92.9\%
 empty columns, close to MEAHNE's 92.4\%, it reaches $0.979$, reproducing MEAHNE's outlying $0.9848$
 from a graph that shares none of its data.
@@ -739,8 +740,8 @@ with ours each lose 0.26--0.37 AUROC between the protocols and land in the same 
 (Table~\ref{tab:discrimination}); four trained models inflate by 0.24--0.31 while an untrained control does not
 move, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
 weakness against a floor also appears in published work. Across the seven surveyed papers the trained models
-beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN) to 3.3 below it (MEAHNE), and on
-ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY. OGB already reports such heuristics, and the
+beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN~\cite{liu2024digamn}) to 3.3 below it (MEAHNE~\cite{huang2022meahne}), and on
+ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY~\cite{chamberlain2023buddy}. OGB~\cite{hu2020ogb} already reports such heuristics, and the
 gap persists, so reporting a baseline does not by itself raise the bar. A headline within a few points of the
 floor is hard to read as evidence of learning.
 
