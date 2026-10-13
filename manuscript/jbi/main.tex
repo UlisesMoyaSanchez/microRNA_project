@@ -528,7 +528,7 @@ margin over the trained model is stated alongside the headline number
 (\S\ref{sec:baselines}).
 
 We report AUROC and AUPRC for link prediction, and accuracy and macro-F1 for cell
-typing, averaged over four random seeds where feasible. The six-row model grid is a
+typing, averaged over four random seeds where feasible. The model grid is a
 single run per model, on one GPU, by a driver separate from the multi-GPU
 headline runs; Results gives the effect-size argument for the single run and the
 comparability limit the driver difference imposes.
@@ -571,8 +571,7 @@ fitted linear model, both trained directly on the raw PCA features without messa
 \paragraph{Models} The link-prediction experiments compare these baselines with four
 trained models (a heterogeneous graph transformer, a homogeneous GCN, a
 co-expression-ablation variant of the transformer, and a graph-free MLP) plus an
-untrained random-weight control and a no-miRNA-input ablation that is
-link-prediction-incapable by construction and retained only as a smoke test.
+untrained random-weight control.
 
 \section{Results}
 \label{sec:results}
@@ -698,11 +697,11 @@ homogeneous GCN, a co-expression ablation and a graph-free MLP) inflate by 0.24-
 between the two protocols, the MLP included, while an untrained random-weight control does
 not move ($-0.004$; Figure~\ref{fig:architecture_inflation}). Each is a single run on one GPU,
 so the levels are comparable with one another but not with Figure~\ref{fig:protocol_grid}
-(Appendix~\ref{app:grid}).
+(\ref{app:grid}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
-\caption{Inflation across four trained models and an untrained control (single seed, one GPU; Appendix~\ref{app:grid}).}
+\caption{Inflation across four trained models and an untrained control (single seed, one GPU; \ref{app:grid}).}
 \label{fig:architecture_inflation}
 \end{figure}
 
@@ -786,41 +785,30 @@ protocol on the five external graphs but narrows on ours (Section~\ref{sec:colla
 
 \section{Conclusion}
 \label{sec:conclusion}
-Evaluating a trained link predictor under conventions common in this subfield (edges
-visible to the encoder during message passing, negatives sampled uniformly at random)
-reports AUROC between 0.879 and 0.992 on six biomedical interaction graphs. Correcting
-both conventions drops every one of them into the range 0.618--0.641, a loss of 0.26--0.37
-on each. Five of those graphs are other groups' published association matrices, sharing no
-data with ours, so the inflation is not a property of any one dataset. How much each
-convention contributes depends on the graph: negative sampling carries most of the loss on
-the five surveyed graphs, while on ours the two compound. Candidate columns that can never
-be positive raise the model-free floor on their own. Against seven surveyed papers' own numbers, trained models beat that floor by 4.7 points per paper on average, and the heuristic wins outright on the sparsest graph. On a proposed graph, the inflation recurs across
-four independently trained models while an untrained control does not move, and a
-structurally similar cell-typing control task survives the same audit by a wide margin.
-The effect therefore follows the evaluation protocol, not the model, and the audit is
-discriminating rather than indiscriminate.
+Under conventions common in this subfield, a trained link predictor scores AUROC 0.879--0.992 on six
+biomedical interaction graphs. Correcting both conventions drops every one into 0.618--0.641, a loss of
+0.26--0.37. Five of those graphs are other groups' published matrices, so the inflation is not a property of
+one dataset. The two failures compound on our graph, negative sampling carries most of the loss on the five
+surveyed graphs, and candidate columns that can never be positive raise the model-free floor on their own.
+Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the
+heuristic wins outright on MEAHNE's graph; on OGB it ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
+On our graph the inflation recurs across four trained models while an untrained control does not move, and
+cell typing survives the same audit by 32 points, so the effect follows the evaluation protocol, not the model.
+Under the corrected protocol our model exceeds its model-free floor by 3.6 points.
 
-We propose a minimum reporting standard with three requirements: a leak-free edge split,
-matched negative sampling, and a model-free baseline with its margin stated. We release
-\texttt{protocheck}, an open-source tool that runs these checks on a user's own splits, so
-that other groups working on biomedical interaction graphs can audit their models before
-reporting a headline number.
+We propose a minimum reporting standard with three requirements: a leak-free edge split, matched negative
+sampling, and a model-free baseline with its margin stated. We release \texttt{protocheck}, an open-source
+tool that verifies on a user's own splits and negatives whether an evaluation meets it, so that groups working
+on biomedical interaction graphs can audit before reporting a headline number.
 
 \appendix
 \setcounter{table}{0}
-\section{Full architecture grid}
+\section{Results for each architecture under the four protocol cells}
 \label{app:grid}
-Every row is trained by the same driver on one GPU, which makes the rows comparable with
-one another but not with the headline numbers: the \emph{HGT} row is a single-GPU retraining
-of this paper's architecture, not the headline model. The 0.9222 against 0.9867 gap in the
-conventional cell is a difference of training regime, not of protocol or measurement. Both
-runs were scored on the same split and the same 44,186 edges, and the headline checkpoint
-moves by 0.00004 AUROC between the validation and test splits. The no-miRNA-input ablation
-has no link-prediction head and is retained only as a smoke test.
-Each row is a single run, so the seed spread measured on the four-GPU headline model
-(0.005--0.02) is only an indicative scale: the inflation is an order of magnitude larger, but the
-0.016 between the GCN (0.6236) and the transformer (0.6080) under the corrected protocol is within
-it and is not read as an ordering.
+Every row is trained by the same driver on one GPU, so the rows are comparable with one another but not with
+the headline numbers: the HGT row is a single-GPU retraining, which explains 0.9222 against 0.9867 in the
+conventional cell. Each row is a single run, so the 0.016 between the GCN and the transformer under the
+corrected protocol is within the seed spread and is not read as an ordering.
 
 \input{tables/tableS1_architecture_grid.tex}
 
