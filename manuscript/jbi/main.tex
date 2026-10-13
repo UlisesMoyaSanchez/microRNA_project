@@ -109,67 +109,32 @@ Biomedical Interaction Graphs}
 %% TODO: fill in the real affiliation before submission.
 
 \begin{abstract}
-\textbf{Objective:} We audit whether Graph Neural Network (GNN) link-prediction evaluation practice inflates
-reported performance, across ten cases spanning eight distinct graphs, to help
-correct how link prediction is evaluated on biomedical interaction graphs.
+\textbf{Objective:} We test whether conventional evaluation of graph neural network (GNN) link predictors on biomedical interaction graphs inflates reported performance, where the inflation comes from, and whether a reporting standard and a tool can prevent it.
 
-\textbf{Methods:} The same topological heuristics and a graph transformer, trained
-under a conventional evaluation protocol and one correcting transductive edge
-leakage and popularity-biased negative sampling, were compared on ten cases: two Open Graph Benchmark (OGB) datasets, the datasets of seven
-surveyed papers, and our own graph (public single-cell RNA-seq data with miRDB v6.0 interactions). On our
-own graph only, three further trained models (a homogeneous Graph Convolutional Network
-(GCN), a co-expression ablation and a graph-free Multi-Layer Perceptron (MLP)), an untrained
-control and a cell-typing task with two graph-free controls were
-tested under both protocols.
+\textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free scores from graph topology alone) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models, an untrained control and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} Retraining one architecture under both protocols on six
-graphs lowers the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics, negative sampling carries 0.29--0.41 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move; cell typing keeps a 32-point margin over its graph-free controls.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.618--0.641 on every graph. Negative sampling carried 0.29--0.41 of the heuristics' loss on the five published graphs; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31 while an untrained control did not move; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
 
-\textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
-any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, a tool that checks it.
+\textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
-%% 2026-09-09: Objective's closing clause added ("...to help correct how link
-%% prediction is evaluated on biomedical interaction graphs") so the Abstract's first
-%% paragraph states why the audit matters, not only what was audited. Rejected: "help
-%% ensure correct protocols are used on graph data in health" -- two problems. (1) "the
-%% correct protocol[s]" is the exact overreach already ruled out for the highlights
-%% (main.tex, bullet-1 note, 2026-09-07): the paper says "corrected", never claims to
-%% possess "the correct" one. Here "correct" is kept as a VERB applied to the evaluation
-%% PRACTICE (consistent with "corrected protocol" elsewhere), not an adjective claiming a
-%% definitive protocol. (2) scope: only eight biomedical interaction graphs were audited,
-%% all link-prediction tasks -- "graph data in the health environment" would claim
-%% coverage (imaging graphs, EHR graphs, etc.) this paper never touched.
-%% 2026-09-09 (same day): the opening context sentence ("GNN papers predicting
-%% microRNA--target interactions routinely report AUROC in the 0.91--0.99 range without a
-%% model-free baseline...") was then dropped at the author's request, and "this
-%% subfield's evaluation practice" rewritten to "GNN link-prediction evaluation
-%% practice" so the sentence is self-contained -- "this subfield" had no antecedent left
-%% once the sentence naming it was removed. Trade-off accepted knowingly: "model-free
-%% baseline" is now used in Methods and Conclusion without ever being defined in the
-%% Abstract (it still is, in \S\ref{sec:results}/\S\ref{sec:discussion}). Do not restore
-%% "this subfield's" without either restoring an antecedent sentence or keeping this
-%% self-contained phrasing.
-%% 2026-09-09 (same day): Methods rewritten to open with the multi-graph/multi-model
-%% comparison (ten cases, eight graphs) instead of the 21-paper literature audit, at the
-%% author's request -- "our own graph" is now one item in a list, not the lead subject,
-%% and the audit felt secondary to the empirical inflation measurement. Also added: the
-%% five-further-model grid (matches highlight 3) and the cell-typing control, both of
-%% which Results already used without Methods ever describing them -- that gap is now
-%% closed. The literature audit was then removed from Methods entirely, and its Results
-%% sentence ("Six of 21 papers report an untrained comparator...") removed too.
-%% Known gap accepted: Conclusion's "...and this literature does not check for it" now
-%% has no methodological grounding left anywhere in the Abstract (the audit is still
-%% real and reported in the body, \S\ref{sec:results}/\S\ref{sec:discussion} -- just not
-%% referenced from the Abstract). Flagged to the author, left as is by their choice.
-%% Acronyms (GNN, OGB, GCN, MLP, AUROC) were also spelled out at first use in the
-%% Abstract -- none of the four ML ones is expanded anywhere else in the paper either.
-%% RNA-seq deliberately left unexpanded (standard term for this readership).
-
+%% 2026-10-12: Abstract rewritten to follow the five contributions (C1 six graphs, C2 sources,
+%% C3 floor on other papers' data, C4 protocol not model, C5 standard + protocheck) and the
+%% experiments E1--E7, and to report protocheck's validation (80 audits with known ground
+%% truth). 274 words against the 300 limit. Decisions kept on record:
+%% - "Model-free" is defined where it first appears (Methods): "parameter-free scores from graph
+%%   topology alone".
+%% - The 21-paper survey is named once, as the source of the seven audited papers (not a
+%%   contribution).
+%% - The Objective no longer carries the closing clause "to help correct how link prediction is
+%%   evaluated" (added 2026-09-09); it asks instead whether a standard and a tool can prevent
+%%   the inflation. Never write "the correct protocol": the paper says "corrected".
+%% - The OGB sentence ("heuristics reproduce the leaderboard") was cut for length; the ranks
+%%   (30th of 32, 14th of 27) are in Results 4.2 and the Conclusion.
+%% - protocheck's validation shows the implementation, not a discovery; the body says so.
 \begin{highlights}
 \item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
-\item On seven papers' own data, trained models beat a model-free floor by 4.7 points.
+\item On 7 of 21 papers' own data, trained models beat a model-free floor by 4.7 points.
 \item Four trained models inflate by 0.24--0.31 on our graph; an untrained control does not.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}

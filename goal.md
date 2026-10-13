@@ -193,6 +193,22 @@ done and the second is suspended). Full detail in
 > the pre-registered miRTarBase arms, whose data is already on disk), and **manuscript
 > housekeeping** (§3.3: retitle per D1, provenance corrections, authorship, venue).
 
+> **Update 2026-10-12 — this section is out of date; read it as history.** The manuscript has since been
+> restructured around five contributions (`manuscript/jbi/main.tex`; `BITACORA.md` has the current
+> where-we-left-off). What changed against the items below:
+> - **D2 is closed: not included.** The context-specific checklist ("is the context variable present, does the
+>   head take it, does the evaluation vary with it") was removed from the Discussion; no claim rests on it.
+> - **D5 is obsolete.** It depended on D2 and D3 and concerned the collaborator summary, not the paper.
+> - **D3 stays open and is the author's call.** The paper does not use disease labels and no reported number
+>   moves; if it is disclosed, one sentence in Methods is enough.
+> - **Retitle (D1) and the MS framing are done** in the manuscript; the sweep of `README.md`,
+>   `results/EVALUATION_AUDIT.md`, `results/RESUMEN_AUDITORIA.md` and the deck for inherited MS framing is
+>   not paper work and was not done.
+> - **Still open for submission:** authorship and affiliation, CRediT, funding, acknowledgements and ethics
+>   (placeholders in `main.tex`), the repository URL/DOI, the merge of `feat/lp-audit` to `main` or a release
+>   tag (`protocheck/` and the Colab notebook exist only on that branch), an external trial of `protocheck`,
+>   and checking the highlight limit against JBI's live guide.
+
 ### 3.1 Done
 
 - [x] **Test-set numbers (2026-07-13).** Was the most urgent gap: the headline had been a

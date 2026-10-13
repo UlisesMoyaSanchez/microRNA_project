@@ -114,15 +114,24 @@ se encontró el log del job. `ssh dgxum` funciona hoy (nodo `dgxa100jal`; el pro
 - `to_review.md` (comentarios de revisión del Abstract): atendidos el 3 y el 4; el 1 (encuesta de 21 contra auditoría de 7) y
   el 2 (definir model-free en el Abstract) siguen abiertos.
 
+**Abstract realineado (misma sesión, final).** Se reescribió para seguir las cinco contribuciones y los experimentos
+E1--E7 y para incluir la validación de `protocheck` (antes solo aparecía en la Conclusión): Objective de una oración,
+Methods con los experimentos, Results en el orden C1, C2, C3, C4 y `protocheck`, Conclusion con estándar y verificación.
+274 palabras de 300. "Model-free" se define en Methods ("parameter-free scores from graph topology alone"); la encuesta de
+21 se nombra una vez, como origen de los siete papers auditados; "checks" pasó a "verifies"; el highlight 3 dice "7 of 21
+papers' own data". Se quitó la oración de OGB (el 30º de 32 y el 14º de 27 quedan en 4.2 y en la Conclusión) y la cláusula
+"to help correct how link prediction is evaluated" del Objective (la del 2026-09-09). Los comentarios `%%` viejos tras
+`\end{abstract}`, que describían la redacción anterior, se sustituyeron por una nota corta con estas decisiones.
+Con esto quedan cerrados los cuatro comentarios de `to_review.md`.
+
 **Dónde nos quedamos.** El manuscrito está revisado de la 2 a la Conclusión, más Abstract y highlights. Siguen abiertos:
-1. Citas de las heurísticas, Katz y PageRank (dar de alta y verificar con Crossref); definir model-free en el Abstract;
-   aclarar encuesta de 21 contra auditoría de 7; decidir D2/D3 de `goal.md` (D2 quedó fuera al quitar "A related check"; D3, la
+1. Decidir D2/D3 de `goal.md` (D2 quedó fuera al quitar "A related check"; D3, la
    etiqueta de los 37 diabéticos, no está en el paper).
 2. Verificación de cifras: cerrada (4.1 a 4.4, Tabla 9, OGB y sampler).
+   Citas de las heurísticas, Katz y PageRank: dadas de alta y verificadas (commit `6ef017f`).
 3. Cierre del paquete: `pyproject.toml` para `protocheck`, merge a `main` o etiqueta de versión, URL/DOI en Data
    availability, y los `[STAGE/TODO]` (autores, afiliación, CRediT, funding, ethics).
-4. Decisión menor: "model-free" se usa en el Abstract sin definirse; "a tool that checks it" en la Conclusión del Abstract
-   frente a "verifies" en el cuerpo.
+4. Nada pendiente del Abstract: "model-free" ya se define y la Conclusión dice "verifies" (ver arriba).
 
 ---
 
