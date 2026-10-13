@@ -1,25 +1,23 @@
 \begin{table}[h!]
-\caption{Minimum reporting checklist for link-prediction models on biomedical interaction graphs. The first two requirements prevent two independent protocol failures; the third is a reporting requirement. Each has a check in \texttt{protocheck}.}
+\caption{Minimum reporting checklist for link-prediction models on biomedical interaction graphs. The first two requirements prevent two independent protocol failures; the third is a reporting requirement. Each maps to one check in \texttt{protocheck}.}
 \label{tab:correct_protocol}
 \small
 \begin{tabular}{p{3.1cm}p{4.7cm}p{5.4cm}}
 \hline
-Requirement & Problem it prevents & How this study implements it \\
+Requirement & Problem it prevents & What \texttt{protocheck} checks \\
 \hline
 Leak-free edge split & Transductive edge leakage: the encoder can recover a held-out
-edge from its own neighborhood (Figure~\ref{fig:edge_split}). & Held-out edges and
-their reverse relation are stripped from the message-passing graph; an automated
-test verifies none is reachable. \\
+edge from its own neighborhood (Figure~\ref{fig:edge_split}). & \texttt{edge\_leakage}: held-out edges, in either
+direction, visible to the encoder, shared with training, or used as evaluation negatives. \\
 Matched negative sampling & Popularity-biased negative sampling and
 the ``mismatch trap'': evaluating against a different negative distribution than
-trained on produces an artifact, not a difficulty measurement (Figure~\ref{fig:neg_sampling_mechanism}). & The same
-sampler (uniform-random or degree-matched) is enforced at training and evaluation
-for every reported number. \\
+trained on produces an artifact, not a difficulty measurement (Figure~\ref{fig:neg_sampling_mechanism}). & \texttt{negative\_matching}: training
+and evaluation negatives with different column-degree profiles, or evaluation negatives that do
+not mirror the held-out positives. \\
 Model-free baseline, with its margin stated & Reporting omission: without a model-free comparator, a model that learned a
 trivial shortcut (e.g.\ popularity) is indistinguishable from one that learned the
-task (Table~\ref{tab:model_free_baselines}). & A topological heuristic (link
-prediction) or non-graph classifier (node classification) is reported alongside
-every trained model, under the same protocol. \\
+task (Table~\ref{tab:model_free_baselines}). & \texttt{model\_free\_baseline}:
+computes the four-heuristic floor and, given the model's AUROC, the margin over it. \\
 \hline
 \end{tabular}
 \end{table}

@@ -52,6 +52,17 @@ y el leaderboard oficial de OGB (consultado hoy, 2026-10-12).
 3. **Sigue sin verificar:** cómo se aplican los heurísticos a OGB (grafo no bipartito) y si el
    sampler uniforme excluye aristas verdaderas.
 
+**Después de la verificación (misma sesión).** Se quitó la tabla de la rejilla headline (era redundante con
+la Figura 5) y las tablas posteriores se renumeraron: la rejilla model-free es ahora la **Tabla 10**, la de
+heurísticos contra el modelo entrenado la **11**, cell typing la **12** y la checklist la **13**. Los
+"Tabla 11 / Tabla 12" de la entrada del 2026-10-10 → 11 son los de entonces; hoy los comentarios pendientes del
+autor sobre "la rejilla model-free" se refieren a la Tabla 10. §4.4 recortada; §4.5/E7 aclarada
+(circularidad de la etiqueta, brecha contra el mejor control); Figura 6 con la leyenda fuera del gráfico.
+`protocheck`: la checklist se queda en la Discusión, en la subsección 5.1 (`sec:standard`), con un párrafo de
+validación (80 auditorías 40/40 y 40/40, paridad 7e-10 en ddi, piso a ≤0.011 AUROC, el criterio previo falló en
+DiGAMN y CoupleMDA y se cambió a Welch). Cifras reverificadas contra `protocheck_validation*.json`. No se fusionó
+con la Tabla 1 de precedentes (vive en Related Work). El AUPRC de la rejilla headline ya no aparece en el paper.
+
 **Dónde nos quedamos:** igual que la entrada del 2026-10-10 → 11. Siguen pendientes los
 comentarios del autor sobre la Tabla 11 y el AUPRC, y luego 4.5, Discusión, Conclusión y la
 pasada final de Abstract/highlights.

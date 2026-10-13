@@ -533,10 +533,8 @@ single run per model, on one GPU, by a driver separate from the multi-GPU
 headline runs; Results gives the effect-size argument for the single run and the
 comparability limit the driver difference imposes.
 
-%% PENDING (user, 2026-10-10): the minimum-reporting checklist (tab:correct_protocol) was
-%% moved out of this subsection to the Discussion, next to where the standard is proposed;
-%% not yet convinced it belongs there either. Decide: keep in Discussion, merge with the
-%% precedents table, or drop.
+%% RESOLVED (2026-10-12): the minimum-reporting checklist (tab:correct_protocol) lives in the Discussion,
+%% in the subsection on the standard and protocheck (sec:standard), with the validation paragraph.
 
 \subsection{Experimental design}
 \label{sec:comparison_design}
@@ -689,7 +687,7 @@ fall occurs in every trained architecture in the grid (Figure~\ref{fig:negative_
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
-\caption{Every architecture trained with uniform negatives and scored under both negative regimes; the untrained control does not move. The dashed line is chance, the AUROC of a random scorer (0.5); the dotted line is the gene in-degree heuristic (Table~\ref{tab:heuristics}) under degree-matched negatives.}
+\caption{Every architecture trained with uniform negatives, scored under both regimes. Chance is a random scorer; the gene in-degree heuristic is in Table~\ref{tab:heuristics}.}
 \label{fig:negative_sampler_collapse}
 \end{figure}
 
@@ -889,11 +887,27 @@ however long it is trained. We therefore attach no context-specific narrative to
 results. The check costs nothing to run and, like a model-free baseline, is most valuable
 exactly where it is least likely to be run.
 
+\subsection{A minimum reporting standard and \texttt{protocheck}}
+\label{sec:standard}
 Given how directly the inflation problem responds to a small set of checks, we propose these as a minimum reporting standard for evaluation methodology in this subfield. First, a leak-free edge split, with an automated check that held-out edges are unreachable to the encoder during message passing. Second, matched negative sampling: negative-sampling distributions that are matched between training and evaluation rather than assumed compatible. Third, at least one model-free baseline reported alongside any trained model, \emph{and the margin over it stated}. Six of the surveyed papers report such a comparator and none reads its own margin. Table~\ref{tab:correct_protocol} summarizes the three requirements as a checklist.
 
 \input{tables/table5_correct_protocol_checklist.tex}
 
 We release \texttt{protocheck} so that this checklist can be run rather than only read. It takes the train and held-out pairs of a link-prediction experiment and reports on each requirement. It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. A check whose input the user did not supply is reported as unchecked, never as passed. The tool inspects only the pairs it is given. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs.
+
+We validated the implementation, not the claim. On the five HMDD-type graphs under the $2\times2$ grid,
+where the true state of every cell is known by construction (four seeds, 80 audits), the leakage check
+flagged all 40 audits with a leak and the negative-matching check all 40 with mismatched negatives, with no
+false alarm in the 40 clean audits of either kind. On ogbl-ddi (one seed, four cells) both checks were
+2/2 and OGB's official negatives triggered the matching warning, and the tool's heuristic scores match the
+repository's own baseline to $7\times10^{-10}$ AUROC. Its model-free floor agrees with our earlier
+measurement to within 0.011 AUROC on all five graphs (Welch $|z|\le1.7$), against gaps of about 0.3 that this
+paper measures. The criterion we fixed in advance (within two standard deviations of the per-split spread)
+failed on two graphs, DiGAMN and CoupleMDA, because it compared a four-split mean with a single-split
+spread; we replaced it with the Welch comparison after seeing the failure. These results show that the
+implementation reproduces our audit scripts. They do not show that its thresholds are right or that it finds
+leakage beyond exact edges, no model was trained, so the margin check was exercised only as a floor
+computation, and the empty-column check is not independently validated.
 
 \section{Conclusion}
 \label{sec:conclusion}
