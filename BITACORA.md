@@ -124,13 +124,25 @@ papers' own data". Se quitó la oración de OGB (el 30º de 32 y el 14º de 27 q
 `\end{abstract}`, que describían la redacción anterior, se sustituyeron por una nota corta con estas decisiones.
 Con esto quedan cerrados los cuatro comentarios de `to_review.md`.
 
+**Autores y afiliaciones (misma sesión, final).** `main.tex` tiene ahora cinco autores en este orden: Asareel Yañez Esparza
+(CUCBA, Universidad de Guadalajara), Alejandro Zarate, Abraham Sánchez y Renato Arroyo (IIEG), y Ulises Moya Sánchez (IIEG y
+TSJ Mario Molina, Zapopan), último autor y de correspondencia (commit `0800858`). Nombres tal como se dieron; Abraham Sánchez
+confirmado por el autor. **Faltan más autores**: el autor de correspondencia dará nombres, orden y afiliaciones (hay un
+`%% TODO` en `main.tex`); Moya Sánchez sigue de último salvo que diga otra cosa. También por confirmar: ciudad del IIEG
+(hoy "TODO city" visible en el PDF), nombre completo de "TSJ Mario Molina", y acentos y apellidos completos de Zarate y
+Arroyo. Las instituciones CUCBA e IIEG se expandieron de memoria del asistente, no de un documento del proyecto: revisar.
+El apartado CRediT sigue en `TODO` hasta cerrar la lista de autores.
+
+También hecho: definición de Empty y Gini en 3.1 y caption de la Tabla 10 más corto; citas en 2.2 y 3.1 (commit `1fc162b`).
+
 **Dónde nos quedamos.** El manuscrito está revisado de la 2 a la Conclusión, más Abstract y highlights. Siguen abiertos:
 1. Decidir D2/D3 de `goal.md` (D2 quedó fuera al quitar "A related check"; D3, la
    etiqueta de los 37 diabéticos, no está en el paper).
 2. Verificación de cifras: cerrada (4.1 a 4.4, Tabla 9, OGB y sampler).
    Citas de las heurísticas, Katz y PageRank: dadas de alta y verificadas (commit `6ef017f`).
-3. Cierre del paquete: `pyproject.toml` para `protocheck`, merge a `main` o etiqueta de versión, URL/DOI en Data
-   availability, y los `[STAGE/TODO]` (autores, afiliación, CRediT, funding, ethics).
+3. Cierre del paquete: `pyproject.toml` para `protocheck` (lo prueba el autor antes; no hacerlo sin avisar), merge a `main` o
+   etiqueta de versión, URL/DOI en Data availability, y los `[STAGE/TODO]`: **autores restantes**, ciudad del IIEG y nombre
+   completo de TSJ Mario Molina, CRediT (roles por persona), funding, acknowledgements y ethics.
 4. Nada pendiente del Abstract: "model-free" ya se define y la Conclusión dice "verifies" (ver arriba).
 
 ---
