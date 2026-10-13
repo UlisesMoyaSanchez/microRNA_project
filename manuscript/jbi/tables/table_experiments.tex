@@ -14,7 +14,7 @@ E3 & How far above a model-free floor are published numbers? & The five external
 E4 & Does the floor behave the same outside this literature? & ogbl-ddi, ogbl-ppa & The same heuristics after a runtime leak-free check, read against the public leaderboards & \S\ref{sec:generalization} \\
 E5 & Why is the floor high on some graphs? & The five external matrices (thinning); the canonical HMDD matrix (padding) & Positives thinned from 100\% to 10\% (five seeds per point); empty candidate columns added; model-free floor measured & \S\ref{sec:dead_columns} \\
 E6 & Does the inflation follow the protocol or the model? & Our graph (CZ CELLxGENE Census scRNA-seq with miRDB v6.0) & The transformer over the full grid (four seeds); four trained models and an untrained control over the grid (one run each) & \S\ref{sec:mechanism} \\
-E7 & Does the audit deflate a task that is not leaky? & Our graph, cell-type labels of its cells & The trained model against two graph-free controls & \S\ref{sec:celltype} \\
+E7 & Does the audit also deflate cell typing, a task that is not link prediction? & Our graph, cell-type labels of its cells & The trained model against two graph-free controls (PCA features only, no graph) & \S\ref{sec:celltype} \\
 \hline
 \end{tabular}}
 \end{table}

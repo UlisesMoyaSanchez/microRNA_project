@@ -485,7 +485,7 @@ protocols. The \emph{conventional} protocol holds nothing out: every edge of $E$
 the message-passing graph and is also a supervision and evaluation target (``edges
 seen''), and negatives are drawn uniformly at random. The \emph{corrected} protocol holds test edges out of the message-passing graph and
 draws degree-matched negatives. The data, labels, model and metric are the same in both. Crossing the two choices gives a $2\times2$ grid of edge
-split by negative sampler, which lets us attribute the inflation to each failure
+split by negative sampler (Figure~\ref{fig:protocol_grid} gives the four cells for our model), which lets us attribute the inflation to each failure
 separately (\S\ref{sec:mechanism}). Table~\ref{tab:protocol_arms} gives the
 difference between the two arms.
 
@@ -520,7 +520,7 @@ $u$, and the fraction of fallbacks is logged. Within any single reported number 
 sampler is used at training and at evaluation; mixing the two produces the ``mismatch
 trap'', an apparent difficulty measurement that is in fact an artifact of the distribution
 mismatch (Figure~\ref{fig:neg_sampling_mechanism}). In the headline grid
-(Table~\ref{tab:headline_grid}), the edges-seen row reports the uniform-negative-trained model
+(Figure~\ref{fig:protocol_grid}), the edges-seen row reports the uniform-negative-trained model
 under both evaluation regimes, and the edges-held-out row each model scored with the negative
 type it was trained on. The third requirement of the standard we
 propose concerns reporting rather than the protocol itself: a model-free baseline, whose
@@ -547,8 +547,8 @@ measured rather than assumed; our own graph (\S\ref{sec:data}) is one case among
 the case they are built around. Together they cover ten cases (our graph, seven surveyed
 papers and two OGB benchmarks) on eight distinct graphs, because three of the papers
 share one matrix. E5 asks what separates the graphs, and E6 and E7 use the one graph whose
-construction and training we control to ask why the inflation arises and whether the audit
-deflates a task that is not leaky.
+construction and training we control: E6 asks why the inflation arises, and E7 asks whether the
+audit also deflates a different task on that graph, cell typing, which is not link prediction.
 
 \input{tables/table_experiments.tex}
 
@@ -603,7 +603,8 @@ numbers (Discussion).
 
 \input{tables/table7_discrimination.tex}
 
-Running the same grid with the four unmodified heuristics instead of a trained model
+Running the same $2\times2$ grid (Figure~\ref{fig:protocol_grid}) with the four model-free
+heuristics (Table~\ref{tab:heuristics}) instead of a trained model
 (Table~\ref{tab:protocol_grid}, in \S\ref{sec:dead_columns}) shows the inflation is not something only a trained model
 produces. Within a row only the adjacency the heuristics may see changes, so the inflation
 is attributable to the protocol alone: $+0.316$ to $+0.426$ across the six graphs, with our
@@ -670,7 +671,7 @@ from a graph that shares none of its data.
 \label{sec:mechanism}
 The two corrections are not redundant. From the conventional 0.9867, matched negatives alone
 lower AUROC by 0.062 and held-out edges alone by 0.177, a sum of 0.239, while together they
-lower it by 0.359 (Figure~\ref{fig:protocol_grid}, Table~\ref{tab:headline_grid}): the pair
+lower it by 0.359 (Figure~\ref{fig:protocol_grid}): the pair
 is super-additive. How the total divides depends on which is applied first (the negatives
 lower it by 0.062 with edges seen but 0.182 with edges held out), so we report the total
 rather than a decomposition.
@@ -681,19 +682,14 @@ rather than a decomposition.
 \label{fig:protocol_grid}
 \end{figure}
 
-\input{tables/table1_headline_grid.tex}
-
-Under the conventional protocol the trained model learns gene popularity. A heuristic that
-never looks at the miRNA, gene in-degree, reaches 0.8712 and outperforms the trained model
-(0.8056; Table~\ref{tab:model_free_baselines}). A model trained with uniform negatives and
-scored against degree-matched ones falls to AUROC $0.5352 \pm 0.0202$, indistinguishable from
-the in-degree floor, so uniform-negative training teaches popularity rather than
-miRNA-specific target information. The same fall occurs in every trained architecture in the
-grid (Figure~\ref{fig:negative_sampler_collapse}).
+A model trained with uniform negatives and scored against degree-matched ones falls to AUROC
+$0.5352 \pm 0.0202$, indistinguishable from the in-degree floor (Table~\ref{tab:model_free_baselines}), so
+uniform-negative training teaches popularity rather than miRNA-specific target information. The same
+fall occurs in every trained architecture in the grid (Figure~\ref{fig:negative_sampler_collapse}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig3_negative_sampler_collapse.pdf}
-\caption{Every architecture trained with uniform negatives and scored under both negative regimes; the untrained control does not move.}
+\caption{Every architecture trained with uniform negatives and scored under both negative regimes; the untrained control does not move. The dashed line is chance, the AUROC of a random scorer (0.5); the dotted line is the gene in-degree heuristic (Table~\ref{tab:heuristics}) under degree-matched negatives.}
 \label{fig:negative_sampler_collapse}
 \end{figure}
 
@@ -702,15 +698,9 @@ grid (Figure~\ref{fig:negative_sampler_collapse}).
 Nor is the inflation specific to one model. Four trained models (the transformer, a
 homogeneous GCN, a co-expression ablation and a graph-free MLP) inflate by 0.24--0.31 AUROC
 between the two protocols, the MLP included, while an untrained random-weight control does
-not move ($-0.004$; Figure~\ref{fig:architecture_inflation}, Appendix~\ref{app:grid}). Each
-is a single run on one GPU, so the seed spread reported elsewhere (0.005--0.02), measured on
-the four-GPU headline model, is only an indicative scale for these rows. The inflation is an
-order of magnitude larger, with the same sign and similar size in all four models, which is
-not what noise in a single run would produce. These levels are comparable with one another
-but not with Table~\ref{tab:headline_grid}: the grid's transformer reaches 0.9222 under the
-conventional protocol against 0.9867 for the four-GPU run of the same configuration
-(Appendix~\ref{app:grid}). The GCN (0.6236) and the transformer (0.6080) differ by 0.016
-under the corrected protocol, within that scale, so we do not read it as an ordering.
+not move ($-0.004$; Figure~\ref{fig:architecture_inflation}). Each is a single run on one GPU,
+so the levels are comparable with one another but not with Figure~\ref{fig:protocol_grid}
+(Appendix~\ref{app:grid}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
@@ -720,13 +710,15 @@ under the corrected protocol, within that scale, so we do not read it as an orde
 
 \subsection{Cell-type classification control (E7)}
 \label{sec:celltype}
-The audit does not deflate every number it touches. Applying the same
-model-free-comparator logic to a structurally different task on the same graph (cell-type classification, 0.9916 test accuracy, carrying a circularity risk analogous to
-the miRNA-target task's own dependence on miRDB), two graph-free controls on the raw PCA
-features alone, nearest-centroid and logistic regression, reach 0.4654 and 0.6692
-(Table~\ref{tab:celltype_control}). That 32-point gap is an order of magnitude larger
-than the 3.6 points the corrected link-prediction protocol leaves between the trained
-model and its topological floor. Here the graph and message passing are doing
+The audit does not deflate every number it touches. This control moves from link prediction to a
+different task on the same graph: classifying the cell type of each cell (node classification). The
+label of a cell is the highest marker-gene score computed from its expression, and the only cell
+feature the model sees is a PCA of that same expression, so the 0.9916 test accuracy could
+be the model recomputing its own label. Two graph-free controls on the PCA features alone, with no
+graph and no message passing, test this: nearest-centroid reaches 0.4654 and logistic regression
+0.6692 (Table~\ref{tab:celltype_control}). The trained model's gap to the better control, 32 points,
+is an order of magnitude larger than the 3.6 points the corrected link-prediction protocol leaves
+between the trained model and its topological floor. Here the graph and message passing do
 substantial work, and the same methodology leaves the number intact: the audit is
 discriminating rather than indiscriminate.
 
@@ -760,7 +752,7 @@ prediction without a matching re-derivation of when it is and is not valid.
 
 What we have not found named in the literature is the interaction between the two: every
 prior treatment we are aware of studies transductive edge leakage or popularity-biased negative
-sampling in isolation. Table~\ref{tab:headline_grid} and Figure~\ref{fig:protocol_grid} show they are
+sampling in isolation. Figure~\ref{fig:protocol_grid} shows they are
 super-additive on this graph: correcting either alone leaves the number substantially
 inflated, and the cross-architecture grid (Table~\ref{tab:architecture_grid},
 Figure~\ref{fig:architecture_inflation}) shows the same compounding recurs across four
@@ -936,6 +928,10 @@ conventional cell is a difference of training regime, not of protocol or measure
 runs were scored on the same split and the same 44,186 edges, and the headline checkpoint
 moves by 0.00004 AUROC between the validation and test splits. The no-miRNA-input ablation
 has no link-prediction head and is retained only as a smoke test.
+Each row is a single run, so the seed spread measured on the four-GPU headline model
+(0.005--0.02) is only an indicative scale: the inflation is an order of magnitude larger, but the
+0.016 between the GCN (0.6236) and the transformer (0.6080) under the corrected protocol is within
+it and is not read as an ordering.
 
 \input{tables/tableS1_architecture_grid.tex}
 

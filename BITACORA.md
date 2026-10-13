@@ -23,6 +23,41 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-12 — Verificación de la Tabla 9 contra los artefactos
+
+Sesión corta. No se tocó `main.tex`. Se contrastó la Tabla 9 (§4.2, E3/E4) con
+`results/comparison/*.json`, `PROTOCOLO_Y_CIFRAS_VIGENTES.md`, `literature_survey_d4_reaudit.tsv`
+y el leaderboard oficial de OGB (consultado hoy, 2026-10-12).
+
+**Coincide:**
+- Los siete model-free de los papers (`hmdd_survey_topology_baseline_*.json`): MGCNSS 0.9136,
+  NIMGSA y HLGNN-MDA 0.8680, DiGAMN 0.8714, CoupleMDA 0.9406, MEAHNE 0.9848, CKSNP-GNN 0.8822.
+- Nuestro grafo: 0.5912 (Adamic--Adar, pareado, `topology_baseline_v3fixed_test.json`) y 0.6276
+  (`PROTOCOLO_Y_CIFRAS_VIGENTES.md`).
+- Gaps y medias recalculados: por paper 0.9514 / 0.9041 / −0.0473; por grafo (promediando antes
+  las tres matrices HMDD) 0.9515 / 0.9124 / −0.0390.
+- OGB: 0.1861 (ddi) y 0.4933 (ppa) coinciden con nuestros JSON. Leaderboard: Adamic--Adar 30º de
+  32 en ddi (HyperFusion 0.9972 primero); Resource Allocation 14º de 27 en ppa, con BUDDY 13º en
+  0.4934.
+- Comparadores sin entrenar citados en §4.2: 0.8960 (NIMGSA), 0.85648 (HLGNN-MDA), 91.90
+  (CKSNP-GNN) en `literature_survey_d4_reaudit.tsv`; 0.8842 y 0.8924 salen de los JSON `_seen`.
+
+**Pendiente / a decidir:**
+1. `PROTOCOLO_Y_CIFRAS_VIGENTES.md:92` avisa que la misma arquitectura da 0.6080 en otro cuadro y
+   0.6276 en el vigente. Confirmar que la Tabla 9 usa el que corresponde (hoy usa 0.6276).
+2. El caption dice "test edges held out and uniform negatives" pero no que, salvo MGCNSS, la
+   partición del heurístico es una aproximación propia (90/10 o 80/20 aleatoria), no la del paper
+   (HLGNN-MDA es 10-fold en el paper). Los `caveat` de los JSON ya lo dicen. Se propuso añadir una
+   nota al caption; **no se hizo, falta decidir**.
+3. **Sigue sin verificar:** cómo se aplican los heurísticos a OGB (grafo no bipartito) y si el
+   sampler uniforme excluye aristas verdaderas.
+
+**Dónde nos quedamos:** igual que la entrada del 2026-10-10 → 11. Siguen pendientes los
+comentarios del autor sobre la Tabla 11 y el AUPRC, y luego 4.5, Discusión, Conclusión y la
+pasada final de Abstract/highlights.
+
+---
+
 ## 2026-10-10 → 11 — Pulido del manuscrito: secciones 2 a 4 revisadas, hasta 4.4
 
 Sesión larga sobre `manuscript/jbi/main.tex`. Commits `0cfe262`…`84e81a1` (más el de cierre de

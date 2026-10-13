@@ -269,12 +269,12 @@ def fig3_negative_sampler_collapse(same_model, topo, out: Path) -> None:
     _despine(ax, keep=("left",))
     ax.tick_params(axis="x", length=0)
     handles = list(ax.get_legend_handles_labels()[0]) + [
-        Line2D([], [], color=INK2, lw=1.1, ls=(0, (4, 3)), label="chance  0.500"),
+        Line2D([], [], color=INK2, lw=1.1, ls=(0, (4, 3)), label="chance (random scorer)  0.500"),
         Line2D([], [], color=ORANGE, lw=1.3, ls=(0, (1, 2)),
-               label=f"gene-degree heuristic  {gd:.3f}"),
+               label=f"gene in-degree heuristic  {gd:.3f}"),
     ]
-    ax.legend(handles=handles, loc="upper right", frameon=False, fontsize=7.5,
-              labelcolor=INK, ncol=1)
+    ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.0, 1.0), frameon=False,
+              fontsize=7.5, labelcolor=INK, ncol=2, borderaxespad=0.2)
     fig.tight_layout()
     fig.savefig(out, bbox_inches="tight")
     plt.close(fig)
