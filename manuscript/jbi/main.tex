@@ -124,7 +124,7 @@ tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
 graphs lowers the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics, negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move; cell typing keeps a 32-point margin over its graph-free controls.
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics, negative sampling carries 0.29--0.41 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move; cell typing keeps a 32-point margin over its graph-free controls.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
 any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, a tool that checks it.
@@ -606,9 +606,9 @@ produces. Within a row only the adjacency the heuristics may see changes, so the
 is attributable to the protocol alone: $+0.316$ to $+0.426$ across the six graphs, with our
 graph's $+0.342$ inside the range. How it divides between the two failures differs. On the
 five surveyed graphs the negative-sampling axis carries almost the whole effect
-($\approx 0.30$) and the edge split only $0.01$--$0.02$, because these association matrices
+($0.29$--$0.41$) and the edge split only $0.01$--$0.02$, because these association matrices
 are small and their heuristics lean on node degree, which a handful of masked edges barely
-moves. On our own graph the two axes are comparable and compound super-additively. The
+moves. On our own graph both contribute and compound super-additively: the two axes sum to $0.272$ against a total of $0.342$. The
 canonical HMDD matrix appears twice because MGCNSS is scored on its own bundled split, and
 MGCNSS has no negative-sampling axis because it carries the paper's own negatives.
 
@@ -660,7 +660,7 @@ $\rho = +0.77$, $p = 0.07$), and our own graph is a counterexample, with 47.5\% 
 and a floor indistinguishable from the graphs with none. The direct evidence is a
 manipulation. Adding empty columns to the canonical HMDD matrix, which has none, and nothing
 else, raises its model-free floor from $0.859 \pm 0.014$ to $0.982 \pm 0.006$. At 92.9\%
-empty columns, MEAHNE's own level, it reaches $0.979$, reproducing MEAHNE's outlying $0.9848$
+empty columns, close to MEAHNE's 92.4\%, it reaches $0.979$, reproducing MEAHNE's outlying $0.9848$
 from a graph that shares none of its data.
 
 \subsection{Sources of the inflation on our graph (E6)}

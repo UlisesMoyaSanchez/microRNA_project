@@ -83,10 +83,24 @@ con la Tabla 1 de precedentes (vive en Related Work). El AUPRC de la rejilla hea
   `results/comparison/multiseed_auprc_test_v3fixed.json`. La Tabla 10 nunca lo tuvo; el comentario pendiente de la entrada
   anterior se refería a una versión vieja y queda cerrado.
 
+**Cifras de 4.1 a 4.4 verificadas (misma sesión, tarde).** Contra `trained_grid_summary.json`,
+`topology_baseline_*`, `graph_candidate_stats.json`, `density_sweep_*`, `multiseed_*_v3fixed.json`,
+`celltype_baseline_*`: coinciden las Tablas 8, 10 y 11, el Apéndice A, E5 (relleno 0.859±0.014 → 0.982±0.006, 0.979 al
+92.9 %; Spearman 0.70/p=0.12 y 0.77/p=0.07), las cifras de 4.4 y E7. Se corrigieron tres frases: el eje de negativos
+es **0.29--0.41** (no "≈0.30"; también en el Abstract); en nuestro grafo los dos ejes no son "comparables" (model-free
+0.210 contra 0.062) sino que suman 0.272 contra un total de 0.342; el relleno llega a 0.979 con 92.9 % de columnas
+vacías, "cerca" del 92.4 % de MEAHNE. El "0.023 de ancho" de la banda sale de extremos redondeados (exacto 0.0224); se
+dejó. **La divergencia de loss en los seis grafos** se verificó corriendo `analysis/compare_overfit_curves.py`: 6/6
+con la firma. La historia de nuestro grafo se trajo del DGX
+(`checkpoints_v3fixed_edgesplit/history.json`, 112 épocas, pico en la 87, semilla 42) y se guardó como
+`results/comparison/history_own_graph.json`; que sea la del job 6214 se deduce por fecha (2026-08-28) y contenido, no
+se encontró el log del job. `ssh dgxum` funciona hoy (nodo `dgxa100jal`; el proyecto está en
+`/raid/home/umoya/scripts/microRNA_project`).
+
 **Dónde nos quedamos.** El manuscrito está revisado de la 2 a la Conclusión, más Abstract y highlights. Siguen abiertos:
 1. Las decisiones de la Tabla 9 de arriba (0.6276 contra 0.6080; nota de particiones aproximadas en el caption).
-2. Cifras sin verificar contra los resultados originales: las de 4.1 a 4.4, cómo se aplican los heurísticos a OGB y si el
-   sampler uniforme excluye aristas verdaderas.
+2. Cifras sin verificar: solo quedan cómo se aplican los heurísticos a OGB (grafo no bipartito) y si el sampler uniforme
+   excluye aristas verdaderas. Las de 4.1 a 4.4 ya están verificadas (arriba).
 3. Cierre del paquete: `pyproject.toml` para `protocheck`, merge a `main` o etiqueta de versión, URL/DOI en Data
    availability, y los `[STAGE/TODO]` (autores, afiliación, CRediT, funding, ethics).
 4. Decisión menor: "model-free" se usa en el Abstract sin definirse; "a tool that checks it" en la Conclusión del Abstract
