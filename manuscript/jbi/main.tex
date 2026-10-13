@@ -115,17 +115,16 @@ correct how link prediction is evaluated on biomedical interaction graphs.
 
 \textbf{Methods:} The same topological heuristics and a graph transformer, trained
 under a conventional evaluation protocol and one correcting transductive edge
-leakage and popularity-biased negative sampling, were compared across ten cases spanning eight distinct
-graphs: two Open Graph Benchmark (OGB) datasets, seven survey-paper datasets, and
-our own graph (public single-cell RNA-seq data with miRDB v6.0 interactions). On our
-own graph only, five further models (a homogeneous Graph Convolutional Network
-(GCN), two ablations, a graph-free Multi-Layer Perceptron (MLP), and an untrained
-control) and an unrelated cell-typing task with two graph-free controls were
+leakage and popularity-biased negative sampling, were compared on ten cases: two Open Graph Benchmark (OGB) datasets, the datasets of seven
+surveyed papers, and our own graph (public single-cell RNA-seq data with miRDB v6.0 interactions). On our
+own graph only, three further trained models (a homogeneous Graph Convolutional Network
+(GCN), a co-expression ablation and a graph-free Multi-Layer Perceptron (MLP)), an untrained
+control and a cell-typing task with two graph-free controls were
 tested under both protocols.
 
 \textbf{Results:} Retraining one architecture under both protocols on six
-graphs (ours and five from surveyed papers) lowers the Area Under the
-Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics (heuristics that use only graph topology), negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move.
+graphs lowers the Area Under the
+Receiver Operating Characteristic curve (AUROC) from 0.879--0.992 to 0.618--0.641, a loss of 0.26--0.37 on each. For model-free heuristics, negative sampling carries about 0.30 of the loss on the five surveyed graphs and the split 0.01--0.02, while on ours the two compound. Empty candidate columns raise a model-free floor from 0.859 to 0.982. On two OGB benchmarks our heuristics reproduce the leaderboard exactly. Against seven papers' numbers, trained models beat the topology floor by 4.7 points per paper, though the heuristic wins on the sparsest. On our graph the inflation recurs across four trained models, and an untrained control does not move; cell typing keeps a 32-point margin over its graph-free controls.
 
 \textbf{Conclusion:} The inflation is a property of the evaluation protocol, not of
 any one model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated) and release protocheck, a tool that checks it.
@@ -171,7 +170,7 @@ any one model or dataset. We propose a minimum reporting standard (a leak-free e
 \item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
 \item On seven papers' own data, trained models beat a model-free floor by 4.7 points.
-\item On our graph, four trained models inflate by 0.24--0.31; an untrained control does not move.
+\item Four trained models inflate by 0.24--0.31 on our graph; an untrained control does not.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
