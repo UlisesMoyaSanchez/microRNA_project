@@ -23,9 +23,10 @@ trabajo, no por commit.
 
 ---
 
-## 2026-10-12 — Verificación de la Tabla 9 contra los artefactos
+## 2026-10-12 — Verificación de la Tabla 9; 4.4, Discusión, Conclusión y Abstract alineados con las contribuciones
 
-Sesión corta. No se tocó `main.tex`. Se contrastó la Tabla 9 (§4.2, E3/E4) con
+Sesión larga. Commits `bdf6d29`, `192bf21`, `127b42a`, `7d03d85`, `e0a202c`, `de0cfcc` y el de esta entrada, todos en
+`feat/lp-audit`. Primero se contrastó la Tabla 9 (§4.2, E3/E4) con
 `results/comparison/*.json`, `PROTOCOLO_Y_CIFRAS_VIGENTES.md`, `literature_survey_d4_reaudit.tsv`
 y el leaderboard oficial de OGB (consultado hoy, 2026-10-12).
 
@@ -63,9 +64,33 @@ validación (80 auditorías 40/40 y 40/40, paridad 7e-10 en ddi, piso a ≤0.011
 DiGAMN y CoupleMDA y se cambió a Welch). Cifras reverificadas contra `protocheck_validation*.json`. No se fusionó
 con la Tabla 1 de precedentes (vive en Related Work). El AUPRC de la rejilla headline ya no aparece en el paper.
 
-**Dónde nos quedamos:** igual que la entrada del 2026-10-10 → 11. Siguen pendientes los
-comentarios del autor sobre la Tabla 11 y el AUPRC, y luego 4.5, Discusión, Conclusión y la
-pasada final de Abstract/highlights.
+**Resto de la sesión.**
+- **Discusión** reescrita alrededor de las cinco contribuciones: se quitó el párrafo de literatura que repetía Related
+  Work, abre con el atajo y la inflación compuesta, un párrafo de generalidad (seis grafos, cuatro modelos, cell typing,
+  pisos publicados), 5.1 estándar y `protocheck`, y 5.2 Limitaciones en seis frases. Se quitó "A related check" (cabeza
+  de scoring ciega al tipo celular). Pasó de ~155 a ~45 líneas fuera de 5.1.
+- **`protocheck`** presentado como herramienta que verifica el estándar sobre los datos del usuario, no sobre el modelo;
+  dice que toma las aristas como vienen (puede dar un `ok` falso si `encoder_edges` no es lo que el código usa). README con
+  "Using it in your own project" (cinco pasos). El notebook de Colab clonaba `feat/protocheck`, que ya no existe en
+  `origin`; ahora usa `feat/lp-audit` y lleva el botón "Open in Colab". `protocheck/` y `notebooks/` **solo están en
+  `feat/lp-audit`, no en `main`**.
+- **Conclusión** corregida: cell typing es una tarea distinta (no "similar"), añade OGB y el margen de 3.6 puntos con el
+  protocolo corregido. **Apéndice A** acortado y retitulado "Results for each architecture under the four protocol cells";
+  se quitó el ablation sin miRNA (smoke test) de la tabla y de 3.4; corregido "Appendix Appendix A".
+- **Abstract** (299 palabras): tres modelos entrenados más el control, cell typing con su margen de 32 puntos; highlight 4
+  recortado a 85 caracteres.
+- **AUPRC:** ya no aparece en ninguna parte del paper (se quitó de la frase de 3.3). Los valores siguen en
+  `results/comparison/multiseed_auprc_test_v3fixed.json`. La Tabla 10 nunca lo tuvo; el comentario pendiente de la entrada
+  anterior se refería a una versión vieja y queda cerrado.
+
+**Dónde nos quedamos.** El manuscrito está revisado de la 2 a la Conclusión, más Abstract y highlights. Siguen abiertos:
+1. Las decisiones de la Tabla 9 de arriba (0.6276 contra 0.6080; nota de particiones aproximadas en el caption).
+2. Cifras sin verificar contra los resultados originales: las de 4.1 a 4.4, cómo se aplican los heurísticos a OGB y si el
+   sampler uniforme excluye aristas verdaderas.
+3. Cierre del paquete: `pyproject.toml` para `protocheck`, merge a `main` o etiqueta de versión, URL/DOI en Data
+   availability, y los `[STAGE/TODO]` (autores, afiliación, CRediT, funding, ethics).
+4. Decisión menor: "model-free" se usa en el Abstract sin definirse; "a tool that checks it" en la Conclusión del Abstract
+   frente a "verifies" en el cuerpo.
 
 ---
 
