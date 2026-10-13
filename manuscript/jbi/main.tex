@@ -725,175 +725,34 @@ discriminating rather than indiscriminate.
 \section{Discussion}
 \label{sec:discussion}
 
-Each half of the inflation we measure already has a name in the broader link-prediction
-literature, and neither is specific to microRNAs. The edge-split half is transductive edge
-leakage, which \cite{zhu2023pitfalls} call \emph{target-link inclusion}: the target edge remains
-reachable to the encoder through message passing at evaluation time, so the model can, in
-effect, recover the label from the neighborhood it was never supposed to have. Its
-lineage traces to the inverse-relation leak in WN18 (a WordNet-derived benchmark) and FB15k, documented by
-\cite{toutanova2015observed}, which was serious enough to motivate a replacement
-benchmark (FB15k-237) rather than a footnote. Figure~\ref{fig:edge_split} illustrates the same mechanism for a bipartite graph with explicit reverse relations, in place of duplicated inverse triples. The negative-sampling half is popularity-biased
-negative sampling, which the literature calls \emph{degree bias}
-(also \emph{popularity bias}): \cite{aiyappa2024implicit} name and quantify it generally,
-and \cite{yilmaz2025biasaware} document the identical pattern in network biology
-specifically, the domain this graph is drawn from. Mechanistically, degree bias is a
-textbook case of \emph{shortcut learning} \cite{geirhos2020shortcut}: a model trained
-under uniform negatives has no incentive to learn miRNA-specific regulatory signal when
-gene in-degree alone, a feature that does not even require knowing which miRNA is
-being scored, separates positives from negatives almost for free
-(Figure~\ref{fig:neg_sampling_mechanism}). Collapsing to chance the moment that shortcut
-is closed off (Table~\ref{tab:model_free_baselines}) is the signature of a model that
-learned the shortcut and nothing else, not of a harder evaluation. The historical root of
-treating unlabeled pairs as negatives at all traces to sampled-metric evaluation practice
-in recommender systems \cite{krichene2020sampled}, a convention that migrated into link
-prediction without a matching re-derivation of when it is and is not valid.
+Collapsing to chance the moment gene in-degree is closed off (Table~\ref{tab:model_free_baselines}) is the
+signature of shortcut learning \cite{geirhos2020shortcut}, not of a harder evaluation. What we have not found
+named in the literature is the interaction between the two failures: prior work studies transductive edge leakage
+or popularity-biased negative sampling in isolation (Section~\ref{sec:related}, Table~\ref{tab:known_pitfalls}),
+but on our graph they are super-additive (Figure~\ref{fig:protocol_grid}), so auditing for one and not the other
+can still miss an inflated headline. We call this \emph{compounded evaluation inflation}. Empty candidate
+columns act through the second failure: under uniform negatives they supply negatives that any degree-aware
+scorer rejects for free, raising the model-free floor from 0.859 to 0.982 with no learning
+(Section~\ref{sec:dead_columns}). The model-free baseline is not a third source of inflation; it is what makes
+the other two visible.
 
-What we have not found named in the literature is the interaction between the two: every
-prior treatment we are aware of studies transductive edge leakage or popularity-biased negative
-sampling in isolation. Figure~\ref{fig:protocol_grid} shows they are
-super-additive on this graph: correcting either alone leaves the number substantially
-inflated, and the cross-architecture grid (Table~\ref{tab:architecture_grid},
-Figure~\ref{fig:architecture_inflation}) shows the same compounding recurs across four
-independently trained models, including a graph-free MLP, with the untrained
-control the only comparator that does not move. We propose calling this \emph{compounded
-evaluation inflation} to distinguish it from either failure mode reported alone: the
-practical implication is that auditing a paper for transductive edge leakage \emph{or} for
-popularity-biased negative sampling, but not both, can still miss a substantially
-inflated headline number. The model-free baseline plays a different role: it is not a
-third source of inflation and does not enter the super-additive interaction, but it is
-what makes either one visible, since a headline number within a few points of a
-model-free floor (Tables~\ref{tab:model_free_baselines} and~\ref{tab:validation_cases})
-is hard to read as evidence of learning.
-
-Neither result above is confined to our own graph. The compounded inflation itself
-reproduces on every graph we could retrain on: five externally-sourced association
-matrices, sharing no data with ours and none of its node features, each lose 0.256 to
-0.365 AUROC between the two protocols and each land in the same 0.618--0.641 band
-(\S\ref{sec:collapse_general}, Table~\ref{tab:discrimination}). That is the strongest
-form the claim takes (the inflation is a property of the protocol, measurable wherever
-the protocol is applied) and it is what licenses the title's framing over the weaker
-reading that we found a quirk of one graph. The separate weakness of trained models
-relative to a model-free floor also recurs, more unevenly, across the nine further
-cases (seven distinct graphs) that make up this paper's validation set
-(Section~\ref{sec:generalization}, Table~\ref{tab:validation_cases}). That weakness is
-not only ours to measure: six of the surveyed papers put an untrained comparator in their
-own comparison tables and clear it by 1.7 to 7.4 AUROC points without comment, over a floor
-that replicates when the same matrices are scored here by a different method
-(\S\ref{sec:generalization}). Topological heuristics have also been shown
-competitive with, or superior to, trained neural link predictors elsewhere in the
-literature, corroborating the pattern from an independent direction: on realistic
-biomedical graphs, a plain Common Neighbours baseline holds its own against
-graph-embedding neural methods on small or sparse, highly-disconnected graphs
-\cite{crichton2018realistic}, and a purely topology-centric method has been shown to
-outperform state-of-the-art GNN link predictors in accuracy while requiring a fraction
-of the training and inference cost \cite{huang2023gelato}. Notably, on ogbl-ppa this
-holds even though OGB already reports model-free heuristics alongside trained
-submissions, exactly the practice we recommend, which suggests the gap is not only
-that model-free baselines go unreported, but that reporting one does not, by itself,
-raise the bar the field treats as meaningful progress.
-
-Seven limitations qualify these results. First, the cross-architecture grid reports a
-single measurement per architecture rather than an average over multiple training
-runs. We consider this justified because the inflation effect size is far larger than
-the run-to-run variability established elsewhere in this study, but a fully repeated
-version of the grid would still strengthen the claim. Second, the task's information
-ceiling is bounded by what the graph and its labels can support: the graph itself
-carries no miRNA or gene sequence information, and the interaction label source, miRDB,
-is itself the output of a seed-complementarity prediction model rather than an
-experimentally confirmed interaction. This ceiling would not be resolved by a better architecture. It would require predicting \emph{experimentally validated} interactions (for example, from miRTarBase) instead of another predictor's output. Third, the
-model-free baselines reported here are local neighborhood-overlap heuristics (gene
-degree, preferential attachment, common neighbours, and Adamic--Adar) computed only
-from the miRNA-to-gene adjacency. We did not evaluate global, path-integrating
-heuristics such as the Katz index or rooted PageRank, which are known to outperform
-local heuristics on sparse graphs and which the trained model's multi-hop,
-multi-relation message passing more closely resembles. The 3.6-point gap between the
-best local heuristic and the trained model should therefore be read as an upper bound
-on how much the model exceeds a model-free topological floor, not a tight one. Fourth,
-the four trained models compared here (Table~\ref{tab:architecture_grid}) are all
-either generic message-passing networks (the project HGT and its ablation, a homogeneous GCN) or a
-graph-free MLP. None explicitly encodes pairwise structural signal (shared neighbors,
-enclosing-subgraph structure, or path distance) the way link-prediction-specific
-architectures such as SEAL \cite{zhang2018seal}, NBFNet \cite{zhu2021nbfnet}, Neo-GNN
-\cite{yun2021neognn}, or BUDDY \cite{chamberlain2023buddy} do. Architectures of that
-family place above local heuristics on properly-audited external leaderboards,
-including the OGB benchmarks discussed above, where BUDDY narrowly outperforms
-Resource Allocation on ogbl-ppa. The 3.6-point gap measured here should therefore not be read as a ceiling on
-what any trained model could achieve on this graph under the corrected protocol, only
-on what the generic message-passing architectures tested here achieve. Whether a
-structure-aware architecture closes it is an open question this study does not
-answer. Fifth, the 21-paper literature survey (Table~\ref{tab:literature_survey}) is a
-two-rater instrument with imperfect agreement, not a settled measurement. Both raters
-read the primary sources under a written codebook, and every disagreement was
-adjudicated against the source rather than averaged away, but agreement before
-adjudication was moderate on the two dimensions that carry real spread: Cohen's
-$\kappa$ 0.44 on whether held-out edges are removed from the encoder's input and 0.49
-on negative sampling. The "unclear" calls in particular, 11 of 19 on the former, should be read as an adjudicated two-rater judgment rather than a fact a third reader
-would recover with certainty. We report the double-rating as a limitation and not as a
-resolution because it changed a headline: the first rater's classification, from which
-this paper's earlier drafts concluded that no surveyed paper reports a model-free
-baseline at all, was overturned to six of 21 once the raters' one disagreement on that
-dimension exposed that the criterion's list of qualifying baselines omitted this subfield's own classical untrained methods. A criterion defect of
-that kind is precisely what a second rater is for, and we cannot rule out another one
-in the dimensions where agreement is only moderate. What the correction did not do is
-weaken the survey's argument: it replaced a claim about an absence with a claim about a
-margin, which the six papers' own tables state and none of them discusses. Sixth, the seven-paper topology audit
-(Table~\ref{tab:validation_cases}) reconstructs, rather than reproduces, six of seven
-papers' evaluation protocols: only MGCNSS's split and CoupleMDA's positive edges are
-each paper's own exact data, the rest use an exact association matrix (verified against
-each paper's own reported node/edge counts) under a self-generated split at the paper's
-stated negative ratio, since no further split file was published. Three further
-candidate papers from the same survey cluster (GONNMDA, Orro, DGNMDA) were excluded
-from the audit entirely rather than approximated further: GONNMDA's linked repository
-contains no code or data, Orro's data-availability statement provides no public
-repository, and DGNMDA's cited data source was unreachable at the time of this audit.
-This audit was further scoped, by design, to the miRNA-disease cluster of the 21-paper
-survey. It covered 10 of its 11 miRNA-disease papers, of which 7 yielded usable data. The eleventh (HybridGNN) was not carried into the audit. The other 10 surveyed papers span
-drug-target (6 papers), circRNA-disease, lncRNA-disease, gene-disease, and plant
-miRNA-target interactions, each keyed to a different reference
-database (e.g.\ DrugBank, BindingDB) that this audit did not attempt to acquire. Extending the same protocol to those domains is future work, not a gap left
-unexplained. The floor-convergence check in \S\ref{sec:generalization} is narrower
-still: three papers over two distinct graphs, one of which (CKSNP-GNN) reports a comparator
-number transferred from that comparator's own paper rather than measured on its data, so the
-agreement between the published and the re-measured floor rests on two independent matrices,
-not three. The audit's headline number (a 4.7-point average gap per paper, 3.9 per
-distinct graph, reversing sign on one of the seven) should be read as a
-lower-confidence, but externally-sourced, complement to the single-graph result in
-Table~\ref{tab:model_free_baselines}, not a literal replication of any individual
-paper's reported figure, and not yet evidence about the 12 domains it does not cover.
-
-Seventh, the six-graph retraining experiment (Table~\ref{tab:discrimination},
-Figure~\ref{fig:cross_graph_collapse}) trains \emph{our} architecture on each paper's
-graph, not each paper's own model, which we could not in general reproduce. It therefore
-licenses the claim that the conventional protocol inflates \emph{a} trained model on
-those graphs, the claim this paper makes, and not the stronger claim that the
-specific figures those papers report are inflated by that amount, which would require
-re-running their models under both protocols. The two arms are kept in separate tables
-for this reason: Table~\ref{tab:validation_cases} reports each paper's own number
-against a floor, Table~\ref{tab:discrimination} reports ours under both protocols, and
-the two should not be read across. A related open item sits inside the same experiment:
-the trained-versus-floor margin widens under the corrected protocol on all five external
-graphs but narrows on ours, and the one mechanism we tested for it (memorisation
-afforded by our graph's node features, absent from the five bare association matrices) is ruled out by per-epoch loss curves that show the same divergence on all six. We
-report it as an open observation (\S\ref{sec:collapse_general}) rather than resolve it.
-
-A related check follows from the same logic and generalizes beyond this study. Any claim
-that an interaction is predicted in a context-specific way (cell-type-specific
-regulation, say) should be tested against three questions before it is trusted: whether
-the context variable is present in the training data at all, whether the scoring head
-receives it as an input, and whether the reported evaluation actually varies with it. The
-scoring head used here fails the second by construction, taking only the concatenated
-miRNA and gene embeddings, so its score for a given pair is identical in every cell type
-however long it is trained. We therefore attach no context-specific narrative to these
-results. The check costs nothing to run and, like a model-free baseline, is most valuable
-exactly where it is least likely to be run.
+None of this is specific to our graph or to one model. Five external association matrices that share no data
+with ours each lose 0.26--0.37 AUROC between the protocols and land in the same 0.618--0.641 band
+(Table~\ref{tab:discrimination}); four trained models inflate by 0.24--0.31 while an untrained control does not
+move, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
+weakness against a floor also appears in published work. Across the seven surveyed papers the trained models
+beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN) to 3.3 below it (MEAHNE), and on
+ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY. OGB already reports such heuristics, and the
+gap persists, so reporting a baseline does not by itself raise the bar. A headline within a few points of the
+floor is hard to read as evidence of learning.
 
 \subsection{A minimum reporting standard and \texttt{protocheck}}
 \label{sec:standard}
-Given how directly the inflation problem responds to a small set of checks, we propose these as a minimum reporting standard for evaluation methodology in this subfield. First, a leak-free edge split, with an automated check that held-out edges are unreachable to the encoder during message passing. Second, matched negative sampling: negative-sampling distributions that are matched between training and evaluation rather than assumed compatible. Third, at least one model-free baseline reported alongside any trained model, \emph{and the margin over it stated}. Six of the surveyed papers report such a comparator and none reads its own margin. Table~\ref{tab:correct_protocol} summarizes the three requirements as a checklist.
+Given how directly the inflation problem responds to a small set of checks, we propose these as a minimum reporting standard for evaluation methodology in this subfield. First, a leak-free edge split, with an automated check that held-out edges are unreachable to the encoder during message passing. Second, matched negative sampling: negative-sampling distributions that are matched between training and evaluation rather than assumed compatible. Third, at least one model-free baseline reported alongside any trained model, \emph{and the margin over it stated}. Six of the surveyed papers report such a comparator and none reads its own margin. We release \texttt{protocheck}, a tool that verifies whether an evaluation meets the standard on the user's own splits. Table~\ref{tab:correct_protocol} gives the three requirements and the check of \texttt{protocheck} that verifies each.
 
 \input{tables/table5_correct_protocol_checklist.tex}
 
-We release \texttt{protocheck} so that this checklist can be run rather than only read. It takes the train and held-out pairs of a link-prediction experiment and reports on each requirement. It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. A check whose input the user did not supply is reported as unchecked, never as passed. The tool inspects only the pairs it is given. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs.
+\texttt{protocheck} takes the train and held-out pairs of a link-prediction experiment and, optionally, the edges the encoder sees, the training and evaluation negatives and the model's AUROC. It reports each check as ok, warn or fail; a check whose input was not supplied is reported as unchecked, never as passed. It needs only numpy, scipy and scikit-learn, and runs from the command line, from Python, or in a Colab notebook on the user's own files (Data availability). It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. The tool inspects only the pairs it is given. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs.
 
 We validated the implementation, not the claim. On the five HMDD-type graphs under the $2\times2$ grid,
 where the true state of every cell is known by construction (four seeds, 80 audits), the leakage check
@@ -908,6 +767,22 @@ spread; we replaced it with the Welch comparison after seeing the failure. These
 implementation reproduces our audit scripts. They do not show that its thresholds are right or that it finds
 leakage beyond exact edges, no model was trained, so the margin check was exercised only as a floor
 computation, and the empty-column check is not independently validated.
+
+\subsection{Limitations}
+\label{sec:limitations}
+(i) The cross-architecture grid is one run per model; the inflation is an order of magnitude above the seed
+spread, but a repeated grid would strengthen it. (ii) Our heuristics are local; global ones (Katz, rooted
+PageRank) may sit higher, so the 3.6-point margin is an upper bound on how far the model exceeds a floor.
+(iii) None of the four trained models encodes pairwise structure as SEAL \cite{zhang2018seal}, NBFNet
+\cite{zhu2021nbfnet} or BUDDY \cite{chamberlain2023buddy} do, so 3.6 points is not a ceiling for trained models,
+and whether a structure-aware architecture closes it is open. (iv) The six-graph experiment retrains our
+architecture on each paper's graph, not each paper's model, and six of the seven audited protocols are
+reconstructed from the paper's matrix and stated negative ratio; it shows that the conventional protocol inflates
+a trained model on those graphs, not that those papers' figures are inflated by that amount. (v) The survey that
+motivates the study is a two-rater instrument (Cohen's $\kappa$ 0.44 and 0.49 before adjudication) and is not
+itself a result. (vi) The label source, miRDB, is itself a prediction model, so a better architecture would not
+lift the information ceiling. We also leave unexplained why the margin over the floor widens under the corrected
+protocol on the five external graphs but narrows on ours (Section~\ref{sec:collapse_general}).
 
 \section{Conclusion}
 \label{sec:conclusion}
