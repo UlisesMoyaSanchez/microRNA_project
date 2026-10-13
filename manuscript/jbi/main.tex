@@ -568,6 +568,8 @@ fitted linear model, both trained directly on the raw PCA features without messa
 
 \input{tables/table_heuristics.tex}
 
+On the two OGB graphs, which are homogeneous and undirected, we use the textbook one-hop forms of the same scores on the symmetrized training edges, plus Resource Allocation, the strongest heuristic on ogbl-ppa's leaderboard; negatives are OGB's official ones.
+
 \paragraph{Models} The link-prediction experiments compare these baselines with four
 trained models (a heterogeneous graph transformer, a homogeneous GCN, a
 co-expression-ablation variant of the transformer, and a graph-free MLP) plus an

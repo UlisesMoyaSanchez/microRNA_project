@@ -43,7 +43,7 @@ y el leaderboard oficial de OGB (consultado hoy, 2026-10-12).
 - Comparadores sin entrenar citados en §4.2: 0.8960 (NIMGSA), 0.85648 (HLGNN-MDA), 91.90
   (CKSNP-GNN) en `literature_survey_d4_reaudit.tsv`; 0.8842 y 0.8924 salen de los JSON `_seen`.
 
-**Pendiente / a decidir:**
+**Pendiente / a decidir (RESUELTO al final de la sesión, ver más abajo):**
 1. `PROTOCOLO_Y_CIFRAS_VIGENTES.md:92` avisa que la misma arquitectura da 0.6080 en otro cuadro y
    0.6276 en el vigente. Confirmar que la Tabla 9 usa el que corresponde (hoy usa 0.6276).
 2. El caption dice "test edges held out and uniform negatives" pero no que, salvo MGCNSS, la
@@ -97,10 +97,28 @@ con la firma. La historia de nuestro grafo se trajo del DGX
 se encontró el log del job. `ssh dgxum` funciona hoy (nodo `dgxa100jal`; el proyecto está en
 `/raid/home/umoya/scripts/microRNA_project`).
 
+**Cierre de los casos abiertos (misma sesión, noche).**
+- **Tabla 9:** los 0.6276 son correctos (titular de cuatro semillas, igual que la Tabla 8); los 0.6080 son del HGT de una GPU
+  y solo valen para comparar arquitecturas (Apéndice A, que ya lo dice). El caption ahora dice en qué partición se puntúan los
+  heurísticos (la del paper donde se publica: MGCNSS con sus negativos, los positivos de CoupleMDA; aleatoria con negativos
+  uniformes en el resto) y que OGB usa sus negativos oficiales.
+- **OGB y sampler (leídos `training/eval_ogb_topology_baseline.py`, `eval_topology_baseline.py` y los JSON):** en OGB los
+  heurísticos son las formas de un salto sobre las aristas de entrenamiento simetrizadas, más Resource Allocation (quinto
+  heurístico solo para OGB); compuerta de fuga en ejecución (0 solape válido/test con el grafo de entrenamiento); negativos
+  pareados excluyen train+val+test y lazos propios (fallback 2.2 % ddi, 0 % ppa); reproducen el leaderboard a 4 decimales en
+  las 5 entradas disponibles. El sampler uniforme bipartito excluye train+test con 32 intentos; devolver una arista verdadera
+  exige que los 32 caigan en positivos (~densidad^32, despreciable). Se añadió una frase en 3.4 y "One-hop forms of the same
+  heuristics" en E4.
+- **Citas:** primera mención de cada paper/dataset citada por sección, y en las Tablas 5, 7, 8 y 10 (commit `ae4f1c9`). Quedan
+  sin cita las heurísticas (Adamic--Adar, etc.), Katz y PageRank: faltan sus entradas en `references.bib`.
+- `to_review.md` (comentarios de revisión del Abstract): atendidos el 3 y el 4; el 1 (encuesta de 21 contra auditoría de 7) y
+  el 2 (definir model-free en el Abstract) siguen abiertos.
+
 **Dónde nos quedamos.** El manuscrito está revisado de la 2 a la Conclusión, más Abstract y highlights. Siguen abiertos:
-1. Las decisiones de la Tabla 9 de arriba (0.6276 contra 0.6080; nota de particiones aproximadas en el caption).
-2. Cifras sin verificar: solo quedan cómo se aplican los heurísticos a OGB (grafo no bipartito) y si el sampler uniforme
-   excluye aristas verdaderas. Las de 4.1 a 4.4 ya están verificadas (arriba).
+1. Citas de las heurísticas, Katz y PageRank (dar de alta y verificar con Crossref); definir model-free en el Abstract;
+   aclarar encuesta de 21 contra auditoría de 7; decidir D2/D3 de `goal.md` (D2 quedó fuera al quitar "A related check"; D3, la
+   etiqueta de los 37 diabéticos, no está en el paper).
+2. Verificación de cifras: cerrada (4.1 a 4.4, Tabla 9, OGB y sampler).
 3. Cierre del paquete: `pyproject.toml` para `protocheck`, merge a `main` o etiqueta de versión, URL/DOI en Data
    availability, y los `[STAGE/TODO]` (autores, afiliación, CRediT, funding, ethics).
 4. Decisión menor: "model-free" se usa en el Abstract sin definirse; "a tool that checks it" en la Conclusión del Abstract
