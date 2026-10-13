@@ -37,6 +37,36 @@ pairs (`--matrix M.csv --heldout-pos F --encoder-edges matrix`), (row, col, labe
 this repo's `EdgeSplit` (`protocheck.io.from_pyg_edge_split`). Homogeneous undirected graphs:
 `--mode homogeneous`. Exit status 1 if any check fails, 2 on a usage error.
 
+## Using it in your own project
+
+`protocheck` inspects the *data* of your experiment (splits and negatives), not your model. Your
+pipeline does not change; you add one step between building the splits and reporting a number.
+
+1. Build your splits and negatives as usual.
+2. Save the pairs as `N x 2` arrays of `(row, col)` (`.npy` or CSV): `train_pos` and `heldout_pos`
+   (required), and, to enable more checks, `encoder_edges` (the edges your model actually uses for
+   message passing), `train_neg`, `eval_neg`, plus your test AUROC (`model_auroc`).
+3. Run the audit, in Python or from the command line:
+
+   ```python
+   from protocheck import audit
+   report = audit(n_rows, n_cols, train_pos, heldout_pos,
+                  encoder_edges=encoder_edges, train_neg=train_neg, eval_neg=eval_neg,
+                  model_auroc=0.91)
+   print(report.render())
+   ```
+
+   or `python -m protocheck --train-pos ... --heldout-pos ... --model-auroc 0.91`. In Colab, open
+   `notebooks/protocheck_colab.ipynb`, upload the files and fill in the names.
+4. Read each finding (`ok`, `warn`, `fail` or `unchecked`). On `fail`, fix the split or the sampler and
+   retrain; on a small margin over the model-free floor, report it next to your number.
+5. Optional: call it at the end of your evaluation script and stop on exit status 1.
+
+Two things to keep in mind. The tool takes the files as given: if `encoder_edges` is not what your code
+really feeds the encoder, it can report `ok` wrongly, so build that file from the same object your model
+uses. And it does not retrain anything: to learn how much of your AUROC was inflation, rerun your model on
+the corrected split.
+
 ## Examples
 
 `python -m protocheck.examples.make_examples` writes five synthetic datasets, each triggering
