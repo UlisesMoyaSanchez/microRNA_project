@@ -133,6 +133,10 @@ confirmado por el autor. **Faltan más autores**: el autor de correspondencia da
 Arroyo. Las instituciones CUCBA e IIEG se expandieron de memoria del asistente, no de un documento del proyecto: revisar.
 El apartado CRediT sigue en `TODO` hasta cerrar la lista de autores.
 
+**Dos autoras más (2026-10-13).** Se añadieron Nancy Ruiz y Miriam Díaz (acento confirmado por el autor), ambas de TSJ Mario Molina
+(aff3), antes del último autor; ahora son siete autores. Siguen sin confirmar su nombre completo y segundos apellidos, y
+puede haber más autores (el `%% TODO` de `main.tex` pasó a "MAY"). El PDF compila (39 páginas).
+
 También hecho: definición de Empty y Gini en 3.1 y caption de la Tabla 10 más corto; citas en 2.2 y 3.1 (commit `1fc162b`).
 
 **Dónde nos quedamos.** El manuscrito está revisado de la 2 a la Conclusión, más Abstract y highlights. Siguen abiertos:
@@ -141,7 +145,7 @@ También hecho: definición de Empty y Gini en 3.1 y caption de la Tabla 10 más
 2. Verificación de cifras: cerrada (4.1 a 4.4, Tabla 9, OGB y sampler).
    Citas de las heurísticas, Katz y PageRank: dadas de alta y verificadas (commit `6ef017f`).
 3. Cierre del paquete: `pyproject.toml` para `protocheck` (lo prueba el autor antes; no hacerlo sin avisar), merge a `main` o
-   etiqueta de versión, URL/DOI en Data availability, y los `[STAGE/TODO]`: **autores restantes**, ciudad del IIEG y nombre
+   etiqueta de versión, URL/DOI en Data availability, y los `[STAGE/TODO]`: **autores restantes (si hay más)**, ciudad del IIEG y nombre
    completo de TSJ Mario Molina, CRediT (roles por persona), funding, acknowledgements y ethics.
 4. Nada pendiente del Abstract: "model-free" ya se define y la Conclusión dice "verifies" (ver arriba).
 
