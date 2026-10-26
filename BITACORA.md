@@ -32,7 +32,7 @@ procedencia). Al revisarlo contra el código y `ms_specificity_audit.json` (job 
 es 78/51/37. La frase dice eso, no la versión de julio. No mueve ninguna cifra: `mirna_expr.tsv` no tiene lectores y los
 nodos miRNA salen de miRDB (miRNAs con al menos una diana entre los 3,000 genes, `build_heterograph.py:151-154`), no de GEO.
 
-Mismo commit, fuera del paper:
+Mismo commit (`1ab3710`, subido a `origin/feat/lp-audit`), fuera del paper:
 - `README.md:31` decía que los nodos miRNA eran "hsa probes in GSE289530, filtered to miRDB" (2,578); es al revés y son
   2,460. Corregido, con las dos tablas de GEO y una nota "Known label error".
 - Las 18 configs viejas (`config.yaml`, `v2*`, `v3`, `v4`, `mirtarbase*`, `ablation*`) aún describían GSE289530 como "CD14+
