@@ -415,7 +415,7 @@ HLGNN-MDA~\cite{yu2022hlgnnmda}) share a byte-identical HMDD~\cite{li2014hmdd} m
 from the paper's own repository, or a shared mirror for CKSNP-GNN~\cite{li2022cksnpgnn}, and was verified against
 that paper's reported counts. Three further papers were excluded because no usable data was
 recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
-open leaderboards, used only as an external check on the model-free baselines. In the
+open leaderboards~\cite{ogb2026leaderboard}, used only as an external check on the model-free baselines. In the
 results table, only MGCNSS uses the paper's own exact test split (Tier 1); CoupleMDA's~\cite{li2025couplemda}
 positive edges are exact but its negatives are not (Tier 1/2); the other five rows (NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}, DiGAMN~\cite{liu2024digamn}, MEAHNE~\cite{huang2022meahne} and CKSNP-GNN~\cite{li2022cksnpgnn}) use
 an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2).
@@ -620,7 +620,7 @@ and CKSNP-GNN~\cite{li2022cksnpgnn} report (0.8960, 0.8565 and 0.9190) sit besid
 best heuristic reaches on their matrices under the conventional protocol, and CKSNP-GNN's
 is a number transferred from other papers, not measured on its own data. Third, on OGB the
 heuristics reproduce the leaderboards exactly and the floor is not uniform: on ogbl-ddi the
-best heuristic ranks 30th of 32, while on ogbl-ppa a zero-parameter formula ranks 14th of 27,
+best heuristic ranks 30th of 32~\cite{ogb2026leaderboard}, while on ogbl-ppa a zero-parameter formula ranks 14th of 27,
 essentially tied with the entry just above it, BUDDY \cite{chamberlain2023buddy} (0.4933 vs.\
 0.4934 Hits@100).
 
@@ -724,7 +724,7 @@ with ours each lose 0.26--0.37 AUROC between the protocols and land in the same 
 move, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
 weakness against a floor also appears in published work. Across the seven surveyed papers the trained models
 beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN~\cite{liu2024digamn}) to 3.3 below it (MEAHNE~\cite{huang2022meahne}), and on
-ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY~\cite{chamberlain2023buddy}. OGB~\cite{hu2020ogb} already reports such heuristics, and the
+ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY~\cite{chamberlain2023buddy}. OGB's leaderboards already list such heuristics~\cite{ogb2026leaderboard}, and the
 gap persists, so reporting a baseline does not by itself raise the bar. A headline within a few points of the
 floor is hard to read as evidence of learning.
 

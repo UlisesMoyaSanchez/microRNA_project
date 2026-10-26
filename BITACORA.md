@@ -23,6 +23,25 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-26 (tarde) — Revisión de referencias: notas internas impresas y una cita a OGB que no decía lo citado
+
+Segunda pasada sobre las 55 entradas de `references.bib` (detalle en `manuscript/jbi/CITATION_REVIEW.md`, Parte 3).
+**El hallazgo grave no era de contenido sino de composición:** 52 de las 53 referencias impresas llevaban su `note` de
+verificación interna ("verified via Crossref API…", "one of the seven papers in this study's pilot literature survey
+(Table 2)", con un número de tabla viejo), porque `elsarticle-num.bst` imprime `note`. Se renombró todo a `annote`; el PDF
+pasó de 39 a 35 páginas. Seis títulos perdían las mayúsculas (CoupleMDA, GONNMDA, …, Bellman-Ford): protegidos con llaves.
+
+**Contenido:** `hu2020ogb` sostenía dos frases que el paper de OGB no dice ("OGB already reports such heuristics" en la
+Discusión, "publishes heuristic baselines on its leaderboards" en la Tabla 1). El paper no menciona ninguna heurística; las
+filas del leaderboard las subieron terceros en 2021. Se creó `ogb2026leaderboard` (URL, consultado 2026-10-26) para esas
+frases y los puestos; los puestos no cambiaron (30º de 32, 14º de 27). Las otras 14 claves nuevas desde agosto se sostienen.
+
+**Metadatos:** 38 coinciden con Crossref; se añadieron 7 DOIs verificados (MGCNSS, NIMGSA, HGDTI, NGCN, kmerPMTF, Toutanova,
+Krichene) y el `eprint` de Kotnis (KBCOM'18 confirmado). Brière sigue como preprint (v3). DBLP no se pudo usar (pide
+verificación anti-bot). Quedan en el bib sin citar `almusawi2023review` y `yun2021neognn`, que no se imprimen.
+
+---
+
 ## 2026-10-26 — D3 cerrada: el error de etiquetas de GSE289530 se declara en Métodos
 
 El autor decidió declararlo con una frase en Métodos (párrafo "Our graph", tras la de la etiqueta de enfermedad como

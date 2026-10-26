@@ -105,3 +105,50 @@ or of the survey's single-rater limitation (tracked separately as the manuscript
 Discussion limitation). Nothing in `main.tex` or `references.bib` was modified in this pass —
 this is a read-only artifact for manual review; any fixes it suggests (the two ⚠️ rows above)
 are a follow-up decision for the authors.
+
+---
+
+## Part 3 — Second pass, 2026-10-26: metadata of all 55 entries and content of the 15 keys added since 2026-08-22
+
+**Metadata.** Every entry with a DOI was resolved on the Crossref API; journal entries without one
+were found by Crossref bibliographic search and accepted only on an exact title match; conference
+and preprint entries were checked on the arXiv API, Semantic Scholar, the bioRxiv API and (for
+Kotnis) the authors' institution. DBLP served a bot challenge on 2026-10-26 and could not be used.
+- 38 entries match Crossref on title, first author, year, volume, issue and pages. The year
+  differences for miRDB, HMDD and CELLxGENE are Crossref's online-first date; the bib carries the
+  NAR print year, which is right. GONNMDA's official title really reads "A Ordered" (the bib's
+  "An" is kept as the publisher's PDF has it; reconcile at proofs).
+- DOIs added (title-matched on Crossref): MGCNSS `10.1093/bib/bbae168`, NIMGSA `10.3390/biom12010064`,
+  HGDTI `10.1186/s12859-022-04655-5`, NGCN `10.1111/jcmm.18224`, kmerPMTF `10.7717/peerj.17396`,
+  Toutanova `10.18653/v1/W15-4007` (pp. 57–66), Krichene `10.1145/3394486.3403226` (pp. 1748–1757).
+- Venues confirmed: SEAL NeurIPS 2018 pp. 5171–5181 (Semantic Scholar); NBFNet NeurIPS 2021 and
+  BUDDY ICLR 2023 (arXiv comment / journal_ref); Kotnis at KBCOM'18, Los Angeles, Feb 2018, best
+  paper ([Heidelberg CL news](https://www.cl.uni-heidelberg.de/news/best-paper-award-at-kbcom-2018.mhtml)),
+  `eprint` added. Gelato and Aiyappa remain arXiv-only; Brière remains a preprint (v3, 2026-07-22,
+  bioRxiv API reports no published version).
+- `almusawi2023review` and `yun2021neognn` are in the bib but uncited (BibTeX does not print them).
+
+**Content of the 15 new keys.** ✅ for 13: the heuristics (`adamic2003friends`, `barabasi1999scaling`,
+`liben2007link` for preferential attachment, common neighbours and rooted PageRank, `zhou2009local`,
+`katz1953status`), the data sources (`chen2020mirdb`, `czi2025cellxgene`, `li2014hmdd`) and the
+comparators named in Table 3 (`lu2015spm`, `chen2018bnpmda`, `qu2018llcmda`, `yu2020tcrwmda`,
+`wang2014hnm`, `tong2006rwr`) are each the original work for the name they are cited for.
+"Resource Allocation, the strongest heuristic on ogbl-ppa's leaderboard" holds (0.4933 vs Adamic
+Adar 0.3245, Common Neighbor 0.2765).
+
+❌ **`hu2020ogb` was cited for two claims it does not make.** "OGB already reports such heuristics"
+(Discussion) and "OGB publishes heuristic baselines on its leaderboards" (Table 1): the OGB paper
+(arXiv v7, full text searched) reports MF, Node2vec, GCN and GraphSAGE and mentions no heuristic.
+The heuristic rows on the leaderboard were submitted by third parties in 2021 (Common Neighbor and
+Adamic Adar by Muhan Zhang on 2021-02-12, Resource Allocation by Shen Fan on 2021-07-05). Fixed:
+new entry `ogb2026leaderboard` (URL, accessed 2026-10-26) now carries those two claims and the
+ranks; `hu2020ogb` stays on the datasets and their official negatives. Ranks re-read on
+2026-10-26: ogbl-ddi 30th of 32 (34 rows, ranks run to 32), ogbl-ppa 14th of 27 — unchanged.
+
+**Typesetting defects found in the printed list, fixed.**
+1. 52 of 53 printed references carried their internal verification `note` ("verified via Crossref
+   API…", "One of the seven papers in this study's pilot literature survey (Table 2)…"), because
+   `elsarticle-num.bst` prints `note`. All renamed to `annote`, which the style ignores; the
+   provenance stays in the bib. The PDF went from 39 to 35 pages.
+2. Six titles lost their capitals under the style's sentence-casing (CoupleMDA, GONNMDA, DGNMDA,
+   HLGNN-MDA, miRNA in Orro, Bellman-Ford); now brace-protected.
