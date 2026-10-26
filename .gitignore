@@ -23,6 +23,7 @@ notebooks/.ipynb_checkpoints/
 
 # data files
 *.csv
+!manuscript/jbi/references_review.csv
 *.npz
 *.npy
 *.h5

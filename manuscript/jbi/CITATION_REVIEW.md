@@ -152,3 +152,12 @@ ranks; `hu2020ogb` stays on the datasets and their official negatives. Ranks re-
    provenance stays in the bib. The PDF went from 39 to 35 pages.
 2. Six titles lost their capitals under the style's sentence-casing (CoupleMDA, GONNMDA, DGNMDA,
    HLGNN-MDA, miRNA in Orro, Bellman-Ford); now brace-protected.
+
+**Spreadsheet for human review.** `references_review.csv` (56 rows: 54 cited in PDF order, the two
+uncited entries last) carries, per entry: printed number, key, short reference, link, full-text link,
+where it is cited (section or table), the citing sentence or table row as it stands in `main.tex`
+today, the metadata check, the content verdict with its date, any open issue, and four empty
+columns for the reviewer (`reviewed_by`, `review_date`, `reviewer_ok`, `reviewer_comment`).
+Regenerate with `python3 build_references_review.py .` after `compile.sh`; the reviewer columns are
+overwritten, so copy them out first. **Line numbers in Parts 1–2 above are stale** (the manuscript
+was restructured after 2026-08-22); the CSV's `cited_in` and `claim_in_paper` columns replace them.

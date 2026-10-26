@@ -40,6 +40,12 @@ frases y los puestos; los puestos no cambiaron (30º de 32, 14º de 27). Las otr
 Krichene) y el `eprint` de Kotnis (KBCOM'18 confirmado). Brière sigue como preprint (v3). DBLP no se pudo usar (pide
 verificación anti-bot). Quedan en el bib sin citar `almusawi2023review` y `yun2021neognn`, que no se imprimen.
 
+**Tabla para revisión humana:** `manuscript/jbi/references_review.csv` (56 filas, en el orden del PDF) con link, sección y
+frase citante actuales, veredicto y columnas vacías para el revisor; se regenera con `build_references_review.py`. Se comprobó
+que `CITATION_REVIEW.md` estaba desfasado: sus números de línea ya no sirven y 10 de sus frases citadas fueron reescritas
+(los veredictos se sostienen contra el texto nuevo). Sigue abierto el detalle del test de permutación de Brière: el texto
+completo no se pudo leer (bioRxiv 403 en agosto, 429 hoy).
+
 ---
 
 ## 2026-10-26 — D3 cerrada: el error de etiquetas de GSE289530 se declara en Métodos
