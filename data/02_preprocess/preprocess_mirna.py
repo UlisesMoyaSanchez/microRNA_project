@@ -129,7 +129,7 @@ def infer_condition(meta_df: pd.DataFrame) -> pd.Series:
             return "MS"
         if any(k in t for k in ctrl_keywords):
             return "Control"
-        return "Control"   # default
+        return "Control"   # default -- KNOWN BUG: stores all 166 GSE289530 samples (incl. MS, T1D) as Control; see README
     return text.apply(_label)
 
 

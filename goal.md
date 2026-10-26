@@ -199,8 +199,10 @@ done and the second is suspended). Full detail in
 > - **D2 is closed: not included.** The context-specific checklist ("is the context variable present, does the
 >   head take it, does the evaluation vary with it") was removed from the Discussion; no claim rests on it.
 > - **D5 is obsolete.** It depended on D2 and D3 and concerned the collaborator summary, not the paper.
-> - **D3 stays open and is the author's call.** The paper does not use disease labels and no reported number
->   moves; if it is disclosed, one sentence in Methods is enough.
+> - **D3 is closed (2026-10-26): disclosed, one sentence in Methods** (`main.tex`, paragraph "Our graph"). It
+>   states the scope exactly: all 166 GSE289530 samples were stored as controls (not only the 37 T1D), while
+>   the series records 78 controls, 51 MS and 37 T1D; the cohort enters no graph, feature or number. The
+>   README carries the same note, and the false "MS vs HC" description was replaced in all 18 old configs.
 > - **Retitle (D1) and the MS framing are done** in the manuscript; the sweep of `README.md`,
 >   `results/EVALUATION_AUDIT.md`, `results/RESUMEN_AUDITORIA.md` and the deck for inherited MS framing is
 >   not paper work and was not done.
@@ -307,7 +309,7 @@ done and the second is suspended). Full detail in
         de-scoped to provenance, **no claim in the paper rests on the variable**, so writing
         up the checklist costs nothing defensively. It is a question of whether the
         generalizable lesson is worth the section, not of exposure.
-      - **D3 — Do we publish the T1D mislabelling?** It is an error we found in our own repo:
+      - **D3 — ANSWERED 2026-10-26: yes, one sentence in Methods (see the 2026-10-12 update above).** *Do we publish the T1D mislabelling?* It is an error we found in our own repo:
         37 diabetics filed as healthy controls by a default return. Publishing it costs nothing
         factually (no reported number moves — `EVALUATION_AUDIT.md:164-165` already documents
         the miRNA features as content-free) and a methods-critique paper that audits its own

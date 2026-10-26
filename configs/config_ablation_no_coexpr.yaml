@@ -35,7 +35,7 @@ data:
 
   geo:
     accessions:
-      GSE289530: "miRNA CD14+ monocytes, CD8+ T cells, neutrophils; MS vs HC (GPL19117, 166 samples, 2026)"
+      GSE289530: "miRNA microarray (GPL19117); lymphocytes, monocytes, neutrophils; mixed cohort per Sample_description (Control/MS/T1D), 166 samples, 2026. NOTE: not used downstream (mirna_expr.tsv has zero readers)."
 
   graph:
     coexpression_threshold:          0.60

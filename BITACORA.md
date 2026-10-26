@@ -23,6 +23,27 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-26 — D3 cerrada: el error de etiquetas de GSE289530 se declara en Métodos
+
+El autor decidió declararlo con una frase en Métodos (párrafo "Our graph", tras la de la etiqueta de enfermedad como
+procedencia). Al revisarlo contra el código y `ms_specificity_audit.json` (job 5716), el error resultó **más amplio** que
+"37 diabéticos archivados como controles": `infer_condition` (`preprocess_mirna.py:132`) devuelve `"Control"` por defecto y
+`mirna_meta.tsv` guarda **las 166 muestras** como Control, incluidas las 51 de MS. Lo verdadero, según `Sample_description`,
+es 78/51/37. La frase dice eso, no la versión de julio. No mueve ninguna cifra: `mirna_expr.tsv` no tiene lectores y los
+nodos miRNA salen de miRDB (miRNAs con al menos una diana entre los 3,000 genes, `build_heterograph.py:151-154`), no de GEO.
+
+Mismo commit, fuera del paper:
+- `README.md:31` decía que los nodos miRNA eran "hsa probes in GSE289530, filtered to miRDB" (2,578); es al revés y son
+  2,460. Corregido, con las dos tablas de GEO y una nota "Known label error".
+- Las 18 configs viejas (`config.yaml`, `v2*`, `v3`, `v4`, `mirtarbase*`, `ablation*`) aún describían GSE289530 como "CD14+
+  monocytes, CD8+ T cells, neutrophils; MS vs HC"; se cambió a la descripción de las `v3fixed`. La cadena no entra en
+  `config_fingerprint` ni en `_build_code_hash` (que solo hashea `build_heterograph.py`), así que ningún grafo en caché queda
+  inválido. Comentario de aviso en la línea del default de `infer_condition`; el bug **no** se arregló (no hay lectores).
+
+Con D3 cerrada, siguen abiertos: autores y afiliaciones, CRediT/funding/ética, URL/DOI y merge o tag de `feat/lp-audit`.
+
+---
+
 ## 2026-10-12 — Verificación de la Tabla 9; 4.4, Discusión, Conclusión y Abstract alineados con las contribuciones
 
 Sesión larga. Commits `bdf6d29`, `192bf21`, `127b42a`, `7d03d85`, `e0a202c`, `de0cfcc` y el de esta entrada, todos en

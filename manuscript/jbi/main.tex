@@ -432,7 +432,10 @@ genes, with the miRNA$\to$gene edges as positives. miRNA nodes carry a learnable
 64-dimensional embedding (no prior biological signal), gene nodes the mean log-normalized
 expression, and cell nodes a 50-dimensional PCA projection of their expression profile. The disease label attached to each cell is kept
 only as provenance and never enters the graph, the model input, the objective or any
-scoring head. We fixed two bugs in the graph-construction pipeline (co-expression gene
+scoring head. A bulk miRNA microarray cohort (GEO GSE289530, 166 samples) was also downloaded
+but enters no graph, feature or reported number; auditing it, we found that a default branch in
+our metadata parser had stored every sample as a control, although the series records 78
+controls, 51 multiple-sclerosis and 37 type~1 diabetes samples. We fixed two bugs in the graph-construction pipeline (co-expression gene
 selection and the cell-to-gene expression threshold) and re-measured every headline number
 on the corrected graph; all replicate the pre-fix figures within one standard deviation.
 
