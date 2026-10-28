@@ -81,6 +81,17 @@ SOURCES = {
             "data/miRNA_disease_matrix.csv": "matrix.csv",
             "data/train/train7.txt": "train7.txt",
             "data/train/test7_1.txt": "test7_1.txt",
+            # The other four folds of the paper's 5-fold CV (train_75/test75 ship
+            # empty). Each train/test pair covers all 5,430 positives and the five
+            # test sets are pairwise disjoint, so test7_1 + test71..74 are one full CV.
+            "data/train/train_71.txt": "train_71.txt",
+            "data/train/test71.txt": "test71.txt",
+            "data/train/train_72.txt": "train_72.txt",
+            "data/train/test72.txt": "test72.txt",
+            "data/train/train_73.txt": "train_73.txt",
+            "data/train/test73.txt": "test73.txt",
+            "data/train/train_74.txt": "train_74.txt",
+            "data/train/test74.txt": "test74.txt",
         },
     },
     "nimgsa": {
