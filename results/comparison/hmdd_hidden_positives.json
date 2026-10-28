@@ -1,0 +1,992 @@
+{
+  "generated_utc": "2026-10-28T03:25:10.408762+00:00",
+  "matrix": "data/raw/hmdd_survey/nimgsa/matrix.csv",
+  "later_release": "HMDD v3.2 (v3_alldata.txt)",
+  "mapping_check": {
+    "positives": 5425,
+    "missing_from_hmdd_v2": 0
+  },
+  "coverage": {
+    "mirnas_in_v3": 495,
+    "n_mirnas": 495,
+    "diseases_in_v3": 201,
+    "n_diseases": 380,
+    "recall_of_matrix_positives": 0.9945181765724178
+  },
+  "protocol_grid_cell_reproduced": true,
+  "seeds": [
+    42,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "summary": {
+    "hidden_rate_uniform": {
+      "mean": 0.10120230984120142,
+      "std": 0.01931494312685605,
+      "min": 0.072202168405056,
+      "max": 0.1423220932483673
+    },
+    "hidden_rate_degree_matched": {
+      "mean": 0.23004541581585294,
+      "std": 0.01550094112303044,
+      "min": 0.18266253173351288,
+      "max": 0.24924011528491974
+    },
+    "drop_as_scored": {
+      "mean": 0.29530245646971265,
+      "std": 0.016685181357031672,
+      "min": 0.25883091731300145,
+      "max": 0.3227541018645512
+    },
+    "drop_hidden_removed": {
+      "mean": 0.2475948167607798,
+      "std": 0.013909696391264255,
+      "min": 0.22186553532920572,
+      "max": 0.2736747799281909
+    }
+  },
+  "runs": [
+    {
+      "seed": 42,
+      "n_pos_judged": 370,
+      "uniform": {
+        "n_neg_judged": 304,
+        "judged_fraction": 0.5598526703499079,
+        "hidden_positive_rate": 0.08223684132099152,
+        "best_auroc_as_scored": 0.8488709103840684,
+        "best_auroc_hidden_removed": 0.8513658820110432,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8488709103840684,
+          "pref_attach": 0.8079391891891894,
+          "common_neigh": 0.8132779160739687,
+          "adamic_adar": 0.8142380867709815
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8513658820110432,
+          "pref_attach": 0.817199457522038,
+          "common_neigh": 0.8200232490555072,
+          "adamic_adar": 0.8217717717717719
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 357,
+        "judged_fraction": 0.6574585635359116,
+        "hidden_positive_rate": 0.24649859964847565,
+        "best_auroc_as_scored": 0.5510712393065335,
+        "best_auroc_hidden_removed": 0.6064955289862353,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5510712393065335,
+          "pref_attach": 0.5114051025815731,
+          "common_neigh": 0.5396055719585131,
+          "adamic_adar": 0.5438602468014233
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5836581935094947,
+          "pref_attach": 0.5718326132824274,
+          "common_neigh": 0.5997789611172512,
+          "adamic_adar": 0.6064955289862353
+        }
+      },
+      "drop_as_scored": 0.2977996710775349,
+      "drop_hidden_removed": 0.24487035302480797
+    },
+    {
+      "seed": 0,
+      "n_pos_judged": 344,
+      "uniform": {
+        "n_neg_judged": 268,
+        "judged_fraction": 0.49355432780847147,
+        "hidden_positive_rate": 0.10447761416435242,
+        "best_auroc_as_scored": 0.8475735421728566,
+        "best_auroc_hidden_removed": 0.8626695736434109,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8475735421728566,
+          "pref_attach": 0.797531239153072,
+          "common_neigh": 0.7953618535230822,
+          "adamic_adar": 0.7948628948281846
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8626695736434109,
+          "pref_attach": 0.8204396802325582,
+          "common_neigh": 0.8171875,
+          "adamic_adar": 0.8174903100775195
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 329,
+        "judged_fraction": 0.6058931860036832,
+        "hidden_positive_rate": 0.24924011528491974,
+        "best_auroc_as_scored": 0.5477530571852689,
+        "best_auroc_hidden_removed": 0.6158965728274174,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5296440941542376,
+          "pref_attach": 0.5362930303244504,
+          "common_neigh": 0.544461723333569,
+          "adamic_adar": 0.5477530571852689
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5745927878730818,
+          "pref_attach": 0.6077935222672064,
+          "common_neigh": 0.6113889935034366,
+          "adamic_adar": 0.6158965728274174
+        }
+      },
+      "drop_as_scored": 0.29982048498758773,
+      "drop_hidden_removed": 0.24677300081599352
+    },
+    {
+      "seed": 1,
+      "n_pos_judged": 357,
+      "uniform": {
+        "n_neg_judged": 291,
+        "judged_fraction": 0.5359116022099447,
+        "hidden_positive_rate": 0.09278350323438644,
+        "best_auroc_as_scored": 0.8580524993502555,
+        "best_auroc_hidden_removed": 0.8603524743230625,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8580524993502555,
+          "pref_attach": 0.8055050198773668,
+          "common_neigh": 0.8054472648165796,
+          "adamic_adar": 0.8059333699115385
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8603524743230625,
+          "pref_attach": 0.8164523385111621,
+          "common_neigh": 0.8138368983957218,
+          "adamic_adar": 0.814913844325609
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 335,
+        "judged_fraction": 0.6169429097605893,
+        "hidden_positive_rate": 0.23582088947296143,
+        "best_auroc_as_scored": 0.5512939504159873,
+        "best_auroc_hidden_removed": 0.6189819677871149,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5330657636188804,
+          "pref_attach": 0.5282871357498223,
+          "common_neigh": 0.546895773234667,
+          "adamic_adar": 0.5512939504159873
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5827479429271709,
+          "pref_attach": 0.5979243259803921,
+          "common_neigh": 0.6134617909663866,
+          "adamic_adar": 0.6189819677871149
+        }
+      },
+      "drop_as_scored": 0.30675854893426824,
+      "drop_hidden_removed": 0.2413705065359476
+    },
+    {
+      "seed": 2,
+      "n_pos_judged": 349,
+      "uniform": {
+        "n_neg_judged": 267,
+        "judged_fraction": 0.49171270718232046,
+        "hidden_positive_rate": 0.1423220932483673,
+        "best_auroc_as_scored": 0.8532403979266604,
+        "best_auroc_hidden_removed": 0.8617760038037561,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8532403979266604,
+          "pref_attach": 0.8110760546451606,
+          "common_neigh": 0.8101102132363198,
+          "adamic_adar": 0.8105502076559029
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8617760038037561,
+          "pref_attach": 0.8367575480787277,
+          "common_neigh": 0.8339234994557125,
+          "adamic_adar": 0.8355375933734562
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 342,
+        "judged_fraction": 0.6298342541436464,
+        "hidden_positive_rate": 0.20467835664749146,
+        "best_auroc_as_scored": 0.5547847651602741,
+        "best_auroc_hidden_removed": 0.6159826394741277,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5422384758457749,
+          "pref_attach": 0.5376304897870272,
+          "common_neigh": 0.5508051408368102,
+          "adamic_adar": 0.5547847651602741
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5825362379908984,
+          "pref_attach": 0.5994069189280297,
+          "common_neigh": 0.6111579302207989,
+          "adamic_adar": 0.6159826394741277
+        }
+      },
+      "drop_as_scored": 0.2984556327663863,
+      "drop_hidden_removed": 0.2457933643296284
+    },
+    {
+      "seed": 3,
+      "n_pos_judged": 353,
+      "uniform": {
+        "n_neg_judged": 288,
+        "judged_fraction": 0.5303867403314917,
+        "hidden_positive_rate": 0.0972222238779068,
+        "best_auroc_as_scored": 0.8306873622914699,
+        "best_auroc_hidden_removed": 0.8460939202440619,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8306873622914699,
+          "pref_attach": 0.7874468838526912,
+          "common_neigh": 0.7990783364809569,
+          "adamic_adar": 0.7989898095687756
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8460939202440619,
+          "pref_attach": 0.8096426236652866,
+          "common_neigh": 0.821894748311179,
+          "adamic_adar": 0.8214970581826105
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 323,
+        "judged_fraction": 0.5948434622467772,
+        "hidden_positive_rate": 0.18266253173351288,
+        "best_auroc_as_scored": 0.5718564449784684,
+        "best_auroc_hidden_removed": 0.6080457550004291,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5674931371087274,
+          "pref_attach": 0.5412211999754426,
+          "common_neigh": 0.5677606363851639,
+          "adamic_adar": 0.5718564449784684
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5779036827195467,
+          "pref_attach": 0.5787299338999056,
+          "common_neigh": 0.6019132543565971,
+          "adamic_adar": 0.6080457550004291
+        }
+      },
+      "drop_as_scored": 0.25883091731300145,
+      "drop_hidden_removed": 0.23804816524363281
+    },
+    {
+      "seed": 4,
+      "n_pos_judged": 331,
+      "uniform": {
+        "n_neg_judged": 274,
+        "judged_fraction": 0.5046040515653776,
+        "hidden_positive_rate": 0.09854014962911606,
+        "best_auroc_as_scored": 0.8529616071625465,
+        "best_auroc_hidden_removed": 0.8530706850789536,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8529616071625465,
+          "pref_attach": 0.8277394314949169,
+          "common_neigh": 0.8333847884093766,
+          "adamic_adar": 0.8342172580325049
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8530706850789536,
+          "pref_attach": 0.8393593209144172,
+          "common_neigh": 0.8421725356850179,
+          "adamic_adar": 0.8438604645473781
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 347,
+        "judged_fraction": 0.6390423572744015,
+        "hidden_positive_rate": 0.24207492172718048,
+        "best_auroc_as_scored": 0.5646368963145476,
+        "best_auroc_hidden_removed": 0.6238785567412954,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5327145929285981,
+          "pref_attach": 0.5466318987958941,
+          "common_neigh": 0.5600572886284684,
+          "adamic_adar": 0.5646368963145476
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5692509161085775,
+          "pref_attach": 0.6060273626411496,
+          "common_neigh": 0.6181808783155088,
+          "adamic_adar": 0.6238785567412954
+        }
+      },
+      "drop_as_scored": 0.28832471084799893,
+      "drop_hidden_removed": 0.22919212833765812
+    },
+    {
+      "seed": 5,
+      "n_pos_judged": 333,
+      "uniform": {
+        "n_neg_judged": 276,
+        "judged_fraction": 0.5082872928176796,
+        "hidden_positive_rate": 0.13405796885490417,
+        "best_auroc_as_scored": 0.8623950036993515,
+        "best_auroc_hidden_removed": 0.8806023596818576,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8623950036993515,
+          "pref_attach": 0.8012360186273231,
+          "common_neigh": 0.7988804021412715,
+          "adamic_adar": 0.7987443965704835
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8806023596818576,
+          "pref_attach": 0.8263409853368012,
+          "common_neigh": 0.8248708960006033,
+          "adamic_adar": 0.8252478419842437
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 361,
+        "judged_fraction": 0.6648250460405156,
+        "hidden_positive_rate": 0.23545706272125244,
+        "best_auroc_as_scored": 0.5522322876893514,
+        "best_auroc_hidden_removed": 0.6069275797536667,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5441507989984443,
+          "pref_attach": 0.5236247327660071,
+          "common_neigh": 0.547532296839776,
+          "adamic_adar": 0.5522322876893514
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5818155111633372,
+          "pref_attach": 0.5766908212560387,
+          "common_neigh": 0.6006767637202419,
+          "adamic_adar": 0.6069275797536667
+        }
+      },
+      "drop_as_scored": 0.3101627160100001,
+      "drop_hidden_removed": 0.2736747799281909
+    },
+    {
+      "seed": 6,
+      "n_pos_judged": 340,
+      "uniform": {
+        "n_neg_judged": 282,
+        "judged_fraction": 0.5193370165745856,
+        "hidden_positive_rate": 0.08865248411893845,
+        "best_auroc_as_scored": 0.84843032957864,
+        "best_auroc_hidden_removed": 0.8575188830395971,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.84843032957864,
+          "pref_attach": 0.7961722987067168,
+          "common_neigh": 0.7984929078014185,
+          "adamic_adar": 0.7991604088443887
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8575188830395971,
+          "pref_attach": 0.8116845960173952,
+          "common_neigh": 0.8136301213092241,
+          "adamic_adar": 0.814505607690547
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 356,
+        "judged_fraction": 0.6556169429097606,
+        "hidden_positive_rate": 0.24438202381134033,
+        "best_auroc_as_scored": 0.546558988764045,
+        "best_auroc_hidden_removed": 0.6092116772359502,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5349884335756774,
+          "pref_attach": 0.5295026437541309,
+          "common_neigh": 0.5427503304692664,
+          "adamic_adar": 0.546558988764045
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5743330417668926,
+          "pref_attach": 0.589388803848677,
+          "common_neigh": 0.6042094904876449,
+          "adamic_adar": 0.6092116772359502
+        }
+      },
+      "drop_as_scored": 0.301871340814595,
+      "drop_hidden_removed": 0.24830720580364696
+    },
+    {
+      "seed": 7,
+      "n_pos_judged": 354,
+      "uniform": {
+        "n_neg_judged": 272,
+        "judged_fraction": 0.5009208103130756,
+        "hidden_positive_rate": 0.0882352963089943,
+        "best_auroc_as_scored": 0.8501734380192755,
+        "best_auroc_hidden_removed": 0.8623280025514853,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8501734380192755,
+          "pref_attach": 0.8067775839149219,
+          "common_neigh": 0.8118768693918245,
+          "adamic_adar": 0.8126246261216351
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8623280025514853,
+          "pref_attach": 0.8258497357390195,
+          "common_neigh": 0.8296883542919629,
+          "adamic_adar": 0.8307135046473484
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 332,
+        "judged_fraction": 0.6114180478821363,
+        "hidden_positive_rate": 0.22891566157341003,
+        "best_auroc_as_scored": 0.5448616499897897,
+        "best_auroc_hidden_removed": 0.6075487729519774,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5424324416309305,
+          "pref_attach": 0.521173677761895,
+          "common_neigh": 0.5414667143148867,
+          "adamic_adar": 0.5448616499897897
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5764698093220341,
+          "pref_attach": 0.5832174699858758,
+          "common_neigh": 0.6020756091101696,
+          "adamic_adar": 0.6075487729519774
+        }
+      },
+      "drop_as_scored": 0.3053117880294858,
+      "drop_hidden_removed": 0.25477922959950794
+    },
+    {
+      "seed": 8,
+      "n_pos_judged": 367,
+      "uniform": {
+        "n_neg_judged": 294,
+        "judged_fraction": 0.5414364640883977,
+        "hidden_positive_rate": 0.11564625799655914,
+        "best_auroc_as_scored": 0.8681486218465587,
+        "best_auroc_hidden_removed": 0.8704202473276041,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8681486218465587,
+          "pref_attach": 0.8229253554282749,
+          "common_neigh": 0.8289310274518527,
+          "adamic_adar": 0.8292183358356967
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8704202473276041,
+          "pref_attach": 0.8356948228882833,
+          "common_neigh": 0.8397348564242298,
+          "adamic_adar": 0.8411863341018654
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 343,
+        "judged_fraction": 0.6316758747697975,
+        "hidden_positive_rate": 0.23032070696353912,
+        "best_auroc_as_scored": 0.5670871696284586,
+        "best_auroc_hidden_removed": 0.6119385269589629,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5364669807198863,
+          "pref_attach": 0.5287493744091643,
+          "common_neigh": 0.561109301642027,
+          "adamic_adar": 0.5670871696284586
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5622987366856577,
+          "pref_attach": 0.5713091404508298,
+          "common_neigh": 0.6045433903063332,
+          "adamic_adar": 0.6119385269589629
+        }
+      },
+      "drop_as_scored": 0.3010614522181001,
+      "drop_hidden_removed": 0.25848172036864125
+    },
+    {
+      "seed": 9,
+      "n_pos_judged": 339,
+      "uniform": {
+        "n_neg_judged": 293,
+        "judged_fraction": 0.5395948434622467,
+        "hidden_positive_rate": 0.095563143491745,
+        "best_auroc_as_scored": 0.8549941103627413,
+        "best_auroc_hidden_removed": 0.8598152167863304,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8549941103627413,
+          "pref_attach": 0.81028320597622,
+          "common_neigh": 0.8119947244958572,
+          "adamic_adar": 0.8128202804876821
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8598152167863304,
+          "pref_attach": 0.8266488562364335,
+          "common_neigh": 0.8261535036455725,
+          "adamic_adar": 0.8275839038236769
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 361,
+        "judged_fraction": 0.6648250460405156,
+        "hidden_positive_rate": 0.22714681923389435,
+        "best_auroc_as_scored": 0.5322400084981901,
+        "best_auroc_hidden_removed": 0.5942578319112718,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5319008980298907,
+          "pref_attach": 0.5091804966538376,
+          "common_neigh": 0.5297722648493615,
+          "adamic_adar": 0.5322400084981901
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5720652139436039,
+          "pref_attach": 0.5673761114811643,
+          "common_neigh": 0.5911493851830707,
+          "adamic_adar": 0.5942578319112718
+        }
+      },
+      "drop_as_scored": 0.3227541018645512,
+      "drop_hidden_removed": 0.26555738487505864
+    },
+    {
+      "seed": 10,
+      "n_pos_judged": 347,
+      "uniform": {
+        "n_neg_judged": 282,
+        "judged_fraction": 0.5193370165745856,
+        "hidden_positive_rate": 0.10638298094272614,
+        "best_auroc_as_scored": 0.8546661352627384,
+        "best_auroc_hidden_removed": 0.8722382324687801,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8546661352627384,
+          "pref_attach": 0.8006979786212113,
+          "common_neigh": 0.8067733562245795,
+          "adamic_adar": 0.8053426533406912
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8722382324687801,
+          "pref_attach": 0.8187239833493437,
+          "common_neigh": 0.8239787749874206,
+          "adamic_adar": 0.8231553908787339
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 336,
+        "judged_fraction": 0.6187845303867403,
+        "hidden_positive_rate": 0.2172619104385376,
+        "best_auroc_as_scored": 0.5496689309729657,
+        "best_auroc_hidden_removed": 0.6079486308499797,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5356928434197886,
+          "pref_attach": 0.5313743653080829,
+          "common_neigh": 0.5453676066968575,
+          "adamic_adar": 0.5496689309729657
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5838200326535978,
+          "pref_attach": 0.5852828700101905,
+          "common_neigh": 0.6029081425800725,
+          "adamic_adar": 0.6079486308499797
+        }
+      },
+      "drop_as_scored": 0.3049972042897727,
+      "drop_hidden_removed": 0.26428960161880033
+    },
+    {
+      "seed": 11,
+      "n_pos_judged": 347,
+      "uniform": {
+        "n_neg_judged": 272,
+        "judged_fraction": 0.5009208103130756,
+        "hidden_positive_rate": 0.09558823704719543,
+        "best_auroc_as_scored": 0.8361745634853366,
+        "best_auroc_hidden_removed": 0.8412408331576112,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8361745634853366,
+          "pref_attach": 0.78594359213426,
+          "common_neigh": 0.7902292761484997,
+          "adamic_adar": 0.7912781827428377
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8412408331576112,
+          "pref_attach": 0.7972751341346267,
+          "common_neigh": 0.800174550736862,
+          "adamic_adar": 0.8015627562615684
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 331,
+        "judged_fraction": 0.6095764272559853,
+        "hidden_positive_rate": 0.23262840509414673,
+        "best_auroc_as_scored": 0.5595087804835578,
+        "best_auroc_hidden_removed": 0.6193752978284055,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.551220212960464,
+          "pref_attach": 0.5393968151701682,
+          "common_neigh": 0.5556648702299382,
+          "adamic_adar": 0.5595087804835578
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5791769724749822,
+          "pref_attach": 0.598572692822619,
+          "common_neigh": 0.6145646599650548,
+          "adamic_adar": 0.6193752978284055
+        }
+      },
+      "drop_as_scored": 0.2766657830017788,
+      "drop_hidden_removed": 0.22186553532920572
+    },
+    {
+      "seed": 12,
+      "n_pos_judged": 345,
+      "uniform": {
+        "n_neg_judged": 294,
+        "judged_fraction": 0.5414364640883977,
+        "hidden_positive_rate": 0.09183673560619354,
+        "best_auroc_as_scored": 0.8473479246771172,
+        "best_auroc_hidden_removed": 0.858850350105846,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8473479246771172,
+          "pref_attach": 0.7919599723947551,
+          "common_neigh": 0.7996697229616483,
+          "adamic_adar": 0.8001183081928422
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.858850350105846,
+          "pref_attach": 0.8121641426477771,
+          "common_neigh": 0.8173207403788743,
+          "adamic_adar": 0.8184877598653857
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 368,
+        "judged_fraction": 0.6777163904235728,
+        "hidden_positive_rate": 0.23641304671764374,
+        "best_auroc_as_scored": 0.5431710775047258,
+        "best_auroc_hidden_removed": 0.6046005467017381,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.537106175173283,
+          "pref_attach": 0.5215816005040957,
+          "common_neigh": 0.5387287334593573,
+          "adamic_adar": 0.5431710775047258
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5708133477745114,
+          "pref_attach": 0.5839857651245551,
+          "common_neigh": 0.5986693485997215,
+          "adamic_adar": 0.6046005467017381
+        }
+      },
+      "drop_as_scored": 0.30417684717239135,
+      "drop_hidden_removed": 0.25424980340410785
+    },
+    {
+      "seed": 13,
+      "n_pos_judged": 352,
+      "uniform": {
+        "n_neg_judged": 277,
+        "judged_fraction": 0.5101289134438306,
+        "hidden_positive_rate": 0.072202168405056,
+        "best_auroc_as_scored": 0.8533598621595012,
+        "best_auroc_hidden_removed": 0.8534223558542624,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8533598621595012,
+          "pref_attach": 0.8055925910731867,
+          "common_neigh": 0.8181561782080735,
+          "adamic_adar": 0.8185253938299967
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8534223558542624,
+          "pref_attach": 0.8086255305978068,
+          "common_neigh": 0.8212106473293244,
+          "adamic_adar": 0.8221281393703573
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 332,
+        "judged_fraction": 0.6114180478821363,
+        "hidden_positive_rate": 0.22590361535549164,
+        "best_auroc_as_scored": 0.5636765813253012,
+        "best_auroc_hidden_removed": 0.6152336841174391,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5441881161007666,
+          "pref_attach": 0.5273009652245345,
+          "common_neigh": 0.5588632940854327,
+          "adamic_adar": 0.5636765813253012
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5802805535903786,
+          "pref_attach": 0.5758202157764415,
+          "common_neigh": 0.6096900424478245,
+          "adamic_adar": 0.6152336841174391
+        }
+      },
+      "drop_as_scored": 0.28968328083420003,
+      "drop_hidden_removed": 0.23818867173682334
+    },
+    {
+      "seed": 14,
+      "n_pos_judged": 325,
+      "uniform": {
+        "n_neg_judged": 294,
+        "judged_fraction": 0.5414364640883977,
+        "hidden_positive_rate": 0.09863945841789246,
+        "best_auroc_as_scored": 0.8402093144950288,
+        "best_auroc_hidden_removed": 0.8534687953555877,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8402093144950288,
+          "pref_attach": 0.7942804814233385,
+          "common_neigh": 0.8083045525902669,
+          "adamic_adar": 0.8079434850863422
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8534687953555877,
+          "pref_attach": 0.8168243831640057,
+          "common_neigh": 0.8267924528301889,
+          "adamic_adar": 0.8274252539912917
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 324,
+        "judged_fraction": 0.5966850828729282,
+        "hidden_positive_rate": 0.22839505970478058,
+        "best_auroc_as_scored": 0.5518898385565052,
+        "best_auroc_hidden_removed": 0.6092676923076923,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5411016144349478,
+          "pref_attach": 0.5383760683760683,
+          "common_neigh": 0.5488983855650522,
+          "adamic_adar": 0.5518898385565052
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5798338461538463,
+          "pref_attach": 0.5916430769230768,
+          "common_neigh": 0.6047384615384616,
+          "adamic_adar": 0.6092676923076923
+        }
+      },
+      "drop_as_scored": 0.2883194759385236,
+      "drop_hidden_removed": 0.24420110304789544
+    },
+    {
+      "seed": 15,
+      "n_pos_judged": 372,
+      "uniform": {
+        "n_neg_judged": 292,
+        "judged_fraction": 0.5377532228360957,
+        "hidden_positive_rate": 0.07876712083816528,
+        "best_auroc_as_scored": 0.8692508101340404,
+        "best_auroc_hidden_removed": 0.8713324939041451,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8692508101340404,
+          "pref_attach": 0.8192112240388865,
+          "common_neigh": 0.8213930623066725,
+          "adamic_adar": 0.8211813227279423
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8713324939041451,
+          "pref_attach": 0.8281768397489706,
+          "common_neigh": 0.8294010073150258,
+          "adamic_adar": 0.8299406403645521
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 331,
+        "judged_fraction": 0.6095764272559853,
+        "hidden_positive_rate": 0.22658610343933105,
+        "best_auroc_as_scored": 0.569145307474905,
+        "best_auroc_hidden_removed": 0.6179645497311828,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5594118506968132,
+          "pref_attach": 0.543018874053861,
+          "common_neigh": 0.5647719520514569,
+          "adamic_adar": 0.569145307474905
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5946058047715055,
+          "pref_attach": 0.590374033938172,
+          "common_neigh": 0.612294186827957,
+          "adamic_adar": 0.6179645497311828
+        }
+      },
+      "drop_as_scored": 0.3001055026591354,
+      "drop_hidden_removed": 0.2533679441729624
+    },
+    {
+      "seed": 16,
+      "n_pos_judged": 328,
+      "uniform": {
+        "n_neg_judged": 281,
+        "judged_fraction": 0.5174953959484346,
+        "hidden_positive_rate": 0.09252668917179108,
+        "best_auroc_as_scored": 0.8645788126030726,
+        "best_auroc_hidden_removed": 0.8755081300813007,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8645788126030726,
+          "pref_attach": 0.8087676850967799,
+          "common_neigh": 0.8168127766686919,
+          "adamic_adar": 0.8164547348320459
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8755081300813007,
+          "pref_attach": 0.8258907221425155,
+          "common_neigh": 0.8339490674318508,
+          "adamic_adar": 0.8346365375418459
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 356,
+        "judged_fraction": 0.6556169429097606,
+        "hidden_positive_rate": 0.24438202381134033,
+        "best_auroc_as_scored": 0.5631765552206084,
+        "best_auroc_hidden_removed": 0.617242043702965,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5463140586462044,
+          "pref_attach": 0.5334766374349137,
+          "common_neigh": 0.5576099616333242,
+          "adamic_adar": 0.5631765552206084
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5765141898630882,
+          "pref_attach": 0.5827930909420619,
+          "common_neigh": 0.6110198114062925,
+          "adamic_adar": 0.617242043702965
+        }
+      },
+      "drop_as_scored": 0.3014022573824642,
+      "drop_hidden_removed": 0.2582660863783357
+    },
+    {
+      "seed": 17,
+      "n_pos_judged": 352,
+      "uniform": {
+        "n_neg_judged": 301,
+        "judged_fraction": 0.5543278084714549,
+        "hidden_positive_rate": 0.13621261715888977,
+        "best_auroc_as_scored": 0.8330706357595893,
+        "best_auroc_hidden_removed": 0.861642263986014,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8330706357595893,
+          "pref_attach": 0.7981821957112655,
+          "common_neigh": 0.8040622168529145,
+          "adamic_adar": 0.8056950317124736
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.861642263986014,
+          "pref_attach": 0.8340854458041959,
+          "common_neigh": 0.8389149912587414,
+          "adamic_adar": 0.8406468531468533
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 352,
+        "judged_fraction": 0.6482504604051565,
+        "hidden_positive_rate": 0.23863635957241058,
+        "best_auroc_as_scored": 0.5728063662190083,
+        "best_auroc_hidden_removed": 0.6323990841248304,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.536173166322314,
+          "pref_attach": 0.548170357696281,
+          "common_neigh": 0.5660430655991735,
+          "adamic_adar": 0.5728063662190083
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5713248388738128,
+          "pref_attach": 0.6052832428765265,
+          "common_neigh": 0.6241996692672999,
+          "adamic_adar": 0.6323990841248304
+        }
+      },
+      "drop_as_scored": 0.260264269540581,
+      "drop_hidden_removed": 0.2292431798611836
+    },
+    {
+      "seed": 18,
+      "n_pos_judged": 366,
+      "uniform": {
+        "n_neg_judged": 292,
+        "judged_fraction": 0.5377532228360957,
+        "hidden_positive_rate": 0.12671232223510742,
+        "best_auroc_as_scored": 0.8682863612545848,
+        "best_auroc_hidden_removed": 0.8754098360655737,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8682863612545848,
+          "pref_attach": 0.8138941911819747,
+          "common_neigh": 0.8282057040197619,
+          "adamic_adar": 0.8272653267460139
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8754098360655737,
+          "pref_attach": 0.8295617700632164,
+          "common_neigh": 0.8419425693774777,
+          "adamic_adar": 0.8415836279867138
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 336,
+        "judged_fraction": 0.6187845303867403,
+        "hidden_positive_rate": 0.2142857164144516,
+        "best_auroc_as_scored": 0.5979459406713505,
+        "best_auroc_hidden_removed": 0.6486431942374565,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.578641360915951,
+          "pref_attach": 0.5699323445225084,
+          "common_neigh": 0.5939817525370804,
+          "adamic_adar": 0.5979459406713505
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.6038251366120218,
+          "pref_attach": 0.62282145222719,
+          "common_neigh": 0.6435668156979631,
+          "adamic_adar": 0.6486431942374565
+        }
+      },
+      "drop_as_scored": 0.27034042058323426,
+      "drop_hidden_removed": 0.22676664182811712
+    },
+    {
+      "seed": 19,
+      "n_pos_judged": 346,
+      "uniform": {
+        "n_neg_judged": 277,
+        "judged_fraction": 0.5101289134438306,
+        "hidden_positive_rate": 0.08664260059595108,
+        "best_auroc_as_scored": 0.8557626092944639,
+        "best_auroc_hidden_removed": 0.8605405652402385,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.8557626092944639,
+          "pref_attach": 0.8081843033325682,
+          "common_neigh": 0.8165313745539533,
+          "adamic_adar": 0.8168756912418356
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.8605405652402385,
+          "pref_attach": 0.8209349082684091,
+          "common_neigh": 0.8277662272384565,
+          "adamic_adar": 0.8287829285567411
+        }
+      },
+      "degree_matched": {
+        "n_neg_judged": 326,
+        "judged_fraction": 0.6003683241252302,
+        "hidden_positive_rate": 0.23926380276679993,
+        "best_auroc_as_scored": 0.5415174296960885,
+        "best_auroc_hidden_removed": 0.5983358195040089,
+        "per_heuristic_as_scored": {
+          "gene_degree": 0.5410608532217455,
+          "pref_attach": 0.5280107450618816,
+          "common_neigh": 0.5377451328061279,
+          "adamic_adar": 0.5415174296960885
+        },
+        "per_heuristic_hidden_removed": {
+          "gene_degree": 0.5794156721983965,
+          "pref_attach": 0.5859243893343278,
+          "common_neigh": 0.5942278109267202,
+          "adamic_adar": 0.5983358195040089
+        }
+      },
+      "drop_as_scored": 0.3142451795983754,
+      "drop_hidden_removed": 0.26220474573622954
+    }
+  ]
+}

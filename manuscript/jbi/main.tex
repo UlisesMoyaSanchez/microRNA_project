@@ -124,7 +124,7 @@ Biomedical Interaction Graphs}
 
 \textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free scores from graph topology alone) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models, an untrained control and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.618--0.641 on every graph. Negative sampling carried 0.29--0.41 of the heuristics' loss on the five published graphs; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31 while an untrained control did not move; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.618--0.641 on every graph. Negative sampling carried 0.29--0.41 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31 while an untrained control did not move; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
 
 \textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
@@ -596,7 +596,8 @@ graph's $+0.342$ inside the range. How it divides between the two failures diffe
 five surveyed graphs the negative-sampling axis carries almost the whole effect
 ($0.29$--$0.41$) and the edge split only $0.01$--$0.02$, because these association matrices
 are small and their heuristics lean on node degree, which a handful of masked edges barely
-moves. On our own graph both contribute and compound super-additively: the two axes sum to $0.272$ against a total of $0.342$. The
+moves. On the canonical HMDD matrix at least a sixth of the negative-sampling share is label
+noise (Section~\ref{sec:limitations}, (vii)). On our own graph both contribute and compound super-additively: the two axes sum to $0.272$ against a total of $0.342$. The
 canonical HMDD~\cite{li2014hmdd} matrix appears twice because MGCNSS~\cite{tian2024mgcnss} is scored on its own five bundled folds, and
 MGCNSS has no negative-sampling axis because it carries the paper's own negatives.
 
@@ -780,7 +781,17 @@ reconstructed from the paper's matrix and stated negative ratio; it shows that t
 a trained model on those graphs, not that those papers' figures are inflated by that amount. (v) The survey that
 motivates the study is a two-rater instrument (Cohen's $\kappa$ 0.44 and 0.49 before adjudication) and is not
 itself a result. (vi) The label source, miRDB, is itself a prediction model, so a better architecture would not
-lift the information ceiling. We also leave unexplained why the margin over the floor widens under the corrected
+lift the information ceiling. (vii) Unlabeled pairs are not all true negatives: some are associations not yet
+recorded, and they concentrate on popular columns, which is where degree-matched negatives are drawn. The
+corrected protocol is therefore biased downward, and part of what we attribute to negative sampling is label
+noise. We measured how much on the canonical HMDD matrix, the one graph whose source release (HMDD v2.0) has a
+later one (v3.2) that its names can be matched against: v3.2 records 23\% of its degree-matched negatives as
+associations, against 10\% of its uniform ones (21 seeds, on the 201 of 380 diseases whose names match).
+Dropping those negatives lowers the heuristics' held-out drop from uniform to degree-matched negatives
+(Table~\ref{tab:protocol_grid}) from 0.30 to 0.25, so the associations known today explain about a sixth of it.
+This is a lower bound: v3.2 is itself incomplete, and the hidden positives it records score above the held-out
+positives on average, so a larger share cannot be ruled out. On our own graph, whose labels are miRDB
+predictions, it cannot be measured (\texttt{analysis/hmdd\_hidden\_positives.py}). We also leave unexplained why the margin over the floor widens under the corrected
 protocol on the five external graphs but narrows on ours (Section~\ref{sec:collapse_general}).
 
 \section{Conclusion}
@@ -789,7 +800,7 @@ Under conventions common in this subfield, a trained link predictor scores AUROC
 biomedical interaction graphs. Correcting both conventions drops every one into 0.618--0.641, a loss of
 0.26--0.37. Five of those graphs are other groups' published matrices, so the inflation is not a property of
 one dataset. The two failures compound on our graph, negative sampling carries most of the loss on the five
-surveyed graphs, and candidate columns that can never be positive raise the model-free floor on their own.
+surveyed graphs, part of it label noise, and candidate columns that can never be positive raise the model-free floor on their own.
 Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the
 heuristic wins outright on MEAHNE's graph; on OGB it ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
 On our graph the inflation recurs across four trained models while an untrained control does not move, and

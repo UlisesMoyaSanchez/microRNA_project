@@ -23,6 +23,35 @@ trabajo, no por commit.
 
 ---
 
+## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
+
+**MGCNSS (27-oct).** Su AUROC de 0.9874 es una media de 5-fold CV, pero el piso model-free se había medido en un solo fold
+(`test7_1`). El repo trae los otros cuatro (el fold 75 está vacío); con los cinco (SLURM 498–505) la mejor heurística da
+0.9169 ± 0.0072 held-out y 0.9619 ± 0.0026 seen. Las medias apenas se mueven (−0.047 por paper, −0.039 por grafo). En
+Related Work se dice cómo infla el propio protocolo de MGCNSS su número (su ablación pasa de 0.9874 a 0.9437; el código deja
+las asociaciones de test en el grafo propagado y elige la época por AUROC de test). `protocheck` sobre sus archivos falla
+leakage en los cinco folds (1,086/1,086 positivos held-out en la entrada). `e9c4f9f`…`3c0843d`
+
+**Ruido de etiquetas (28-oct).** La objeción: los negativos degree-matched caen en columnas populares, justo donde se
+concentran las asociaciones aún no registradas, así que parte de la caída que atribuimos a negative sampling podría ser ruido
+de etiquetas. **Solo se puede medir en un grafo**: la matriz canónica de HMDD (495 × 383; MGCNSS, NIMGSA, HLGNN-MDA) sale de
+HMDD v2.0 y tiene una versión posterior (v3.2) con la que cruzar nombres. En nuestro grafo las etiquetas son predicciones de
+miRDB y no hay contra qué cruzar. `analysis/hmdd_hidden_positives.py`:
+- Los 5,425 positivos de la matriz reaparecen en v2.0 (valida el mapeo índice → nombre). v3.2 empareja los 495 miRNAs pero
+  solo 201 de 380 enfermedades (v3 renombró muchas); en esas, recupera el 99.5% de los positivos de la matriz.
+- La celda canónica del grid de protocolo se regenera exacta; 21 seeds.
+- v3.2 registra como asociación el **23%** de los negativos degree-matched frente al **10%** de los uniformes. Quitándolos,
+  la caída uniforme → degree-matched de las heurísticas pasa de **0.295 a 0.248**: lo conocido hoy explica **~1/6**.
+- Es cota inferior y **no hay cota superior útil**: los positivos ocultos que v3.2 sí registra puntúan *por encima* de los
+  positivos held-out, así que una cota analítica que suponga empate no es conservadora.
+
+En el paper: limitación (vii), una frase en Resultados y menciones de una línea en Abstract, Conclusión y la fila E2 de la
+tabla resumen. El claim sobrevive: el ruido de etiquetas es una fracción, no la mayor parte. El JSON se generó en el DGX; antes
+del commit se volvió a correr el script final y salió idéntico salvo el timestamp. HMDD v4.0 se descartó a propósito (ver el
+docstring de `download_hmdd_versions.py`).
+
+---
+
 ## 2026-10-26 (tarde) — Revisión de referencias: notas internas impresas y una cita a OGB que no decía lo citado
 
 Segunda pasada sobre las 55 entradas de `references.bib` (detalle en `manuscript/jbi/CITATION_REVIEW.md`, Parte 3).
