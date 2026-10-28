@@ -92,6 +92,10 @@ SOURCES = {
             "data/train/test73.txt": "test73.txt",
             "data/train/train_74.txt": "train_74.txt",
             "data/train/test74.txt": "test74.txt",
+            # The precomputed network Link_Prediction.py loads; its raw_association is
+            # the miRNA-disease block the GCN propagates over (src/Model.py::forward).
+            # Read by analysis/protocheck_mgcnss.py as the encoder's edges.
+            "data/result.mat": "result.mat",
         },
     },
     "nimgsa": {

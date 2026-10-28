@@ -1,0 +1,813 @@
+{
+  "generated_utc": "2026-10-28T02:55:30.297709+00:00",
+  "paper": "MGCNSS (tian2024mgcnss)",
+  "headline_auroc": 0.9874,
+  "encoder_edges_source": "result.mat raw_association (src/Model.py::forward)",
+  "result_mat_sha256": "1fb719cbff6c7cae7846004f46ecff8dd369babc4b025063a51f8bec9e5528af",
+  "not_visible_to_protocheck": [
+    "test negatives chosen by the paper's own distance-based selector",
+    "epoch kept by best test AUROC in src/link_prediction_evaluate.py"
+  ],
+  "folds": {
+    "test7_1": {
+      "split_only": {
+        "generated_utc": "2026-10-28T02:55:30.119770+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "unchecked",
+            "message": "No encoder_edges supplied, so leakage into the message-passing graph was not checked. Pass the edges your model's encoder sees.",
+            "evidence": {}
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5386740331491713,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.041436464088397795,
+              "tv_train_neg_vs_train_pos": 0.5566298342541436
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0738 (0.9874 vs pref_attach 0.9136).",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8354577258189786,
+                  "pref_attach": 0.9135905158233537,
+                  "common_neigh": 0.9090924507120595,
+                  "adamic_adar": 0.9114474697217898
+                },
+                "best": "pref_attach",
+                "floor": 0.9135905158233537,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9135905158233537,
+              "reference": "corrected (heuristics see training edges only)",
+              "model_auroc": 0.9874,
+              "margin": 0.07380948417664634
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      },
+      "with_encoder": {
+        "generated_utc": "2026-10-28T02:55:30.119843+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=13 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "evidence": {
+              "n_heldout": 1086,
+              "heldout_in_encoder_fwd": 1086,
+              "heldout_in_train_pos": 0,
+              "eval_negatives_that_are_real_edges": 13,
+              "fraction_heldout_in_encoder": 1.0
+            }
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5386740331491713,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.041436464088397795,
+              "tv_train_neg_vs_train_pos": 0.5566298342541436
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0261 (model 0.9874 vs pref_attach 0.9613); below 0.05, so most of the number may be graph structure.",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8354577258189786,
+                  "pref_attach": 0.9135905158233537,
+                  "common_neigh": 0.9090924507120595,
+                  "adamic_adar": 0.9114474697217898
+                },
+                "best": "pref_attach",
+                "floor": 0.9135905158233537,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "floor_as_evaluated": {
+                "heuristics": {
+                  "gene_degree": 0.8517800636936194,
+                  "pref_attach": 0.9613331739297064,
+                  "common_neigh": 0.9490073732656377,
+                  "adamic_adar": 0.9564234574307526
+                },
+                "best": "pref_attach",
+                "floor": 0.9613331739297064,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9613331739297064,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "model_auroc": 0.9874,
+              "margin": 0.026066826070293647
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "test71": {
+      "split_only": {
+        "generated_utc": "2026-10-28T02:55:30.165151+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "unchecked",
+            "message": "No encoder_edges supplied, so leakage into the message-passing graph was not checked. Pass the edges your model's encoder sees.",
+            "evidence": {}
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.03061694290976059,
+              "tv_train_neg_vs_train_pos": 0.5536372007366483
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0602 (0.9874 vs pref_attach 0.9272).",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8440663695654386,
+                  "pref_attach": 0.9271788271284623,
+                  "common_neigh": 0.9201938958585582,
+                  "adamic_adar": 0.9229427605316621
+                },
+                "best": "pref_attach",
+                "floor": 0.9271788271284623,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9271788271284623,
+              "reference": "corrected (heuristics see training edges only)",
+              "model_auroc": 0.9874,
+              "margin": 0.06022117287153772
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      },
+      "with_encoder": {
+        "generated_utc": "2026-10-28T02:55:30.165246+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=14 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "evidence": {
+              "n_heldout": 1086,
+              "heldout_in_encoder_fwd": 1086,
+              "heldout_in_train_pos": 0,
+              "eval_negatives_that_are_real_edges": 14,
+              "fraction_heldout_in_encoder": 1.0
+            }
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.03061694290976059,
+              "tv_train_neg_vs_train_pos": 0.5536372007366483
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0240 (model 0.9874 vs pref_attach 0.9634); below 0.05, so most of the number may be graph structure.",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8440663695654386,
+                  "pref_attach": 0.9271788271284623,
+                  "common_neigh": 0.9201938958585582,
+                  "adamic_adar": 0.9229427605316621
+                },
+                "best": "pref_attach",
+                "floor": 0.9271788271284623,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "floor_as_evaluated": {
+                "heuristics": {
+                  "gene_degree": 0.8572311590000306,
+                  "pref_attach": 0.963365146227391,
+                  "common_neigh": 0.9497785307055475,
+                  "adamic_adar": 0.9570309717855581
+                },
+                "best": "pref_attach",
+                "floor": 0.963365146227391,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.963365146227391,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "model_auroc": 0.9874,
+              "margin": 0.024034853772609055
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "test72": {
+      "split_only": {
+        "generated_utc": "2026-10-28T02:55:30.209522+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "unchecked",
+            "message": "No encoder_edges supplied, so leakage into the message-passing graph was not checked. Pass the edges your model's encoder sees.",
+            "evidence": {}
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.556 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.556169429097606,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.01496316758747694,
+              "tv_train_neg_vs_train_pos": 0.5550184162062615
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0663 (0.9874 vs pref_attach 0.9211).",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8369067726192051,
+                  "pref_attach": 0.921078246831429,
+                  "common_neigh": 0.9181720982604655,
+                  "adamic_adar": 0.9207458733114239
+                },
+                "best": "pref_attach",
+                "floor": 0.921078246831429,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.921078246831429,
+              "reference": "corrected (heuristics see training edges only)",
+              "model_auroc": 0.9874,
+              "margin": 0.06632175316857103
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      },
+      "with_encoder": {
+        "generated_utc": "2026-10-28T02:55:30.209601+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=12 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "evidence": {
+              "n_heldout": 1086,
+              "heldout_in_encoder_fwd": 1086,
+              "heldout_in_train_pos": 0,
+              "eval_negatives_that_are_real_edges": 12,
+              "fraction_heldout_in_encoder": 1.0
+            }
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.556 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.556169429097606,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.01496316758747694,
+              "tv_train_neg_vs_train_pos": 0.5550184162062615
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0220 (model 0.9874 vs pref_attach 0.9654); below 0.05, so most of the number may be graph structure.",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8369067726192051,
+                  "pref_attach": 0.921078246831429,
+                  "common_neigh": 0.9181720982604655,
+                  "adamic_adar": 0.9207458733114239
+                },
+                "best": "pref_attach",
+                "floor": 0.921078246831429,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "floor_as_evaluated": {
+                "heuristics": {
+                  "gene_degree": 0.852522816763835,
+                  "pref_attach": 0.9654390891608924,
+                  "common_neigh": 0.9523264450617096,
+                  "adamic_adar": 0.9600888929587685
+                },
+                "best": "pref_attach",
+                "floor": 0.9654390891608924,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9654390891608924,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "model_auroc": 0.9874,
+              "margin": 0.021960910839107672
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "test73": {
+      "split_only": {
+        "generated_utc": "2026-10-28T02:55:30.253422+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "unchecked",
+            "message": "No encoder_edges supplied, so leakage into the message-passing graph was not checked. Pass the edges your model's encoder sees.",
+            "evidence": {}
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.522 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5220994475138121,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.057780847145488035,
+              "tv_train_neg_vs_train_pos": 0.5587016574585636
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0738 (0.9874 vs pref_attach 0.9136).",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8265518960552689,
+                  "pref_attach": 0.9135761016655982,
+                  "common_neigh": 0.9078282442877541,
+                  "adamic_adar": 0.9111655457539284
+                },
+                "best": "pref_attach",
+                "floor": 0.9135761016655982,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9135761016655982,
+              "reference": "corrected (heuristics see training edges only)",
+              "model_auroc": 0.9874,
+              "margin": 0.07382389833440184
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      },
+      "with_encoder": {
+        "generated_utc": "2026-10-28T02:55:30.253522+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=11 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "evidence": {
+              "n_heldout": 1086,
+              "heldout_in_encoder_fwd": 1086,
+              "heldout_in_train_pos": 0,
+              "eval_negatives_that_are_real_edges": 11,
+              "fraction_heldout_in_encoder": 1.0
+            }
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.522 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5220994475138121,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.057780847145488035,
+              "tv_train_neg_vs_train_pos": 0.5587016574585636
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0288 (model 0.9874 vs pref_attach 0.9586); below 0.05, so most of the number may be graph structure.",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8265518960552689,
+                  "pref_attach": 0.9135761016655982,
+                  "common_neigh": 0.9078282442877541,
+                  "adamic_adar": 0.9111655457539284
+                },
+                "best": "pref_attach",
+                "floor": 0.9135761016655982,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "floor_as_evaluated": {
+                "heuristics": {
+                  "gene_degree": 0.8419869153363246,
+                  "pref_attach": 0.9586097460055826,
+                  "common_neigh": 0.9446216537956718,
+                  "adamic_adar": 0.953301944385092
+                },
+                "best": "pref_attach",
+                "floor": 0.9586097460055826,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9586097460055826,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "model_auroc": 0.9874,
+              "margin": 0.02879025399441748
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "test74": {
+      "split_only": {
+        "generated_utc": "2026-10-28T02:55:30.297552+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "unchecked",
+            "message": "No encoder_edges supplied, so leakage into the message-passing graph was not checked. Pass the edges your model's encoder sees.",
+            "evidence": {}
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.03406998158379373,
+              "tv_train_neg_vs_train_pos": 0.5534069981583793
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0782 (0.9874 vs adamic_adar 0.9092).",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8371119623943103,
+                  "pref_attach": 0.9084310952385798,
+                  "common_neigh": 0.9065559828929383,
+                  "adamic_adar": 0.9091653693924687
+                },
+                "best": "adamic_adar",
+                "floor": 0.9091653693924687,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9091653693924687,
+              "reference": "corrected (heuristics see training edges only)",
+              "model_auroc": 0.9874,
+              "margin": 0.07823463060753133
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      },
+      "with_encoder": {
+        "generated_utc": "2026-10-28T02:55:30.297627+00:00",
+        "dataset": {
+          "n_rows": 495,
+          "n_cols": 383,
+          "mode": "bipartite",
+          "n_train_pos": 4344,
+          "n_heldout_pos": 1086
+        },
+        "scope_note": "Scope: these checks inspect the pairs you supplied. They cannot see leakage that does not pass through exact edges (e.g. node features derived from held-out labels), cannot tell a correct sampler with a different seed/parameter from a matched one, and do not test whether any published number is inflated -- only whether the evaluation set-up has the failure modes described in the paper.",
+        "findings": [
+          {
+            "check": "edge_leakage",
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=13 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "evidence": {
+              "n_heldout": 1086,
+              "heldout_in_encoder_fwd": 1086,
+              "heldout_in_train_pos": 0,
+              "eval_negatives_that_are_real_edges": 13,
+              "fraction_heldout_in_encoder": 1.0
+            }
+          },
+          {
+            "check": "negative_matching",
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "evidence": {
+              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "n_eval_neg": 1086,
+              "tv_train_neg_vs_eval_neg": 0.03406998158379373,
+              "tv_train_neg_vs_train_pos": 0.5534069981583793
+            }
+          },
+          {
+            "check": "model_free_baseline",
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0264 (model 0.9874 vs adamic_adar 0.9610); below 0.05, so most of the number may be graph structure.",
+            "evidence": {
+              "negatives": "supplied by the user",
+              "floor_corrected": {
+                "heuristics": {
+                  "gene_degree": 0.8371119623943103,
+                  "pref_attach": 0.9084310952385798,
+                  "common_neigh": 0.9065559828929383,
+                  "adamic_adar": 0.9091653693924687
+                },
+                "best": "adamic_adar",
+                "floor": 0.9091653693924687,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "floor_as_evaluated": {
+                "heuristics": {
+                  "gene_degree": 0.857616101801261,
+                  "pref_attach": 0.9609537424240882,
+                  "common_neigh": 0.947590122401636,
+                  "adamic_adar": 0.9543745273004149
+                },
+                "best": "pref_attach",
+                "floor": 0.9609537424240882,
+                "n_pos": 1086,
+                "n_neg": 1086
+              },
+              "reference_floor": 0.9609537424240882,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "model_auroc": 0.9874,
+              "margin": 0.026446257575911902
+            }
+          },
+          {
+            "check": "dead_candidates",
+            "status": "ok",
+            "message": "0.0% dead candidate columns.",
+            "evidence": {
+              "n_rows": 495,
+              "n_columns": 383,
+              "n_positives": 5430,
+              "density": 0.02864150644829496,
+              "dead_column_fraction": 0.0,
+              "n_dead_columns": 0,
+              "dead_row_fraction": 0.0,
+              "column_degree_gini": 0.7117176117594449,
+              "eval_negatives_on_dead_columns": 0.0
+            }
+          }
+        ]
+      }
+    }
+  }
+}

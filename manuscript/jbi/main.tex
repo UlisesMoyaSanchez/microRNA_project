@@ -754,6 +754,19 @@ implementation reproduces our audit scripts. They do not show that its threshold
 leakage beyond exact edges, no model was trained, so the margin check was exercised only as a floor
 computation, and the empty-column check is not independently validated.
 
+On a published paper's own files the tool behaves as intended, and the case also shows its main limit.
+MGCNSS~\cite{tian2024mgcnss} is the one surveyed paper whose repository ships both its five
+cross-validation folds and the precomputed network its model reads. Given the split files alone,
+\texttt{protocheck} reports the leakage check as unchecked, because a split does not show what the encoder
+sees. Given that network as the encoder's edges as well, it fails the leakage check on every fold
+(all 1,086 held-out positives are in the encoder's input, and 11--14 evaluation negatives are known
+associations), warns that the evaluation negatives do not mirror the positives' column degrees
+(TV 0.52--0.56, while training and evaluation negatives match each other at 0.02--0.06), and puts the
+reported 0.9874 only 2.2 to 2.9 points above a floor that sees the same edges. It cannot see the two other
+choices behind that number: that the test negatives were picked by the paper's own selector, and that
+the public code keeps the epoch with the best test AUROC. A leak-free claim therefore needs the encoder's
+edge set, not only the split.
+
 \subsection{Limitations}
 \label{sec:limitations}
 (i) The cross-architecture grid is one run per model; the inflation is an order of magnitude above the seed
