@@ -384,7 +384,11 @@ Third, in 11 of the 19 papers where the question applies, it is unclear from the
 section whether held-out edges are removed from the encoder's input. This is a reporting
 gap, not confirmed leakage: after adjudication only MGCNSS~\cite{tian2024mgcnss} clearly leaks and 7 clearly strip
 test edges correctly, and our own project's original split was worse than the norm we
-observed.
+observed. MGCNSS's~\cite{tian2024mgcnss} headline is inflated by its own protocol: its authors
+report that applying their negative selection to the training set only, not to the test set,
+lowers AUROC (reported as AUC) from 0.9874 to 0.9437, and its public code also leaves the
+test associations in the graph the encoder propagates over and keeps the epoch with the best
+test AUROC.
 
 Getting the split right is not protective on its own. All seven papers that strip held-out
 edges still draw their negatives from unlabeled pairs, none of them degree-matched, and four
