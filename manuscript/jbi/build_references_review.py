@@ -153,6 +153,12 @@ for k in ['adamic2003friends', 'barabasi1999scaling', 'liben2007link', 'zhou2009
           'chen2020mirdb', 'czi2025cellxgene', 'li2014hmdd', 'lu2015spm', 'chen2018bnpmda', 'qu2018llcmda',
           'yu2020tcrwmda', 'wang2014hnm', 'tong2006rwr']:
     verdict[k] = (P3, '✅ Supported — the original work for the name or resource it is cited for.')
+verdict['vidal2011interactome'] = (P3, '✅ Supported (full text, PMC3102045 author manuscript) for mapping interactome networks '
+                                   '(section "Mapping Interactome Networks") and for miRNA–target networks ("Complex networks are formed '
+                                   'by miRNAs interacting with their targets"). ❌ "drug targets": the word "drug" does not appear.')
+verdict['barabasi2004networkbiology'] = (P3, 'Removed from the paper 2026-10-26 (author\'s call). Full text read (author copy, '
+                                         'barabasi.com 147.pdf): supports cataloguing interactions as a key aim; names microRNAs and '
+                                         'targeted drugs only as future directions.')
 verdict['hu2020ogb'] = (P3, '✅ Supported (after fix) — now cited only for the datasets and their official negatives. '
                         'Was ❌ for "OGB already reports such heuristics": the paper reports none; moved to ogb2026leaderboard.')
 verdict['ogb2026leaderboard'] = (P3, '✅ Supported — ranks re-read 2026-10-26 (ddi 30th of 32; ppa 14th of 27, BUDDY 13th); '
@@ -165,7 +171,8 @@ NOTES = {
     'toutanova2015observed': 'Claim (inverse-relation leak in FB15k) is in the paper body, not the abstract; no verbatim quote taken.',
     'kotnis2017analysis': 'Shows sampling-method × dataset bias, not degree bias as such; cited for "bias in link prediction generally". '
                           'KBCOM\'18 venue confirmed (Heidelberg CL news, best paper).',
-    'barabasi2004networkbiology': 'No abstract exists; support is title/scope level.',
+    'barabasi2004networkbiology': 'In the bib but no longer cited; not printed.',
+    'vidal2011interactome': 'OPEN by choice: the sentence keeps "drug targets", which this source does not cover (author kept the wording 2026-10-26).',
     'krichene2020sampled': 'About evaluation-time sampled metrics in recommenders; the sentence hedges with "likely rooted in".',
     'huang2023gelato': 'arXiv-only, no peer-reviewed venue found (2026-10-26).',
     'aiyappa2024implicit': 'arXiv-only (2026-10-26).',

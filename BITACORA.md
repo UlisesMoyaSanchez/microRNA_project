@@ -46,6 +46,11 @@ que `CITATION_REVIEW.md` estaba desfasado: sus números de línea ya no sirven y
 (los veredictos se sostienen contra el texto nuevo). Sigue abierto el detalle del test de permutación de Brière: el texto
 completo no se pudo leer (bioRxiv 403 en agosto, 429 hoy).
 
+**Primera frase de la Introducción.** Se leyeron completas las dos fuentes. Vidal 2011 respalda mapear interactomas y las redes
+miRNA–diana de forma literal, pero no menciona fármacos; Barabási y Oltvai 2004 solo nombra microRNA y fármacos dirigidos como
+direcciones futuras. **El autor decidió quitar Barabási 2004 y mantener la frase tal cual**, con "drug targets" sin fuente que lo
+respalde (queda como `open_issue` en el CSV). Las referencias se renumeran: 53 impresas.
+
 ---
 
 ## 2026-10-26 — D3 cerrada: el error de etiquetas de GSE289530 se declara en Métodos

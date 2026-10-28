@@ -161,3 +161,12 @@ columns for the reviewer (`reviewed_by`, `review_date`, `reviewer_ok`, `reviewer
 Regenerate with `python3 build_references_review.py .` after `compile.sh`; the reviewer columns are
 overwritten, so copy them out first. **Line numbers in Parts 1–2 above are stale** (the manuscript
 was restructured after 2026-08-22); the CSV's `cited_in` and `claim_in_paper` columns replace them.
+
+**Introduction, first sentence (2026-10-26, full text of both sources read).** `vidal2011interactome`
+(PMC3102045, NIH author manuscript) supports mapping interactome networks (section "Mapping
+Interactome Networks") and miRNA–target networks explicitly (*"Complex networks are formed by miRNAs
+interacting with their targets"*); it never mentions drugs. `barabasi2004networkbiology` (author copy,
+barabasi.com `147.pdf`) supports cataloguing interactions as a key aim but names microRNAs and targeted
+drugs only as future directions. **The author removed `barabasi2004networkbiology` and kept the
+sentence as written**, so "drug targets" now has no supporting source; recorded as an open issue in
+`references_review.csv`. References renumber from [1] (53 printed).
