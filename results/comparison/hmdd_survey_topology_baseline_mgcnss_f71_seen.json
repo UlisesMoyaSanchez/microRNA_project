@@ -1,0 +1,41 @@
+{
+  "paper": "mgcnss_f71",
+  "tier": 1,
+  "edge_regime": "seen",
+  "n_mirna": 495,
+  "n_disease": 383,
+  "n_positives_total": 5430,
+  "seed": 42,
+  "best_model_free_auroc": 0.963365146227391,
+  "results": {
+    "paper_split": {
+      "gene_degree": {
+        "auroc": 0.8572311590000306,
+        "auprc": 0.8430873372311479,
+        "n_pairs": 2172
+      },
+      "pref_attach": {
+        "auroc": 0.963365146227391,
+        "auprc": 0.9616960441135632,
+        "n_pairs": 2172
+      },
+      "common_neigh": {
+        "auroc": 0.9497785307055475,
+        "auprc": 0.956204135778574,
+        "n_pairs": 2172
+      },
+      "adamic_adar": {
+        "auroc": 0.9570309717855581,
+        "auprc": 0.9624198408931541,
+        "n_pairs": 2172
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 1,
+    "headline_auroc": 0.9874,
+    "negative_sampling": "distance-based selection (paper's own contribution)",
+    "url": "https://academic.oup.com/bib/article/25/3/bbae168/7645839",
+    "caveat": "MGCNSS's own headline negatives are distance-based (their contribution), not uniform-random; our topology baseline is scored against their bundled test71.txt labels as published (whatever negative-selection method produced them), so this is a like-for-like comparison on their own exact test pairs, not a re-derivation of their negative sampling.\n"
+  }
+}

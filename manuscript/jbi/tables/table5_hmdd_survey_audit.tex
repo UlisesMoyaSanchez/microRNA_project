@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{Model-free baselines on all ten cases. ``Best reported'' is the paper's own model under its own protocol; ``Model-free'' is the best of the four heuristics with test edges held out, scored on the paper's split where it is published (MGCNSS, with its own negatives; CoupleMDA's positives) and otherwise on a random split with uniform negatives; for OGB, its official negatives \cite{hu2020ogb}. The own-graph row uses the corrected protocol and is excluded from the means. AUROC and Hits@$K$ rows are not comparable.}
+\caption{Model-free baselines on all ten cases. ``Best reported'' is the paper's own model under its own protocol; ``Model-free'' is the best of the four heuristics with test edges held out, scored on the paper's split where it is published (MGCNSS, with its own negatives, averaged over its five published folds as its headline is; CoupleMDA's positives) and otherwise on a random split with uniform negatives; for OGB, its official negatives \cite{hu2020ogb}. The own-graph row uses the corrected protocol and is excluded from the means. AUROC and Hits@$K$ rows are not comparable.}
 \label{tab:validation_cases}
 \footnotesize
 \resizebox{\textwidth}{!}{%
@@ -13,7 +13,7 @@ ogbl-ddi \cite{hu2020ogb} & drug--drug & Hits@20 & 0.9972 (HyperFusion) & 0.1861
 ogbl-ppa \cite{hu2020ogb} & protein--protein & Hits@100 & 0.4934 (BUDDY \cite{chamberlain2023buddy}) & 0.4933 (Resource Alloc.) & $-0.0001$ & 14 / 27 \\
 \hline
 \multicolumn{7}{l}{\emph{Shared canonical HMDD matrix (495 $\times$ 383, 5,430 associations) -- one graph, three papers}} \\
-MGCNSS \cite{tian2024mgcnss} & miRNA-disease & AUROC & 0.9874 & 0.9136 & $-0.074$ & Tier 1 \\
+MGCNSS \cite{tian2024mgcnss} & miRNA-disease & AUROC & 0.9874 & 0.9169 & $-0.070$ & Tier 1 \\
 NIMGSA \cite{jin2022nimgsa} & miRNA-disease & AUROC & 0.9354 & 0.8680 & $-0.067$ & Tier 2 \\
 HLGNN-MDA \cite{yu2022hlgnnmda} & miRNA-disease & AUROC & 0.93086 & 0.8680 & $-0.063$ & Tier 2 \\
 \multicolumn{7}{l}{\emph{Distinct graphs, one paper each}} \\
@@ -23,7 +23,7 @@ MEAHNE \cite{huang2022meahne} & miRNA-disease & AUROC & 0.9520 & \textbf{0.9848}
 CKSNP-GNN \cite{li2022cksnpgnn} & miRNA-disease & AUROC & 0.9371 & 0.8822 & $-0.055$ & Tier 2 \\
 \hline
 Mean, 7 surveyed papers & & AUROC & 0.951 & 0.905 & $-0.047$ & \\
-Mean, 5 distinct graphs & & AUROC & 0.951 & 0.912 & $-0.039$ & \\
+Mean, 5 distinct graphs & & AUROC & 0.951 & 0.913 & $-0.039$ & \\
 \hline
 \end{tabular}
 }

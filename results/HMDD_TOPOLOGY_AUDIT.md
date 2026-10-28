@@ -27,7 +27,7 @@ bytes by `data/01_download/inspect_hmdd_survey_sources.py` before being trusted
 
 | Paper | Tier | Their reported AUROC | Our best topology-only AUROC (uniform neg.) | Gap | Negatives |
 |---|:--:|:--:|:--:|:--:|---|
-| **MGCNSS** | 1 — exact split | 0.9874 | 0.9136 | −0.074 | their own (distance-based) |
+| **MGCNSS** | 1 — exact split (5 folds) | 0.9874 | 0.9169 | −0.070 | their own (distance-based) |
 | **DiGAMN** | 2 — exact matrix, our split | 0.9635 | 0.8714 | −0.092 | uniform 1:1 (our approx.) |
 | **CoupleMDA** | 1 (pos.) / 2 (neg.) | 0.9536 | 0.9406 | **−0.013** | uniform 1:1 (our approx.) |
 | **MEAHNE** | 2 — exact matrix, our split | 0.9520 | **0.9848** | **+0.033** ⚠️ | uniform 1:1 (our approx.) |
@@ -70,8 +70,15 @@ Consequences, all now propagated to `manuscript/jbi/main.tex` and
 `manuscript/jbi/tables/table5_hmdd_survey_audit.tex`:
 
 - NIMGSA and HLGNN-MDA produce **bit-identical** model-free numbers in every cell (same graph,
-  same generated split, same seed). MGCNSS differs (0.9136 vs 0.8680) only because it is scored
+  same generated split, same seed). MGCNSS differs (0.9169 vs 0.8680) only because it is scored
   on the paper's own bundled Tier-1 split.
+- 2026-10-27: MGCNSS is now the mean over all five of its published CV folds (test7_1 +
+  test71..74, pairwise disjoint, each covering the 5,430 positives), matching its 5-fold headline.
+  Per fold, held out: 0.9136, 0.9272, 0.9211, 0.9136, 0.9092 (0.9169 ± 0.0072); seen: 0.9613,
+  0.9634, 0.9654, 0.9586, 0.9610 (0.9619 ± 0.0026). The single fold used before (test7_1, gap
+  −0.074) was second-lowest for the heuristic. Means move by <0.001: −0.047 per paper, −0.039 per
+  graph, graph-mean floor 0.912 → 0.913. Artifacts: `hmdd_survey_topology_baseline_mgcnss_f7{1..4}{,_seen}.json`
+  (SLURM jobs 498–505).
 - The mean gap is now reported **both ways**: -0.047 per paper (7), -0.039 per distinct graph (5).
   The per-paper mean is weighted 3x toward one benchmark.
 - "Ten independently-sourced graphs" was inaccurate: ten cases, **eight distinct graphs**.

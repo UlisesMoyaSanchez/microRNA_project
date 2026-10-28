@@ -416,7 +416,7 @@ from the paper's own repository, or a shared mirror for CKSNP-GNN~\cite{li2022ck
 that paper's reported counts. Three further papers were excluded because no usable data was
 recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
 open leaderboards~\cite{ogb2026leaderboard}, used only as an external check on the model-free baselines. In the
-results table, only MGCNSS uses the paper's own exact test split (Tier 1); CoupleMDA's~\cite{li2025couplemda}
+results table, only MGCNSS uses the paper's own exact test splits, all five of its published cross-validation folds (Tier 1); CoupleMDA's~\cite{li2025couplemda}
 positive edges are exact but its negatives are not (Tier 1/2); the other five rows (NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}, DiGAMN~\cite{liu2024digamn}, MEAHNE~\cite{huang2022meahne} and CKSNP-GNN~\cite{li2022cksnpgnn}) use
 an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2).
 
@@ -593,7 +593,7 @@ five surveyed graphs the negative-sampling axis carries almost the whole effect
 ($0.29$--$0.41$) and the edge split only $0.01$--$0.02$, because these association matrices
 are small and their heuristics lean on node degree, which a handful of masked edges barely
 moves. On our own graph both contribute and compound super-additively: the two axes sum to $0.272$ against a total of $0.342$. The
-canonical HMDD~\cite{li2014hmdd} matrix appears twice because MGCNSS~\cite{tian2024mgcnss} is scored on its own bundled split, and
+canonical HMDD~\cite{li2014hmdd} matrix appears twice because MGCNSS~\cite{tian2024mgcnss} is scored on its own five bundled folds, and
 MGCNSS has no negative-sampling axis because it carries the paper's own negatives.
 
 One asymmetry in Table~\ref{tab:discrimination} is measured but not explained. On the five
