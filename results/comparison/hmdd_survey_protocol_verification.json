@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-22T16:49:10.883183+00:00",
+  "checked_at": "2026-10-28T02:17:08.608680+00:00",
   "checks": {
     "canonical_matrix_identity": {
       "shapes": {
@@ -109,7 +109,7 @@
       },
       "nimgsa": {
         "headline_auroc": "0.9354",
-        "negative_sampling": "not described",
+        "negative_sampling": "all unlabeled pairs treated as negative (implicit: reconstruction loss over the full matrix)",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8774034/"
       },
       "hlgnn_mda": {
