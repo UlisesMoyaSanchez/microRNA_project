@@ -47,7 +47,19 @@ def parsed_hash(path):
 
 Si prefieren otra definición de "valores parseados" (por ejemplo `np.array_equal` entre las tres), basta con que las tres matrices sean idénticas y den 495 × 383 con 5,430 unos.
 
-*(Archivos opcionales, no necesarios para la pista A: `train7.txt` y `test7_1.txt` en `MGCNSS/.../data/train/`, y `train5430_idx.txt` y `test2792_idx.txt` en `HLGNN-MDA/Python/data/`. Son los splits que publicaron esos papers; verlos antes de la Fase 3 puede anclar su implementación.)*
+*(Archivos opcionales, no necesarios para la pista A: `train7.txt` y `test7_1.txt` en `MGCNSS/.../data/train/`, y `train5430_idx.txt` y `test2792_idx.txt` en `HLGNN-MDA/Python/data/`. Son los splits que publicaron esos papers; verlos antes de la Fase 3 puede anclar su implementación de la pista A.)*
+
+**Solo para la pista E (tarea 2, caso MGCNSS):** los cinco folds de validación cruzada de MGCNSS y el grafo que propaga su GCN. Quien haga también la pista A, que los baje después de terminarla.
+
+```bash
+mkdir -p mgcnss_cv && M=$GH/15136943622/MGCNSS/f8a87e698b78696fb8cfe930a2b86ae53e61c81a/data
+for f in train/train7.txt train/test7_1.txt train/train_71.txt train/test71.txt train/train_72.txt train/test72.txt \
+         train/train_73.txt train/test73.txt train/train_74.txt train/test74.txt result.mat; do
+  curl -sS --fail "$M/$f" -o "mgcnss_cv/$(basename "$f")"
+done
+```
+
+`train_75`/`test75` vienen vacíos y no se usan. Las cinco particiones de prueba son disjuntas entre sí y cada par train/test cubre los 5,430 positivos. En `result.mat` (léase con `scipy.io.loadmat`), el campo `raw_association` es el bloque miRNA–enfermedad sobre el que propaga la GCN.
 
 ## 2. `digamn` (DiGAMN)
 
