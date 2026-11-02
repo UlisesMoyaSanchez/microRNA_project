@@ -1,0 +1,1382 @@
+{
+  "canonical5430": {
+    "summary": {
+      "ours_tries16": {
+        "floor_mean": 0.5595053739371678,
+        "floor_sd": 0.0071126503753465836,
+        "fallback_mean": 0.03130755064456722
+      },
+      "ours_tries50": {
+        "floor_mean": 0.5496701701548928,
+        "floor_sd": 0.004420653703781307,
+        "fallback_mean": 0.018047882136279926
+      },
+      "ours_tries1000": {
+        "floor_mean": 0.5510986979776089,
+        "floor_sd": 0.003122635445252548,
+        "fallback_mean": 0.018047882136279926
+      },
+      "audit_tries16": {
+        "floor_mean": 0.5597421052810082,
+        "floor_sd": 0.006958663355682557,
+        "fallback_mean": 0.03167587476979742
+      },
+      "audit_tries50": {
+        "floor_mean": 0.5498723075201205,
+        "floor_sd": 0.004464825147571648,
+        "fallback_mean": 0.018047882136279926
+      },
+      "audit_tries1000": {
+        "floor_mean": 0.5511678859348345,
+        "floor_sd": 0.0031197597621617688,
+        "fallback_mean": 0.018047882136279926
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.02578268876611418,
+        "floor": 0.5499577749966932,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.01841620626151013,
+        "floor": 0.5424590213973932,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.01841620626151013,
+        "floor": 0.5462321391627579,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.02578268876611418,
+        "floor": 0.5499577749966932,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.01841620626151013,
+        "floor": 0.5424590213973932,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.01841620626151013,
+        "floor": 0.5462321391627579,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.029465930018416207,
+        "floor": 0.5618655650858575,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5506818744509901,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5521182028767267,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.029465930018416207,
+        "floor": 0.5618655650858575,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5506818744509901,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5521182028767267,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.04419889502762431,
+        "floor": 0.5686622644133099,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.022099447513812154,
+        "floor": 0.5545872633110508,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.022099447513812154,
+        "floor": 0.5548551970669733,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.04419889502762431,
+        "floor": 0.5686622644133099,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.022099447513812154,
+        "floor": 0.5545872633110508,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.022099447513812154,
+        "floor": 0.5548551970669733,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.034990791896869246,
+        "floor": 0.5616705500103443,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5505801274550702,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.551431410654267,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.034990791896869246,
+        "floor": 0.5616705500103443,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5505801274550702,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.551431410654267,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.022099447513812154,
+        "floor": 0.5553707151796343,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5500425641599599,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5508565401273194,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.02394106813996317,
+        "floor": 0.5565543718988364,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5510532509860979,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.016574585635359115,
+        "floor": 0.5512024799134472,
+        "best": "adamic_adar"
+      }
+    ]
+  },
+  "cksnp_gnn": {
+    "summary": {
+      "ours_tries16": {
+        "floor_mean": 0.5579232650811332,
+        "floor_sd": 0.002990826217919747,
+        "fallback_mean": 0.049786975045648205
+      },
+      "ours_tries50": {
+        "floor_mean": 0.5470063335147284,
+        "floor_sd": 0.0016319170168368634,
+        "fallback_mean": 0.03420572124163116
+      },
+      "ours_tries1000": {
+        "floor_mean": 0.5467377601873568,
+        "floor_sd": 0.0024589957703275546,
+        "fallback_mean": 0.0332318928788801
+      },
+      "audit_tries16": {
+        "floor_mean": 0.5579232650811332,
+        "floor_sd": 0.002990826217919747,
+        "fallback_mean": 0.049786975045648205
+      },
+      "audit_tries50": {
+        "floor_mean": 0.5470063335147284,
+        "floor_sd": 0.0016319170168368634,
+        "fallback_mean": 0.03420572124163116
+      },
+      "audit_tries1000": {
+        "floor_mean": 0.5467377601873568,
+        "floor_sd": 0.0024589957703275546,
+        "fallback_mean": 0.0332318928788801
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.051734631771150334,
+        "floor": 0.5597481189679819,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.032866707242848445,
+        "floor": 0.5474244929242968,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.0310407790626902,
+        "floor": 0.5459349296837984,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.051734631771150334,
+        "floor": 0.5597481189679819,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.032866707242848445,
+        "floor": 0.5474244929242968,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.0310407790626902,
+        "floor": 0.5459349296837984,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.05295191722458917,
+        "floor": 0.5612241609306196,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.036518563603164945,
+        "floor": 0.5487201277001343,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.035909920876445525,
+        "floor": 0.5502541444568874,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.05295191722458917,
+        "floor": 0.5612241609306196,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.036518563603164945,
+        "floor": 0.5487201277001343,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.035909920876445525,
+        "floor": 0.5502541444568874,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.048691418137553254,
+        "floor": 0.5572392736443622,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.035909920876445525,
+        "floor": 0.5465706149662394,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.03530127814972611,
+        "floor": 0.547692881028684,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.048691418137553254,
+        "floor": 0.5572392736443622,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.035909920876445525,
+        "floor": 0.5465706149662394,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.03530127814972611,
+        "floor": 0.547692881028684,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.04503956177723676,
+        "floor": 0.5533336617954256,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.02982349360925137,
+        "floor": 0.5444388836388463,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.028606208155812538,
+        "floor": 0.5435738923017253,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.04503956177723676,
+        "floor": 0.5533336617954256,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.02982349360925137,
+        "floor": 0.5444388836388463,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.028606208155812538,
+        "floor": 0.5435738923017253,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.0505173463177115,
+        "floor": 0.5580711100672767,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.035909920876445525,
+        "floor": 0.547877548344125,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.03530127814972611,
+        "floor": 0.5462329534656887,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.0505173463177115,
+        "floor": 0.5580711100672767,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.035909920876445525,
+        "floor": 0.547877548344125,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.03530127814972611,
+        "floor": 0.5462329534656887,
+        "best": "adamic_adar"
+      }
+    ]
+  },
+  "digamn": {
+    "summary": {
+      "ours_tries16": {
+        "floor_mean": 0.5539808457623315,
+        "floor_sd": 0.004680955871900681,
+        "fallback_mean": 0.046323024054982814
+      },
+      "ours_tries50": {
+        "floor_mean": 0.546210885558744,
+        "floor_sd": 0.006714005685871829,
+        "fallback_mean": 0.03436426116838488
+      },
+      "ours_tries1000": {
+        "floor_mean": 0.5460048417000272,
+        "floor_sd": 0.006651881765279828,
+        "fallback_mean": 0.033814432989690724
+      },
+      "audit_tries16": {
+        "floor_mean": 0.5539808457623315,
+        "floor_sd": 0.004680955871900681,
+        "fallback_mean": 0.046323024054982814
+      },
+      "audit_tries50": {
+        "floor_mean": 0.546210885558744,
+        "floor_sd": 0.006714005685871829,
+        "fallback_mean": 0.03436426116838488
+      },
+      "audit_tries1000": {
+        "floor_mean": 0.5460048417000272,
+        "floor_sd": 0.006651881765279828,
+        "fallback_mean": 0.033814432989690724
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.05154639175257732,
+        "floor": 0.5617056954924954,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.044673539518900345,
+        "floor": 0.5570980503300622,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.04329896907216495,
+        "floor": 0.5572787284042465,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.05154639175257732,
+        "floor": 0.5617056954924954,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.044673539518900345,
+        "floor": 0.5570980503300622,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.04329896907216495,
+        "floor": 0.5572787284042465,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.04192439862542955,
+        "floor": 0.5504325645658412,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.032989690721649485,
+        "floor": 0.5471073794593828,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.032989690721649485,
+        "floor": 0.5458823112622666,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.04192439862542955,
+        "floor": 0.5504325645658412,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.032989690721649485,
+        "floor": 0.5471073794593828,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.032989690721649485,
+        "floor": 0.5458823112622666,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.05085910652920962,
+        "floor": 0.5544443263541998,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.03367697594501718,
+        "floor": 0.5414766004180395,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.03367697594501718,
+        "floor": 0.5410122695764104,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.05085910652920962,
+        "floor": 0.5544443263541998,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.03367697594501718,
+        "floor": 0.5414766004180395,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.03367697594501718,
+        "floor": 0.5410122695764104,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.04398625429553265,
+        "floor": 0.5501772534570919,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.028178694158075602,
+        "floor": 0.540067311439402,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.027491408934707903,
+        "floor": 0.5411957818164641,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.04398625429553265,
+        "floor": 0.5501772534570919,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.028178694158075602,
+        "floor": 0.540067311439402,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.027491408934707903,
+        "floor": 0.5411957818164641,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.04329896907216495,
+        "floor": 0.5531443889420294,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.03230240549828179,
+        "floor": 0.5453050861468334,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.03161512027491409,
+        "floor": 0.5446551174407482,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.04329896907216495,
+        "floor": 0.5531443889420294,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.03230240549828179,
+        "floor": 0.5453050861468334,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.03161512027491409,
+        "floor": 0.5446551174407482,
+        "best": "adamic_adar"
+      }
+    ]
+  },
+  "meahne": {
+    "summary": {
+      "ours_tries16": {
+        "floor_mean": 0.5636274626386834,
+        "floor_sd": 0.005711602589754232,
+        "fallback_mean": 0.0457985531441291
+      },
+      "ours_tries50": {
+        "floor_mean": 0.5528187243377558,
+        "floor_sd": 0.004575039462641772,
+        "fallback_mean": 0.0333889816360601
+      },
+      "ours_tries1000": {
+        "floor_mean": 0.5522089542671286,
+        "floor_sd": 0.004421385060767602,
+        "fallback_mean": 0.032609905397885365
+      },
+      "audit_tries16": {
+        "floor_mean": 0.5636274626386834,
+        "floor_sd": 0.005711602589754232,
+        "fallback_mean": 0.0457985531441291
+      },
+      "audit_tries50": {
+        "floor_mean": 0.5528187243377558,
+        "floor_sd": 0.004575039462641772,
+        "fallback_mean": 0.0333889816360601
+      },
+      "audit_tries1000": {
+        "floor_mean": 0.5522089542671286,
+        "floor_sd": 0.004421385060767602,
+        "fallback_mean": 0.032609905397885365
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.044518642181413465,
+        "floor": 0.5627018489667284,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.0333889816360601,
+        "floor": 0.5530656656165642,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.032276015581524764,
+        "floor": 0.5521628129365427,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.044518642181413465,
+        "floor": 0.5627018489667284,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.0333889816360601,
+        "floor": 0.5530656656165642,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.032276015581524764,
+        "floor": 0.5521628129365427,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.05147468002225932,
+        "floor": 0.5710552878429361,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.037840845854201444,
+        "floor": 0.5588104548203601,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.037006121313299944,
+        "floor": 0.5583508995546587,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.05147468002225932,
+        "floor": 0.5710552878429361,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.037840845854201444,
+        "floor": 0.5588104548203601,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.037006121313299944,
+        "floor": 0.5583508995546587,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.04730105731775181,
+        "floor": 0.5648465305280643,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.03311074012242626,
+        "floor": 0.5527979142879882,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.03199777406789093,
+        "floor": 0.5517666245820572,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.04730105731775181,
+        "floor": 0.5648465305280643,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.03311074012242626,
+        "floor": 0.5527979142879882,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.03199777406789093,
+        "floor": 0.5517666245820572,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.03867557039510295,
+        "floor": 0.5551211225411549,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.02810239287701725,
+        "floor": 0.5459394622645979,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.027824151363383415,
+        "floor": 0.5458970757234975,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.03867557039510295,
+        "floor": 0.5551211225411549,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.02810239287701725,
+        "floor": 0.5459394622645979,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.027824151363383415,
+        "floor": 0.5458970757234975,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.047022815804117976,
+        "floor": 0.564412523314533,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.03450194769059544,
+        "floor": 0.5534801246992684,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.03394546466332777,
+        "floor": 0.5528673585388867,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.047022815804117976,
+        "floor": 0.564412523314533,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.03450194769059544,
+        "floor": 0.5534801246992684,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.03394546466332777,
+        "floor": 0.5528673585388867,
+        "best": "adamic_adar"
+      }
+    ]
+  },
+  "couplemda": {
+    "summary": {
+      "ours_tries16": {
+        "floor_mean": 0.5773086260184719,
+        "floor_sd": 0.0021328519539014048,
+        "fallback_mean": 0.06211424819435325
+      },
+      "ours_tries50": {
+        "floor_mean": 0.5695432132989068,
+        "floor_sd": 0.0011316814851699175,
+        "fallback_mean": 0.05226526592252134
+      },
+      "ours_tries1000": {
+        "floor_mean": 0.5691371825918107,
+        "floor_sd": 0.0015423166634850791,
+        "fallback_mean": 0.051871306631648066
+      },
+      "audit_tries16": {
+        "floor_mean": 0.5773086260184719,
+        "floor_sd": 0.0021328519539014048,
+        "fallback_mean": 0.06211424819435325
+      },
+      "audit_tries50": {
+        "floor_mean": 0.5695432132989068,
+        "floor_sd": 0.0011316814851699175,
+        "fallback_mean": 0.05226526592252134
+      },
+      "audit_tries1000": {
+        "floor_mean": 0.5691371825918107,
+        "floor_sd": 0.0015423166634850791,
+        "fallback_mean": 0.051871306631648066
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.06369008535784636,
+        "floor": 0.580037154094646,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.05252790544977019,
+        "floor": 0.5694048231343518,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5710702474510989,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.06369008535784636,
+        "floor": 0.580037154094646,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.05252790544977019,
+        "floor": 0.5694048231343518,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 0,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5710702474510989,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.06369008535784636,
+        "floor": 0.5786620904502595,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.570156484355229,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5683828484144842,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.06369008535784636,
+        "floor": 0.5786620904502595,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.570156484355229,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 1,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5683828484144842,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.061720288903479976,
+        "floor": 0.5748505407778907,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5689146374113021,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5669750194974928,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.061720288903479976,
+        "floor": 0.5748505407778907,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5689146374113021,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 2,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5669750194974928,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.061720288903479976,
+        "floor": 0.5756138422929828,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.05252790544977019,
+        "floor": 0.5681502580911901,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5697880905994277,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.061720288903479976,
+        "floor": 0.5756138422929828,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.05252790544977019,
+        "floor": 0.5681502580911901,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 3,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5697880905994277,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 16,
+        "fallback_rate": 0.05975049244911359,
+        "floor": 0.5773795024765804,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 50,
+        "fallback_rate": 0.05252790544977019,
+        "floor": 0.571089863502461,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "ours",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5694697069965498,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 16,
+        "fallback_rate": 0.05975049244911359,
+        "floor": 0.5773795024765804,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 50,
+        "fallback_rate": 0.05252790544977019,
+        "floor": 0.571089863502461,
+        "best": "adamic_adar"
+      },
+      {
+        "seed": 4,
+        "bins": "audit",
+        "n_tries": 1000,
+        "fallback_rate": 0.051871306631648066,
+        "floor": 0.5694697069965498,
+        "best": "adamic_adar"
+      }
+    ]
+  }
+}
