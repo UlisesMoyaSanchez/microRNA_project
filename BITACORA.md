@@ -23,6 +23,182 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-02 — La auditoría independiente: cuatro afirmaciones tocadas y una regla de falsación disparada
+
+**Qué llegó.** Abraham Sánchez (con Claude Sonnet 5.5 como asistente) entregó el reporte de la auditoría independiente como
+`audit_result/AUDIT_REPORT_Abraham_Sanchez_paquete.zip` (sin trackear). Trae el reporte en Markdown, su código (`trackA/B/C/E.py`
+y otros), los lanzadores SLURM, los JSON de cada número y los logs (jobs 528–547 en `dgxa100jal`). Siguió la guía
+`audit_independent/INDEPENDENT_AUDIT_GUIDE.md` en `abd0025`, cubrió las pistas A–E y entregó la Fase 2 sin ver nuestras cifras.
+Respetó la independencia: no leyó `results/`, `protocheck/` (hasta después de escribir sus expectativas), `BITACORA.md` ni el
+manuscrito más allá del Abstract. **No le enviamos el grafo propio**, así que C1 quedó probada en 5 de 6 grafos y C2 solo con
+su GCN, no con nuestros cuatro modelos ni con el confound DDP/1-GPU. Hoy se hizo la Fase 3 (comparar contra lo nuestro); no se
+ha editado nada todavía.
+
+Notas de proceso que reportó él mismo: el commit de congelamiento de la guía está vacío (usó el HEAD); una vez corrió `python3`
+en el login de la DGX en vez de por SLURM (sin efecto, rehecho como job 534); la descarga de `cksnp_gnn` desde
+`public.aibiochem.net` se cuelga desde la DGX (H1, la terminó desde su equipo y el hash coincide); PMC bloquea con reCAPTCHA el
+acceso automatizado a 11 de 21 papers y lo resolvió con E-utilities `efetch` (H7).
+
+### Lo que se reprodujo
+
+- **Datos.** Los hashes y formas de los seis grafos externos coinciden con `DATA_ACCESS.md`, incluido el hash parseado de
+  `canonical5430` (`78f1a3cd…77d04e`).
+- **C1 (fenómeno), 5/5 grafos externos.** Con su propia GCN bipartita (2 capas, 3 semillas, 1000 épocas, selección por
+  AUROC de validación): convencional → corregido 0.906→0.611 (canonical5430), 0.886→0.605 (digamn), 0.942→0.624 (couplemda),
+  0.990→0.621 (meahne), 0.893→0.615 (cksnp_gnn). Caída de 0.28–0.37 (la regla pedía ≥0.15) y corregido a 0.050–0.064 del piso
+  (regla ≤0.10). Nuestro rango corregido es 0.618–0.641 con otra arquitectura; la guía solo exige el fenómeno.
+- **C2 (super-aditividad), 5/5 con su modelo.** Ejemplo: canonical5430 caída(ambas)=0.295 > 0.175 (solo negativos) + 0.045
+  (solo partición). Su lectura del mecanismo (H3) coincide con la nuestra: la parte de "solo partición" es chica (0.003–0.045)
+  porque bajo negativos uniformes el piso de grado tapa la fuga; la fuga rinde cuando los negativos ya están emparejados.
+- **C3, 5/5.** Mejor heurística (vistas, uniformes) 0.885–0.992 y (retenidas, emparejados) 0.547–0.562; regla >0.85 y <0.65.
+  OGB ddi y ppa medidos de forma determinista (AUROC, no Hits@K, así que no se compara con nuestra Tabla 5).
+- **Margen del modelo sobre el piso (H6):** 5.0–6.4 puntos; nosotros 3.6–8.3. Mismo mensaje.
+- **C5, "reproducida con reservas".** 17 tests pasan; 4 de 5 ejemplos sintéticos disparan exactamente su check; MGCNSS falla
+  leakage con 1,086/1,086 en los 5 folds por dos formatos de entrada; la rejilla 2×2 en 5 grafos acierta 40/40; la paridad en
+  ddi da diferencia máxima de 2.6e-10 (regla ≤1e-3). **No encontró ningún conjunto con fuga por aristas que saliera `ok`**
+  con los insumos correctos.
+- **Pista C (mecanismo, opcional).** En un grafo sin estructura, una GCN *sin entrenar* sube de 0.50 a 0.69–0.73 solo por
+  dejar las aristas de prueba en la propagación, monótonamente con la fracción visible. Y un desajuste de muestreadores
+  (entrenar con negativos más populares que los positivos) invierte el signo del peso de grado y da AUROC 0.236, bajo el azar.
+  Esto lo construyó él; no afirma que algún paper lo haga.
+
+### Problema 1 (el más grave): C4 dispara su propia regla de falsación — ModulePred
+
+La regla de la pista D dice que C4 es falsa si algún paper supera a su baseline sin aprendizaje por **≥10 puntos de AUROC**.
+El auditor extrajo de la leyenda de la Fig. 2D de ModulePred (BMC Bioinformatics 2024;25:214, imagen incrustada leída a 300 ppi):
+ModulePred 83.43 %, RWRH 69.76 %, RWR 68.16 %, DADA 65.64 %. Margen sobre el mejor sin entrenar: **13.7 puntos** (15.3 si se
+excluye RWRH). El texto del paper confirma dos de esos números ("from 0.752 to 0.834; Fig. 2D", contra HerGePred), lo que da
+confianza en la lectura de la figura. Encontró además que la referencia [28] de RWRH en el paper apunta a un artículo de
+resumen de documentos con redes neuronales recursivas, no a RWRH; no cambia nada porque RWR también supera los 10 puntos.
+
+En nuestra encuesta el margen de ModulePred estaba **en blanco** ("figure only", `results/literature_survey_d4_reaudit.tsv`), y
+`main.tex:375` dice "In the five papers whose numbers can be read from the text, the headline clears the comparator by 1.7 to
+7.4 AUROC points". La frase es literalmente cierta, pero deja fuera el único caso que la contradice. **Pendiente:** verificar
+la cifra contra el PDF nosotros mismos (regla de citas: fuente primaria) y, si se confirma, reportar el rango hasta 13.7 o dejar
+de decir que los que reportan baseline "le ganan por pocos puntos". Matices a decir: la tarea es priorización gen–enfermedad,
+y en el conjunto externo (Fig. 3) RWR y RWRH superan a ModulePred en precisión Top@3.
+
+### Problema 2: los conteos de la encuesta difieren más de lo permitido
+
+La regla de C4 tolera diferencias de ≤2 papers por dimensión. Comparando su calificación final (21/21 con texto literal de PMC)
+contra `results/literature_survey.tsv`:
+
+| Dimensión | Nosotros | Auditor | Papers en desacuerdo |
+|---|---|---|---|
+| D1 (CV sobre aristas) = yes | 19 | 15 | GONNMDA, DGNMDA, HiGLDP, SaeGraphDTI: nosotros `yes`, él `unclear` (diferencia 4) |
+| D2 (prueba fuera del encoder) = yes | 7 | 6 | SaeGraphDTI (`yes` → `unclear`); MGCNSS: nosotros `no` (por el código), él `unclear` (solo texto) |
+| D3 (negativos de pares no anotados) | 17 | 12 `uniform_unlabeled` | HMCDA, NIMGSA, HybridGNN, MEAHNE, SaeGraphDTI: él `not_described` (diferencia 5) |
+| D4 (baseline sin aprendizaje) = yes | 6 | 4 | CKSNP-GNN y Orro: nosotros `yes`, él `unclear`; DTI-MHAPR: nosotros `unclear`, él `no`; HGDTI: nosotros `no`, él `unclear` |
+
+La dirección no cambia (casi todos validan sobre aristas; la mayoría no reporta baseline sin aprendizaje), pero D1 y D3 rebasan
+la tolerancia. En D4 los dos `yes` que él no ve los obtuvimos en la re-auditoría de D4 leyendo las tablas y las citas reales de
+los comparadores (en Orro, los nombres de la Tabla 2 están revueltos; ver la entrada del 2026-09-06 y
+`literature_survey_d4_reaudit.tsv`); su lectura no recuperó esas tablas. En D3 el desacuerdo parece de criterio (si "1:1" sin
+decir cómo se eligen los negativos cuenta como "uniforme"). **Pendiente:** adjudicar cada paper contra la fuente con el codebook
+ciego y corregir los números de `main.tex:373–386` donde corresponda.
+
+Él señala también (H9) que CKSNP-GNN se compara contra "the optimal AUC recorded in each paper", es decir, cifras copiadas de
+otros trabajos con otras particiones; ya lo teníamos anotado en la re-auditoría de D4.
+
+### Problema 3: "an untrained control does not move" depende de la arquitectura
+
+Su control (la misma GCN con pesos aleatorios) **sí se mueve** entre los protocolos completos: canonical5430 0.83→0.53, digamn
+0.80→0.54, couplemda 0.70→0.53, meahne 0.66→0.53 (H2). No se mueve al cambiar solo la visibilidad con el muestreador fijo
+(digamn 0.800→0.787 con uniformes). El motivo: propagar embeddings aleatorios con A+I normalizada filtra el grado del nodo, y
+bajo negativos uniformes el grado basta. Nuestro control (HGT sin entrenar, Tabla S1) se queda en 0.49–0.51 en las **cuatro**
+celdas, incluida la convencional donde el grado solo da 0.87: no puntúa nada, así que "no se mueve" es cierto pero poco
+informativo. Las dos cosas no se contradicen en datos (grafos y arquitecturas distintos), pero nuestra frase se lee como
+general. Aparece en el Abstract (l. 127), el highlight 4 (l. 149) y `main.tex` 279, 685, 728 y 806. **Pendiente:** acotarla a
+"our untrained HGT", y considerar citar el resultado del auditor como evidencia de que el paso de mensajes sin entrenar ya
+cosecha grado y fuga.
+
+### Problema 4: hallazgos sobre `protocheck`
+
+- **E-2 (media).** Si no se pasa `encoder_edges`, el check de leakage queda `unchecked` (bien, nunca `ok`), pero el CLI
+  devuelve **código de salida 0**. El README recomienda "stop on exit status 1", así que un pipeline con esa guarda aceptaría
+  MGCNSS con 100 % de fuga. Arreglo propuesto: un código de salida distinto de 0 cuando el check de leakage no corre, o un flag
+  explícito `--allow-unchecked`.
+- **E-4 (media).** El umbral de 0.10 en la distancia de variación total entre histogramas de grado no considera el tamaño
+  de muestra. Con un protocolo limpio y negativos emparejados, `negative_matching` avisa en 40/40, 35/40, 20/40, 3/40 y 0/40
+  semillas con 10, 30, 100, 300 y 1,200 positivos de prueba. Con 0 positivos falla con un error poco claro de sklearn; con 1,
+  devuelve un piso de 1.0000 como `info`. Esto **choca con "with no false alarms" del Abstract**, que solo vale para nuestras 80
+  auditorías con conjuntos de prueba grandes. Arreglo: umbral dependiente de n (o prueba con nulo por remuestreo) y un mínimo
+  de positivos.
+- **E-6 (baja–media).** `dead_candidates` avisa en meahne (92.4 % de columnas muertas) y couplemda (55.7 %) incluso con
+  negativos emparejados, donde solo 6 % y 5 % de los negativos caen en columnas muertas; el mensaje ("a scorer that ranks by
+  degree separates these negatives for free") es falso ahí. Debería mirar dónde caen los negativos de evaluación, no solo la
+  fracción de columnas.
+- **E-1 (baja).** El README dice que cada ejemplo dispara "its own check and no other"; `dead_columns` dispara tres (su propio
+  test lo admite). Corregir el README.
+- **E-3 (baja–media).** Los folds de MGCNSS tienen positivos en base 1 y negativos en base 0 dentro del mismo archivo;
+  `--index-base` es único. Base 0 falla con error; base 1 pasa en silencio y desplaza los negativos una columna. Documentarlo o
+  admitir bases separadas.
+- **E-5 (alta por la regla de la guía, magnitud chica).** La fuga por *features* derivadas de etiquetas de prueba (p. ej.
+  grado calculado sobre toda la matriz) sale `ok`. Está declarada en la nota de alcance que se imprime en cada reporte; su
+  demostración es sintética (+0.018 AUROC). No requiere cambio, pero hay que mantenerlo en Limitaciones.
+- **Umbral de margen.** `margin_warn = 0.05` cae justo donde están los modelos honestos: su GCN corregida queda a 0.048–0.068
+  del piso, y digamn recibe `warn` por 0.002.
+
+### Discrepancia numérica: nuestro piso corregido está ~0.01–0.02 arriba del suyo
+
+La guía acepta |Δ| ≤ 0.015 o |z| ≤ 2. Adamic–Adar en (retenidas, emparejados), nosotros contra él (media ± DE de 5 particiones):
+canonical5430 0.5683 vs 0.5501 ± 0.0065 (Δ 0.018); digamn 0.5580 vs 0.5468 (0.011); couplemda 0.5789 vs 0.5596 (0.019);
+meahne 0.5648 vs 0.5533 (0.012); cksnp_gnn 0.5591 vs 0.5478 (0.011). Dos grafos rebasan el |Δ|, y el sesgo va en la misma
+dirección en los cinco, así que no es solo ruido. Causas candidatas, sin probar:
+1. Nuestro piso es **una sola partición** (semilla 42, `results/comparison/hmdd_survey_topology_baseline_*.json`, 543 positivos
+   en canonical5430); el suyo es la media de 5. Con DE ≈ 0.0065, 0.018 son ~2.8 DE.
+2. Los **contenedores de grado** se definen distinto. Nosotros (`training/splits.py::degree_bins`) los ponemos log-lineales de
+   0 al máximo y probamos 16 candidatos; él de mínimo a máximo con 50 intentos (`trackA.py::make_bins`). Él mismo señala la
+   ambigüedad en H5.
+
+Un piso más alto nos perjudica (achica nuestro margen), así que no infla ningún resultado nuestro. **Pendiente:** recalcular
+nuestro piso con 5 particiones y, si el sesgo persiste, correr su muestreador contra el nuestro en la misma partición.
+
+### Otros hallazgos, menores
+
+- **H4.** La cifra corregida depende del número de épocas, que la guía no fija: con 300 épocas su corregido fue 0.578–0.624
+  y la mejor época caía en el tope.
+- **H5.** Ambigüedades de la pista A: `gene_degree` en grafos no bipartitos (OGB), límites de los 8 contenedores, y si
+  "uniforme" incluye columnas muertas.
+
+### Plan, en orden
+
+(a) ~~Verificar ModulePred contra el PDF y reescribir C4 en `main.tex:373–378`~~ **hecho el mismo día**, ver abajo. (b) Adjudicar D1, D3 y D4 contra las fuentes y
+corregir los conteos. (c) Acotar "untrained control" en Abstract, highlights y cuerpo. (d) Arreglar `protocheck` (E-2, E-4,
+E-6, README) y matizar "no false alarms". (e) Recalcular el piso con 5 particiones en la DGX. Decidir aparte si se le manda el
+grafo propio al auditor para cerrar C1 en 6/6 y C2.
+
+### (a) hecha: ModulePred verificado y C4 reescrita
+
+**Verificación contra la fuente primaria.** PMC bloquea la descarga directa de la imagen y Springer devuelve AccessDenied,
+pero el paquete de archivos de Europe PMC (`webservices/rest/PMC11549817/supplementaryFiles`) trae
+`12859_2024_5841_Fig2_HTML.jpg`. La leyenda del panel D dice, en AUROC %: DADA 65.64, RWR 68.16, **RWRH 69.76**, Dgn2vec
+77.09, HerGePred 75.20, **ModulePred 83.43**. El texto (XML de E-utilities) repite dos de ellos ("from 0.752 to 0.834; Fig. 2D").
+Las referencias del XML confirman el error de cita que vio el auditor: [26] DADA (Erten et al. 2011) y [27] RWR (un libro
+sobre PageRank) son correctas en espíritu, pero **[28] RWRH es Cao et al., AAAI 2015**, sobre resumen de documentos con redes
+recursivas. La cifra del auditor era correcta: margen de **13.7 puntos** sobre RWRH (15.3 sobre RWR).
+
+**Lo que cambió:**
+- `main.tex` (Encuesta, ~l. 373): "none remarks on how narrow its margin…" pasa a "none states its margin over that
+  comparator". Se conserva el rango 1.7–7.4 para los cinco papers que imprimen sus cifras en texto o tabla, y se añade
+  ModulePred: "0.834 against 0.698 for RWRH, the best of its three untrained comparators, or 13.7 points on a gene-disease
+  ranking task. A narrow margin is common but not universal." Un comentario `%% STAGE` documenta por qué y prohíbe volver a
+  "few points/narrow" como afirmación general.
+- `tables/table3_literature_survey.tex`: el comparador de ModulePred pasa de "RWR" a "RWR, RWRH".
+- `references.bib`: nueva entrada `li2010rwrh` (Li y Patra, Bioinformatics 2010;26(9):1219–1224,
+  doi 10.1093/bioinformatics/btq108), verificada en Crossref, porque la cita del propio ModulePred para RWRH es errónea.
+- `results/literature_survey.tsv` y `literature_survey_d4_reaudit.tsv`: margen de ModulePred 0.1367 (antes en blanco), con
+  la evidencia anexada. Solo cambió esa fila.
+- El manuscrito compila sin citas indefinidas.
+
+**Qué no cambió y por qué.** La frase de la Discusión (l. ~733, "A headline within a few points of the floor is hard to read")
+y el highlight 3 (4.7 puntos) hablan del **piso que medimos nosotros** sobre los datos de siete papers, no de los márgenes que
+reportan los papers, así que siguen en pie. Por la regla de la guía, C4 queda **refutada en su condición de margen** y
+**reproducida en su dirección** (la mayoría no reporta baseline sin aprendizaje); el texto nuevo ya no afirma la condición
+refutada.
+
+---
+
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
 
 **MGCNSS (27-oct).** Su AUROC de 0.9874 es una media de 5-fold CV, pero el piso model-free se había medido en un solo fold

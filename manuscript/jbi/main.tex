@@ -372,11 +372,25 @@ lncRNA-disease, drug-target, and gene-disease), reading each paper's methods sec
 full rather than inferring its protocol from the abstract
 (Table~\ref{tab:literature_survey}). Three findings matter here. First, 14 of the 21
 report no model-free baseline. The six that do report a classical untrained method as one
-more competitor in a comparison table, never as a floor, and none remarks on how narrow
-its margin over that comparator is. In the five papers whose numbers can be read from
-the text, the headline clears the comparator by 1.7 to 7.4 AUROC points; NIMGSA's \cite{jin2022nimgsa} SPM
+more competitor in a comparison table, never as a floor, and none states its margin over
+that comparator. In the five that print the numbers in the text or a table, the headline
+clears the comparator by 1.7 to 7.4 AUROC points; NIMGSA's \cite{jin2022nimgsa} SPM
 comparator (0.8960) comes within 3.9 points of NIMGSA itself (0.9354) and outscores IMCMDA
-(0.8329), a trained baseline in the same table.
+(0.8329), a trained baseline in the same table. The sixth, ModulePred~\cite{jia2024modulepred},
+prints its comparators only in a figure legend, and there the margin is wide: 0.834 against
+0.698 for RWRH~\cite{li2010rwrh}, the best of its three untrained comparators, or 13.7 points on a
+gene-disease ranking task. A narrow margin is common but not universal.
+%% STAGE (2026-11-02): the old text said "in the five papers whose numbers can be read from
+%%   the text ... 1.7 to 7.4", which was literally true but left out the one case that breaks
+%%   it. The independent audit (BITACORA 2026-11-02) read ModulePred's Fig. 2D legend and found
+%%   13.7 points, which trips the audit guide's own C4 falsification rule (>= 10 points).
+%%   Verified 2026-11-02 against the primary source (Europe PMC figure file
+%%   12859_2024_5841_Fig2_HTML.jpg for PMC11549817): DADA 65.64, RWR 68.16, RWRH 69.76,
+%%   Dgn2vec 77.09, HerGePred 75.20, ModulePred 83.43 (AUROC %); the text's "from 0.752 to
+%%   0.834; Fig. 2D" matches two of them. Ref [28] for RWRH in ModulePred actually points to
+%%   Cao et al. AAAI 2015 (recursive-NN summarization), a citation error; against RWR alone the
+%%   margin is 15.3, so the conclusion does not depend on how RWRH is classified. Do not
+%%   restore "few points" or "narrow" as a general claim about the surveyed margins.
 Second, 17 draw their negatives from unlabeled pairs, uniformly sampled or taken wholesale,
 without discussing the alternative; only MGCNSS~\cite{tian2024mgcnss} and
 HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and two papers never say.
