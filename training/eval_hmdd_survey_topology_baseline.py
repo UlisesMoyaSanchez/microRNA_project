@@ -185,6 +185,11 @@ def main() -> None:
                    help="Which edges the heuristics may see (see build_scoring_matrix). "
                         "held_out is the corrected protocol and the default, so an "
                         "un-flagged run reproduces the published numbers exactly.")
+    p.add_argument("--seed", type=int, default=None,
+                   help="Override the config's split/negative seed. The output then gets an "
+                        "`_s<seed>` suffix, so the published single-seed artifacts are never "
+                        "overwritten. Used to average the floor over several splits "
+                        "(independent audit 2026-11-02: our floor was one split).")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -194,7 +199,7 @@ def main() -> None:
         cfg = yaml.safe_load(fh)
 
     paper = cfg["project"]["name"]
-    seed = cfg["project"]["seed"]
+    seed = cfg["project"]["seed"] if args.seed is None else args.seed
     dcfg = cfg["data"]
     ref = cfg["evaluation"]["paper_reference"]
     tier = ref["tier"]
@@ -202,6 +207,8 @@ def main() -> None:
     # Unsuffixed for held_out: the already-published artifacts keep their paths.
     if args.out is None:
         suffix = "" if args.edge_regime == "held_out" else f"_{args.edge_regime}"
+        if args.seed is not None:
+            suffix += f"_s{args.seed}"
         args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}{suffix}.json"
 
     log.info("=" * 78)
