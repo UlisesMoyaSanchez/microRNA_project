@@ -279,6 +279,39 @@ Hay que corregir las láminas antes de volver a presentarlas.
 cuatro celdas en la DGX. Por lo que midió el auditor, lo esperable es que **se mueva** por el grado, lo que apoyaría el paper
 (la inflación aparece sin aprendizaje) pero cambiaría la narrativa de esa sección.
 
+### El control de verdad, corrido: no se mueve en nuestro grafo (y la predicción de arriba falló)
+
+`run_baselines.py` ganó dos filas opt-in, `hgt_untrained_s<k>` y `homo_gcn_untrained_s<k>`: las mismas arquitecturas en
+su inicialización aleatoria, sin entrenar, evaluadas por el mismo evaluador sobre la misma partición (semilla 42), con cinco
+semillas de inicialización (0–4). Se activan con `--only`, que además pone un sufijo a la tabla para no pisar la del grid
+(`f8ff47c`). Jobs **561–564** en `dgxa100jal`, una celda por job, unos 25 s cada uno. Resultados en
+`results/comparison/comparison_table_checkpoints_v3fixed_baselines_<celda>__only-hgt_untrained-homo_gcn_untrained.{tsv,json}`
+(`29f57ce`).
+
+Un primer envío (jobs 557–560) solo corrió `hgt_untrained_s0`, porque `sbatch --export=A=..,B=..` parte en las comas y
+`RUN_ARGS` las lleva. Se borraron esas salidas y se relanzó pasando las variables por el entorno con `--export=ALL`; el
+launcher documenta ahora esa forma (`5e2bb57`).
+
+AUROC, media ± DE de 5 semillas de inicialización, con la convención de celdas de la Tabla S1:
+
+| Arquitectura sin entrenar | Seen+uniform | Seen+matched | Held+uniform | Held+matched | Inflación |
+|---|---|---|---|---|---|
+| HGT | 0.4947 ± 0.0150 | 0.5003 ± 0.0015 | 0.4950 ± 0.0156 | 0.4985 ± 0.0036 | −0.0038 ± 0.0128 |
+| GCN homogénea | 0.4939 ± 0.0272 | 0.4980 ± 0.0039 | 0.5009 ± 0.0277 | 0.4995 ± 0.0038 | −0.0057 ± 0.0244 |
+
+Las mismas arquitecturas entrenadas inflan +0.29 a +0.31. **Sin entrenar se quedan en el azar en las cuatro celdas.** La
+dispersión es mayor con negativos uniformes (±0.015–0.027; la GCN con semilla 0 llega a 0.53), que es donde el grado podría
+colarse por casualidad, pero la media no se mueve.
+
+**Lectura.** La predicción que escribí arriba ("lo esperable es que se mueva") **falló**. La GCN sin entrenar del auditor
+(embeddings por nodo, A+I normalizada, decodificador de producto punto, sobre matrices bipartitas miRNA–enfermedad) sí
+cosechaba el grado. Las nuestras, en nuestro grafo (centrado en células, con features de expresión y vecindarios muestreados
+desde las células), no. Así que en nuestro grafo **la afirmación "un control sin entrenar no se mueve" es cierta con un
+control de verdad**, pero depende de la arquitectura y no se generaliza a "las redes sin entrenar no inflan". El
+`RandomBaseline` sigue sin probar nada y no debe volver a citarse como control.
+
+**Pendiente:** decidir si el manuscrito vuelve a citar el control, ahora con estas dos filas y su salvedad de arquitectura.
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
