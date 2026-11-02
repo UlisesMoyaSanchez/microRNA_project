@@ -247,6 +247,38 @@ Lo dejamos documentado en vez de forzar la coincidencia.
 
 Los demás conteos (D2: 7 yes / 1 no / 11 unclear de 19; seis con baseline) no cambian.
 
+### (c) hecha: el "control sin entrenar" no era un control
+
+Al revisar el código para acotar la frase apareció algo más grave que lo que señaló el auditor. La fila "Untrained (control)"
+de la Tabla S1 y la Fig. 2 es `models/baselines.py::RandomBaseline`, que **devuelve `torch.randn` por cada par y nunca lee
+el grafo ni las features**. No es una red con pesos aleatorios, aunque el manuscrito la llamaba "untrained random-weight
+control". Su AUROC es 0.5 bajo cualquier protocolo por construcción, así que "does not move" era una tautología: no podía
+moverse y no prueba nada sobre el protocolo. El comentario `%% STAGE` del highlight 4 incluso decía que era "lo que muestra
+que la inflación es un artefacto del protocolo", lo cual era falso.
+
+La evidencia real de "el efecto sigue al protocolo, no al modelo" es el **MLP sin grafo**, que también infla (+0.24). El
+auditor muestra además (H2, pista C) que una GCN de verdad sin entrenar **sí** se mueve (0.83→0.53), porque la propagación
+filtra el grado: la inflación no necesita aprendizaje.
+
+**Cambios:**
+- `main.tex`: Abstract (Methods y Results), highlight 4, contribuciones, Modelos, Resultados (§ arquitecturas), caption de
+  la Fig. 2, Discusión y Conclusión. "an untrained control does not move" pasa a "a graph-free MLP included", y la fila se
+  describe como "random-score reference that ignores its input and marks chance level". En Resultados se dice explícitamente
+  que "does not test the protocol". El highlight quedó en 82 caracteres.
+- Tablas: `tableS1` (la etiqueta pasa a "Random scores (reference)"), `table_experiments` y `table_results_summary` (fila E6).
+- Figuras: etiqueta cambiada en `analysis/make_manuscript_figures.py` y `make_manuscript_tables.py`. Se regeneraron
+  **solo** la Fig. 2 y la Fig. 3 (llamando a sus funciones, no a `main()`), y la anotación "no change" pasó a "chance level by
+  construction". La Tabla S1 se editó a mano porque su generador tiene un caption viejo que pisaría el recortado.
+- `goal.md` (l. ~445) corregido. Comentario `%% STAGE` nuevo que prohíbe reintroducir el control como evidencia.
+- Compila limpio.
+
+**Sin tocar:** `presentation/beamer_ms_project/` (01_context l. 28; 05_estado_actual l. 171, 187, 348) repite la afirmación.
+Hay que corregir las láminas antes de volver a presentarlas.
+
+**Abierto:** si se quiere un control de verdad, hay que correr el HGT (o la GCN) con pesos aleatorios congelados en las
+cuatro celdas en la DGX. Por lo que midió el auditor, lo esperable es que **se mueva** por el grado, lo que apoyaría el paper
+(la inflación aparece sin aprendizaje) pero cambiaría la narrativa de esa sección.
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas

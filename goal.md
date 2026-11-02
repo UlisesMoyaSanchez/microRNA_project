@@ -442,8 +442,9 @@ done and the second is suspended). Full detail in
       **Every trained architecture inflates by 0.24-0.31** between the original protocol
       (seen edges + uniform negatives) and the honest one (held-out + degree-matched):
       `hgt_v2` +0.3142, `ablation_no_coexpr` +0.2943, `homo_gcn` +0.2941, and a **graph-free
-      `mlp` +0.2420**. The untrained `random` control does not move (−0.0043), which is what
-      makes the rest trustworthy. The inflation therefore is not a property of the
+      `mlp` +0.2420**. The `random` row (−0.0043) is `RandomBaseline`, which returns random scores and never
+      reads the graph, so it sits at chance by construction and supports nothing (corrected
+      2026-11-02; see BITACORA). The inflation therefore is not a property of the
       transformer, of heterogeneous message passing, or even of *having a graph* — it is a
       property of the protocol. `gene_degree` (0.8712) also beats **all four** trained models
       under the original protocol, generalizing §2's claim 2 beyond the HGT.

@@ -122,9 +122,9 @@ Biomedical Interaction Graphs}
 \begin{abstract}
 \textbf{Objective:} We test whether conventional evaluation of graph neural network (GNN) link predictors on biomedical interaction graphs inflates reported performance, where the inflation comes from, and whether a reporting standard and a tool can prevent it.
 
-\textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free scores from graph topology alone) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models, an untrained control and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
+\textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free scores from graph topology alone) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.618--0.641 on every graph. Negative sampling carried 0.29--0.41 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31 while an untrained control did not move; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.618--0.641 on every graph. Negative sampling carried 0.29--0.41 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
 
 \textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
@@ -146,7 +146,7 @@ Biomedical Interaction Graphs}
 \item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
 \item On 7 of 21 papers' own data, trained models beat a model-free floor by 4.7 points.
-\item Four trained models inflate by 0.24--0.31 on our graph; an untrained control does not.
+\item Four trained models inflate by 0.24--0.31 on our graph, a graph-free MLP included.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
 %% STAGE: verify highlight count/character limit against JBI's live guide before submission.
@@ -192,11 +192,14 @@ Biomedical Interaction Graphs}
 %% "models" at the author's request -- consistent with \S\ref{sec:results} calling this
 %% axis the MODEL axis. "Our graph" became "our graph data". 0.24--0.31 is the AUROC
 %% INFLATION (the delta between protocols), not an absolute AUROC value; do not let a
-%% future edit read as "AUROC of 0.24--0.31". "Except untrained" elides the article for
-%% length but still names the single untrained-control row (Table~\ref{tab:architecture_grid}),
-%% not "untrained models" plural -- losing that exception would misstate the finding, since
-%% it is what shows the inflation is a training-protocol artifact and not something any
-%% random model would exhibit.
+%% future edit read as "AUROC of 0.24--0.31".
+%% 2026-11-02: the "untrained control does not move" clause was removed here and everywhere.
+%%   The row is models/baselines.py::RandomBaseline, which returns torch.randn per pair and
+%%   never reads the graph or the features: it is at 0.5 under any protocol by construction,
+%%   so it cannot show anything about the protocol, and "random-weight" misdescribed it. The
+%%   independent audit (BITACORA 2026-11-02, H2) found a genuinely untrained GCN DOES move
+%%   (0.83 -> 0.53) because propagation leaks degree. The "not the model" evidence is the
+%%   graph-free MLP, which inflates by +0.24. Do not reintroduce the control as evidence.
 %% 2026-09-09: bullet 5 trimmed from 142 to 82 chars. Dropped "We propose a minimum
 %% reporting" (the Conclusion already frames this as the paper's proposal) and turned
 %% "a leak-free split check" into "leak-free splits" -- the word CHECK is gone, but the
@@ -276,8 +279,8 @@ positive raise the model-free floor on their own.
 \item It measures the model-free floor on other papers' own data: seven surveyed papers and
 two Open Graph Benchmark (OGB) datasets \cite{hu2020ogb}.
 \item On a proposed graph, it shows the effect follows the
-protocol and not the model. It recurs across four trained models, an untrained control does
-not move, and a cell-typing task survives the same audit.
+protocol and not the model. It recurs across four trained models, a graph-free MLP
+included, and a cell-typing task survives the same audit.
 \item It proposes a minimum reporting standard with three requirements (a leak-free edge
 split, matched negative sampling, and a model-free baseline with its margin stated;
 Table~\ref{tab:correct_protocol}) and releases \texttt{protocheck}, an open-source tool
@@ -578,8 +581,8 @@ On the two OGB graphs, which are homogeneous and undirected, we use the textbook
 
 \paragraph{Models} The link-prediction experiments compare these baselines with four
 trained models (a heterogeneous graph transformer, a homogeneous GCN, a
-co-expression-ablation variant of the transformer, and a graph-free MLP) plus an
-untrained random-weight control.
+co-expression-ablation variant of the transformer, and a graph-free MLP) plus a
+random-score reference that ignores its input and marks chance level.
 
 \section{Results}
 \label{sec:results}
@@ -703,14 +706,15 @@ fall occurs in every trained architecture in the grid (Figure~\ref{fig:negative_
 
 Nor is the inflation specific to one model. Four trained models (the transformer, a
 homogeneous GCN, a co-expression ablation and a graph-free MLP) inflate by 0.24--0.31 AUROC
-between the two protocols, the MLP included, while an untrained random-weight control does
-not move ($-0.004$; Figure~\ref{fig:architecture_inflation}). Each is a single run on one GPU,
+between the two protocols, the MLP included (Figure~\ref{fig:architecture_inflation}). The
+random-score reference stays at chance in every cell ($-0.004$), as it must: it ignores the
+graph, so it marks the 0.5 line and does not test the protocol. Each is a single run on one GPU,
 so the levels are comparable with one another but not with Figure~\ref{fig:protocol_grid}
 (\ref{app:grid}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig2_architecture_inflation.pdf}
-\caption{Inflation across four trained models and an untrained control (single seed, one GPU; \ref{app:grid}).}
+\caption{Inflation across four trained models, with a random-score reference at chance level (single seed, one GPU; \ref{app:grid}).}
 \label{fig:architecture_inflation}
 \end{figure}
 
@@ -746,8 +750,8 @@ the other two visible.
 
 None of this is specific to our graph or to one model. Five external association matrices that share no data
 with ours each lose 0.26--0.37 AUROC between the protocols and land in the same 0.618--0.641 band
-(Table~\ref{tab:discrimination}); four trained models inflate by 0.24--0.31 while an untrained control does not
-move, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
+(Table~\ref{tab:discrimination}); four trained models inflate by 0.24--0.31, a graph-free MLP
+included, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
 weakness against a floor also appears in published work. Across the seven surveyed papers the trained models
 beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN~\cite{liu2024digamn}) to 3.3 below it (MEAHNE~\cite{huang2022meahne}), and on
 ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY~\cite{chamberlain2023buddy}. OGB's leaderboards already list such heuristics~\cite{ogb2026leaderboard}, and the
@@ -824,7 +828,7 @@ one dataset. The two failures compound on our graph, negative sampling carries m
 surveyed graphs, part of it label noise, and candidate columns that can never be positive raise the model-free floor on their own.
 Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the
 heuristic wins outright on MEAHNE's graph; on OGB it ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
-On our graph the inflation recurs across four trained models while an untrained control does not move, and
+On our graph the inflation recurs across four trained models, a graph-free MLP included, and
 cell typing survives the same audit by 32 points, so the effect follows the evaluation protocol, not the model.
 Under the corrected protocol our model exceeds its model-free floor by 3.6 points.
 

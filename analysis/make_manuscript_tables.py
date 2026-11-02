@@ -42,7 +42,7 @@ PRETTY = {
     "ablation_no_coexpr": "HGT, no co-expression edges",
     "mlp":                "MLP (no graph)",
     "ablation_no_mirna":  "HGT, no miRNA input (smoke test)",
-    "random":             "Untrained (control)",
+    "random":             "Random scores (reference)",
 }
 ORDER_FULL = ["hgt_v2", "homo_gcn", "ablation_no_coexpr", "mlp", "ablation_no_mirna", "random"]
 

@@ -65,7 +65,7 @@ PRETTY = {
     "homo_gcn":           "Homogeneous GCN",
     "ablation_no_coexpr": "HGT, no co-expression edges",
     "mlp":                "MLP (no graph)",
-    "random":             "Untrained (control)",
+    "random":             "Random scores (reference)",
 }
 ORDER = ["hgt_v2", "homo_gcn", "ablation_no_coexpr", "mlp", "random"]
 
@@ -76,7 +76,7 @@ SHORT = {
     "homo_gcn":           "GCN",
     "ablation_no_coexpr": "HGT, no\nco-expr.",
     "mlp":                "MLP\n(no graph)",
-    "random":             "Untrained\n(control)",
+    "random":             "Random\nscores",
 }
 
 
@@ -186,14 +186,14 @@ def fig2_architecture_inflation(grid: dict[str, dict[str, float]], out: Path) ->
                 fontsize=8, color=INK)
         flat = abs(delta) < 0.02
         ax.text(0.985, y + 0.30,
-                ("no change" if flat else f"inflation  +{delta:.3f}"),
+                ("chance level by construction" if flat else f"inflation  +{delta:.3f}"),
                 va="center", ha="right", fontsize=8, color=INK2 if flat else INK,
                 style="italic" if flat else "normal",
                 fontweight="normal" if flat else "bold")
 
     ax.set_yticks(list(ys))
     ax.set_yticklabels([PRETTY[m] for m in (r[0] for r in rows)], fontsize=9)
-    ax.set_xlim(0.44, 1.0)
+    ax.set_xlim(0.40, 1.0)
     ax.set_ylim(-0.7, len(rows) - 0.35)
     ax.set_xlabel("AUROC  (held-out test edges)", fontsize=8.5, color=INK2)
     ax.xaxis.grid(True, color=GRID, lw=0.8)
