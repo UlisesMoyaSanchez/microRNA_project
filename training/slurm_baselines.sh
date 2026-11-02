@@ -16,6 +16,11 @@
 # Usage:
 #   sbatch --export=ALL,CONFIG=configs/config_v3fixed_baselines_edgesplit.yaml \
 #       training/slurm_baselines.sh
+#   Only the genuinely untrained controls (no training; 5 init seeds), written to a
+#   suffixed table so the full grid's table is not overwritten:
+#   sbatch --export=ALL,CONFIG=configs/config_v3fixed_baselines_edgesplit.yaml,\
+#       RUN_ARGS="--only hgt_untrained,homo_gcn_untrained --init_seeds 0,1,2,3,4" \
+#       training/slurm_baselines.sh
 #   To skip training and only evaluate saved checkpoints:
 #   sbatch --export=ALL,SKIP_TRAINING=1 training/slurm_baselines.sh
 # =============================================================================
@@ -40,6 +45,7 @@ set -u
 
 CONFIG="${CONFIG:-configs/config_v2.yaml}"
 SKIP_TRAINING="${SKIP_TRAINING:-0}"
+RUN_ARGS="${RUN_ARGS:-}"
 
 echo "========================================"
 echo "Job:    ${SLURM_JOB_ID:-local}"
@@ -61,7 +67,7 @@ echo ""
 echo "Running baseline & ablation experiments..."
 python training/run_baselines.py \
     --config "${CONFIG}" \
-    ${EXTRA_ARGS}
+    ${EXTRA_ARGS} ${RUN_ARGS}
 
 echo ""
 echo "========================================"
@@ -71,8 +77,10 @@ echo "Results:"
 # would fail the job *after* the work succeeded — a false failure, the mirror image of the
 # silent false success this project keeps finding.
 RESULT_TAG="$(python -c "import sys,yaml,pathlib; print(pathlib.Path(yaml.safe_load(open(sys.argv[1]))['training']['checkpoint_dir']).name)" "${CONFIG}")"
-RESULT_TSV="results/comparison/comparison_table_${RESULT_TAG}.tsv"
-if [[ -f "${RESULT_TSV}" ]]; then
+# With --only, run_baselines.py appends "__only-<rows>" to the stem; take the newest match.
+RESULT_TSV="$(ls -t results/comparison/comparison_table_${RESULT_TAG}.tsv \
+    results/comparison/comparison_table_${RESULT_TAG}__only-*.tsv 2>/dev/null | head -1 || true)"
+if [[ -n "${RESULT_TSV}" && -f "${RESULT_TSV}" ]]; then
     cat "${RESULT_TSV}"
 else
     echo "ERROR: expected results table not found: ${RESULT_TSV}"

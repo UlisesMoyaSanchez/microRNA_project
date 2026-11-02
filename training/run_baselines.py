@@ -72,6 +72,13 @@ def parse_args() -> argparse.Namespace:
                    help="Override num_epochs for baselines (default: use config value)")
     p.add_argument("--skip_training", action="store_true",
                    help="Skip training — only evaluate existing checkpoints")
+    p.add_argument("--only", default=None,
+                   help="Comma-separated row names to run (e.g. hgt_untrained,homo_gcn_untrained). "
+                        "The table is then written with an `__only-<rows>` suffix so the full "
+                        "grid's table for this cell is never overwritten.")
+    p.add_argument("--init_seeds", default="0",
+                   help="Comma-separated weight-init seeds for the *_untrained rows; one row per "
+                        "seed. The edge split and negative samplers stay at the config seed.")
     return p.parse_args()
 
 
@@ -458,6 +465,39 @@ def main() -> None:
         ),
     ]
 
+    # ── Genuinely untrained controls ───────────────────────────────────────
+    # `random` above returns torch.randn per pair and never reads the graph, so it sits at
+    # chance under ANY protocol by construction and cannot test the protocol. These rows are
+    # the real control: the same architectures at their random initialisation, never
+    # trained, scored by the same evaluator on the same split. One row per init seed; the
+    # split and samplers stay at the config seed. Added 2026-11-02 after the independent
+    # audit (BITACORA) found an untrained GCN does move between protocols via degree.
+    init_seeds = [int(x) for x in str(args.init_seeds).split(",") if x.strip()]
+    for k in init_seeds:
+        experiments.append((
+            f"hgt_untrained_s{k}",
+            lambda: miRNAGraphTransformer.from_config(cfg, metadata, num_cell_types),
+            graph, None,
+        ))
+        experiments.append((
+            f"homo_gcn_untrained_s{k}",
+            lambda: HomoGCNBaseline.from_config(cfg, metadata, num_cell_types),
+            graph, None,
+        ))
+
+    only = [x.strip() for x in args.only.split(",")] if args.only else None
+    if only:
+        def _wanted(name: str) -> bool:
+            return any(name == o or (o.endswith("_untrained") and name.startswith(o + "_s"))
+                       for o in only)
+        experiments = [e for e in experiments if _wanted(e[0])]
+        if not experiments:
+            raise SystemExit(f"--only {args.only!r} matched no experiment")
+        log.info(f"--only: running {[e[0] for e in experiments]}")
+    else:
+        # Default run keeps the original six rows only; untrained controls are opt-in.
+        experiments = [e for e in experiments if "_untrained_s" not in e[0]]
+
     # ── Pre-trained transductive reference row (optional) ──────────────────
     # A checkpoint trained with every miRNA→gene edge as a supervision target, so the
     # "held-out" edges of the split above are not held out *for it*. Scoring it on them
@@ -573,6 +613,9 @@ def main() -> None:
             exp_train_loader = train_loader
             exp_val_loader   = val_loader
 
+        if "_untrained_s" in name:
+            torch.manual_seed(int(name.rsplit("_s", 1)[1]))
+            torch.cuda.manual_seed_all(int(name.rsplit("_s", 1)[1]))
         model = model_fn().to(device)
 
         # Warm up lazy linears BEFORE counting parameters or loading checkpoints.
@@ -590,8 +633,8 @@ def main() -> None:
         n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         log.info(f"  Parameters: {n_params:,}")
 
-        if name == "random":
-            # Random baseline: no training, just evaluate
+        if name == "random" or "_untrained_s" in name:
+            # No training: score the model as constructed (random init for *_untrained).
             eval_ckpt = ""
         elif args.skip_training and ckpt_path and os.path.exists(ckpt_path):
             log.info("  Skip-training mode: loading existing checkpoint")
@@ -647,6 +690,8 @@ def main() -> None:
     # sampler cell, and a fixed `comparison_table.tsv` meant four runs silently overwriting
     # each other until only the last survived.
     run_tag = Path(tcfg["checkpoint_dir"]).name
+    if only:
+        run_tag += "__only-" + "-".join(only)
     cols = ["model", "protocol", "trained_with", "link_loss", "clf_loss",
             "auroc_matched", "auprc_matched", "auroc_uniform", "auprc_uniform",
             "auroc_transd", "cell_acc", "cell_f1"]
