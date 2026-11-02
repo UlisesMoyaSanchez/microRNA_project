@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-02T22:18:57.120840+00:00",
+  "generated_utc": "2026-11-02T23:22:01.803346+00:00",
   "seeds": [
     42,
     43,
@@ -1100,7 +1100,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.04424040066777961,
@@ -1119,7 +1119,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.04841402337228713,
@@ -1138,7 +1138,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.0489705063995548,
@@ -1157,7 +1157,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.04757929883138564,
@@ -1252,7 +1252,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.04424040066777961,
@@ -1271,7 +1271,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.04841402337228713,
@@ -1290,7 +1290,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.0489705063995548,
@@ -1309,7 +1309,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.04757929883138564,
@@ -1404,7 +1404,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.05322687957418496,
@@ -1423,7 +1423,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.05123087159015305,
@@ -1442,7 +1442,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.05123087159015304,
@@ -1461,7 +1461,7 @@
         "edge_leakage": "error",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.05522288755821689,
@@ -1556,7 +1556,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.05322687957418496,
@@ -1575,7 +1575,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.05123087159015305,
@@ -1594,7 +1594,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.05123087159015304,
@@ -1613,7 +1613,7 @@
         "edge_leakage": "ok",
         "negative_matching": "ok",
         "model_free_baseline": "info",
-        "dead_candidates": "warn"
+        "dead_candidates": "info"
       },
       "heldout_in_encoder_fraction": 0.0,
       "tv_eval_neg_vs_heldout_pos": 0.05522288755821689,
