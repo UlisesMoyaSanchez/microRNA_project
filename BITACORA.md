@@ -354,6 +354,46 @@ que una prueba de estrés independiente no encontró ningún conjunto con fuga r
 `encoder_edges`), y que las falsas alarmas con pocos positivos se corrigieron antes de revalidar, sin cambios en los
 conteos. El Abstract ("no false alarms") sigue siendo cierto para la validación y no se tocó.
 
+### (e) hecha: por qué nuestro piso corregido estaba ~0.01 arriba del del auditor
+
+**Paso 1, promediar particiones (job 566, `4ea3507`).** `eval_hmdd_survey_topology_baseline.py` ganó `--seed`, y
+`training/slurm_survey_floor_seeds.sh` corre los 5 grafos × 2 regímenes × semillas 42, 7, 123, 2024 (las del grid
+entrenado). La semilla 42 reproduce **exactamente** los artefactos publicados. Mejor heurística, media de 4 particiones,
+contra el auditor (mejor de los mismos 4 heurísticos, 5 particiones):
+
+| Grafo | Corregido: publicado (s42) | Nuestro, 4 particiones | Auditor | Δ | Welch z |
+|---|---|---|---|---|---|
+| canonical5430 | 0.5683 | 0.5572 ± 0.0074 | 0.5501 ± 0.0065 | +0.007 | +1.5 |
+| cksnp_gnn | 0.5591 | 0.5545 ± 0.0032 | 0.5478 ± 0.0036 | +0.007 | +3.0 |
+| digamn | 0.5580 | 0.5582 ± 0.0031 | 0.5472 ± 0.0064 | +0.011 | +3.4 |
+| meahne | 0.5648 | 0.5640 ± 0.0013 | 0.5533 ± 0.0040 | +0.011 | +5.6 |
+| couplemda | 0.5789 | 0.5760 ± 0.0030 | 0.5596 ± 0.0032 | +0.017 | +8.0 |
+
+En la celda convencional coincidimos (|Δ| ≤ 0.007). Promediar particiones solo explicó canonical5430, que con una sola
+partición había caído alto por azar (+0.011 sobre su media). En los otros cuatro el sesgo es sistemático.
+
+**Paso 2, aislar el muestreador (`analysis/compare_matched_samplers.py`, job 568, `92bc6c6`).** Mismas 5 particiones por
+grafo, variando una cosa a la vez:
+- **Contenedores:** los nuestros (de 0 al máximo) y los del auditor (del mínimo al máximo, `np.digitize`) dan **resultados
+  idénticos**. No era eso.
+- **Intentos por positivo antes de caer a un negativo uniforme:** **esa es la causa.** Con 16 intentos (el default de
+  `training/splits.py::sample_degree_matched_negatives`) el fallback es 3.1–6.2 %; con 50 baja a 1.8–5.2 %, y con 1000 ya
+  no baja más (el resto son contenedores realmente agotados para miRNAs muy conectados). Ese 1.2–1.6 % extra de negativos
+  uniformes, fáciles de separar, sube el piso **0.008–0.011**. Con 50 intentos nuestro piso coincide con el del auditor:
+  0.5497 vs 0.5501, 0.5470 vs 0.5478, 0.5462 vs 0.5472, 0.5528 vs 0.5533. En CoupleMDA queda 0.5695 vs 0.5596, +0.010,
+  dentro de la tolerancia.
+
+**Qué implica.** El mismo muestreador con 16 intentos se usó para **todas** las celdas emparejadas del paper: los pisos y
+también los AUROC corregidos de los modelos entrenados (0.618–0.641 y el 0.6276 del titular). Así que los números
+corregidos absolutos están levemente inflados, porque ~1.5 % de sus negativos son uniformes. Eso va **en la dirección
+conservadora**: la caída real entre protocolos sería algo mayor, no menor. Los márgenes modelo-sobre-piso usan el mismo
+muestreador en los dos lados, así que se afectan menos. No cambia ninguna conclusión, pero los decimales absolutos no son
+exactos.
+
+**Decisión pendiente:** (i) documentarlo como sesgo conservador sin cambiar cifras, o (ii) subir el default a ≥50 intentos
+y re-evaluar los checkpoints existentes. Re-evaluar es barato (solo inferencia); re-entrenar no haría falta, porque los
+negativos de entrenamiento no cambian la evaluación de un checkpoint ya entrenado.
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
