@@ -773,7 +773,7 @@ Given how directly the inflation problem responds to a small set of checks, we p
 
 \input{tables/table5_correct_protocol_checklist.tex}
 
-\texttt{protocheck} takes the train and held-out pairs of a link-prediction experiment and, optionally, the edges the encoder sees, the training and evaluation negatives and the model's AUROC. It reports each check as ok, warn or fail; a check whose input was not supplied is reported as unchecked, never as passed. It needs only numpy, scipy and scikit-learn, and runs from the command line, from Python, or in a Colab notebook on the user's own files (Data availability). It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. The tool inspects the experiment's data, not the model: the user runs it on the saved splits and negatives before reporting a number, and revises the split or the sampler if a check fails. It takes the supplied edges as given, so it shows that the files are consistent with the protocol, not that the user's code behaves as the files say. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs.
+\texttt{protocheck} takes the train and held-out pairs of a link-prediction experiment and, optionally, the edges the encoder sees, the training and evaluation negatives and the model's AUROC. It reports each check as ok, warn or fail; a check whose input was not supplied is reported as unchecked, never as passed. It needs only numpy, scipy and scikit-learn, and runs from the command line, from Python, or in a Colab notebook on the user's own files (Data availability). It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. The tool inspects the experiment's data, not the model: the user runs it on the saved splits and negatives before reporting a number, and revises the split or the sampler if a check fails. It takes the supplied edges as given, so it shows that the files are consistent with the protocol, not that the user's code behaves as the files say. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs. The degree-profile check compares each distance with what sampling noise alone produces at the observed sample sizes, so a small test set is not flagged for histogram noise, and it warns outright when fewer than 30 held-out positives are given; from the command line, a run whose leakage check could not be performed exits with a non-zero status rather than as a pass.
 
 We validated the implementation, not the claim. On the five HMDD-type graphs under the $2\times2$ grid,
 where the true state of every cell is known by construction (four seeds, 80 audits), the leakage check
@@ -787,7 +787,13 @@ failed on two graphs, DiGAMN and CoupleMDA, because it compared a four-split mea
 spread; we replaced it with the Welch comparison after seeing the failure. These results show that the
 implementation reproduces our audit scripts. They do not show that its thresholds are right or that it finds
 leakage beyond exact edges, no model was trained, so the margin check was exercised only as a floor
-computation, and the empty-column check is not independently validated.
+computation, and the empty-column check is not independently validated. An independent stress test with
+synthetic cases built to break the tool found no leaked set reported as clean once the encoder's edges were
+supplied; the false alarms it found on small test sets, and the zero exit status of an unchecked leakage
+test, were fixed before the validation above was re-run, with unchanged detection counts.
+%% STAGE (2026-11-02): fixes E-1..E-6 from the independent audit (BITACORA 2026-11-02), commit f091c10;
+%%   validation re-run as job 565 (b621390): 40/40, 40/40, 0 false alarms, ddi 2/2, parity 7.35e-10.
+%%   Only change: dead_candidates goes warn -> info on the degree-matched cells of MEAHNE/CoupleMDA.
 
 On a published paper's own files the tool behaves as intended, and the case also shows its main limit.
 MGCNSS~\cite{tian2024mgcnss} is the one surveyed paper whose repository ships both its five

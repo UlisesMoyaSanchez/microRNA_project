@@ -318,6 +318,42 @@ grado mientras la GCN bipartita del auditor sí. No conviene poner en el resumen
 `%% STAGE` en `main.tex` lo deja dicho. La Fig. 2 no cambia. Si un revisor lo pide, el experimento que lo contestaría es
 correr la GCN del auditor sobre nuestro grafo, o la nuestra sobre `canonical5430`.
 
+### (d) hecha: los hallazgos del auditor sobre `protocheck`, arreglados y revalidados
+
+Código en `f091c10`; validación en `b621390`.
+
+- **E-2 (código de salida).** Si no se pasan `encoder_edges`, la fuga queda `unchecked` y la CLI ahora sale con **3**, no
+  con 0, salvo con `--allow-unchecked`. Así un pipeline que se detiene con cualquier código distinto de 0 ya no acepta
+  MGCNSS. Códigos: 0 limpio, 1 falla, 2 uso, 3 fuga sin revisar.
+- **E-4 (falsas alarmas con pocos positivos).** Cada distancia TV entre histogramas de grado se compara además con el
+  percentil 95 de su **nulo por remuestreo**: TV entre dos histogramas multinomiales del mismo perfil combinado, con los
+  mismos n, 500 sorteos. Avisa solo si supera **el umbral fijo y también el nulo**; si supera solo el umbral, queda como nota
+  `info` con ambos números. Con menos de 30 positivos de prueba, `model_free_baseline` avisa que el piso no se puede leer, y
+  un conjunto vacío de positivos o de negativos da un `ValueError` claro en vez del error de sklearn.
+  Costo: con muestras chicas el check pierde potencia para detectar un desajuste real. Es la contraparte honesta de no
+  disparar por ruido.
+- **E-6 (columnas muertas).** Con `eval_neg`, `dead_candidates` juzga **dónde caen esos negativos**: si caen en columnas
+  muertas, `warn`; si la matriz tiene muchas columnas muertas pero los negativos las evitan, `info` con los dos números. Sin
+  `eval_neg` sigue avisando por la fracción de columnas.
+- **E-3 (bases mixtas).** `--neg-index-base` (y `load_labeled_pairs(..., neg_index_base=)`) para los archivos
+  (fila, col, etiqueta) como los de MGCNSS.
+- **E-1 (README).** Ya no dice que cada ejemplo dispara solo su check; explica por qué `dead_columns` dispara tres. El README
+  documenta además el código 3, el nulo y el mínimo de 30.
+- **E-5** (fuga por features) no se toca: está declarada en el alcance y sigue en Limitaciones.
+- **Tests:** 7 nuevos, uno por arreglo. Entre ellos, el caso de pocos positivos del auditor: grafo 300×250, negativos
+  emparejados, 20 semillas con 10, 30 y 100 positivos de prueba, que debe dar ≤2 avisos de 20. Los 24 pasan, en el laptop
+  y en la DGX.
+
+**Validación de las 80 auditorías, relanzada (job 565).** `edge_leakage` y `negative_matching` siguen en 40/40 detectadas
+y 0 falsas alarmas; ogbl-ddi 2/2; paridad 7.35e-10; cruces del piso iguales (Welch |z| ≤ 1.69). **El único cambio** son 16
+celdas de `dead_candidates` que pasan de `warn` a `info`: las celdas con negativos emparejados de MEAHNE y CoupleMDA.
+Las uniformes siguen en `warn`. Es exactamente el efecto buscado en E-6.
+
+**Manuscrito:** el párrafo de `protocheck` describe el nulo, el mínimo de 30 y el código de salida. El de validación añade
+que una prueba de estrés independiente no encontró ningún conjunto con fuga reportado como limpio (dados los
+`encoder_edges`), y que las falsas alarmas con pocos positivos se corrigieron antes de revalidar, sin cambios en los
+conteos. El Abstract ("no false alarms") sigue siendo cierto para la validación y no se tocó.
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
