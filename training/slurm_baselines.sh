@@ -17,10 +17,11 @@
 #   sbatch --export=ALL,CONFIG=configs/config_v3fixed_baselines_edgesplit.yaml \
 #       training/slurm_baselines.sh
 #   Only the genuinely untrained controls (no training; 5 init seeds), written to a
-#   suffixed table so the full grid's table is not overwritten:
-#   sbatch --export=ALL,CONFIG=configs/config_v3fixed_baselines_edgesplit.yaml,\
-#       RUN_ARGS="--only hgt_untrained,homo_gcn_untrained --init_seeds 0,1,2,3,4" \
-#       training/slurm_baselines.sh
+#   suffixed table so the full grid's table is not overwritten. RUN_ARGS contains commas,
+#   and `sbatch --export=A=..,B=..` splits on commas, so pass it through the environment:
+#   CONFIG=configs/config_v3fixed_baselines_edgesplit.yaml \
+#   RUN_ARGS="--only hgt_untrained,homo_gcn_untrained --init_seeds 0,1,2,3,4" \
+#       sbatch --export=ALL training/slurm_baselines.sh
 #   To skip training and only evaluate saved checkpoints:
 #   sbatch --export=ALL,SKIP_TRAINING=1 training/slurm_baselines.sh
 # =============================================================================
