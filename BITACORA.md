@@ -197,6 +197,56 @@ reportan los papers, así que siguen en pie. Por la regla de la guía, C4 queda 
 **reproducida en su dirección** (la mayoría no reporta baseline sin aprendizaje); el texto nuevo ya no afirma la condición
 refutada.
 
+### (b) hecha: las celdas de la encuesta en disputa, adjudicadas contra la fuente
+
+Se bajó el texto completo de los 13 papers en disputa por E-utilities (`efetch db=pmc`, XML) y, donde hizo falta, las figuras
+desde el paquete de Europe PMC. Cada celda se resolvió con el codebook ciego y una cita textual, y quedó registrada como fila
+nueva en `results/literature_survey_adjudication.tsv` (15 filas, columna `upheld` = `ours` o `auditor`).
+
+**Dos celdas nuestras cambian (el auditor tenía razón):**
+- **SaeGraphDTI, D3: `all_unlabeled` → `not_described`.** Nuestra cita ("the rest as negative examples") la contradice la
+  Tabla 1 del propio paper: E 2,920/2,920, GPCR 3,098/3,099, IC 1,475/1,475, conjuntos balanceados heredados de Bian et al.
+  Así que "el resto" no puede ser el régimen evaluado, y el paper no dice cómo se eligieron los negativos.
+- **DTI-MHAPR, D4: `unclear` → `no`.** FSI se nombra en el texto como comparado, pero no está en las Tablas 2–3, que solo
+  traen siete modelos entrenados. D4 cuenta lo que hay en una tabla o figura, y `unclear` es para comparadores que no se pueden
+  identificar.
+
+**Se sostienen las nuestras, con la cita ahora registrada:**
+- **D4, CKSNP-GNN y Orro (`yes`):** los comparadores sin entrenar están en sus tablas (PBMDA 91.72 y LLCMDA 91.90; TCRWMDA
+  92.09, WBSMDA 81.85 e ICFMDA 90.23). El `unclear` del auditor vino de no haber recuperado las tablas.
+- **D4, HGDTI (`no`):** "six predictive models" incluye al propio HGDTI; la Fig. 5 muestra exactamente los cinco comparadores
+  nombrados, todos entrenados.
+- **D1, GONNMDA, DGNMDA, HiGLDP y SaeGraphDTI (`yes`):** el "dataset" que se divide en folds está definido como pares
+  positivos y negativos. En GONNMDA es limítrofe porque la unidad se define en otra sección (3.1) que la partición (2.1).
+- **D2, SaeGraphDTI (`yes`):** cita explícita de que la red se construye con un subconjunto B < A "porque incluir todos los
+  pares inflaría el rendimiento". **D2, MGCNSS (`no`):** se sostiene la adjudicación del 2026-09-06 (M = [IM A; Aᵀ ID] con
+  la A completa); la pista E del propio auditor midió 1,086/1,086 positivos de prueba en el grafo.
+- **D3, NIMGSA, HMCDA, HybridGNN y MEAHNE:** se mantienen como negativos de pares no anotados. En NIMGSA y HMCDA es
+  **diferencia de lectura**: el paper describe solo un régimen (la pérdida sobre toda Y; el muestreo 5:1 de entrenamiento) y
+  nosotros leemos que la regla 1 del codebook ("clasificar el régimen evaluado") solo aplica cuando se describen dos. El auditor
+  exige que el régimen de evaluación esté dicho. En HybridGNN la uniformidad viene del comportamiento documentado de
+  `RandomLinkSplit`, no de la prosa (limítrofe).
+
+**Tolerancia de la guía (≤2 papers por dimensión), después de adjudicar:**
+- D2 y D4 quedan dentro.
+- D1 sigue en 4, pero son papers donde la unidad está dicha en otra sección.
+- D3 sigue en 4 (NIMGSA, HMCDA, HybridGNN y MEAHNE), por la diferencia de lectura de la regla 1. Si se adoptara la lectura
+  estricta del auditor, nuestro conteo bajaría de 16 a 14.
+
+Lo dejamos documentado en vez de forzar la coincidencia.
+
+**Cambios en el manuscrito:**
+- Introducción (l. ~247) y encuesta (l. ~373, ~394): "14 report no model-free baseline" → 15; "17 draw their negatives from
+  unlabeled pairs" → 16; "two papers never say" → three.
+- Párrafo "Getting the split right…": "All seven papers that strip held-out edges still draw their negatives from unlabeled
+  pairs" → seis de siete, y SaeGraphDTI no dice cómo. "Cuatro de los siete sin baseline" no cambia.
+- Tabla 3: la celda de SaeGraphDTI pasa a "not described (balanced sets inherited from prior work)".
+- `literature_survey.tsv` (SaeGraphDTI D3, DTI-MHAPR D4) y `literature_survey_d4_reaudit.tsv` (DTI-MHAPR D4).
+- Comentario `%% STAGE` en `main.tex`.
+- Compila limpio.
+
+Los demás conteos (D2: 7 yes / 1 no / 11 unclear de 19; seis con baseline) no cambian.
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas

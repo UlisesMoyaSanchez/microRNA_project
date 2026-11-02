@@ -244,9 +244,9 @@ ahmad2026hybridgnn,yu2022hgdti,cao2024ngcn,zhang2024kmerpmtf,orro2026mirnadiseas
 li2025couplemda,zeng2025gonnmda,liu2024digamn,lu2024dgnmda,yu2022hlgnnmda,
 huang2022meahne,li2022cksnpgnn,liang2023hmcda,wang2026higldp,xiong2025gpsdti,
 zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A literature
-audit of 21 papers in this space found three gaps behind those numbers. First, 14 report no
+audit of 21 papers in this space found three gaps behind those numbers. First, 15 report no
 model-free baseline (a simple scorer with no trained parameters, such as node degree, used as a
-sanity-check floor). Second, 17 draw their negatives from unlabeled pairs without
+sanity-check floor). Second, 16 draw their negatives from unlabeled pairs without
 discussion. Third, for 11 of the 19 papers where the question applies (the other two never
 propagate over an interaction graph), it is unclear whether held-out edges are removed from
 the encoder's input (full results in Related Work below). The last two
@@ -370,7 +370,7 @@ Against that backdrop, we surveyed 21 papers in the miRNA-target and adjacent
 biomolecule-interaction link-prediction literature (miRNA-disease, circRNA-disease,
 lncRNA-disease, drug-target, and gene-disease), reading each paper's methods section in
 full rather than inferring its protocol from the abstract
-(Table~\ref{tab:literature_survey}). Three findings matter here. First, 14 of the 21
+(Table~\ref{tab:literature_survey}). Three findings matter here. First, 15 of the 21
 report no model-free baseline. The six that do report a classical untrained method as one
 more competitor in a comparison table, never as a floor, and none states its margin over
 that comparator. In the five that print the numbers in the text or a table, the headline
@@ -391,9 +391,15 @@ gene-disease ranking task. A narrow margin is common but not universal.
 %%   Cao et al. AAAI 2015 (recursive-NN summarization), a citation error; against RWR alone the
 %%   margin is 15.3, so the conclusion does not depend on how RWRH is classified. Do not
 %%   restore "few points" or "narrow" as a general claim about the surveyed margins.
-Second, 17 draw their negatives from unlabeled pairs, uniformly sampled or taken wholesale,
+Second, 16 draw their negatives from unlabeled pairs, uniformly sampled or taken wholesale,
 without discussing the alternative; only MGCNSS~\cite{tian2024mgcnss} and
-HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and two papers never say.
+HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and three papers never say.
+%% STAGE (2026-11-02): counts re-adjudicated after the independent audit (BITACORA 2026-11-02).
+%%   D3: SaeGraphDTI moved from all-unlabeled to not described -- its own Table 1 lists balanced
+%%   sets (e.g. E: 2,920 positive / 2,920 negative) inherited from Bian et al., so "the rest as
+%%   negative" cannot be the evaluation regime, and the paper never says how they were drawn.
+%%   D4: DTI-MHAPR moved from unclear to no -- FSI is named in prose but absent from Tables 2-3,
+%%   and D4 counts only comparators in a results table or figure. Hence 14 -> 15 and 17 -> 16.
 Third, in 11 of the 19 papers where the question applies, it is unclear from the methods
 section whether held-out edges are removed from the encoder's input. This is a reporting
 gap, not confirmed leakage: after adjudication only MGCNSS~\cite{tian2024mgcnss} clearly leaks and 7 clearly strip
@@ -404,8 +410,9 @@ lowers AUROC (reported as AUC) from 0.9874 to 0.9437, and its public code also l
 test associations in the graph the encoder propagates over and keeps the epoch with the best
 test AUROC.
 
-Getting the split right is not protective on its own. All seven papers that strip held-out
-edges still draw their negatives from unlabeled pairs, none of them degree-matched, and four
+Getting the split right is not protective on its own. Six of the seven papers that strip held-out
+edges still draw their negatives from unlabeled pairs and the seventh, SaeGraphDTI~\cite{zhang2025saegraphdti},
+does not say how it draws them; none is degree-matched, and four
 of the seven report no model-free baseline. The two failure modes are independent, so fixing
 the split is not evidence against the popularity-biased negative sampling this paper
 identifies, which is why, as Results shows, correcting both is super-additive rather than
