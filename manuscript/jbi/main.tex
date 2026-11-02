@@ -708,7 +708,16 @@ Nor is the inflation specific to one model. Four trained models (the transformer
 homogeneous GCN, a co-expression ablation and a graph-free MLP) inflate by 0.24--0.31 AUROC
 between the two protocols, the MLP included (Figure~\ref{fig:architecture_inflation}). The
 random-score reference stays at chance in every cell ($-0.004$), as it must: it ignores the
-graph, so it marks the 0.5 line and does not test the protocol. Each is a single run on one GPU,
+graph, so it marks the 0.5 line and does not test the protocol. The test is the same transformer and
+GCN left untrained: over five random initialisations both also stay at chance in every cell (inflation
+$-0.004 \pm 0.013$ and $-0.006 \pm 0.024$; Table~\ref{tab:architecture_grid}), so on our graph the inflation
+comes with training under the protocol. This depends on the architecture: an untrained GCN with a
+dot-product decoder over a bipartite association matrix can already rank by degree, so the result
+is not a claim about untrained networks in general. Each trained row is a single run on one GPU,
+%% STAGE (2026-11-02): the untrained rows are cited HERE ONLY (the "minimal" option chosen by the
+%%   author). Abstract, highlights, contributions, discussion and conclusion rest on the MLP. We do
+%%   not know why our untrained models miss degree while the independent audit's bipartite GCN
+%%   picks it up (BITACORA 2026-11-02), so do not promote this to the abstract without that answer.
 so the levels are comparable with one another but not with Figure~\ref{fig:protocol_grid}
 (\ref{app:grid}).
 

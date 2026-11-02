@@ -310,7 +310,13 @@ desde las células), no. Así que en nuestro grafo **la afirmación "un control 
 control de verdad**, pero depende de la arquitectura y no se generaliza a "las redes sin entrenar no inflan". El
 `RandomBaseline` sigue sin probar nada y no debe volver a citarse como control.
 
-**Pendiente:** decidir si el manuscrito vuelve a citar el control, ahora con estas dos filas y su salvedad de arquitectura.
+**Decisión (mismo día): alternativa mínima.** Las dos filas entran **solo** en la Tabla S1 (separadas por una línea, con la
+media de 5 inicializaciones y el caption explicando el diseño) y en una frase de Resultados (§ arquitecturas), con la
+salvedad de que depende de la arquitectura. Abstract, highlights, contribuciones, Discusión y Conclusión siguen apoyándose
+en el MLP sin grafo. Razón: el MLP ya sostiene el argumento, y no sabemos por qué nuestras redes sin entrenar no captan el
+grado mientras la GCN bipartita del auditor sí. No conviene poner en el resumen algo cuyo mecanismo no entendemos. Un
+`%% STAGE` en `main.tex` lo deja dicho. La Fig. 2 no cambia. Si un revisor lo pide, el experimento que lo contestaría es
+correr la GCN del auditor sobre nuestro grafo, o la nuestra sobre `canonical5430`.
 
 ---
 
