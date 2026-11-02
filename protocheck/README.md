@@ -13,7 +13,11 @@ only (no torch, no PyG).
 
 A check whose input you did not supply is reported as `unchecked`, never as `ok`.
 Thresholds are heuristics (`protocheck.DEFAULT_THRESHOLDS`), not validated cut-offs; read the
-numbers in each finding rather than the status word.
+numbers in each finding rather than the status word. The degree-profile distances warn only when
+they also exceed what sampling noise produces at your sample sizes, and fewer than 30 held-out
+positives is itself a warning: the floor and the margin are not readable at that size.
+`dead_candidates` judges the evaluation negatives you supply, not only the share of empty
+columns: a padded matrix scored with degree-matched negatives is reported as `info`.
 
 ## Use
 
@@ -35,7 +39,10 @@ Other input layouts (`python -m protocheck -h`): an HMDD-style 0/1 matrix plus t
 pairs (`--matrix M.csv --heldout-pos F --encoder-edges matrix`), (row, col, label) triples
 (`--labeled-train/--labeled-test`), OGB `split_edge` (`protocheck.io.from_ogb_split_edge`) and
 this repo's `EdgeSplit` (`protocheck.io.from_pyg_edge_split`). Homogeneous undirected graphs:
-`--mode homogeneous`. Exit status 1 if any check fails, 2 on a usage error.
+`--mode homogeneous`. Exit status 1 if any check fails, 2 on a usage error, and 3 if nothing
+failed but the leakage check could not run because no encoder edges were given
+(`--allow-unchecked` accepts that and exits 0). (row, col, label) files whose negatives use a
+different index base than their positives take `--neg-index-base`.
 
 ## Using it in your own project
 
@@ -60,7 +67,8 @@ pipeline does not change; you add one step between building the splits and repor
    `notebooks/protocheck_colab.ipynb`, upload the files and fill in the names.
 4. Read each finding (`ok`, `warn`, `fail` or `unchecked`). On `fail`, fix the split or the sampler and
    retrain; on a small margin over the model-free floor, report it next to your number.
-5. Optional: call it at the end of your evaluation script and stop on exit status 1.
+5. Optional: call it at the end of your evaluation script and stop on any non-zero exit status
+   (1 = a check failed, 3 = leakage was not checked).
 
 Two things to keep in mind. The tool takes the files as given: if `encoder_edges` is not what your code
 really feeds the encoder, it can report `ok` wrongly, so build that file from the same object your model
@@ -82,7 +90,9 @@ any published number is inflated.
 
 ## Verification
 
-`pytest tests/test_protocheck.py` checks that each example triggers its own check and no
-other, and that the scorers reproduce `training/eval_topology_baseline.py::build_scorers`
+`pytest tests/test_protocheck.py` checks that each example triggers its own check (the
+`dead_columns` example also trips `negative_matching` and `model_free_baseline`, mechanically:
+uniform negatives on empty columns both skew the degree profile and inflate the floor; every
+other example triggers its own check and no other), and that the scorers reproduce `training/eval_topology_baseline.py::build_scorers`
 and the OGB formulas. `python analysis/validate_protocheck.py` runs the tool on the paper's
 graphs under the 2x2 protocol grid; read its docstring for what that does and does not show.

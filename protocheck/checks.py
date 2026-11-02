@@ -37,6 +37,14 @@ DEFAULT_THRESHOLDS = {
     # Total-variation distance between two degree-bin histograms (0 = identical, 1 = disjoint).
     "neg_mismatch_tv_warn": 0.10,   # train negatives vs eval negatives
     "neg_vs_pos_tv_warn": 0.20,     # eval negatives vs the held-out positives
+    # A TV distance only warns if it ALSO exceeds this quantile of its sampling null: the TV
+    # between two histograms drawn from the same distribution, at the same sample sizes.
+    # Without it, small test sets trip the fixed thresholds on noise alone (independent
+    # audit 2026-11-02, finding E-4: 20/40 clean protocols warned at 100 test positives).
+    "tv_null_quantile": 0.95,
+    "tv_null_draws": 500,
+    # Fewer held-out positives than this and the model-free floor is too noisy to read.
+    "min_heldout_positives": 30,
     # AUROC points a trained model must clear the best no-learning heuristic by.
     "margin_warn": 0.05,
 }
@@ -115,6 +123,23 @@ def _tv(p: np.ndarray, q: np.ndarray) -> float:
 def _bin_hist(cols: np.ndarray, col_bins: np.ndarray, n_bins: int) -> np.ndarray:
     h = np.bincount(col_bins[cols], minlength=n_bins).astype(float)
     return h / max(h.sum(), 1.0)
+
+
+def _bin_counts(cols: np.ndarray, col_bins: np.ndarray, n_bins: int) -> np.ndarray:
+    return np.bincount(col_bins[cols], minlength=n_bins).astype(np.int64)
+
+
+def _tv_null_quantile(ca: np.ndarray, cb: np.ndarray, rng, draws: int, q: float) -> float:
+    """Quantile q of the TV distance between two histograms of sizes |a| and |b| drawn from
+    the SAME distribution (their pooled histogram). The fixed TV thresholds ignore sample
+    size; this is what a TV of that size looks like when nothing is mismatched."""
+    na, nb = int(ca.sum()), int(cb.sum())
+    if na == 0 or nb == 0:
+        return 1.0
+    p = (ca + cb) / (na + nb)
+    a = rng.multinomial(na, p, size=draws) / na
+    b = rng.multinomial(nb, p, size=draws) / nb
+    return float(np.quantile(0.5 * np.abs(a - b).sum(axis=1), q))
 
 
 # ── Negative samplers (used by examples, tests and the baseline when none is supplied) ──
@@ -330,9 +355,13 @@ def check_leakage(n_cols, heldout_pos, *, encoder_edges=None, encoder_edges_rev=
 
 def check_negative_matching(n_rows, n_cols, train_pos, heldout_pos, *, train_neg=None,
                             eval_neg=None, declared_samplers=None, thresholds=None,
-                            n_bins=N_DEGREE_BINS, undirected=False) -> Finding:
+                            n_bins=N_DEGREE_BINS, undirected=False, seed=0) -> Finding:
     """Empirical train-vs-eval negative distribution, in column-degree bins computed from
-    TRAINING edges only (training/splits.py: binning on the full edge set leaks structure)."""
+    TRAINING edges only (training/splits.py: binning on the full edge set leaks structure).
+
+    A TV distance warns only if it exceeds both its fixed threshold and the
+    `tv_null_quantile` of its sampling null at the observed sample sizes, so a small test
+    set is not flagged for histogram noise."""
     name = "negative_matching"
     thr = {**DEFAULT_THRESHOLDS, **(thresholds or {})}
     ev: dict = {}
@@ -349,27 +378,42 @@ def check_negative_matching(n_rows, n_cols, train_pos, heldout_pos, *, train_neg
                        "were not inspected. Pass the negatives your reported metric used.", ev)
     tr = as_pairs(train_pos)
     col_bins = degree_bins(column_degree(tr, n_cols, undirected), n_bins)
-    hist = lambda p: _bin_hist(_cols(as_pairs(p), undirected), col_bins, n_bins)  # noqa: E731
-    eval_h, pos_h = hist(eval_neg), hist(heldout_pos)
-    ev["tv_eval_neg_vs_heldout_pos"] = _tv(eval_h, pos_h)
-    ev["n_eval_neg"] = int(as_pairs(eval_neg).shape[1])
+    counts = lambda p: _bin_counts(_cols(as_pairs(p), undirected), col_bins, n_bins)  # noqa: E731
+    norm = lambda c: c / max(c.sum(), 1)  # noqa: E731
+    rng = np.random.default_rng(seed)
+    null = lambda a, b: _tv_null_quantile(a, b, rng, thr["tv_null_draws"],  # noqa: E731
+                                          thr["tv_null_quantile"])
+    eval_c, pos_c = counts(eval_neg), counts(heldout_pos)
+    ev["tv_eval_neg_vs_heldout_pos"] = _tv(norm(eval_c), norm(pos_c))
+    ev["tv_eval_neg_vs_heldout_pos_null"] = null(eval_c, pos_c)
+    ev["n_eval_neg"] = int(eval_c.sum())
+    ev["n_heldout_pos"] = int(pos_c.sum())
     problems, notes = [], []
     if train_neg is not None:
-        train_h = hist(train_neg)
-        ev["tv_train_neg_vs_eval_neg"] = _tv(train_h, eval_h)
-        ev["tv_train_neg_vs_train_pos"] = _tv(train_h, hist(tr))
-        if ev["tv_train_neg_vs_eval_neg"] > thr["neg_mismatch_tv_warn"]:
+        train_c = counts(train_neg)
+        ev["tv_train_neg_vs_eval_neg"] = _tv(norm(train_c), norm(eval_c))
+        ev["tv_train_neg_vs_eval_neg_null"] = null(train_c, eval_c)
+        ev["tv_train_neg_vs_train_pos"] = _tv(norm(train_c), norm(counts(tr)))
+        tv, nl = ev["tv_train_neg_vs_eval_neg"], ev["tv_train_neg_vs_eval_neg_null"]
+        if tv > thr["neg_mismatch_tv_warn"] and tv > nl:
             problems.append(
-                f"train and eval negatives differ (TV={ev['tv_train_neg_vs_eval_neg']:.3f} > "
-                f"{thr['neg_mismatch_tv_warn']}): the model is scored on a different negative "
-                "distribution than it trained on")
+                f"train and eval negatives differ (TV={tv:.3f} > {thr['neg_mismatch_tv_warn']}, "
+                f"and above the {nl:.3f} that sampling noise alone reaches at these sizes): the "
+                "model is scored on a different negative distribution than it trained on")
+        elif tv > thr["neg_mismatch_tv_warn"]:
+            notes.append(f"train-vs-eval TV {tv:.3f} exceeds {thr['neg_mismatch_tv_warn']} but "
+                         f"not the {nl:.3f} sampling noise reaches with {ev['n_eval_neg']:,} "
+                         "eval negatives, so it is not read as a mismatch")
     else:
         notes.append("train_neg not supplied: train-vs-eval matching was not checked")
-    if ev["tv_eval_neg_vs_heldout_pos"] > thr["neg_vs_pos_tv_warn"]:
+    tv, nl = ev["tv_eval_neg_vs_heldout_pos"], ev["tv_eval_neg_vs_heldout_pos_null"]
+    if tv > thr["neg_vs_pos_tv_warn"] and tv > nl:
         problems.append(
             f"eval negatives do not mirror the held-out positives' column-degree profile "
-            f"(TV={ev['tv_eval_neg_vs_heldout_pos']:.3f} > {thr['neg_vs_pos_tv_warn']}): a "
+            f"(TV={tv:.3f} > {thr['neg_vs_pos_tv_warn']}): a "
             "popularity-only scorer can separate them, so part of the metric is column degree")
+    elif tv > thr["neg_vs_pos_tv_warn"]:
+        notes.append(f"eval-neg-vs-positive TV {tv:.3f} is within sampling noise ({nl:.3f})")
     if problems:
         return Finding(name, "warn", "; ".join(problems) + ".", ev)
     msg = "Negative degree profiles are consistent" + (" (" + "; ".join(notes) + ")" if notes else "") + "."
@@ -392,8 +436,17 @@ def check_baseline_margin(n_rows, n_cols, train_pos, heldout_pos, eval_neg=None,
         ev["negatives"] = "generated by protocheck: uniform (no eval_neg supplied)"
     else:
         ev["negatives"] = "supplied by the user"
+    if as_pairs(eval_neg).shape[1] == 0:
+        raise ValueError("no evaluation negatives: the floor needs at least one")
     corrected = model_free_floor(train_pos, heldout, eval_neg, n_rows, n_cols, mode)
     ev["floor_corrected"] = corrected
+    n_held = int(heldout.shape[1])
+    if n_held < thr["min_heldout_positives"]:
+        return Finding(name, "warn",
+                       f"Only {n_held} held-out positive(s): the model-free floor "
+                       f"({corrected['floor']:.4f}) and any margin over it are too noisy to "
+                       f"read (minimum {thr['min_heldout_positives']}). Evaluate on more "
+                       "held-out edges before reporting either.", ev)
     reference, ref_label = corrected["floor"], "corrected (heuristics see training edges only)"
     if encoder_edges is not None:
         enc = as_pairs(encoder_edges)
@@ -443,14 +496,25 @@ def check_dead_columns(n_rows, n_cols, train_pos, heldout_pos, *, eval_neg=None,
         "dead_row_fraction": float((rdeg == 0).mean()), "column_degree_gini": gini(cdeg),
     }
     over = []
-    if ev["dead_column_fraction"] > thr["dead_column_fraction_warn"]:
-        over.append(f"{ev['dead_column_fraction']:.1%} of candidate columns have no positive "
-                    f"({ev['n_dead_columns']:,} of {n_cols:,})")
+    many_dead = ev["dead_column_fraction"] > thr["dead_column_fraction_warn"]
+    col_msg = (f"{ev['dead_column_fraction']:.1%} of candidate columns have no positive "
+               f"({ev['n_dead_columns']:,} of {n_cols:,})")
     if eval_neg is not None:
+        # With the evaluation negatives in hand, what inflates the floor is where THEY land,
+        # not how many columns are empty: a degree-matched sampler on a padded matrix puts
+        # almost none there (independent audit 2026-11-02, finding E-6).
         share = float((cdeg[_cols(as_pairs(eval_neg), undirected)] == 0).mean())
         ev["eval_negatives_on_dead_columns"] = share
         if share > thr["negatives_on_dead_columns_warn"]:
-            over.append(f"{share:.1%} of evaluation negatives sit on such columns")
+            over = ([col_msg] if many_dead else []) + [
+                f"{share:.1%} of evaluation negatives sit on such columns"]
+        elif many_dead:
+            return Finding(name, "info",
+                           f"{col_msg}, but only {share:.1%} of your evaluation negatives sit "
+                           "there, so they do not inflate this floor. A uniform sampler on the "
+                           "same candidate space would.", ev)
+    elif many_dead:
+        over.append(col_msg)
     if over:
         return Finding(name, "warn",
                        "; ".join(over) + ". A scorer that just ranks by column degree "

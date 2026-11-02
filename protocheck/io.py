@@ -39,13 +39,20 @@ def load_binary_matrix(path: str) -> tuple[np.ndarray, int, int]:
     return np.argwhere(m > 0).T.astype(np.int64), m.shape[0], m.shape[1]
 
 
-def load_labeled_pairs(path: str, index_base: int = 0) -> tuple[np.ndarray, np.ndarray]:
-    """Whitespace/comma-separated (row, col, label) triples -> (positives, negatives)."""
+def load_labeled_pairs(path: str, index_base: int = 0,
+                       neg_index_base: int | None = None) -> tuple[np.ndarray, np.ndarray]:
+    """Whitespace/comma-separated (row, col, label) triples -> (positives, negatives).
+
+    `neg_index_base` overrides `index_base` for the negative rows. MGCNSS's published
+    folds, for one, store positives 1-based and negatives 0-based in the same file
+    (independent audit 2026-11-02, finding E-3); one base for both shifts the negatives a
+    column without any error."""
     a = np.loadtxt(path, dtype=float, ndmin=2, delimiter="," if _sniff_comma(path) else None)
     if a.shape[1] != 3:
         raise ValueError(f"expected (row, col, label) triples, got {a.shape[1]} columns")
-    pairs, y = a[:, :2].astype(np.int64) - index_base, a[:, 2]
-    return pairs[y == 1].T, pairs[y != 1].T
+    nb = index_base if neg_index_base is None else neg_index_base
+    pairs, y = a[:, :2].astype(np.int64), a[:, 2]
+    return (pairs[y == 1] - index_base).T, (pairs[y != 1] - nb).T
 
 
 def subtract_pairs(a: np.ndarray, b: np.ndarray, n_cols: int) -> np.ndarray:

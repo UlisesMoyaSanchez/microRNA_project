@@ -12,9 +12,11 @@ Three ways to describe a dataset (pair files are N x 2 (row, col), .npy or CSV):
       model's graph input was the whole matrix, the conventional protocol)
   3. (row, col, label) triples
        --labeled-train F --labeled-test F --n-rows N --n-cols M [--index-base 1]
+       [--neg-index-base 0]   (when negatives use a different base than positives)
 
-Exit status: 0 clean, 1 if any check fails, 2 on a usage error. --fail-on-warn also
-fails on warnings.
+Exit status: 0 clean, 1 if any check fails, 2 on a usage error, 3 if no check failed but
+edge leakage could not be checked (no encoder edges given; --allow-unchecked turns this
+into 0). --fail-on-warn also fails on warnings. Stop on any non-zero status.
 """
 
 from __future__ import annotations
@@ -43,8 +45,9 @@ def _build(a: argparse.Namespace) -> dict:
     elif a.labeled_train:
         if not (a.labeled_test and a.n_rows and a.n_cols):
             raise ValueError("--labeled-train needs --labeled-test, --n-rows, --n-cols")
-        tp, tn = lio.load_labeled_pairs(a.labeled_train, ib)
-        hp, hn = lio.load_labeled_pairs(a.labeled_test, ib)
+        nb = a.neg_index_base
+        tp, tn = lio.load_labeled_pairs(a.labeled_train, ib, nb)
+        hp, hn = lio.load_labeled_pairs(a.labeled_test, ib, nb)
         kw.update(n_rows=a.n_rows, n_cols=a.n_cols, train_pos=tp, heldout_pos=hp,
                   train_neg=tn, eval_neg=hn)
     else:
@@ -74,6 +77,8 @@ def main(argv=None) -> int:
     p.add_argument("--n-rows", type=int)
     p.add_argument("--n-cols", type=int)
     p.add_argument("--index-base", type=int, default=0, choices=[0, 1])
+    p.add_argument("--neg-index-base", type=int, default=None, choices=[0, 1],
+                   help="Index base of the negative rows in --labeled-* files, if it differs.")
     p.add_argument("--mode", default="bipartite", choices=["bipartite", "homogeneous"])
     p.add_argument("--model-auroc", type=float, help="The AUROC you report, to compute the margin.")
     p.add_argument("--train-sampler", help="Declared train negative sampler (string).")
@@ -81,6 +86,8 @@ def main(argv=None) -> int:
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--json", help="Also write the full report here.")
     p.add_argument("--fail-on-warn", action="store_true")
+    p.add_argument("--allow-unchecked", action="store_true",
+                   help="Exit 0 even if edge leakage could not be checked.")
     a = p.parse_args(argv)
     try:
         report = audit(**_build(a))
@@ -90,4 +97,11 @@ def main(argv=None) -> int:
     print(report.render())
     if a.json:
         report.save(a.json)
-    return 1 if report.has_errors or (a.fail_on_warn and report.has_warnings) else 0
+    if report.has_errors or (a.fail_on_warn and report.has_warnings):
+        return 1
+    if report.leakage_unchecked and not a.allow_unchecked:
+        print("protocheck: edge leakage was NOT checked (no encoder edges given); exiting 3 so "
+              "a pipeline that stops on non-zero does not read this as a pass. Pass "
+              "--encoder-edges, or --allow-unchecked to accept it.", file=sys.stderr)
+        return 3
+    return 0

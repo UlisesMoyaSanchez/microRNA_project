@@ -201,3 +201,72 @@ def test_homogeneous_degree_counts_both_endpoints():
     assert column_degree(pairs, 4, undirected=True).tolist() == [2, 2, 2, 0]
     f = check_dead_columns(4, 4, pairs, pairs[:, :1], undirected=True)
     assert f.evidence["n_dead_columns"] == 1 and f.evidence["dead_row_fraction"] == 0.25
+
+
+# ── fixes from the independent audit (BITACORA 2026-11-02) ────────────────────
+
+def test_cli_exits_3_when_leakage_is_unchecked(scenarios, tmp_path):
+    """E-2: without encoder edges the leakage check cannot run; a pipeline that stops on
+    non-zero must not read that as a pass."""
+    d = tmp_path / "leak"
+    d.mkdir()
+    for k, v in scenarios["leak"].items():
+        if isinstance(v, np.ndarray):
+            np.save(d / f"{k}.npy", v.T)
+    argv = ["--train-pos", str(d / "train_pos.npy"), "--heldout-pos", str(d / "heldout_pos.npy"),
+            "--n-rows", str(N_ROWS), "--n-cols", str(N_COLS)]
+    assert cli_main(argv) == 3
+    assert cli_main(argv + ["--allow-unchecked"]) == 0
+
+
+def _clean_small_test(n_test, seed):
+    """A leak-free protocol with matched negatives and only n_test held-out positives."""
+    rng = np.random.default_rng(seed)
+    n_rows, n_cols = 300, 250
+    w = rng.pareto(1.5, n_cols) + 1
+    pos = np.unique(np.stack([rng.integers(0, n_rows, 9000),
+                              rng.choice(n_cols, 9000, p=w / w.sum())]), axis=1)[:, :6000]
+    perm = rng.permutation(pos.shape[1])
+    held, train = pos[:, perm[:n_test]], pos[:, perm[n_test:]]
+    bins = degree_bins(np.bincount(train[1], minlength=n_cols))
+    tr_neg, _ = degree_matched_negatives(train, pos, n_rows, n_cols, bins, rng)
+    ev_neg, _ = degree_matched_negatives(held, pos, n_rows, n_cols, bins, rng)
+    return dict(n_rows=n_rows, n_cols=n_cols, train_pos=train, heldout_pos=held,
+                encoder_edges=train, train_neg=tr_neg, eval_neg=ev_neg)
+
+
+@pytest.mark.parametrize("n_test", [10, 30, 100])
+def test_small_clean_test_sets_are_not_flagged_as_mismatched(n_test):
+    """E-4: the fixed TV threshold flagged half of clean protocols at 100 test positives."""
+    flagged = sum(audit(**_clean_small_test(n_test, s)).status("negative_matching") == "warn"
+                  for s in range(20))
+    assert flagged <= 2, f"{flagged}/20 clean protocols flagged at n_test={n_test}"
+
+
+def test_too_few_heldout_positives_warns_and_empty_is_an_error():
+    kw = _clean_small_test(5, 0)
+    assert audit(**kw).status("model_free_baseline") == "warn"
+    kw["heldout_pos"] = kw["heldout_pos"][:, :0]
+    with pytest.raises(ValueError):
+        audit(**kw)
+
+
+def test_dead_columns_with_negatives_on_live_columns_is_info():
+    """E-6: a padded matrix is only a problem for the floor if the eval negatives land on it."""
+    from protocheck.checks import check_dead_columns
+    rng = np.random.default_rng(0)
+    pos = np.unique(np.stack([rng.integers(0, 50, 800), rng.integers(0, 60, 800)]), axis=1)
+    held, train = pos[:, :100], pos[:, 100:]
+    n_cols = 100                                            # columns 60..99 are dead
+    live_neg = np.stack([held[0], rng.integers(0, 60, held.shape[1])])
+    dead_neg = np.stack([held[0], rng.integers(60, 100, held.shape[1])])
+    assert check_dead_columns(50, n_cols, train, held, eval_neg=live_neg).status == "info"
+    assert check_dead_columns(50, n_cols, train, held, eval_neg=dead_neg).status == "warn"
+    assert check_dead_columns(50, n_cols, train, held).status == "warn"
+
+
+def test_labeled_triples_with_mixed_index_bases(tmp_path):
+    """E-3: MGCNSS's folds store positives 1-based and negatives 0-based."""
+    (tmp_path / "t.txt").write_text("1 1 1\n3 2 1\n0 4 0\n")
+    p, n = lio.load_labeled_pairs(str(tmp_path / "t.txt"), index_base=1, neg_index_base=0)
+    assert p.tolist() == [[0, 2], [0, 1]] and n.tolist() == [[0], [4]]

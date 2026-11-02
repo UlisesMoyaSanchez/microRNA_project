@@ -26,6 +26,10 @@ class Report:
         return any(f.status == "error" for f in self.findings)
 
     @property
+    def leakage_unchecked(self) -> bool:
+        return any(f.check == "edge_leakage" and f.status == "unchecked" for f in self.findings)
+
+    @property
     def has_warnings(self) -> bool:
         return any(f.status in ("warn", "error") for f in self.findings)
 
@@ -73,6 +77,8 @@ def audit(n_rows: int, n_cols: int, train_pos, heldout_pos, *, encoder_edges=Non
                               'homogeneous' (one undirected node set; n_rows == n_cols).
     """
     train_pos, heldout_pos = as_pairs(train_pos), as_pairs(heldout_pos)
+    if heldout_pos.shape[1] == 0:
+        raise ValueError("heldout_pos is empty: there is no held-out positive to audit")
     undirected = mode == "homogeneous"
     findings = [
         check_leakage(n_cols, heldout_pos, encoder_edges=encoder_edges,
@@ -80,7 +86,7 @@ def audit(n_rows: int, n_cols: int, train_pos, heldout_pos, *, encoder_edges=Non
                       eval_neg=eval_neg, undirected=undirected),
         check_negative_matching(n_rows, n_cols, train_pos, heldout_pos, train_neg=train_neg,
                                 eval_neg=eval_neg, declared_samplers=declared_samplers,
-                                thresholds=thresholds, undirected=undirected),
+                                thresholds=thresholds, undirected=undirected, seed=seed),
         check_baseline_margin(n_rows, n_cols, train_pos, heldout_pos, eval_neg,
                               encoder_edges=encoder_edges, model_auroc=model_auroc,
                               mode=mode, thresholds=thresholds, seed=seed),
