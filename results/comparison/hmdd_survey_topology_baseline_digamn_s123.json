@@ -1,0 +1,63 @@
+{
+  "paper": "digamn",
+  "tier": 2,
+  "edge_regime": "held_out",
+  "n_mirna": 917,
+  "n_disease": 792,
+  "n_positives_total": 14550,
+  "seed": 123,
+  "best_model_free_auroc": 0.8862245367910156,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8862245367910156,
+        "auprc": 0.8930473529928478,
+        "n_pairs": 2910
+      },
+      "pref_attach": {
+        "auroc": 0.8395557444999467,
+        "auprc": 0.8571649471325644,
+        "n_pairs": 2910
+      },
+      "common_neigh": {
+        "auroc": 0.8476383131989467,
+        "auprc": 0.8686836923793171,
+        "n_pairs": 2910
+      },
+      "adamic_adar": {
+        "auroc": 0.8437654255381963,
+        "auprc": 0.8639698285144006,
+        "n_pairs": 2910
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.55330711729904,
+        "auprc": 0.5767648111168855,
+        "n_pairs": 2910
+      },
+      "pref_attach": {
+        "auroc": 0.5490981448022578,
+        "auprc": 0.574504282070571,
+        "n_pairs": 2910
+      },
+      "common_neigh": {
+        "auroc": 0.5571736280865838,
+        "auprc": 0.5832762512565675,
+        "n_pairs": 2910
+      },
+      "adamic_adar": {
+        "auroc": 0.5579336569006035,
+        "auprc": 0.5829768837023817,
+        "n_pairs": 2910
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.9635,
+    "negative_sampling": "uniform random, 1:1 (balanced) -- 1:5 and 1:10 also tested, not reproduced here",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11610307/",
+    "caveat": "96.35% is DiGAMN's own reported number on \"Data1\" (1:1 balanced negatives). No split file is bundled; this run uses a single random 90/10 edge split with 1:1 uniform negatives as an honest approximation, not a reproduction of DiGAMN's own exact split.\n"
+  }
+}
