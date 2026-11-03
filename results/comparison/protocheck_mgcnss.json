@@ -1,5 +1,81 @@
 {
-  "generated_utc": "2026-10-28T02:55:30.297709+00:00",
+  "generated_utc": "2026-11-03T16:58:59.425127+00:00",
+  "index_base": {
+    "positives": 1,
+    "negatives": 0,
+    "check": {
+      "test7_1": {
+        "neg_base0": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 0,
+          "negatives_out_of_range": 0
+        },
+        "neg_base1": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 13,
+          "negatives_out_of_range": 1
+        }
+      },
+      "test71": {
+        "neg_base0": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 0,
+          "negatives_out_of_range": 0
+        },
+        "neg_base1": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 14,
+          "negatives_out_of_range": 9
+        }
+      },
+      "test72": {
+        "neg_base0": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 0,
+          "negatives_out_of_range": 0
+        },
+        "neg_base1": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 12,
+          "negatives_out_of_range": 6
+        }
+      },
+      "test73": {
+        "neg_base0": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 0,
+          "negatives_out_of_range": 0
+        },
+        "neg_base1": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 11,
+          "negatives_out_of_range": 8
+        }
+      },
+      "test74": {
+        "neg_base0": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 0,
+          "negatives_out_of_range": 0
+        },
+        "neg_base1": {
+          "positives_on_raw_association": 1086,
+          "n_positives": 1086,
+          "negatives_that_are_known_associations": 13,
+          "negatives_out_of_range": 5
+        }
+      }
+    }
+  },
   "paper": "MGCNSS (tian2024mgcnss)",
   "headline_auroc": 0.9874,
   "encoder_edges_source": "result.mat raw_association (src/Model.py::forward)",
@@ -11,7 +87,7 @@
   "folds": {
     "test7_1": {
       "split_only": {
-        "generated_utc": "2026-10-28T02:55:30.119770+00:00",
+        "generated_utc": "2026-11-03T16:58:59.173238+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -30,36 +106,39 @@
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.564 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5386740331491713,
+              "tv_eval_neg_vs_heldout_pos": 0.56353591160221,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06721915285451197,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.041436464088397795,
-              "tv_train_neg_vs_train_pos": 0.5566298342541436
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.0395948434622468,
+              "tv_train_neg_vs_eval_neg_null": 0.048123848987108656,
+              "tv_train_neg_vs_train_pos": 0.5715930018416207
             }
           },
           {
             "check": "model_free_baseline",
             "status": "ok",
-            "message": "Model clears the model-free floor by +0.0738 (0.9874 vs pref_attach 0.9136).",
+            "message": "Model clears the model-free floor by +0.0780 (0.9874 vs pref_attach 0.9094).",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8354577258189786,
-                  "pref_attach": 0.9135905158233537,
-                  "common_neigh": 0.9090924507120595,
-                  "adamic_adar": 0.9114474697217898
+                  "gene_degree": 0.844647175333815,
+                  "pref_attach": 0.9093620802512472,
+                  "common_neigh": 0.9053070385180211,
+                  "adamic_adar": 0.9076760477396905
                 },
                 "best": "pref_attach",
-                "floor": 0.9135905158233537,
+                "floor": 0.9093620802512472,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9135905158233537,
+              "reference_floor": 0.9093620802512472,
               "reference": "corrected (heuristics see training edges only)",
               "model_auroc": 0.9874,
-              "margin": 0.07380948417664634
+              "margin": 0.07803791974875285
             }
           },
           {
@@ -81,7 +160,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-10-28T02:55:30.119843+00:00",
+        "generated_utc": "2026-11-03T16:58:59.173379+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -94,60 +173,63 @@
           {
             "check": "edge_leakage",
             "status": "error",
-            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=13 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
             "evidence": {
               "n_heldout": 1086,
               "heldout_in_encoder_fwd": 1086,
               "heldout_in_train_pos": 0,
-              "eval_negatives_that_are_real_edges": 13,
+              "eval_negatives_that_are_real_edges": 0,
               "fraction_heldout_in_encoder": 1.0
             }
           },
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.564 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5386740331491713,
+              "tv_eval_neg_vs_heldout_pos": 0.56353591160221,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06721915285451197,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.041436464088397795,
-              "tv_train_neg_vs_train_pos": 0.5566298342541436
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.0395948434622468,
+              "tv_train_neg_vs_eval_neg_null": 0.048123848987108656,
+              "tv_train_neg_vs_train_pos": 0.5715930018416207
             }
           },
           {
             "check": "model_free_baseline",
             "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0261 (model 0.9874 vs pref_attach 0.9613); below 0.05, so most of the number may be graph structure.",
+            "message": "Margin over the model-free floor is only +0.0307 (model 0.9874 vs pref_attach 0.9567); below 0.05, so most of the number may be graph structure.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8354577258189786,
-                  "pref_attach": 0.9135905158233537,
-                  "common_neigh": 0.9090924507120595,
-                  "adamic_adar": 0.9114474697217898
+                  "gene_degree": 0.844647175333815,
+                  "pref_attach": 0.9093620802512472,
+                  "common_neigh": 0.9053070385180211,
+                  "adamic_adar": 0.9076760477396905
                 },
                 "best": "pref_attach",
-                "floor": 0.9135905158233537,
+                "floor": 0.9093620802512472,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
               "floor_as_evaluated": {
                 "heuristics": {
-                  "gene_degree": 0.8517800636936194,
-                  "pref_attach": 0.9613331739297064,
-                  "common_neigh": 0.9490073732656377,
-                  "adamic_adar": 0.9564234574307526
+                  "gene_degree": 0.8624300065457234,
+                  "pref_attach": 0.9566638347086136,
+                  "common_neigh": 0.9461525221384505,
+                  "adamic_adar": 0.9537509030045888
                 },
                 "best": "pref_attach",
-                "floor": 0.9613331739297064,
+                "floor": 0.9566638347086136,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9613331739297064,
+              "reference_floor": 0.9566638347086136,
               "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
               "model_auroc": 0.9874,
-              "margin": 0.026066826070293647
+              "margin": 0.030736165291386452
             }
           },
           {
@@ -171,7 +253,7 @@
     },
     "test71": {
       "split_only": {
-        "generated_utc": "2026-10-28T02:55:30.165151+00:00",
+        "generated_utc": "2026-11-03T16:58:59.236553+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -190,36 +272,39 @@
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "tv_eval_neg_vs_heldout_pos": 0.578268876611418,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06721915285451195,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.03061694290976059,
-              "tv_train_neg_vs_train_pos": 0.5536372007366483
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.017955801104972375,
+              "tv_train_neg_vs_eval_neg_null": 0.048572744014732966,
+              "tv_train_neg_vs_train_pos": 0.5633057090239411
             }
           },
           {
             "check": "model_free_baseline",
             "status": "ok",
-            "message": "Model clears the model-free floor by +0.0602 (0.9874 vs pref_attach 0.9272).",
+            "message": "Model clears the model-free floor by +0.0634 (0.9874 vs pref_attach 0.9240).",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8440663695654386,
-                  "pref_attach": 0.9271788271284623,
-                  "common_neigh": 0.9201938958585582,
-                  "adamic_adar": 0.9229427605316621
+                  "gene_degree": 0.858171046874841,
+                  "pref_attach": 0.9240386604668832,
+                  "common_neigh": 0.9171046026949389,
+                  "adamic_adar": 0.9193298942848713
                 },
                 "best": "pref_attach",
-                "floor": 0.9271788271284623,
+                "floor": 0.9240386604668832,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9271788271284623,
+              "reference_floor": 0.9240386604668832,
               "reference": "corrected (heuristics see training edges only)",
               "model_auroc": 0.9874,
-              "margin": 0.06022117287153772
+              "margin": 0.06336133953311684
             }
           },
           {
@@ -241,7 +326,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-10-28T02:55:30.165246+00:00",
+        "generated_utc": "2026-11-03T16:58:59.236683+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -254,60 +339,63 @@
           {
             "check": "edge_leakage",
             "status": "error",
-            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=14 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
             "evidence": {
               "n_heldout": 1086,
               "heldout_in_encoder_fwd": 1086,
               "heldout_in_train_pos": 0,
-              "eval_negatives_that_are_real_edges": 14,
+              "eval_negatives_that_are_real_edges": 0,
               "fraction_heldout_in_encoder": 1.0
             }
           },
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "tv_eval_neg_vs_heldout_pos": 0.578268876611418,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06721915285451195,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.03061694290976059,
-              "tv_train_neg_vs_train_pos": 0.5536372007366483
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.017955801104972375,
+              "tv_train_neg_vs_eval_neg_null": 0.048572744014732966,
+              "tv_train_neg_vs_train_pos": 0.5633057090239411
             }
           },
           {
             "check": "model_free_baseline",
             "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0240 (model 0.9874 vs pref_attach 0.9634); below 0.05, so most of the number may be graph structure.",
+            "message": "Margin over the model-free floor is only +0.0264 (model 0.9874 vs pref_attach 0.9610); below 0.05, so most of the number may be graph structure.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8440663695654386,
-                  "pref_attach": 0.9271788271284623,
-                  "common_neigh": 0.9201938958585582,
-                  "adamic_adar": 0.9229427605316621
+                  "gene_degree": 0.858171046874841,
+                  "pref_attach": 0.9240386604668832,
+                  "common_neigh": 0.9171046026949389,
+                  "adamic_adar": 0.9193298942848713
                 },
                 "best": "pref_attach",
-                "floor": 0.9271788271284623,
+                "floor": 0.9240386604668832,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
               "floor_as_evaluated": {
                 "heuristics": {
-                  "gene_degree": 0.8572311590000306,
-                  "pref_attach": 0.963365146227391,
-                  "common_neigh": 0.9497785307055475,
-                  "adamic_adar": 0.9570309717855581
+                  "gene_degree": 0.8719925283789329,
+                  "pref_attach": 0.9610423470997019,
+                  "common_neigh": 0.9482697075452181,
+                  "adamic_adar": 0.9555081584132896
                 },
                 "best": "pref_attach",
-                "floor": 0.963365146227391,
+                "floor": 0.9610423470997019,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.963365146227391,
+              "reference_floor": 0.9610423470997019,
               "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
               "model_auroc": 0.9874,
-              "margin": 0.024034853772609055
+              "margin": 0.026357652900298123
             }
           },
           {
@@ -331,7 +419,7 @@
     },
     "test72": {
       "split_only": {
-        "generated_utc": "2026-10-28T02:55:30.209522+00:00",
+        "generated_utc": "2026-11-03T16:58:59.299201+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -350,36 +438,39 @@
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.556 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.556169429097606,
+              "tv_eval_neg_vs_heldout_pos": 0.5782688766114181,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06721915285451197,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.01496316758747694,
-              "tv_train_neg_vs_train_pos": 0.5550184162062615
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.03775322283609574,
+              "tv_train_neg_vs_eval_neg_null": 0.04881445672191525,
+              "tv_train_neg_vs_train_pos": 0.5651473296500921
             }
           },
           {
             "check": "model_free_baseline",
             "status": "ok",
-            "message": "Model clears the model-free floor by +0.0663 (0.9874 vs pref_attach 0.9211).",
+            "message": "Model clears the model-free floor by +0.0770 (0.9874 vs pref_attach 0.9104).",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8369067726192051,
-                  "pref_attach": 0.921078246831429,
-                  "common_neigh": 0.9181720982604655,
-                  "adamic_adar": 0.9207458733114239
+                  "gene_degree": 0.8552377657716324,
+                  "pref_attach": 0.9103905728016713,
+                  "common_neigh": 0.9064220160149771,
+                  "adamic_adar": 0.9091653693924686
                 },
                 "best": "pref_attach",
-                "floor": 0.921078246831429,
+                "floor": 0.9103905728016713,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.921078246831429,
+              "reference_floor": 0.9103905728016713,
               "reference": "corrected (heuristics see training edges only)",
               "model_auroc": 0.9874,
-              "margin": 0.06632175316857103
+              "margin": 0.0770094271983287
             }
           },
           {
@@ -401,7 +492,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-10-28T02:55:30.209601+00:00",
+        "generated_utc": "2026-11-03T16:58:59.299327+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -414,60 +505,63 @@
           {
             "check": "edge_leakage",
             "status": "error",
-            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=12 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
             "evidence": {
               "n_heldout": 1086,
               "heldout_in_encoder_fwd": 1086,
               "heldout_in_train_pos": 0,
-              "eval_negatives_that_are_real_edges": 12,
+              "eval_negatives_that_are_real_edges": 0,
               "fraction_heldout_in_encoder": 1.0
             }
           },
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.556 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.556169429097606,
+              "tv_eval_neg_vs_heldout_pos": 0.5782688766114181,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06721915285451197,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.01496316758747694,
-              "tv_train_neg_vs_train_pos": 0.5550184162062615
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.03775322283609574,
+              "tv_train_neg_vs_eval_neg_null": 0.04881445672191525,
+              "tv_train_neg_vs_train_pos": 0.5651473296500921
             }
           },
           {
             "check": "model_free_baseline",
             "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0220 (model 0.9874 vs pref_attach 0.9654); below 0.05, so most of the number may be graph structure.",
+            "message": "Margin over the model-free floor is only +0.0329 (model 0.9874 vs pref_attach 0.9545); below 0.05, so most of the number may be graph structure.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8369067726192051,
-                  "pref_attach": 0.921078246831429,
-                  "common_neigh": 0.9181720982604655,
-                  "adamic_adar": 0.9207458733114239
+                  "gene_degree": 0.8552377657716324,
+                  "pref_attach": 0.9103905728016713,
+                  "common_neigh": 0.9064220160149771,
+                  "adamic_adar": 0.9091653693924686
                 },
                 "best": "pref_attach",
-                "floor": 0.921078246831429,
+                "floor": 0.9103905728016713,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
               "floor_as_evaluated": {
                 "heuristics": {
-                  "gene_degree": 0.852522816763835,
-                  "pref_attach": 0.9654390891608924,
-                  "common_neigh": 0.9523264450617096,
-                  "adamic_adar": 0.9600888929587685
+                  "gene_degree": 0.8713260855556573,
+                  "pref_attach": 0.9544902645082738,
+                  "common_neigh": 0.942309453313391,
+                  "adamic_adar": 0.9498747664058552
                 },
                 "best": "pref_attach",
-                "floor": 0.9654390891608924,
+                "floor": 0.9544902645082738,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9654390891608924,
+              "reference_floor": 0.9544902645082738,
               "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
               "model_auroc": 0.9874,
-              "margin": 0.021960910839107672
+              "margin": 0.032909735491726266
             }
           },
           {
@@ -491,7 +585,7 @@
     },
     "test73": {
       "split_only": {
-        "generated_utc": "2026-10-28T02:55:30.253422+00:00",
+        "generated_utc": "2026-11-03T16:58:59.361658+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -510,36 +604,39 @@
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.522 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.538 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5220994475138121,
+              "tv_eval_neg_vs_heldout_pos": 0.5377532228360957,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06629834254143646,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.057780847145488035,
-              "tv_train_neg_vs_train_pos": 0.5587016574585636
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.02969613259668509,
+              "tv_train_neg_vs_eval_neg_null": 0.048354051565377525,
+              "tv_train_neg_vs_train_pos": 0.580340699815838
             }
           },
           {
             "check": "model_free_baseline",
             "status": "ok",
-            "message": "Model clears the model-free floor by +0.0738 (0.9874 vs pref_attach 0.9136).",
+            "message": "Model clears the model-free floor by +0.0818 (0.9874 vs pref_attach 0.9056).",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8265518960552689,
-                  "pref_attach": 0.9135761016655982,
-                  "common_neigh": 0.9078282442877541,
-                  "adamic_adar": 0.9111655457539284
+                  "gene_degree": 0.8388518360245414,
+                  "pref_attach": 0.9056457712252712,
+                  "common_neigh": 0.9007805690370325,
+                  "adamic_adar": 0.9038613832843253
                 },
                 "best": "pref_attach",
-                "floor": 0.9135761016655982,
+                "floor": 0.9056457712252712,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9135761016655982,
+              "reference_floor": 0.9056457712252712,
               "reference": "corrected (heuristics see training edges only)",
               "model_auroc": 0.9874,
-              "margin": 0.07382389833440184
+              "margin": 0.08175422877472882
             }
           },
           {
@@ -561,7 +658,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-10-28T02:55:30.253522+00:00",
+        "generated_utc": "2026-11-03T16:58:59.361785+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -574,60 +671,63 @@
           {
             "check": "edge_leakage",
             "status": "error",
-            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=11 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
             "evidence": {
               "n_heldout": 1086,
               "heldout_in_encoder_fwd": 1086,
               "heldout_in_train_pos": 0,
-              "eval_negatives_that_are_real_edges": 11,
+              "eval_negatives_that_are_real_edges": 0,
               "fraction_heldout_in_encoder": 1.0
             }
           },
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.522 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.538 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5220994475138121,
+              "tv_eval_neg_vs_heldout_pos": 0.5377532228360957,
+              "tv_eval_neg_vs_heldout_pos_null": 0.06629834254143646,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.057780847145488035,
-              "tv_train_neg_vs_train_pos": 0.5587016574585636
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.02969613259668509,
+              "tv_train_neg_vs_eval_neg_null": 0.048354051565377525,
+              "tv_train_neg_vs_train_pos": 0.580340699815838
             }
           },
           {
             "check": "model_free_baseline",
             "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0288 (model 0.9874 vs pref_attach 0.9586); below 0.05, so most of the number may be graph structure.",
+            "message": "Margin over the model-free floor is only +0.0373 (model 0.9874 vs pref_attach 0.9501); below 0.05, so most of the number may be graph structure.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8265518960552689,
-                  "pref_attach": 0.9135761016655982,
-                  "common_neigh": 0.9078282442877541,
-                  "adamic_adar": 0.9111655457539284
+                  "gene_degree": 0.8388518360245414,
+                  "pref_attach": 0.9056457712252712,
+                  "common_neigh": 0.9007805690370325,
+                  "adamic_adar": 0.9038613832843253
                 },
                 "best": "pref_attach",
-                "floor": 0.9135761016655982,
+                "floor": 0.9056457712252712,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
               "floor_as_evaluated": {
                 "heuristics": {
-                  "gene_degree": 0.8419869153363246,
-                  "pref_attach": 0.9586097460055826,
-                  "common_neigh": 0.9446216537956718,
-                  "adamic_adar": 0.953301944385092
+                  "gene_degree": 0.8544691520066203,
+                  "pref_attach": 0.9500519757570824,
+                  "common_neigh": 0.9390069154041562,
+                  "adamic_adar": 0.9475952097514322
                 },
                 "best": "pref_attach",
-                "floor": 0.9586097460055826,
+                "floor": 0.9500519757570824,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9586097460055826,
+              "reference_floor": 0.9500519757570824,
               "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
               "model_auroc": 0.9874,
-              "margin": 0.02879025399441748
+              "margin": 0.03734802424291761
             }
           },
           {
@@ -651,7 +751,7 @@
     },
     "test74": {
       "split_only": {
-        "generated_utc": "2026-10-28T02:55:30.297552+00:00",
+        "generated_utc": "2026-11-03T16:58:59.424842+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -670,36 +770,39 @@
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.529 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "tv_eval_neg_vs_heldout_pos": 0.5285451197053406,
+              "tv_eval_neg_vs_heldout_pos_null": 0.07002762430939224,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.03406998158379373,
-              "tv_train_neg_vs_train_pos": 0.5534069981583793
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.041666666666666664,
+              "tv_train_neg_vs_eval_neg_null": 0.04880294659300182,
+              "tv_train_neg_vs_train_pos": 0.5780386740331491
             }
           },
           {
             "check": "model_free_baseline",
             "status": "ok",
-            "message": "Model clears the model-free floor by +0.0782 (0.9874 vs adamic_adar 0.9092).",
+            "message": "Model clears the model-free floor by +0.0911 (0.9874 vs pref_attach 0.8963).",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8371119623943103,
-                  "pref_attach": 0.9084310952385798,
-                  "common_neigh": 0.9065559828929383,
-                  "adamic_adar": 0.9091653693924687
+                  "gene_degree": 0.8306819761979861,
+                  "pref_attach": 0.8963261703448208,
+                  "common_neigh": 0.8926798123785394,
+                  "adamic_adar": 0.8958912019372628
                 },
-                "best": "adamic_adar",
-                "floor": 0.9091653693924687,
+                "best": "pref_attach",
+                "floor": 0.8963261703448208,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9091653693924687,
+              "reference_floor": 0.8963261703448208,
               "reference": "corrected (heuristics see training edges only)",
               "model_auroc": 0.9874,
-              "margin": 0.07823463060753133
+              "margin": 0.0910738296551793
             }
           },
           {
@@ -721,7 +824,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-10-28T02:55:30.297627+00:00",
+        "generated_utc": "2026-11-03T16:58:59.424967+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -734,60 +837,63 @@
           {
             "check": "edge_leakage",
             "status": "error",
-            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086, eval_negatives_that_are_real_edges=13 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
             "evidence": {
               "n_heldout": 1086,
               "heldout_in_encoder_fwd": 1086,
               "heldout_in_train_pos": 0,
-              "eval_negatives_that_are_real_edges": 13,
+              "eval_negatives_that_are_real_edges": 0,
               "fraction_heldout_in_encoder": 1.0
             }
           },
           {
             "check": "negative_matching",
             "status": "warn",
-            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.558 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.529 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
             "evidence": {
-              "tv_eval_neg_vs_heldout_pos": 0.5580110497237569,
+              "tv_eval_neg_vs_heldout_pos": 0.5285451197053406,
+              "tv_eval_neg_vs_heldout_pos_null": 0.07002762430939224,
               "n_eval_neg": 1086,
-              "tv_train_neg_vs_eval_neg": 0.03406998158379373,
-              "tv_train_neg_vs_train_pos": 0.5534069981583793
+              "n_heldout_pos": 1086,
+              "tv_train_neg_vs_eval_neg": 0.041666666666666664,
+              "tv_train_neg_vs_eval_neg_null": 0.04880294659300182,
+              "tv_train_neg_vs_train_pos": 0.5780386740331491
             }
           },
           {
             "check": "model_free_baseline",
             "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0264 (model 0.9874 vs adamic_adar 0.9610); below 0.05, so most of the number may be graph structure.",
+            "message": "Margin over the model-free floor is only +0.0409 (model 0.9874 vs pref_attach 0.9465); below 0.05, so most of the number may be graph structure.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
                 "heuristics": {
-                  "gene_degree": 0.8371119623943103,
-                  "pref_attach": 0.9084310952385798,
-                  "common_neigh": 0.9065559828929383,
-                  "adamic_adar": 0.9091653693924687
+                  "gene_degree": 0.8306819761979861,
+                  "pref_attach": 0.8963261703448208,
+                  "common_neigh": 0.8926798123785394,
+                  "adamic_adar": 0.8958912019372628
                 },
-                "best": "adamic_adar",
-                "floor": 0.9091653693924687,
+                "best": "pref_attach",
+                "floor": 0.8963261703448208,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
               "floor_as_evaluated": {
                 "heuristics": {
-                  "gene_degree": 0.857616101801261,
-                  "pref_attach": 0.9609537424240882,
-                  "common_neigh": 0.947590122401636,
-                  "adamic_adar": 0.9543745273004149
+                  "gene_degree": 0.8512522511522848,
+                  "pref_attach": 0.9465234747277418,
+                  "common_neigh": 0.9353228262602212,
+                  "adamic_adar": 0.9430666205413618
                 },
                 "best": "pref_attach",
-                "floor": 0.9609537424240882,
+                "floor": 0.9465234747277418,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9609537424240882,
+              "reference_floor": 0.9465234747277418,
               "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
               "model_auroc": 0.9874,
-              "margin": 0.026446257575911902
+              "margin": 0.04087652527225827
             }
           },
           {
