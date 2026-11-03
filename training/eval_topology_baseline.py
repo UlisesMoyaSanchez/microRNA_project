@@ -134,9 +134,18 @@ def main() -> None:
                         "Crossed with the two negative samplers this gives the same 2x2 "
                         "protocol grid measured on the surveyed papers' graphs by "
                         "eval_hmdd_survey_topology_baseline.py.")
+    p.add_argument("--eval-n-tries", default=None,
+                   help="Comma-separated retry budgets for the EVALUATION degree-matched "
+                        "sampler (e.g. 16,64). 16 is the published default and is always "
+                        "scored under the usual key; each other value adds a "
+                        "`degree_matched_ntries<N>` entry. The output gets an `_evalntries` "
+                        "suffix so published artifacts are never overwritten. Training "
+                        "negatives are unchanged (independent audit 2026-11-02: 16 draws "
+                        "fall back to uniform 1.2-1.6 points more often than 50).")
     args = p.parse_args()
     if args.out is None:
         suffix = "" if args.edge_regime == "held_out" else f"_{args.edge_regime}"
+        suffix += "_evalntries" if args.eval_n_tries else ""
         args.out = f"results/comparison/topology_baseline_{args.split}{suffix}.json"
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -213,7 +222,17 @@ def main() -> None:
     k = scored_pos.shape[1]
     results: dict[str, dict[str, dict[str, float]]] = {}
 
-    for sampler_name, neg in (("uniform", unif_neg), ("degree_matched", hard_neg)):
+    conds = [("uniform", unif_neg), ("degree_matched", hard_neg)]
+    extra_ntries = [int(x) for x in (args.eval_n_tries or "").split(",") if x.strip() and int(x) != 16]
+    for n in extra_ntries:
+        # Fresh generator at the same seed: with n_tries=16 this reproduces hard_neg exactly.
+        neg_n, fb_n = sample_degree_matched_negatives(
+            scored_pos, split.all_pos, bins, n_gene, torch.Generator().manual_seed(seed),
+            torch.device("cpu"), n_tries=n)
+        log.info(f"Negatives — degree-matched, n_tries={n}: fallback "
+                 f"{100.0 * fb_n / max(neg_n.shape[1], 1):.1f}%")
+        conds.append((f"degree_matched_ntries{n}", neg_n))
+    for sampler_name, neg in conds:
         y = np.concatenate([np.ones(k), np.zeros(neg.shape[1])])
         m_idx = torch.cat([scored_pos[0], neg[0]]).long()
         g_idx = torch.cat([scored_pos[1], neg[1]]).long()

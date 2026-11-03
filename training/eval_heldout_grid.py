@@ -56,6 +56,14 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--config", default="configs/config_v2_edgesplit.yaml")
     p.add_argument("--checkpoint", default=None)
+    p.add_argument("--eval-n-tries", default=None,
+                   help="Comma-separated retry budgets for the EVALUATION degree-matched "
+                        "sampler (e.g. 16,64). 16 is the published default and is always "
+                        "scored under the usual key; each other value adds a "
+                        "`degree_matched_ntries<N>` entry. The output gets an `_evalntries` "
+                        "suffix so published artifacts are never overwritten. Training "
+                        "negatives are unchanged (independent audit 2026-11-02: 16 draws "
+                        "fall back to uniform 1.2-1.6 points more often than 50).")
     p.add_argument("--split", default="val", choices=["val", "test"])
     # Suffixed by split AND checkpoint: this script is run against two different models
     # (matched-negative and uniform-negative) on two splits, and a fixed path would have
@@ -146,7 +154,8 @@ def main() -> None:
     if args.out is None:
         tag = Path(ckpt).parent.name
         kind = "seen_grid" if is_transductive else "heldout_grid"
-        args.out = f"results/comparison/{kind}_{tag}_{args.split}.json"
+        args.out = (f"results/comparison/{kind}_{tag}_{args.split}"
+                    f"{'_evalntries' if args.eval_n_tries else ''}.json")
 
     criterion = CombinedLoss(
         reconstruction_weight=tcfg["loss_reconstruction_weight"],
@@ -155,10 +164,13 @@ def main() -> None:
     ).to(device)
 
     results: dict[str, dict[str, float]] = {}
-    for name, hard in (("uniform", False), ("degree_matched", True)):
+    extra_ntries = [int(x) for x in (args.eval_n_tries or "").split(",") if x.strip() and int(x) != 16]
+    conds = [("uniform", False, 16), ("degree_matched", True, 16)] + [
+        (f"degree_matched_ntries{n}", True, n) for n in extra_ntries]
+    for name, hard, n_tries in conds:
         # Fresh sampler per condition, same seed: identical positives, identical encoder
         # view, only the negatives differ.
-        sampler = LinkSampler(all_pos, deg, seed, hard=hard)
+        sampler = LinkSampler(all_pos, deg, seed, hard=hard, n_tries=n_tries)
         m = evaluate(model, loader, criterion, device, mp_graph,
                      sampler=sampler, sup_edges=sup)
         results[name] = {
@@ -167,7 +179,9 @@ def main() -> None:
             "cell_acc": m.get("cell_acc", float("nan")),
         }
         if hard:
-            log.info(f"  degree-matched fallback rate: {sampler.fallback_pct:.1f}%")
+            results[name]["fallback_pct"] = sampler.fallback_pct
+            log.info(f"  [{name}] degree-matched fallback rate: {sampler.fallback_pct:.1f}%  "
+                     f"AUROC={results[name]['auroc']:.4f}")
 
     u = results["uniform"]["auroc"]
     d = results["degree_matched"]["auroc"]

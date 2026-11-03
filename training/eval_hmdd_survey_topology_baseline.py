@@ -190,6 +190,9 @@ def main() -> None:
                         "`_s<seed>` suffix, so the published single-seed artifacts are never "
                         "overwritten. Used to average the floor over several splits "
                         "(independent audit 2026-11-02: our floor was one split).")
+    p.add_argument("--n-tries", type=int, default=16,
+                   help="Retry budget of the degree-matched sampler (16 = published). "
+                        "A non-default value adds an `_ntries<N>` suffix to the output.")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -209,6 +212,8 @@ def main() -> None:
         suffix = "" if args.edge_regime == "held_out" else f"_{args.edge_regime}"
         if args.seed is not None:
             suffix += f"_s{args.seed}"
+        if args.n_tries != 16:
+            suffix += f"_ntries{args.n_tries}"
         args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}{suffix}.json"
 
     log.info("=" * 78)
@@ -267,7 +272,7 @@ def main() -> None:
         deg = gene_in_degree(train_pos, n_disease)
         bins = degree_bins(deg)
         dm_neg, n_fb = sample_degree_matched_negatives(
-            tiled, all_pos, bins, n_disease, gen, torch.device("cpu")
+            tiled, all_pos, bins, n_disease, gen, torch.device("cpu"), n_tries=args.n_tries
         )
         log.info(f"  degree-matched fallback rate: "
                  f"{100.0 * n_fb / max(dm_neg.shape[1], 1):.1f}%")
@@ -309,7 +314,7 @@ def main() -> None:
         deg = gene_in_degree(train_pos, n_disease)
         bins = degree_bins(deg)
         dm_neg, n_fb = sample_degree_matched_negatives(
-            tiled, all_pos, bins, n_disease, gen, torch.device("cpu")
+            tiled, all_pos, bins, n_disease, gen, torch.device("cpu"), n_tries=args.n_tries
         )
         log.info(f"  degree-matched fallback rate: "
                  f"{100.0 * n_fb / max(dm_neg.shape[1], 1):.1f}%")

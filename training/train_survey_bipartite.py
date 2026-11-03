@@ -73,11 +73,11 @@ def edge_dict(edge_index: torch.Tensor) -> dict:
 
 def draw_negatives(
     pos: torch.Tensor, all_pos: torch.Tensor, bins: torch.Tensor,
-    n_mirna: int, n_gene: int, hard: bool, gen: torch.Generator,
+    n_mirna: int, n_gene: int, hard: bool, gen: torch.Generator, n_tries: int = 16,
 ) -> torch.Tensor:
     if hard:
         neg, _ = sample_degree_matched_negatives(
-            pos, all_pos, bins, n_gene, gen, torch.device("cpu")
+            pos, all_pos, bins, n_gene, gen, torch.device("cpu"), n_tries=n_tries
         )
         return neg
     return uniform_negatives(pos, all_pos, n_mirna, n_gene, gen)
@@ -118,6 +118,14 @@ def main() -> None:
                         "The split is seeded from this too, so each seed is a different "
                         "split AND a different init -- the same convention as the "
                         "multi-seed runs on our own graph.")
+    p.add_argument("--eval-n-tries", default=None,
+                   help="Comma-separated retry budgets for the EVALUATION degree-matched "
+                        "sampler (e.g. 16,64). 16 is the published default and is always "
+                        "scored under the usual key; each other value adds a "
+                        "`degree_matched_ntries<N>` entry. The output gets an `_evalntries` "
+                        "suffix so published artifacts are never overwritten. Training "
+                        "negatives are unchanged (independent audit 2026-11-02: 16 draws "
+                        "fall back to uniform 1.2-1.6 points more often than 50).")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -136,7 +144,7 @@ def main() -> None:
                    else ("_trainuniform" if args.negatives == "uniform"
                          else "_traindm"))
         args.out = (f"results/comparison/survey_trained_grid_{paper}_{regime}"
-                    f"{neg_tag}_s{seed}.json")
+                    f"{neg_tag}_s{seed}{'_evalntries' if args.eval_n_tries else ''}.json")
 
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -231,9 +239,13 @@ def main() -> None:
     # Both test cells from the one trained model: same pairs, same encoder view, only
     # the negative sampler differs -- mirroring eval_heldout_grid.py on our own graph.
     results = {}
-    for name, is_hard in (("uniform", False), ("degree_matched", True)):
+    extra_ntries = [int(x) for x in (args.eval_n_tries or "").split(",") if x.strip() and int(x) != 16]
+    conds = [("uniform", False, 16), ("degree_matched", True, 16)] + [
+        (f"degree_matched_ntries{n}", True, n) for n in extra_ntries]
+    for name, is_hard, n_tries in conds:
         g_eval = torch.Generator().manual_seed(seed)
-        neg = draw_negatives(test_sup, split.all_pos, bins, n_mirna, n_gene, is_hard, g_eval)
+        neg = draw_negatives(test_sup, split.all_pos, bins, n_mirna, n_gene, is_hard, g_eval,
+                             n_tries=n_tries)
         results[name] = evaluate(model, x_dict, ei_dict, test_sup, neg, device)
         log.info(f"  TEST [{name:<15}] AUROC={results[name]['auroc']:.4f}  "
                  f"AUPRC={results[name]['auprc']:.4f}")

@@ -332,8 +332,13 @@ class LinkSampler:
         seed: int,
         hard: bool = True,
         n_bins: int = N_DEGREE_BINS,
+        n_tries: int = 16,
     ) -> None:
         self.all_pos = all_pos_global
+        # Draws per positive from its degree bin before falling back to a uniform non-edge.
+        # 16 is what every published number used; 50+ cuts the fallback by 1.2-1.6 points
+        # (analysis/compare_matched_samplers.py, job 568).
+        self.n_tries = n_tries
         self.gene_bins_global = degree_bins(deg, n_bins)
         self.hard = hard
         self.generator = torch.Generator().manual_seed(seed)
@@ -378,7 +383,7 @@ class LinkSampler:
             gene_bins_local = self.gene_bins_global[batch["gene"].n_id.cpu()]
             neg, n_fb = sample_degree_matched_negatives(
                 scored_pos, exclusion, gene_bins_local, n_gene,
-                self.generator, device,
+                self.generator, device, n_tries=self.n_tries,
             )
             self.n_fallback += n_fb
         else:

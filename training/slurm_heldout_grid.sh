@@ -54,7 +54,7 @@ echo ""
 python training/eval_heldout_grid.py \
     --config "${CONFIG}" \
     --checkpoint "${CKPT}" \
-    --split "${SPLIT}"
+    --split "${SPLIT}" ${RUN_ARGS:-}
 
 CKPT_TAG="$(basename "$(dirname "${CKPT}")")"
 

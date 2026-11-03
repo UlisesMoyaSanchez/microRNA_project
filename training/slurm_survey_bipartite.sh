@@ -59,7 +59,7 @@ echo ""
 
 NEGARG=()
 if [[ -n "${NEGATIVES:-}" ]]; then NEGARG=(--negatives "${NEGATIVES}"); fi
-python training/train_survey_bipartite.py --config "${CONFIG}" --seed "${SEED}" "${NEGARG[@]}"
+python training/train_survey_bipartite.py --config "${CONFIG}" --seed "${SEED}" "${NEGARG[@]}" ${RUN_ARGS:-}
 
 echo ""
 echo "Done: $(date)"
