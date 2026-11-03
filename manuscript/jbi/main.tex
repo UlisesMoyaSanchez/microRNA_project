@@ -362,7 +362,7 @@ miRNA and $v$ a gene.}
 \end{tikzpicture}
 \caption{Popularity-biased negative sampling. For a scorer $\mathrm{score}(u,v)=\deg(v)$, a
 uniform negative usually has lower degree than the positive's node and loses for free, while
-a degree-matched negative ties.}
+a degree-matched negative roughly ties (exactly only when degrees, not just degree bins, match; with eight bins a degree-only scorer still reaches about 0.51--0.55).}
 \label{fig:neg_sampling_mechanism}
 \end{figure}
 
@@ -809,10 +809,15 @@ MGCNSS~\cite{tian2024mgcnss} is the one surveyed paper whose repository ships bo
 cross-validation folds and the precomputed network its model reads. Given the split files alone,
 \texttt{protocheck} reports the leakage check as unchecked, because a split does not show what the encoder
 sees. Given that network as the encoder's edges as well, it fails the leakage check on every fold
-(all 1,086 held-out positives are in the encoder's input, and 11--14 evaluation negatives are known
-associations), warns that the evaluation negatives do not mirror the positives' column degrees
-(TV 0.52--0.56, while training and evaluation negatives match each other at 0.02--0.06), and puts the
-reported 0.9874 only 2.2 to 2.9 points above a floor that sees the same edges. It cannot see the two other
+(all 1,086 held-out positives are in the encoder's input), warns that the evaluation negatives do not
+mirror the positives' column degrees (TV 0.53--0.58, while training and evaluation negatives match each
+other at 0.02--0.04), and puts the reported 0.9874 only 2.6 to 4.1 points above a floor that sees the same
+edges. Its fold files store positives 1-based and negatives 0-based, so they must be read with separate
+index bases (\texttt{--neg-index-base}); read with one base, a few negatives fall on known associations.
+%% STAGE (2026-11-03): corrected after the independent audit's F3-2. The earlier text said "11-14
+%%   evaluation negatives are known associations", TV 0.52-0.56, 0.02-0.06 and 2.2-2.9 points: all
+%%   artefacts of reading the 0-based negatives as 1-based (job 672 checks both bases per fold:
+%%   0 known associations with the right base, 11-14 plus 1-9 out-of-range rows with the wrong one). It cannot see the two other
 choices behind that number: that the test negatives were picked by the paper's own selector, and that
 the public code keeps the epoch with the best test AUROC. A leak-free claim therefore needs the encoder's
 edge set, not only the split.

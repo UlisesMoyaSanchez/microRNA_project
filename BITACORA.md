@@ -88,6 +88,27 @@ Compara su fase 2 contra nuestros artefactos. Hallazgos:
   independiente**. Su GCN sin entrenar sí se mueve en nuestro grafo (0.67 uniforme contra 0.51 emparejado), coherente con la
   salvedad de arquitectura.
 
+### F3-2 y F3-7, corregidos
+
+**F3-2.** `analysis/protocheck_mgcnss.py` (`5f…`) ahora lee los folds con positivos en base 1 y negativos en base 0, y
+**verifica las dos bases por fold** antes de auditar. Hubo que copiar `result.mat` a la DGX con `scp`; el SHA-256 coincide.
+Job 672 (`e2a6cca`):
+- Con base 0, **0** negativos son asociaciones conocidas y ninguno queda fuera de rango.
+- Con base 1, como estaba, 11–14 eran asociaciones conocidas y además **1–9 negativos por fold tenían índice −1**, que numpy
+  toma en silencio como la última fila o columna.
+
+Cifras corregidas en el manuscrito (párrafo de MGCNSS en la sección de `protocheck`):
+- Se quitó "11–14 evaluation negatives are known associations".
+- TV 0.52–0.56 → **0.53–0.58**; TV entrenamiento-contra-evaluación 0.02–0.06 → **0.02–0.04**.
+- Margen sobre el piso que ve las mismas aristas: 2.2–2.9 → **2.6–4.1 puntos**.
+- Una frase nueva dice que esos archivos necesitan bases separadas (`--neg-index-base`).
+
+Las conclusiones no cambian (fuga del 100 %, aviso de negativos, margen chico). Las cifras de su fold 0 (TV 0.5635, piso
+0.9567) coinciden con las del auditor.
+
+**F3-7.** El caption de la figura del mecanismo de popularidad ya no dice que el negativo emparejado "empata": dice que
+empata aproximadamente, y que con 8 contenedores un scorer de solo grado llega a ~0.51–0.55.
+
 ---
 
 ## 2026-11-02 — La auditoría independiente: cuatro afirmaciones tocadas y una regla de falsación disparada
