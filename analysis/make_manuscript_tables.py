@@ -323,6 +323,8 @@ def table6_protocol_grid() -> str:
              json.load(open(COMP / "graph_candidate_stats.json"))["graphs"]}
 
     hmdd = "hmdd_survey_topology_baseline_%s%s.json"
+    EXACT_PAPER = {"Canonical HMDD, generated split": "nimgsa", "DiGAMN": "digamn",
+                   "CKSNP-GNN": "cksnp_gnn", "CoupleMDA": "couplemda", "MEAHNE": "meahne"}
     rows = [
         ("Own graph (primary case)", "own_graph", "--",
          load("topology_baseline_test_seen.json"), load("topology_baseline_test.json")),
@@ -375,6 +377,12 @@ def table6_protocol_grid() -> str:
         else:
             us, uh = best(seen, "uniform"), best(held, "uniform")
             ds, dh = best(seen, "degree_matched"), best(held, "degree_matched")
+            # External graphs: degree-matched cells from the exact sampler with nearest-bin
+            # fallback, same seed-42 split (adopted 2026-11-03, see aggregate_trained_grid.py).
+            paper = EXACT_PAPER.get(label)
+            if paper:
+                ds = best(load(hmdd % (paper, "_seen_s42_policyexactnb")), "degree_matched")
+                dh = best(load(hmdd % (paper, "_s42_policyexactnb")), "degree_matched")
         cost = us - (dh if dh is not None else uh)
         cell = lambda v: "--" if v is None else f"{v:.4f}"
         lines.append(

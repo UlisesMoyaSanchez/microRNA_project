@@ -124,7 +124,7 @@ Biomedical Interaction Graphs}
 
 \textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free scores from graph topology alone) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.618--0.641 on every graph. Negative sampling carried 0.29--0.41 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
 
 \textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
@@ -143,7 +143,7 @@ Biomedical Interaction Graphs}
 %%   (30th of 32, 14th of 27) are in Results 4.2 and the Conclusion.
 %% - protocheck's validation shows the implementation, not a discovery; the body says so.
 \begin{highlights}
-\item Correcting the protocol drops AUROC from 0.88--0.99 to 0.62--0.64 on six graphs.
+\item Correcting the protocol drops AUROC from 0.88--0.99 to 0.61--0.63 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
 \item On 7 of 21 papers' own data, trained models beat a model-free floor by 4.7 points.
 \item Four trained models inflate by 0.24--0.31 on our graph, a graph-free MLP included.
@@ -272,7 +272,7 @@ Because we built it, it is also the one on which we can dissect the mechanism in
 This paper makes five contributions.
 \begin{enumerate}
 \item It quantifies the inflation on six graphs. The conventional protocol overstates AUROC by
-0.26--0.37 on every one of them, and the corrected protocol leaves all six at 0.62--0.64.
+0.26--0.38 on every one of them, and the corrected protocol leaves all six at 0.61--0.63.
 \item It explains where the inflation comes from. It separates the two failure modes, whose
 relative weight depends on the graph, and shows that candidate columns which can never be
 positive raise the model-free floor on their own.
@@ -513,6 +513,7 @@ of the training edges are withheld from the encoder's input and used only as sup
 targets, so the model cannot read a training edge off the graph while being asked to
 predict it.
 
+\phantomsection\label{sec:methods_negatives}%
 A uniform negative pairs the source node $u$ of a positive with a target node drawn
 uniformly at random. A degree-matched negative pairs it instead with a non-target node of
 similar popularity: target nodes are placed in eight log-spaced bins of in-degree,
@@ -524,9 +525,17 @@ v' \sim \mathcal{U}\bigl\{\, j : b(j) = b(v),\ (u,j)\notin E \,\bigr\},
 \label{eq:matched}
 \end{equation}
 where $d_{\mathrm{tr}}(j)$ is the in-degree of node $j$ among training edges.
-When no valid candidate is found in 16 draws the sampler falls back to any non-target of
-$u$, and the fraction of fallbacks is logged. Within any single reported number the same
-sampler is used at training and at evaluation; mixing the two produces the ``mismatch
+During training, negatives are drawn per batch with up to 16 draws from that set and a uniform
+non-target of $u$ as the fallback. Evaluation negatives are drawn from the set itself, enumerated
+rather than sampled; when it is empty, because $u$ already targets every node in the bin, they come
+from the nearest bin that is not. On our graph the bins never run out, but on the five external
+graphs 3--4\% of held-out positives hit an exhausted bin, and a uniform fallback for those few
+raises the model-free floor by 0.016--0.046 AUROC (\texttt{analysis/test\_fallback\_policy.py}).
+Within any single reported number the same type of negative, uniform or degree-matched, is used
+at training and at evaluation;
+%% STAGE (2026-11-03): evaluation sampler changed to the exact, nearest-bin one after the
+%%   independent audit traced its 0.011-0.019 lower floor to our 16-draw uniform fallback
+%%   (BITACORA 2026-11-02/03; jobs 566-659, 670). Own graph unaffected (fallback 0%). mixing the two produces the ``mismatch
 trap'', an apparent difficulty measurement that is in fact an artifact of the distribution
 mismatch (Figure~\ref{fig:neg_sampling_mechanism}). In the headline grid
 (Figure~\ref{fig:protocol_grid}), the edges-seen row reports the uniform-negative-trained model
@@ -595,9 +604,9 @@ subsections below follow the same order.
 \label{sec:collapse_general}
 We retrain this paper's architecture from scratch under both protocols on six graphs
 (Figure~\ref{fig:cross_graph_collapse}, Table~\ref{tab:discrimination}). AUROC falls from
-0.879--0.992 under the conventional protocol to 0.618--0.641 once test edges are held out
-and negatives are degree-matched, an inflation of 0.256 to 0.365 on every graph. Six graphs
-that share no data, no node types and no size land in the same 0.023-wide band. Our own
+0.879--0.992 under the conventional protocol to 0.612--0.633 once test edges are held out
+and negatives are degree-matched, an inflation of 0.263 to 0.380 on every graph. Six graphs
+that share no data, no node types and no size land in the same 0.022-wide band. Our own
 graph's $+0.359$ is inside that range, near its upper end: it is a member of the
 distribution, not an outlier. The trained arm is our architecture on their graphs, not each
 paper's own model, so the table is evidence about the protocol, not about their reported
@@ -605,7 +614,7 @@ numbers (Discussion).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
-\caption{The same inflation on six graphs: this paper's architecture under the conventional and corrected protocols (mean over 4 seeds). Rows are sorted by inflation, our graph is in bold, and the band marks 0.618--0.641.}
+\caption{The same inflation on six graphs: this paper's architecture under the conventional and corrected protocols (mean over 4 seeds). Rows are sorted by inflation, our graph is in bold, and the band marks 0.612--0.633.}
 \label{fig:cross_graph_collapse}
 \end{figure}
 
@@ -615,10 +624,10 @@ Running the same $2\times2$ grid (Figure~\ref{fig:protocol_grid}) with the four 
 heuristics (Table~\ref{tab:heuristics}) instead of a trained model
 (Table~\ref{tab:protocol_grid}, in \S\ref{sec:dead_columns}) shows the inflation is not something only a trained model
 produces. Within a row only the adjacency the heuristics may see changes, so the inflation
-is attributable to the protocol alone: $+0.316$ to $+0.426$ across the six graphs, with our
+is attributable to the protocol alone: $+0.335$ to $+0.464$ across the six graphs, with our
 graph's $+0.342$ inside the range. How it divides between the two failures differs. On the
 five surveyed graphs the negative-sampling axis carries almost the whole effect
-($0.29$--$0.41$) and the edge split only $0.01$--$0.02$, because these association matrices
+($0.30$--$0.45$) and the edge split only $0.01$--$0.02$, because these association matrices
 are small and their heuristics lean on node degree, which a handful of masked edges barely
 moves. On the canonical HMDD matrix at least a sixth of the negative-sampling share is label
 noise (Section~\ref{sec:limitations}, (vii)). On our own graph both contribute and compound super-additively: the two axes sum to $0.272$ against a total of $0.342$. The
@@ -626,9 +635,9 @@ canonical HMDD~\cite{li2014hmdd} matrix appears twice because MGCNSS~\cite{tian2
 MGCNSS has no negative-sampling axis because it carries the paper's own negatives.
 
 One asymmetry in Table~\ref{tab:discrimination} is measured but not explained. On the five
-surveyed graphs the conventional protocol leaves the trained model within 1.3 points of the
-best heuristic, behind it on three, and the corrected protocol opens that margin to between
-4.3 and 8.3 points, so only the corrected one can tell a trained model from a degree count.
+surveyed graphs the conventional protocol leaves the trained model within 0.7 points of the
+best heuristic, behind it on two, and the corrected protocol opens that margin to between
+7.0 and 10.7 points, so only the corrected one can tell a trained model from a degree count.
 On our graph the margin narrows from $+0.053$ to $+0.036$. The obvious explanation, that our
 node features and miRNA embeddings let the model memorise training edges under the
 conventional protocol, does not hold: per-epoch training and validation loss show the same
@@ -644,7 +653,7 @@ the seven surveyed papers' own matrices the trained models beat the model-free f
 AUROC points on average per paper (3.9 per distinct graph), but the gap runs from $-9.2$
 points (DiGAMN~\cite{liu2024digamn}) to $+3.3$: on MEAHNE's~\cite{huang2022meahne} graph the heuristic beats the paper's own model
 (0.9848 vs.\ 0.9520), and with degree-matched negatives every heuristic falls to
-0.55--0.58. Second, the floor replicates. The untrained comparators that NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}
+0.52--0.55. Second, the floor replicates. The untrained comparators that NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}
 and CKSNP-GNN~\cite{li2022cksnpgnn} report (0.8960, 0.8565 and 0.9190) sit beside the 0.8842 and 0.8924 that our
 best heuristic reaches on their matrices under the conventional protocol, and CKSNP-GNN's
 is a number transferred from other papers, not measured on its own data. Third, on OGB the
@@ -758,7 +767,7 @@ scorer rejects for free, raising the model-free floor from 0.859 to 0.982 with n
 the other two visible.
 
 None of this is specific to our graph or to one model. Five external association matrices that share no data
-with ours each lose 0.26--0.37 AUROC between the protocols and land in the same 0.618--0.641 band
+with ours each lose 0.26--0.38 AUROC between the protocols and land in the same 0.612--0.633 band
 (Table~\ref{tab:discrimination}); four trained models inflate by 0.24--0.31, a graph-free MLP
 included, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
 weakness against a floor also appears in published work. Across the seven surveyed papers the trained models
@@ -825,10 +834,10 @@ lift the information ceiling. (vii) Unlabeled pairs are not all true negatives: 
 recorded, and they concentrate on popular columns, which is where degree-matched negatives are drawn. The
 corrected protocol is therefore biased downward, and part of what we attribute to negative sampling is label
 noise. We measured how much on the canonical HMDD matrix, the one graph whose source release (HMDD v2.0) has a
-later one (v3.2) that its names can be matched against: v3.2 records 23\% of its degree-matched negatives as
+later one (v3.2) that its names can be matched against: v3.2 records 25\% of its degree-matched negatives as
 associations, against 10\% of its uniform ones (21 seeds, on the 201 of 380 diseases whose names match).
 Dropping those negatives lowers the heuristics' held-out drop from uniform to degree-matched negatives
-(Table~\ref{tab:protocol_grid}) from 0.30 to 0.25, so the associations known today explain about a sixth of it.
+(Table~\ref{tab:protocol_grid}) from 0.31 to 0.26, so the associations known today explain about a sixth of it.
 This is a lower bound: v3.2 is itself incomplete, and the hidden positives it records score above the held-out
 positives on average, so a larger share cannot be ruled out. On our own graph, whose labels are miRDB
 predictions, it cannot be measured (\texttt{analysis/hmdd\_hidden\_positives.py}). We also leave unexplained why the margin over the floor widens under the corrected
@@ -837,8 +846,8 @@ protocol on the five external graphs but narrows on ours (Section~\ref{sec:colla
 \section{Conclusion}
 \label{sec:conclusion}
 Under conventions common in this subfield, a trained link predictor scores AUROC 0.879--0.992 on six
-biomedical interaction graphs. Correcting both conventions drops every one into 0.618--0.641, a loss of
-0.26--0.37. Five of those graphs are other groups' published matrices, so the inflation is not a property of
+biomedical interaction graphs. Correcting both conventions drops every one into 0.612--0.633, a loss of
+0.26--0.38. Five of those graphs are other groups' published matrices, so the inflation is not a property of
 one dataset. The two failures compound on our graph, negative sampling carries most of the loss on the five
 surveyed graphs, part of it label noise, and candidate columns that can never be positive raise the model-free floor on their own.
 Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the

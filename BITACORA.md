@@ -23,6 +23,73 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-03 — Adoptado el muestreador emparejado exacto; tablas actualizadas; llega la fase 3 del auditor
+
+### El muestreador exacto, adoptado para evaluar
+
+Decisión del autor: los negativos emparejados de **evaluación** se sacan con
+`training/splits.py::sample_degree_matched_negatives_exact(neighbour=True)`. Enumera los candidatos válidos del contenedor y,
+si está agotado, toma el contenedor vecino más cercano; nunca cae a uniforme. El entrenamiento sigue con el muestreador por
+batch (16 intentos y fallback uniforme), así que los modelos no cambian. Los dos son negativos emparejados por grado y solo
+difieren en el 3–4 % de positivos con contenedor agotado de los grafos externos. Métodos lo dice, y aclara que lo que
+coincide entre entrenamiento y evaluación es el *tipo* de negativo.
+
+**Código:**
+- `analysis/aggregate_trained_grid.py` (`e638549`): las celdas emparejadas entrenadas salen de los `_evalpolicy`
+  (`degree_matched_exactnb`) y **todos los pisos son la media de las 4 semillas del grid**, no la partición única de la
+  semilla 42.
+- `trained_grid_summary.json` regenerado.
+- Fig. 4 regenerada.
+- `make_manuscript_tables.py::table6_protocol_grid` lee las celdas emparejadas de los `_s42_policyexactnb`.
+- `analysis/hmdd_hidden_positives.py --policy exactnb` (job 670, `27f0204`).
+
+**Manuscrito:**
+- **Tabla 6** (grid de pisos, sigue en una partición, semilla 42): celdas emparejadas de los 5 externos 0.5244–0.5497
+  (antes 0.5580–0.5789). Inflación +0.335 a +0.464 (antes +0.316 a +0.426); la nuestra, +0.342, sigue dentro.
+- **Tabla 7:** corregido entrenado 0.612–0.634 (antes 0.618–0.641); pisos (4 semillas) 0.524–0.541; márgenes corregidos
+  **+0.070 a +0.107** (antes +0.043 a +0.083); márgenes convencionales −0.006 a +0.003, detrás en 2 (antes en 3).
+- **Texto:**
+  - Banda "0.618–0.641" → **0.612–0.633** en Abstract, Resultados, Discusión, Conclusión, caption de la Fig. 4 y tabla resumen.
+  - Pérdida "0.26–0.37" → 0.26–0.38. Highlight 1 y contribuciones "0.62–0.64" → 0.61–0.63.
+  - Eje de negativos "0.29–0.41" → 0.30–0.45. "Every heuristic falls to 0.55–0.58" → 0.52–0.55.
+  - Banda "0.023-wide" → 0.022.
+  - Ruido de etiquetas: 23 % → 25 % de negativos emparejados registrados en v3.2, y la caída "0.30 → 0.25" → **0.31 → 0.26**.
+    La fracción explicada no cambia: **un sexto** (16.4 % contra 16.2 %).
+  - Discusión de la asimetría: "within 1.3 points, behind on three, 4.3–8.3" → 0.7, two, 7.0–10.7.
+- **Sin cambio:** nuestro grafo (0.6276, 0.5912, +0.036; fallback 0 %), la Tabla 5 y el "4.7 points" (pisos uniformes),
+  MGCNSS (sus propios negativos).
+- Compila limpio.
+
+La anomalía de la Tabla 7 se agranda: nuestro margen se cierra (+0.053 → +0.036) mientras los externos se abren a +0.07–0.11.
+Sigue declarada como abierta.
+
+### La fase 3 del auditor (`audit_result/AUDIT_REPORT_Abraham_Sanchez_fase3.zip`)
+
+Compara su fase 2 contra nuestros artefactos. Hallazgos:
+- **F3-1** (muestreador con 16 intentos): lo mismo que encontramos y ya está resuelto arriba. Él lo cuantificó por su lado:
+  con nuestros 16 intentos, sus 10 celdas emparejadas pasan la regla.
+- **F3-2 (media–alta, NUEVO):** `analysis/protocheck_mgcnss.py` lee los folds de MGCNSS con base 1 **para los negativos
+  también**, cuando son base 0 (su E-3). Así, dos cifras del manuscrito son **falsas**: "11–14 evaluation negatives are known
+  associations" (con la base correcta son 0) y "TV 0.52–0.56" (el valor correcto es 0.529–0.578). Pendiente: corregir.
+- **F3-3** (ModulePred) y **D** (adjudicación): ya resueltos el 2026-11-02.
+- **F3-4:** su GCN da 0.605–0.624 corregido; sin cambio.
+- **F3-5:** con los márgenes viejos, `margin_warn = 0.05` habría avisado en 2 de 5 grafos sobre el protocolo corregido. Con
+  los nuevos (+0.070 a +0.107) ya no avisa en ninguno.
+- **F3-6:** el control sin entrenar no tenía sensibilidad demostrada. Ya lo cambiamos: corrimos HGT y GCN sin entrenar y
+  pusimos la salvedad de arquitectura. Él sugiere además un **control positivo** (algo sin entrenar que sí suba con la fuga),
+  que queda como opción.
+- **F3-7 (baja):** la Fig. 2 de Métodos dice que el emparejado "empata en 0.5"; en realidad es ≈0.5, porque 8 contenedores
+  dejan señal de grado dentro de cada uno.
+- **F3-8 (baja):** reproducibilidad del grafo propio. `01_download` usa `mygene.info` en vivo, sin versión, y su
+  reconstrucción da 44,158 aristas miRNA→gen contra nuestras 44,186 (−28).
+- **Grafo propio reconstruido (5e):** el resto del grafo coincide exacto. Su pista A sobre él reproduce nuestro piso con
+  diferencias ≤ 0.005 (gene_degree 0.873/0.513 contra 0.8712/0.5126; Adamic–Adar 0.867/0.593 contra 0.8630/0.5912). Su GCN
+  (pista B) va de 0.900 a 0.686 y es super-aditiva, así que **C1 y C2 se sostienen en nuestro grafo con un modelo
+  independiente**. Su GCN sin entrenar sí se mueve en nuestro grafo (0.67 uniforme contra 0.51 emparejado), coherente con la
+  salvedad de arquitectura.
+
+---
+
 ## 2026-11-02 — La auditoría independiente: cuatro afirmaciones tocadas y una regla de falsación disparada
 
 **Qué llegó.** Abraham Sánchez (con Claude Sonnet 5.5 como asistente) entregó el reporte de la auditoría independiente como
