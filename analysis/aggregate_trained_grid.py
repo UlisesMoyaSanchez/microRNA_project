@@ -64,6 +64,15 @@ FLOOR_ARTIFACT = {
 
 SEEDS = [42, 7, 123, 2024]
 
+# Degree-matched cells are scored with the EXACT sampler and a nearest-bin fallback
+# (training/splits.py::sample_degree_matched_negatives_exact, neighbour=True), adopted
+# 2026-11-03. The retry sampler used before gave 2-5% of positives a uniform negative when
+# their bin was exhausted, which inflated the model-free floor by 0.016-0.046 on these graphs
+# (analysis/test_fallback_policy.py, jobs 618-659; BITACORA 2026-11-02/03). Trained matched
+# cells come from the retrained runs scored with that sampler (`_evalpolicy`; at the old
+# sampler they reproduce the published runs to <=0.003); floors are the mean over SEEDS.
+MATCHED_POLICY = "exactnb"
+
 # (regime, eval sampler) -> which training arm fills it. See the docstring.
 CELL_ARM = {
     ("seen", "uniform"): "uniform",
@@ -78,21 +87,31 @@ def trained_cell(graph: str, regime: str, ev: str) -> tuple[float, float, int]:
     tag = "_trainuniform" if arm == "uniform" else ""
     vals = []
     for s in SEEDS:
-        f = COMP / f"survey_trained_grid_{graph}_{regime}{tag}_s{s}.json"
+        if ev == "degree_matched":
+            f = COMP / f"survey_trained_grid_{graph}_{regime}{tag}_s{s}_evalpolicy.json"
+            key = f"degree_matched_{MATCHED_POLICY}"
+        else:
+            f = COMP / f"survey_trained_grid_{graph}_{regime}{tag}_s{s}.json"
+            key = ev
         if not f.exists():
             raise FileNotFoundError(f"missing {f} — run training/slurm_survey_bipartite.sh "
                                     f"for graph={graph} regime={regime} "
                                     f"negatives={arm} seed={s}")
-        vals.append(json.load(open(f))["results"][ev]["auroc"])
+        vals.append(json.load(open(f))["results"][key]["auroc"])
     return st.mean(vals), st.pstdev(vals), len(vals)
 
 
 def floor_cell(graph: str, regime: str, ev: str) -> float:
-    """Best of the four model-free heuristics, same graph, same protocol cell."""
+    """Best of the four model-free heuristics, same graph, same protocol cell, averaged over
+    the same SEEDS as the trained cells (it used to be the single seed-42 split)."""
     suffix = "_seen" if regime == "seen" else ""
-    f = COMP / f"hmdd_survey_topology_baseline_{FLOOR_ARTIFACT[graph]}{suffix}.json"
-    res = json.load(open(f))["results"]
-    return max(v["auroc"] for v in res[ev].values())
+    pol = f"_policy{MATCHED_POLICY}" if ev == "degree_matched" else ""
+    vals = []
+    for s in SEEDS:
+        f = COMP / f"hmdd_survey_topology_baseline_{FLOOR_ARTIFACT[graph]}{suffix}_s{s}{pol}.json"
+        res = json.load(open(f))["results"]
+        vals.append(max(v["auroc"] for v in res[ev].values()))
+    return st.mean(vals)
 
 
 def main() -> None:

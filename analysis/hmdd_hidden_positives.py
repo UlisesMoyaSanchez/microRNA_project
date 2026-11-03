@@ -55,7 +55,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from training.eval_hmdd_survey_topology_baseline import build_scoring_matrix, load_matrix
 from training.eval_topology_baseline import build_scorers, uniform_negatives
-from training.splits import degree_bins, gene_in_degree, sample_degree_matched_negatives
+from training.splits import (degree_bins, gene_in_degree, sample_degree_matched_negatives,
+                             sample_degree_matched_negatives_exact)
+
+POLICY = "tries"  # set from --policy in main(); "exactnb" = the sampler adopted 2026-11-03
 
 VERSIONS = Path("data/raw/hmdd_versions")
 CONFIG = "configs/config_hmdd_survey_nimgsa.yaml"  # the canonical row of the protocol grid
@@ -106,8 +109,12 @@ def regenerate(A_full: torch.Tensor, seed: int, test_frac: float, ratio: int):
     tiled = test_pos.repeat(1, ratio)
     unif = uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen)
     bins = degree_bins(gene_in_degree(train_pos, n_disease))
-    dm, _ = sample_degree_matched_negatives(tiled, all_pos, bins, n_disease, gen,
-                                            torch.device("cpu"))
+    if POLICY == "tries":
+        dm, _ = sample_degree_matched_negatives(tiled, all_pos, bins, n_disease, gen,
+                                                torch.device("cpu"))
+    else:
+        dm, _, _ = sample_degree_matched_negatives_exact(tiled, all_pos, bins, n_disease, gen,
+                                                         neighbour=(POLICY == "exactnb"))
     return scorers, tiled, unif, dm
 
 
@@ -143,8 +150,17 @@ def one_seed(A_full, seed, test_frac, ratio, mi, di, judge_d, v3) -> dict:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    p.add_argument("--out", default="results/comparison/hmdd_hidden_positives.json")
+    p.add_argument("--out", default=None)
+    p.add_argument("--policy", default="tries", choices=["tries", "exact", "exactnb"],
+                   help="Degree-matched sampler (see training/splits.py). Non-default writes "
+                        "hmdd_hidden_positives_policy<name>.json and checks the regenerated "
+                        "cell against the matching _s42_policy<name> floor artifact.")
     args = p.parse_args()
+    global POLICY, ARTIFACT
+    POLICY = args.policy
+    if args.out is None:
+        args.out = ("results/comparison/hmdd_hidden_positives.json" if POLICY == "tries" else
+                    f"results/comparison/hmdd_hidden_positives_policy{POLICY}.json")
 
     cfg = yaml.safe_load(open(CONFIG))
     dcfg, seed = cfg["data"], cfg["project"]["seed"]
@@ -178,7 +194,9 @@ def main() -> None:
     # 3. the exact canonical cell, checked against the artifact
     test_frac, ratio = float(dcfg["test_fraction"]), int(dcfg["negative_ratio"])
     scorers, pos, unif, dm = regenerate(A_full, seed, test_frac, ratio)
-    art = json.load(open(ARTIFACT))["results"]
+    art_path = (ARTIFACT if POLICY == "tries" else
+                Path(str(ARTIFACT).replace(".json", f"_s{seed}_policy{POLICY}.json")))
+    art = json.load(open(art_path))["results"]
     for name, neg in (("uniform", unif), ("degree_matched", dm)):
         mine = max(aurocs(scorers, pos, neg).values())
         theirs = max(v["auroc"] for v in art[name].values())
