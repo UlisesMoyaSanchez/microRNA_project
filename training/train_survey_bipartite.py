@@ -56,6 +56,7 @@ from training.eval_topology_baseline import uniform_negatives
 from training.splits import (
     REL_FWD, REL_REV, build_edge_split, assert_no_edge_leakage,
     degree_bins, gene_in_degree, sample_degree_matched_negatives,
+    sample_degree_matched_negatives_exact,
 )
 
 
@@ -126,6 +127,11 @@ def main() -> None:
                         "suffix so published artifacts are never overwritten. Training "
                         "negatives are unchanged (independent audit 2026-11-02: 16 draws "
                         "fall back to uniform 1.2-1.6 points more often than 50).")
+    p.add_argument("--eval-policies", default=None,
+                   help="Comma-separated extra evaluation samplers for the degree-matched "
+                        "cell: `exact` (enumerate the bin, uniform fallback) and/or `exactnb` "
+                        "(enumerate the bin, nearest-bin fallback). Adds "
+                        "`degree_matched_<policy>` entries; output suffix `_evalpolicy`.")
     args = p.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -144,7 +150,8 @@ def main() -> None:
                    else ("_trainuniform" if args.negatives == "uniform"
                          else "_traindm"))
         args.out = (f"results/comparison/survey_trained_grid_{paper}_{regime}"
-                    f"{neg_tag}_s{seed}{'_evalntries' if args.eval_n_tries else ''}.json")
+                    f"{neg_tag}_s{seed}{'_evalntries' if args.eval_n_tries else ''}"
+                    f"{'_evalpolicy' if args.eval_policies else ''}.json")
 
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -249,6 +256,18 @@ def main() -> None:
         results[name] = evaluate(model, x_dict, ei_dict, test_sup, neg, device)
         log.info(f"  TEST [{name:<15}] AUROC={results[name]['auroc']:.4f}  "
                  f"AUPRC={results[name]['auprc']:.4f}")
+    for pol in [x.strip() for x in (args.eval_policies or "").split(",") if x.strip()]:
+        assert pol in ("exact", "exactnb"), pol
+        neg, n_u, n_n = sample_degree_matched_negatives_exact(
+            test_sup, split.all_pos, bins, n_gene, torch.Generator().manual_seed(seed),
+            neighbour=(pol == "exactnb"))
+        name = f"degree_matched_{pol}"
+        results[name] = evaluate(model, x_dict, ei_dict, test_sup, neg, device)
+        results[name]["uniform_fallback_pct"] = 100.0 * n_u / max(test_sup.shape[1], 1)
+        results[name]["neighbour_fallback_pct"] = 100.0 * n_n / max(test_sup.shape[1], 1)
+        log.info(f"  TEST [{name:<15}] AUROC={results[name]['auroc']:.4f}  "
+                 f"uniform fb {results[name]['uniform_fallback_pct']:.1f}%  "
+                 f"neighbour fb {results[name]['neighbour_fallback_pct']:.1f}%")
 
     summary = {
         "paper": paper,

@@ -72,7 +72,8 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from training.eval_topology_baseline import build_scorers, uniform_negatives
-from training.splits import degree_bins, gene_in_degree, pair_keys, sample_degree_matched_negatives
+from training.splits import (degree_bins, gene_in_degree, pair_keys, sample_degree_matched_negatives,
+                             sample_degree_matched_negatives_exact)
 
 ORDER = ["gene_degree", "pref_attach", "common_neigh", "adamic_adar"]
 
@@ -190,6 +191,10 @@ def main() -> None:
                         "`_s<seed>` suffix, so the published single-seed artifacts are never "
                         "overwritten. Used to average the floor over several splits "
                         "(independent audit 2026-11-02: our floor was one split).")
+    p.add_argument("--policy", default="tries", choices=["tries", "exact", "exactnb"],
+                   help="Degree-matched sampler: retry-based (published), exact enumeration "
+                        "with uniform fallback, or exact with nearest-bin fallback. A "
+                        "non-default value adds a `_policy<name>` suffix.")
     p.add_argument("--n-tries", type=int, default=16,
                    help="Retry budget of the degree-matched sampler (16 = published). "
                         "A non-default value adds an `_ntries<N>` suffix to the output.")
@@ -214,6 +219,8 @@ def main() -> None:
             suffix += f"_s{args.seed}"
         if args.n_tries != 16:
             suffix += f"_ntries{args.n_tries}"
+        if args.policy != "tries":
+            suffix += f"_policy{args.policy}"
         args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}{suffix}.json"
 
     log.info("=" * 78)
@@ -271,9 +278,14 @@ def main() -> None:
         # edge regime with a different negative set.
         deg = gene_in_degree(train_pos, n_disease)
         bins = degree_bins(deg)
-        dm_neg, n_fb = sample_degree_matched_negatives(
-            tiled, all_pos, bins, n_disease, gen, torch.device("cpu"), n_tries=args.n_tries
-        )
+        if args.policy == "tries":
+            dm_neg, n_fb = sample_degree_matched_negatives(
+                tiled, all_pos, bins, n_disease, gen, torch.device("cpu"), n_tries=args.n_tries
+            )
+        else:
+            dm_neg, n_fb, _n_nb = sample_degree_matched_negatives_exact(
+                tiled, all_pos, bins, n_disease, gen, neighbour=(args.policy == "exactnb")
+            )
         log.info(f"  degree-matched fallback rate: "
                  f"{100.0 * n_fb / max(dm_neg.shape[1], 1):.1f}%")
         results = {
@@ -313,9 +325,14 @@ def main() -> None:
         # Degree bins stay on train_pos in BOTH regimes -- see the Mode B note.
         deg = gene_in_degree(train_pos, n_disease)
         bins = degree_bins(deg)
-        dm_neg, n_fb = sample_degree_matched_negatives(
-            tiled, all_pos, bins, n_disease, gen, torch.device("cpu"), n_tries=args.n_tries
-        )
+        if args.policy == "tries":
+            dm_neg, n_fb = sample_degree_matched_negatives(
+                tiled, all_pos, bins, n_disease, gen, torch.device("cpu"), n_tries=args.n_tries
+            )
+        else:
+            dm_neg, n_fb, _n_nb = sample_degree_matched_negatives_exact(
+                tiled, all_pos, bins, n_disease, gen, neighbour=(args.policy == "exactnb")
+            )
         log.info(f"  degree-matched fallback rate: "
                  f"{100.0 * n_fb / max(dm_neg.shape[1], 1):.1f}%")
 

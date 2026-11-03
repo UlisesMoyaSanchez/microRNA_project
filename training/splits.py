@@ -316,6 +316,54 @@ def map_to_local(
     return torch.stack([src[keep], dst[keep]])
 
 
+def sample_degree_matched_negatives_exact(
+    scored_pos: torch.Tensor,
+    exclusion_pos: torch.Tensor,
+    gene_bins: torch.Tensor,
+    n_gene: int,
+    generator: torch.Generator,
+    neighbour: bool = True,
+) -> tuple[torch.Tensor, int, int]:
+    """Evaluation-time degree-matched negatives with no retry budget.
+
+    For each positive (m, g): a column drawn uniformly from ALL columns of g's degree bin
+    that m does not link to (enumerated, not sampled with retries). If m already links to
+    every column of that bin, `neighbour=True` takes the nearest bin with a valid column
+    (b-1/b+1, then b-2/b+2, ...); `neighbour=False` falls back to a uniform non-edge, which
+    is what the retry sampler above does. analysis/test_fallback_policy.py (job 618): on the
+    survey graphs 2-5% of positives hit an exhausted bin, and their uniform fallbacks raise
+    the model-free floor by 0.011-0.037 AUROC.
+
+    A Python loop: meant for scoring a fixed test set once, not for per-batch training.
+    Returns (negatives (2, k), n_uniform_fallback, n_neighbour_fallback).
+    """
+    pos = scored_pos.cpu().long()
+    excl = exclusion_pos.cpu().long()
+    known: dict[int, set[int]] = {}
+    for r, c in excl.T.tolist():
+        known.setdefault(r, set()).add(c)
+    bins = gene_bins.cpu().long()
+    n_bins = int(bins.max()) + 1
+    by_bin = [torch.nonzero(bins == b, as_tuple=True)[0].tolist() for b in range(n_bins)]
+    cols, n_unif, n_nb = [], 0, 0
+    for m, g in pos.T.tolist():
+        km = known.get(m, set())
+        b = int(bins[g])
+        valid = [c for c in by_bin[b] if c not in km]
+        if not valid and neighbour:
+            for d in range(1, n_bins):
+                cand = [c for bb in (b - d, b + d) if 0 <= bb < n_bins
+                        for c in by_bin[bb] if c not in km]
+                if cand:
+                    valid, n_nb = cand, n_nb + 1
+                    break
+        if not valid:
+            n_unif += 1
+            valid = [c for c in range(n_gene) if c not in km]
+        cols.append(valid[int(torch.randint(len(valid), (1,), generator=generator))])
+    return torch.stack([pos[0], torch.tensor(cols, dtype=torch.long)]), n_unif, n_nb
+
+
 class LinkSampler:
     """
     Turns a batch plus a global supervision edge set into (mirna_idx, gene_idx, labels).
