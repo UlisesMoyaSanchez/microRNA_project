@@ -1,0 +1,41 @@
+{
+  "checkpoint": "checkpoints_v3fixed_edgesplit_s123/best_model.pt",
+  "epoch": 85,
+  "split": "test",
+  "protocol": "held_out",
+  "n_held_out_edges": 4418,
+  "held_out": {
+    "uniform": {
+      "auroc": 0.5630629673477047,
+      "auprc": 0.5923673700743171,
+      "cell_acc": 0.9867036011080332
+    },
+    "degree_matched": {
+      "auroc": 0.6351669248470591,
+      "auprc": 0.6673157774428699,
+      "cell_acc": 0.9864375835425293,
+      "fallback_pct": 0.0
+    },
+    "degree_matched_ntries17": {
+      "auroc": 0.6361339348406831,
+      "auprc": 0.6691026291459321,
+      "cell_acc": 0.9863779706752496,
+      "fallback_pct": 0.0
+    },
+    "degree_matched_ntries64": {
+      "auroc": 0.6373450539328835,
+      "auprc": 0.6701292766874903,
+      "cell_acc": 0.9865636108665167,
+      "fallback_pct": 0.0
+    }
+  },
+  "reference_seen_edges": {
+    "uniform": 0.9867,
+    "degree_matched": 0.9248
+  },
+  "attribution": {
+    "negatives_only": 0.061900000000000066,
+    "split_only": 0.42363703265229535,
+    "total": 0.35153307515294097
+  }
+}

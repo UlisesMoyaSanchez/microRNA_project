@@ -1,0 +1,63 @@
+{
+  "paper": "nimgsa",
+  "tier": 2,
+  "edge_regime": "seen",
+  "n_mirna": 495,
+  "n_disease": 383,
+  "n_positives_total": 5430,
+  "seed": 42,
+  "best_model_free_auroc": 0.8841864818941221,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8841864818941221,
+        "auprc": 0.8824006076364429,
+        "n_pairs": 1086
+      },
+      "pref_attach": {
+        "auroc": 0.8667945287248727,
+        "auprc": 0.8774698673967299,
+        "n_pairs": 1086
+      },
+      "common_neigh": {
+        "auroc": 0.8718564417718899,
+        "auprc": 0.8913895748602405,
+        "n_pairs": 1086
+      },
+      "adamic_adar": {
+        "auroc": 0.8805948129381479,
+        "auprc": 0.8960372257392676,
+        "n_pairs": 1086
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5475209344444105,
+        "auprc": 0.5726808532990503,
+        "n_pairs": 1086
+      },
+      "pref_attach": {
+        "auroc": 0.5420689912463668,
+        "auprc": 0.5597219756375051,
+        "n_pairs": 1086
+      },
+      "common_neigh": {
+        "auroc": 0.57965602732246,
+        "auprc": 0.6057646655804956,
+        "n_pairs": 1086
+      },
+      "adamic_adar": {
+        "auroc": 0.5874973291413571,
+        "auprc": 0.6081870986879486,
+        "n_pairs": 1086
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.9354,
+    "negative_sampling": "not described",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8774034/",
+    "caveat": "NIMGSA's paper does not state its negative-sampling method or exact split; this run uses a single random 90/10 edge split with 1:1 uniform negatives (the field default) as an honest approximation, not a reproduction of NIMGSA's own (undocumented) protocol.\n"
+  }
+}

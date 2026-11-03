@@ -1,0 +1,41 @@
+{
+  "checkpoint": "checkpoints_v3fixed_edgesplit_s2024/best_model.pt",
+  "epoch": 55,
+  "split": "test",
+  "protocol": "held_out",
+  "n_held_out_edges": 4418,
+  "held_out": {
+    "uniform": {
+      "auroc": 0.5613168290823944,
+      "auprc": 0.5893024109001153,
+      "cell_acc": 0.9772048317963372
+    },
+    "degree_matched": {
+      "auroc": 0.6235508879354177,
+      "auprc": 0.6527528058523626,
+      "cell_acc": 0.9776820419797875,
+      "fallback_pct": 0.0
+    },
+    "degree_matched_ntries17": {
+      "auroc": 0.6244347312233665,
+      "auprc": 0.6517569056124508,
+      "cell_acc": 0.9773270080157043,
+      "fallback_pct": 0.0
+    },
+    "degree_matched_ntries64": {
+      "auroc": 0.624525038664006,
+      "auprc": 0.6505155058370053,
+      "cell_acc": 0.9773548072230356,
+      "fallback_pct": 0.0
+    }
+  },
+  "reference_seen_edges": {
+    "uniform": 0.9867,
+    "degree_matched": 0.9248
+  },
+  "attribution": {
+    "negatives_only": 0.061900000000000066,
+    "split_only": 0.4253831709176056,
+    "total": 0.36314911206458234
+  }
+}
