@@ -90,7 +90,7 @@ Compara su fase 2 contra nuestros artefactos. Hallazgos:
 
 ### F3-2 y F3-7, corregidos
 
-**F3-2.** `analysis/protocheck_mgcnss.py` (`5f…`) ahora lee los folds con positivos en base 1 y negativos en base 0, y
+**F3-2.** `analysis/protocheck_mgcnss.py` (`be7c54a`) ahora lee los folds con positivos en base 1 y negativos en base 0, y
 **verifica las dos bases por fold** antes de auditar. Hubo que copiar `result.mat` a la DGX con `scp`; el SHA-256 coincide.
 Job 672 (`e2a6cca`):
 - Con base 0, **0** negativos son asociaciones conocidas y ninguno queda fuera de rango.
