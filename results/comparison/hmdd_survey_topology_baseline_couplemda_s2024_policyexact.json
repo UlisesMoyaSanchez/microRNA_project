@@ -1,0 +1,64 @@
+{
+  "paper": "couplemda",
+  "tier": 1,
+  "edge_regime": "held_out",
+  "n_mirna": 2090,
+  "n_disease": 1754,
+  "n_positives_total": 15032,
+  "seed": 2024,
+  "best_model_free_auroc": 0.9386784989538826,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.9386784989538826,
+        "auprc": 0.9339059679009166,
+        "n_pairs": 3046
+      },
+      "pref_attach": {
+        "auroc": 0.9202019030587675,
+        "auprc": 0.9200055003565917,
+        "n_pairs": 3046
+      },
+      "common_neigh": {
+        "auroc": 0.9213739082374051,
+        "auprc": 0.9225435173943064,
+        "n_pairs": 3046
+      },
+      "adamic_adar": {
+        "auroc": 0.9204517382623801,
+        "auprc": 0.9214761766416832,
+        "n_pairs": 3046
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5622738495616998,
+        "auprc": 0.5777228894379974,
+        "n_pairs": 3046
+      },
+      "pref_attach": {
+        "auroc": 0.5605857913395349,
+        "auprc": 0.5823535943747573,
+        "n_pairs": 3046
+      },
+      "common_neigh": {
+        "auroc": 0.5676419652438061,
+        "auprc": 0.5912844444147325,
+        "n_pairs": 3046
+      },
+      "adamic_adar": {
+        "auroc": 0.568203717220177,
+        "auprc": 0.5903351423328653,
+        "n_pairs": 3046
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 1,
+    "negatives_exact": false,
+    "headline_auroc": 0.9536,
+    "negative_sampling": "uniform random, 1:1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12112494/",
+    "caveat": "0.9536 is CoupleMDA's own reported number (Table 3). Positive train/test split is exact (CoupleMDA's own bundled link.dat/link.dat.test, link-type 12, 43 leaking pairs removed from train). Negatives are self-generated at their stated 1:1 ratio, not their own exact (unpublished, runtime- generated) negative pairs -- so this is an exact-positives / approximate- negatives hybrid, not a full reproduction.\n"
+  }
+}
