@@ -436,6 +436,53 @@ conclusión cambia**; el sesgo iba en contra de nuestros márgenes, no a favor.
 **Pendiente:** decidir si el manuscrito pasa a estas cifras (4 semillas para el piso, 64 intentos) o se queda con las
 publicadas más una nota.
 
+### Pruebas de la política de fallback: el residuo pesaba más que los intentos
+
+Pregunta del autor: ¿estamos seguros de los valores nuevos de la Tabla 7? Con 64 o 1000 intentos queda un 2–5 % de positivos
+cuyo contenedor está **agotado**: su miRNA ya está ligado a todas las columnas del contenedor. Esos positivos siguen
+recibiendo un negativo uniforme.
+
+**Prueba 1 (`analysis/test_fallback_policy.py`, job 618, numpy, 5 particiones).** Tres políticas sobre las mismas
+particiones: la publicada (16 intentos y luego uniforme), la **exacta** (enumera los candidatos válidos del contenedor; si
+está agotado, uniforme) y la **exacta con fallback al contenedor vecino** más cercano (nunca uniforme).
+- La exacta coincide con 50 o 1000 intentos.
+- **El fallback al vecino baja el piso otros 0.011–0.037**, a ~0.526–0.536 en los cinco grafos. La TV entre perfiles de grado
+  casi no cambia (0.033 → 0.031): los negativos del vecino siguen emparejados, pero dejan de ser columnas de grado bajo o
+  muertas que cualquier positivo supera.
+- **El +0.010 de CoupleMDA contra el auditor queda explicado:** él no usa la partición del paper, sino una aleatoria del 10 %
+  sobre la matriz completa (su `loaders.py::load_couple` junta train y test). Con partición aleatoria, nuestro piso exacto da
+  0.5584 contra su 0.5596, y el fallback 3.8 % contra su ~4 %.
+
+**Prueba 2 (jobs 619–659, `09c3dc0`).** Se implementó `training/splits.py::sample_degree_matched_negatives_exact` (con
+`neighbour=True/False`). Los 40 modelos del brazo emparejado se reentrenaron y evaluaron con las tres
+políticas, y los pisos se recalcularon con las dos exactas (4 semillas × 2 regímenes). Con 16 intentos se reproduce lo
+publicado con |Δ| ≤ 0.003.
+
+Celda corregida (retenidas + emparejados), media de 4 semillas:
+
+| Grafo | Entrenado publicado | Entrenado exacta+vecino | Piso publicado (s42) | Piso 16, 4 sem. | Piso exacta+vecino | Margen 16 | Margen exacta+vecino |
+|---|---|---|---|---|---|---|---|
+| canonical5430 | 0.6181 | 0.6118 ± 0.014 | 0.5683 | 0.5572 | 0.5414 | +0.061 | +0.070 |
+| cksnp_gnn | 0.6221 | 0.6170 ± 0.007 | 0.5591 | 0.5545 | 0.5238 | +0.067 | +0.093 |
+| digamn | 0.6408 | 0.6335 ± 0.011 | 0.5580 | 0.5582 | 0.5269 | +0.083 | +0.107 |
+| meahne | 0.6266 | 0.6124 ± 0.015 | 0.5648 | 0.5640 | 0.5252 | +0.063 | +0.087 |
+| couplemda | 0.6222 | 0.6157 ± 0.007 | 0.5789 | 0.5760 | 0.5300 | +0.046 | +0.086 |
+
+En la celda "vistas + emparejados", el entrenado baja ~0.005 y el piso 0.016–0.047.
+
+**Lectura:**
+- Los **AUROC entrenados son robustos**: bajan 0.002–0.014. La banda corregida de los externos pasa de 0.618–0.641 a
+  **0.612–0.634**.
+- Los **pisos corregidos estaban inflados** 0.016–0.046 por ese 2–5 % de negativos uniformes. Con un emparejamiento sin
+  fallback uniforme quedan en **0.524–0.541**, no en "~0.55–0.58".
+- Los **márgenes crecen**: +0.046–0.083 → **+0.070–0.107**.
+- **Nuestro grafo no cambia** (fallback 0 %): 0.6276 y 0.5912, margen +0.036. Con esto, la anomalía de la Tabla 7 (nuestro
+  margen se cierra mientras los externos se abren) se vuelve **más marcada**.
+
+**Ninguna conclusión del paper cambia.** Lo que cambia es el nivel del piso corregido en los grafos externos y, por lo
+tanto, los números derivados de él: Tabla 7, Tabla 6 o grid de protocolo, la frase "~0.55–0.58" y el reparto
+"negative sampling carried 0.29–0.41 of the heuristics' loss".
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
