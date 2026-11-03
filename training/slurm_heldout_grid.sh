@@ -61,7 +61,9 @@ CKPT_TAG="$(basename "$(dirname "${CKPT}")")"
 echo ""
 echo "========================================"
 echo "Results:"
-cat "results/comparison/heldout_grid_${CKPT_TAG}_${SPLIT}.json"
+# heldout_grid_* or seen_grid_* (transductive), optionally _evalntries: show the newest.
+OUT_JSON="$(ls -t results/comparison/*_grid_${CKPT_TAG}_${SPLIT}*.json 2>/dev/null | head -1 || true)"
+if [[ -n "${OUT_JSON}" ]]; then cat "${OUT_JSON}"; else echo "ERROR: no result JSON for ${CKPT_TAG}"; exit 1; fi
 echo ""
 echo "Done: $(date)"
 echo "========================================"
