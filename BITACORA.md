@@ -394,6 +394,48 @@ exactos.
 y re-evaluar los checkpoints existentes. Re-evaluar es barato (solo inferencia); re-entrenar no haría falta, porque los
 negativos de entrenamiento no cambian la evaluación de un checkpoint ya entrenado.
 
+### Opción (ii) ejecutada: re-evaluación con 64 intentos
+
+**Código** (`10e5d82`, `2c1eb24`). `LinkSampler` acepta `n_tries` (default 16, el publicado). `eval_heldout_grid.py`,
+`train_survey_bipartite.py` y `eval_topology_baseline.py` aceptan `--eval-n-tries 16,64`: 16 se evalúa siempre con la clave
+de siempre, para comprobar la reproducción, y cada valor extra agrega `degree_matched_ntries<N>`. Los negativos de
+entrenamiento no cambian y las salidas llevan el sufijo `_evalntries`. `eval_hmdd_survey_topology_baseline.py` acepta
+`--n-tries` (sufijo `_ntries<N>`). De paso se arregló `slurm_heldout_grid.sh`: hacía `cat` de un nombre fijo y habría fallado
+en falso con `seen_grid_*` o con el sufijo nuevo.
+
+**Jobs** (resultados en `df22096`):
+- **569–576:** los 8 checkpoints de nuestro grafo (retenidas y transductivo, semillas 7, 123, 777, 2024) re-evaluados con 16,
+  17 y 64 intentos. El 17 sirve para medir el ruido del submuestreo: en nuestro grafo la evaluación toma 256 positivos por
+  batch con el mismo generador que los negativos, así que cambiar `n_tries` cambia también los positivos.
+- **577:** piso de nuestro grafo con 16 y 64, y pisos de los 5 grafos externos con 64 (4 semillas × 2 regímenes).
+- **578–617:** reentrenamiento del brazo emparejado del grid externo (40 corridas de ~14 s), evaluado con 16 y 64 sobre el
+  mismo modelo. Comparación pareada; con 16 reproduce lo publicado con |Δ| ≤ 0.004.
+
+**Nuestro grafo: sin efecto.** El fallback es **0 %** con 16, 17 y 64 intentos (los contenedores de genes son grandes y no
+se agotan). El piso da 0.5912 idéntico con 16 y con 64. La re-evaluación retenida da 0.6236 ± 0.0097 (16), 0.6229 ± 0.0118
+(17) y 0.6258 ± 0.0090 (64), contra 0.6276 ± 0.0070 publicado. Las diferencias son ruido del submuestreo (la propia condición
+16 se mueve hasta ±0.01 respecto de lo publicado) y no hay sesgo que corregir. **0.6276 y 0.5912 se quedan.**
+
+**Grafos externos, media de 4 semillas** (celda corregida = retenidas + emparejados):
+
+| Grafo | Entrenado 16 | Entrenado 64 | Piso 16 | Piso 64 | Margen 16 | Margen 64 |
+|---|---|---|---|---|---|---|
+| canonical5430 | 0.6187 | 0.6240 | 0.5572 | 0.5487 | +0.062 | +0.075 |
+| cksnp_gnn | 0.6228 | 0.6170 | 0.5545 | 0.5430 | +0.068 | +0.074 |
+| digamn | 0.6406 | 0.6325 | 0.5582 | 0.5473 | +0.082 | +0.085 |
+| meahne | 0.6267 | 0.6237 | 0.5640 | 0.5524 | +0.063 | +0.071 |
+| couplemda | 0.6218 | 0.6199 | 0.5760 | 0.5697 | +0.046 | +0.050 |
+
+- Los pisos bajan de forma consistente, −0.006 a −0.012, en las dos celdas emparejadas.
+- Los AUROC entrenados se mueven poco y en ambas direcciones (−0.008 a +0.005).
+- La banda corregida pasa de 0.618–0.641 a **0.617–0.633**, y los márgenes **crecen** +0.003 a +0.014.
+
+El modelo entrenado no aprovechaba tanto los negativos uniformes de relleno como las heurísticas de grado. **Ninguna
+conclusión cambia**; el sesgo iba en contra de nuestros márgenes, no a favor.
+
+**Pendiente:** decidir si el manuscrito pasa a estas cifras (4 semillas para el piso, 64 intentos) o se queda con las
+publicadas más una nota.
+
 ---
 
 ## 2026-10-27 → 10-28 — MGCNSS en sus cinco folds, y cuánto del efecto de negative sampling es ruido de etiquetas
