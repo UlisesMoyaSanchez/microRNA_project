@@ -109,6 +109,30 @@ Las conclusiones no cambian (fuga del 100 %, aviso de negativos, margen chico). 
 **F3-7.** El caption de la figura del mecanismo de popularidad ya no dice que el negativo emparejado "empata": dice que
 empata aproximadamente, y que con 8 contenedores un scorer de solo grado llega a ~0.51–0.55.
 
+### Documentos internos y láminas, alineados con el manuscrito
+
+- **`results/PROTOCOLO_Y_CIFRAS_VIGENTES.md`:**
+  - La regla 3 ahora precisa que lo que coincide entre entrenamiento y evaluación es el *tipo* de negativo; la evaluación usa
+    el muestreador exacto, y siempre hay que reportar la tasa de fallback.
+  - En la tabla de arquitecturas, `random` queda marcada como "no es un control" y se agregan las filas de HGT y GCN sin
+    entrenar.
+  - Sección nueva con los 5 grafos externos (Tabla 7) y la lista de cifras retiradas: la banda 0.618–0.641, los márgenes
+    4.3–8.3, los pisos ~0.55–0.58 y las cifras de MGCNSS con la base equivocada.
+- **`results/EVALUATION_AUDIT.md`:** los cuatro pasajes que citaban el "untrained control" ahora llevan la corrección y las
+  filas sin entrenar.
+- **`audit_independent/INDEPENDENT_AUDIT_GUIDE.md`:** **no se reescribió**, porque es el registro de lo que recibió el
+  auditor. Se le agregó un apéndice posterior a la auditoría con lo que cambió en C1–C5.
+- **Láminas:**
+  - `01_context`: "el control sin entrenar no se mueve" pasa a "las mismas redes sin entrenar se quedan en el azar". Además
+    se corrigió un dato viejo de semanas: "0/7 artículos publican una línea base" → "15 de 21 no la publican".
+  - `05_estado_actual`: las tres menciones; la fila aleatoria ahora se presenta como verificación de la métrica, no como
+    control.
+  - `03_model_results`: solo cambia la etiqueta.
+  - `analysis/make_slide_figures.py`: etiqueta y anotación ("azar por construcción"); las tres figuras de las láminas se
+    regeneraron.
+  - El deck compila.
+- `RESUMEN_AUDITORIA.md` no se tocó: solo trata de nuestro grafo y no repite ninguna de las afirmaciones corregidas.
+
 ---
 
 ## 2026-11-02 — La auditoría independiente: cuatro afirmaciones tocadas y una regla de falsación disparada

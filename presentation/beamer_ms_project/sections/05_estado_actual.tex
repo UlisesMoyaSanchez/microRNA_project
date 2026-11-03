@@ -168,8 +168,9 @@
     \scriptsize
     Todo modelo entrenado con controles al azar \textbf{se derrumba al azar} en cuanto se
     parean por popularidad: aprendi\'o popularidad del gen, no regulaci\'on.
-    \onslide<2->{\textbf{El control aleatorio no se mueve} (0.498 $\to$ 0.502) --- eso es
-    lo que vuelve cre\'ible al resto: el efecto no lo fabrica nuestro c\'odigo.}
+    \onslide<2->{\textbf{La referencia aleatoria se queda en 0.5} (0.498 $\to$ 0.502): la
+    m\'etrica se calcula bien. No es un control del protocolo, porque no lee el grafo; ese
+    papel lo cumplen el HGT y la GCN \emph{sin entrenar}, que tambi\'en se quedan en el azar.}
   \end{block}
 \end{frame}
 
@@ -184,7 +185,8 @@
   \begin{block}{Lectura}
     \scriptsize
     \textbf{Todas las arquitecturas entrenadas se inflan entre 0.24 y 0.31} --- incluido un
-    MLP que \textbf{no ve el grafo en absoluto}. El control sin entrenar no se mueve. La
+    MLP que \textbf{no ve el grafo en absoluto}. Las mismas redes sin entrenar (HGT y GCN,
+    5 inicializaciones) se quedan en el azar. La
     inflaci\'on no es del transformer, ni del paso de mensajes heterog\'eneo, ni siquiera
     de \emph{tener} un grafo: es \textbf{del protocolo}. Es la afirmaci\'on sobre la que se
     sostiene el art\'iculo, y ahora est\'a medida, no argumentada.
@@ -345,7 +347,7 @@
     \emph{La evaluaci\'on transductiva y los controles no pareados inflan la predicci\'on de
     blancos de miRNA en $\approx$0.36 de AUROC sobre un grafo biom\'edico real; la
     inflaci\'on aparece en \textbf{todas} las arquitecturas probadas ---
-    \textbf{incluida una sin grafo} --- y no en el control sin entrenar; y una
+    \textbf{incluida una sin grafo} --- y no en esas mismas redes sin entrenar; y una
     heur\'istica de una l\'inea que ignora al miRNA le gana a todas ellas bajo el protocolo
     de uso com\'un.\footnotemark}
   \end{block}

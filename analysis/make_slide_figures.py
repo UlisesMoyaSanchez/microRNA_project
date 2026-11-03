@@ -68,13 +68,14 @@ CELLS = {           # cell -> (table suffix, column with train/eval negatives co
     "held_matched":  ("edgesplit",            "auroc_matched"),
 }
 
-# Spanish labels for the deck. 'random' is the control and is named as such.
+# Spanish labels for the deck. 'random' returns random scores and never reads the graph:
+# it marks chance level, it is not a control of the protocol (BITACORA 2026-11-02).
 PRETTY = {
     "hgt_v2":             "HGT  (el modelo del proyecto)",
     "homo_gcn":           "GCN homogéneo",
     "ablation_no_coexpr": "HGT sin co-expresión",
     "mlp":                "MLP  (¡sin grafo!)",
-    "random":             "Aleatorio  (control, sin entrenar)",
+    "random":             "Aleatorio  (referencia de azar)",
 }
 ORDER = ["hgt_v2", "homo_gcn", "ablation_no_coexpr", "mlp", "random"]
 
@@ -133,7 +134,7 @@ def fig_inflation(grid, out: Path) -> None:
                 fontsize=10, color=INK)
         flat = abs(delta) < 0.02
         ax.text(0.985, y + 0.30,
-                ("sin cambio" if flat else f"inflación  +{delta:.3f}"),
+                ("azar por construcción" if flat else f"inflación  +{delta:.3f}"),
                 va="center", ha="right", fontsize=10.5, color=INK2 if flat else INK,
                 style="italic" if flat else "normal",
                 fontweight="normal" if flat else "bold")

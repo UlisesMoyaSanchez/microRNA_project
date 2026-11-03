@@ -262,7 +262,9 @@ negatives consistently — the mismatch trap above forbids anything else.
 | `homo_gcn` | 0.9177 | 0.8296 | 0.7954 | 0.6236 | **+0.2941** |
 | `ablation_no_coexpr` | 0.9128 | 0.8323 | 0.8071 | 0.6185 | **+0.2943** |
 | `mlp` — **no graph at all** | 0.7622 | 0.4994 | 0.7269 | 0.5202 | **+0.2420** |
-| `random` — untrained control | 0.4895 | 0.5071 | 0.4984 | 0.4938 | **−0.0043** |
+| `random` — random scores (**not** a control: never reads the graph) | 0.4895 | 0.5071 | 0.4984 | 0.4938 | **−0.0043** |
+| `hgt_v2`, **untrained** (mean of 5 inits, jobs 561–564, added 2026-11-03) | 0.4947 | 0.5003 | 0.4950 | 0.4985 | **−0.0038** |
+| `homo_gcn`, **untrained** (mean of 5 inits) | 0.4939 | 0.4980 | 0.5009 | 0.4995 | **−0.0057** |
 | `ablation_no_mirna` | n/a | n/a | n/a | n/a | no link head |
 
 **Establishes: the inflation is structural.** Every trained architecture inflates by
@@ -350,7 +352,10 @@ scoring head takes context as input at all.**
    **Generalized across architectures (experiment 5, jobs 5849–5852):** `gene_degree` beats
    **every** architecture tested under that protocol — `hgt_v2`, `homo_gcn`,
    `ablation_no_coexpr` and a graph-free `mlp` — and all of them inflate by 0.24–0.31 between
-   the original and honest protocols while an untrained control does not move. The indictment
+   the original and honest protocols, the graph-free MLP included. (Corrected 2026-11-03: the
+   "untrained control" cited here was `RandomBaseline`, which returns random scores and cannot
+   move; the genuine untrained HGT and GCN also stay at chance on this graph, but an untrained
+   bipartite GCN does pick up degree elsewhere, so this is architecture-specific.) The indictment
    is of the protocol, not of one model; that is what makes this a methods result rather than
    a bug report.
 3. **Context-specific claims may not be architecturally supported** (above).
@@ -576,7 +581,8 @@ paper is submitted.**
 
 - **Cell-type classification: 0.9916 (test)**, on a real cell-level split, now with its own
   no-learning control (best no-graph baseline 0.6692 — see "The cell-type control" above).
-- **The six-architecture inflation, 0.24--0.31, and the untrained control at $-0.004$**
+- **The six-architecture inflation, 0.24--0.31** (the "untrained control at $-0.004$" is the
+  random-score row and is not evidence; see the correction in experiment 5 and BITACORA 2026-11-02)
   (2026-09-07). All six rows share one driver, one GPU, one seed and one split, so the
   comparison across architectures is internally controlled and the training-regime confound
   does not touch it. The graph-free MLP inflating too (+0.242) is what rules out a
@@ -690,7 +696,8 @@ The audit is sound. The **paper** is not finished. Four gaps, in priority order:
    samplers — jobs **5849–5852**, tables at
    `results/comparison/comparison_table_checkpoints_v3fixed_baselines_*.tsv`. Every trained
    architecture inflates by **0.24–0.31** between the original and honest protocols, a
-   graph-free MLP included; the untrained control does not move. Full table, the
+   graph-free MLP included (the random-score row is chance by construction; the untrained HGT
+   and GCN also stay at chance on this graph). Full table, the
    per-architecture super-additivity, and the two caveats (n=1; a different training loop than
    §2's) are in **experiment 5** above. The claim is no longer anecdotal.
 4. **~~Support the premise~~ — DONE, expanded to n=21 papers (2026-08-12), spot-checked

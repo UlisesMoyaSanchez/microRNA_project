@@ -194,3 +194,22 @@ Todo lo que cambió respecto a esta guía y por qué (tolerancias, particiones, 
 Adjunten el código con el que obtuvieron cada número, las semillas, y los archivos de salida. **Los números sin código no cuentan.** Si algo les pareció confuso en esta guía, díganlo: una ambigüedad en la especificación es un hallazgo.
 
 **Qué hacemos con lo que devuelvan:** cada discrepancia o hallazgo se registra en la bitácora del proyecto con su resolución, y los cambios al manuscrito citan el reporte que los motivó. Si una afirmación no se reproduce, se corrige o se retira; no se reformula para que parezca que sí.
+
+---
+
+## Apéndice posterior a la auditoría (2026-11-03) — no forma parte de la guía congelada
+
+Lo de arriba es la guía tal como la recibió el auditor (`abd0025`). No se reescribe, para que quede el registro de qué se
+dio a auditar. Estas son las afirmaciones que cambiaron a raíz de la auditoría (detalle en `../BITACORA.md`, entradas del
+2026-11-02 y 2026-11-03):
+
+- **C1:** la banda corregida es **0.612–0.633** (no 0.618–0.641), con negativos pareados de evaluación sacados por un
+  muestreador exacto que nunca cae a uniforme.
+- **C2:** "un control sin entrenar no se mueve" se refería a una fila de puntajes aleatorios que no lee el grafo. El HGT y la
+  GCN sin entrenar de verdad tampoco se mueven en nuestro grafo, pero eso depende de la arquitectura.
+- **C3:** los pisos corregidos de los grafos externos son **~0.52–0.54** (no ~0.55–0.58).
+- **C4:** el margen de ModulePred es de 13.7 puntos, ≥ 10. La afirmación de "pocos puntos" se retiró. Se re-adjudicaron 15
+  celdas de la encuesta: cambian 2 y en D1 y D3 quedan diferencias de lectura documentadas.
+- **C5:** `protocheck` corrigió E-1 a E-4 y E-6 (código de salida 3 si no revisó la fuga, nulo por remuestreo para la TV,
+  mínimo de positivos, `dead_candidates` según dónde caen los negativos, `--neg-index-base`). Su validación no cambió.
+

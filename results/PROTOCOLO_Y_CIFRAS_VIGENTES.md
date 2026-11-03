@@ -1,6 +1,6 @@
 # Protocolo y cifras vigentes — leer antes de reportar cualquier número
 
-**Última actualización:** 2026-07-29
+**Última actualización:** 2026-11-03 (tras la auditoría independiente; ver `../BITACORA.md` del 2026-11-02 y 2026-11-03)
 **Para qué existe:** este proyecto ya reportó una vez un AUROC de 0.9836 como logro del
 modelo. No era una invención: era una medición correcta bajo un protocolo que filtraba.
 El costo de descubrirlo tarde fue alto. Este archivo es el resguardo para no repetirlo —
@@ -28,6 +28,14 @@ notas. Para el razonamiento completo, `EVALUATION_AUDIT.md`. Para el plan de pub
    Cambiar el muestreador solo al evaluar mide un desajuste, no la dificultad — es la
    "trampa del desajuste" que casi reportamos (un modelo entrenado con negativos duros da
    *menos* contra negativos uniformes, lo cual es absurdo a primera vista).
+   **Precisión (2026-11-03):** lo que debe coincidir es el *tipo* de negativo (uniforme o
+   pareado), no el código. Al entrenar se usa el muestreador por batch (16 intentos y
+   fallback uniforme); al **evaluar** se usa
+   `training/splits.py::sample_degree_matched_negatives_exact(neighbour=True)`: enumera el
+   contenedor de grado y, si está agotado, toma el contenedor vecino, **nunca uniforme**. En
+   nuestro grafo da lo mismo (fallback 0 %). En los grafos de la encuesta, 3–4 % de los
+   positivos caen en contenedores agotados, y su fallback uniforme inflaba el piso
+   0.016–0.046. **Siempre reportar la tasa de fallback.**
 
 4. **Ningún AUROC se reporta sin su control sin aprendizaje al lado.**
    Los pisos vigentes sobre `graphs_v3fixed` están abajo. Si un modelo no le gana a
@@ -81,7 +89,16 @@ miRNA→gen. Útil como comprobación de que no se movió nada más.
 | `homo_gcn` | 0.9177 | **0.6236** | **+0.294** |
 | `ablation_no_coexpr` | 0.9128 | 0.6185 | **+0.294** |
 | `mlp` (sin grafo) | 0.7622 | 0.5202 | **+0.242** |
-| `random` (control) | 0.4895 | 0.4938 | −0.004 |
+| `random` (puntajes al azar, **no es un control**) | 0.4895 | 0.4938 | −0.004 |
+| `hgt_v2` **sin entrenar** (5 inicializaciones, jobs 561–564) | 0.4947 | 0.4985 | −0.004 ± 0.013 |
+| `homo_gcn` **sin entrenar** (5 inicializaciones) | 0.4939 | 0.4995 | −0.006 ± 0.024 |
+
+`random` es `RandomBaseline`: devuelve `torch.randn` y nunca lee el grafo, así que está en 0.5
+por construcción y **no puede citarse como control**. El control de verdad son las dos filas
+sin entrenar. En nuestro grafo tampoco se mueven, pero **depende de la arquitectura**: la GCN
+bipartita sin entrenar del auditor sí se mueve (0.83 → 0.53 en matrices miRNA–enfermedad, y
+0.67 → 0.51 en nuestro grafo reconstruido), porque la propagación filtra el grado. Citar así:
+"our untrained HGT and GCN stay at chance", nunca "untrained networks do not inflate".
 
 Artefactos: `comparison/comparison_table_checkpoints_v3fixed_baselines_*.tsv`.
 
@@ -93,6 +110,28 @@ como n=1, nunca con ±.** Si un revisor pide semillas: 16 jobs, ~8 h.
 mismo criterio de selección, pero `run_baselines.py` entrena en una sola GPU con su propio
 bucle y queda 0.02–0.06 más bajo. **Esta tabla sirve para comparar arquitecturas entre sí
 en condiciones idénticas, no para repetir el titular.**
+
+### Los cinco grafos externos (Tabla 7 del manuscrito; 4 semillas {42, 7, 123, 2024})
+
+Nuestra arquitectura reentrenada sobre las matrices de la encuesta. Celdas pareadas con el
+muestreador exacto (ver regla 3); pisos = media de las mismas 4 particiones. Fuente:
+`comparison/trained_grid_summary.json` (`analysis/aggregate_trained_grid.py`).
+
+| grafo | convencional | corregido | piso corregido | margen corregido |
+|---|:--:|:--:|:--:|:--:|
+| canonical5430 (HMDD v2) | 0.8789 | 0.6118 | 0.5414 | +0.070 |
+| CKSNP-GNN | 0.8812 | 0.6170 | 0.5238 | +0.093 |
+| DiGAMN | 0.8963 | 0.6335 | 0.5269 | +0.107 |
+| MEAHNE | 0.9919 | 0.6124 | 0.5252 | +0.087 |
+| CoupleMDA | 0.9487 | 0.6157 | 0.5300 | +0.086 |
+
+Con nuestro grafo (0.9867 → 0.6276): **banda corregida 0.612–0.633, pérdida 0.26–0.38**.
+**Retiradas (2026-11-03):** la banda 0.618–0.641, los márgenes 4.3–8.3 y los pisos
+"~0.55–0.58". Venían del muestreador con fallback uniforme y de un piso de una sola
+partición. En el ejemplo de MGCNSS con `protocheck`, retiradas también "11–14 negativos son
+asociaciones conocidas" y "TV 0.52–0.56": eran un error de base de índices (los negativos
+son base 0). Lo vigente es 0 asociaciones conocidas, TV 0.53–0.58 y un margen de 2.6–4.1
+puntos (job 672).
 
 ### Clasificación de tipo celular
 
