@@ -76,10 +76,32 @@ def main() -> None:
     enc = encoder_edges(DATA / "result.mat")
     print(f"encoder edges (raw_association): {enc.shape[1]:,}")
 
+    # MGCNSS's fold files store positives 1-based and negatives 0-based in the same file
+    # (independent audit 2026-11-02, findings E-3 / F3-2). Reading both as 1-based shifted
+    # every negative one row and one column, which made 11-14 of them land on known
+    # associations and moved the TV figures. Verified here, per fold, before auditing:
+    # under the right base no positive is outside the matrix or off raw_association, and
+    # no negative is a known association.
+    known = set(map(tuple, enc.T.tolist()))
+    base_check = {}
+    for _, test_name in FOLDS:
+        for nb in (0, 1):
+            hp, hn = lio.load_labeled_pairs(str(DATA / f"{test_name}.txt"), 1, neg_index_base=nb)
+            base_check.setdefault(test_name, {})[f"neg_base{nb}"] = {
+                "positives_on_raw_association": int(sum(tuple(q) in known for q in hp.T.tolist())),
+                "n_positives": int(hp.shape[1]),
+                "negatives_that_are_known_associations": int(sum(tuple(q) in known for q in hn.T.tolist())),
+                "negatives_out_of_range": int(((hn[0] < 0) | (hn[0] >= N_MIRNA) |
+                                               (hn[1] < 0) | (hn[1] >= N_DISEASE)).sum()),
+            }
+        print(test_name, base_check[test_name])
+        if base_check[test_name]["neg_base0"]["negatives_that_are_known_associations"]:
+            raise SystemExit("0-based negatives hit known associations; the base assumption is wrong")
+
     folds = {}
     for train_name, test_name in FOLDS:
-        tp, tn = lio.load_labeled_pairs(str(DATA / f"{train_name}.txt"), 1)
-        hp, hn = lio.load_labeled_pairs(str(DATA / f"{test_name}.txt"), 1)
+        tp, tn = lio.load_labeled_pairs(str(DATA / f"{train_name}.txt"), 1, neg_index_base=0)
+        hp, hn = lio.load_labeled_pairs(str(DATA / f"{test_name}.txt"), 1, neg_index_base=0)
         common = dict(n_rows=N_MIRNA, n_cols=N_DISEASE, train_pos=tp, heldout_pos=hp,
                       train_neg=tn, eval_neg=hn, model_auroc=HEADLINE_AUROC)
         split_only = audit(**common)
@@ -93,6 +115,7 @@ def main() -> None:
 
     out = {
         "generated_utc": datetime.now(timezone.utc).isoformat(),
+        "index_base": {"positives": 1, "negatives": 0, "check": base_check},
         "paper": "MGCNSS (tian2024mgcnss)",
         "headline_auroc": HEADLINE_AUROC,
         "encoder_edges_source": "result.mat raw_association (src/Model.py::forward)",
