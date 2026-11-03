@@ -1,0 +1,1244 @@
+{
+  "canonical5430": {
+    "summary": {
+      "published": {
+        "floor": [
+          0.5595053739371678,
+          0.0071126503753465836
+        ],
+        "gene_degree": [
+          0.5455504342900943,
+          0.006558865162735894
+        ],
+        "uniform_pct": [
+          3.130755064456722,
+          0.8637966408514604
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.03130755064456722,
+          0.00863796640851461
+        ]
+      },
+      "exact": {
+        "floor": [
+          0.5468619530675024,
+          0.004103823986960027
+        ],
+        "gene_degree": [
+          0.5354103286767125,
+          0.0031167169193651216
+        ],
+        "uniform_pct": [
+          1.8047882136279927,
+          0.24011795230948987
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.01804788213627992,
+          0.0024011795230949123
+        ]
+      },
+      "neighbour": {
+        "floor": [
+          0.5363267299532981,
+          0.0038343512870733145
+        ],
+        "gene_degree": [
+          0.5273550190097304,
+          0.003399596605699957
+        ],
+        "uniform_pct": [
+          0.0,
+          0.0
+        ],
+        "neighbour_pct": [
+          1.8047882136279927,
+          0.24011795230948987
+        ],
+        "tv_neg_vs_pos": [
+          0.01804788213627992,
+          0.002401179523094913
+        ]
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "policy": "published",
+        "uniform_pct": 2.578268876611418,
+        "neighbour_pct": 0.0,
+        "floor": 0.5499577749966932,
+        "gene_degree": 0.5391369819806071,
+        "tv_neg_vs_pos": 0.025782688766114194
+      },
+      {
+        "seed": 0,
+        "policy": "exact",
+        "uniform_pct": 1.8416206261510129,
+        "neighbour_pct": 0.0,
+        "floor": 0.5443006420235443,
+        "gene_degree": 0.5348703912850307,
+        "tv_neg_vs_pos": 0.018416206261510134
+      },
+      {
+        "seed": 0,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 1.8416206261510129,
+        "floor": 0.5347669485058453,
+        "gene_degree": 0.5268476406567429,
+        "tv_neg_vs_pos": 0.018416206261510137
+      },
+      {
+        "seed": 1,
+        "policy": "published",
+        "uniform_pct": 2.9465930018416207,
+        "neighbour_pct": 0.0,
+        "floor": 0.5618655650858575,
+        "gene_degree": 0.5496067478607695,
+        "tv_neg_vs_pos": 0.02946593001841619
+      },
+      {
+        "seed": 1,
+        "policy": "exact",
+        "uniform_pct": 1.6574585635359116,
+        "neighbour_pct": 0.0,
+        "floor": 0.5453333740321318,
+        "gene_degree": 0.5389504458214204,
+        "tv_neg_vs_pos": 0.01657458563535909
+      },
+      {
+        "seed": 1,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 1.6574585635359116,
+        "floor": 0.5375887318593585,
+        "gene_degree": 0.5323470657862159,
+        "tv_neg_vs_pos": 0.016574585635359088
+      },
+      {
+        "seed": 2,
+        "policy": "published",
+        "uniform_pct": 4.419889502762431,
+        "neighbour_pct": 0.0,
+        "floor": 0.5686622644133099,
+        "gene_degree": 0.5542175825592083,
+        "tv_neg_vs_pos": 0.04419889502762433
+      },
+      {
+        "seed": 2,
+        "policy": "exact",
+        "uniform_pct": 2.2099447513812156,
+        "neighbour_pct": 0.0,
+        "floor": 0.5498729858334266,
+        "gene_degree": 0.5375785571597665,
+        "tv_neg_vs_pos": 0.022099447513812168
+      },
+      {
+        "seed": 2,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 2.2099447513812156,
+        "floor": 0.5326472194241798,
+        "gene_degree": 0.5257080743024396,
+        "tv_neg_vs_pos": 0.022099447513812168
+      },
+      {
+        "seed": 3,
+        "policy": "published",
+        "uniform_pct": 3.4990791896869244,
+        "neighbour_pct": 0.0,
+        "floor": 0.5616705500103443,
+        "gene_degree": 0.5455148228415224,
+        "tv_neg_vs_pos": 0.03499079189686924
+      },
+      {
+        "seed": 3,
+        "policy": "exact",
+        "uniform_pct": 1.6574585635359116,
+        "neighbour_pct": 0.0,
+        "floor": 0.5424607171806586,
+        "gene_degree": 0.5308293397637435,
+        "tv_neg_vs_pos": 0.01657458563535909
+      },
+      {
+        "seed": 3,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 1.6574585635359116,
+        "floor": 0.5342327767772657,
+        "gene_degree": 0.5232610590505647,
+        "tv_neg_vs_pos": 0.016574585635359088
+      },
+      {
+        "seed": 4,
+        "policy": "published",
+        "uniform_pct": 2.2099447513812156,
+        "neighbour_pct": 0.0,
+        "floor": 0.5553707151796343,
+        "gene_degree": 0.5392760362083643,
+        "tv_neg_vs_pos": 0.022099447513812147
+      },
+      {
+        "seed": 4,
+        "policy": "exact",
+        "uniform_pct": 1.6574585635359116,
+        "neighbour_pct": 0.0,
+        "floor": 0.5523420462677506,
+        "gene_degree": 0.5348229093536013,
+        "tv_neg_vs_pos": 0.016574585635359112
+      },
+      {
+        "seed": 4,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 1.6574585635359116,
+        "floor": 0.5423979731998413,
+        "gene_degree": 0.5286112552526887,
+        "tv_neg_vs_pos": 0.016574585635359115
+      }
+    ]
+  },
+  "cksnp_gnn": {
+    "summary": {
+      "published": {
+        "floor": [
+          0.5579232650811332,
+          0.002990826217919747
+        ],
+        "gene_degree": [
+          0.5546166273191306,
+          0.002555119894465694
+        ],
+        "uniform_pct": [
+          4.9786975045648205,
+          0.3085524493155588
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.047961046865489944,
+          0.0025242168415493295
+        ]
+      },
+      "exact": {
+        "floor": [
+          0.5466631523692427,
+          0.002246244969654837
+        ],
+        "gene_degree": [
+          0.5433888915849124,
+          0.00255828798359828
+        ],
+        "uniform_pct": [
+          3.3231892878880096,
+          0.32378420154036247
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.03311016433353621,
+          0.0031508652721959317
+        ]
+      },
+      "neighbour": {
+        "floor": [
+          0.5264905912280617,
+          0.0014498156450471816
+        ],
+        "gene_degree": [
+          0.5257878922698669,
+          0.0023593211367653913
+        ],
+        "uniform_pct": [
+          0.0,
+          0.0
+        ],
+        "neighbour_pct": [
+          3.3231892878880096,
+          0.32378420154036247
+        ],
+        "tv_neg_vs_pos": [
+          0.030919050517346315,
+          0.0038829307139955148
+        ]
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "policy": "published",
+        "uniform_pct": 5.173463177115034,
+        "neighbour_pct": 0.0,
+        "floor": 0.5597481189679819,
+        "gene_degree": 0.553737447901405,
+        "tv_neg_vs_pos": 0.04930006086427267
+      },
+      {
+        "seed": 0,
+        "policy": "exact",
+        "uniform_pct": 3.10407790626902,
+        "neighbour_pct": 0.0,
+        "floor": 0.5456445000442682,
+        "gene_degree": 0.5432253026450954,
+        "tv_neg_vs_pos": 0.03104077906269021
+      },
+      {
+        "seed": 0,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.10407790626902,
+        "floor": 0.5281848258663157,
+        "gene_degree": 0.5281848258663157,
+        "tv_neg_vs_pos": 0.029214850882531965
+      },
+      {
+        "seed": 1,
+        "policy": "published",
+        "uniform_pct": 5.295191722458917,
+        "neighbour_pct": 0.0,
+        "floor": 0.5612241609306196,
+        "gene_degree": 0.5574517244074624,
+        "tv_neg_vs_pos": 0.05051734631771149
+      },
+      {
+        "seed": 1,
+        "policy": "exact",
+        "uniform_pct": 3.5909920876445525,
+        "neighbour_pct": 0.0,
+        "floor": 0.5485395352903499,
+        "gene_degree": 0.5460506940490448,
+        "tv_neg_vs_pos": 0.035909920876445525
+      },
+      {
+        "seed": 1,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.5909920876445525,
+        "floor": 0.526474291605435,
+        "gene_degree": 0.526474291605435,
+        "tv_neg_vs_pos": 0.03408399269628727
+      },
+      {
+        "seed": 2,
+        "policy": "published",
+        "uniform_pct": 4.869141813755325,
+        "neighbour_pct": 0.0,
+        "floor": 0.5572392736443622,
+        "gene_degree": 0.5555398527625452,
+        "tv_neg_vs_pos": 0.04808277541083382
+      },
+      {
+        "seed": 2,
+        "policy": "exact",
+        "uniform_pct": 3.530127814972611,
+        "neighbour_pct": 0.0,
+        "floor": 0.5456913614593201,
+        "gene_degree": 0.5443351587675855,
+        "tv_neg_vs_pos": 0.03469263542300667
+      },
+      {
+        "seed": 2,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.530127814972611,
+        "floor": 0.5274791262957736,
+        "gene_degree": 0.5274791262957736,
+        "tv_neg_vs_pos": 0.03408399269628726
+      },
+      {
+        "seed": 3,
+        "policy": "published",
+        "uniform_pct": 4.503956177723676,
+        "neighbour_pct": 0.0,
+        "floor": 0.5533336617954256,
+        "gene_degree": 0.5506964569436207,
+        "tv_neg_vs_pos": 0.04382227632379791
+      },
+      {
+        "seed": 3,
+        "policy": "exact",
+        "uniform_pct": 2.8606208155812536,
+        "neighbour_pct": 0.0,
+        "floor": 0.5440115742138488,
+        "gene_degree": 0.5391928130518489,
+        "tv_neg_vs_pos": 0.028606208155812527
+      },
+      {
+        "seed": 3,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 2.8606208155812536,
+        "floor": 0.5244485078251154,
+        "gene_degree": 0.5224543971751272,
+        "tv_neg_vs_pos": 0.02495435179549603
+      },
+      {
+        "seed": 4,
+        "policy": "published",
+        "uniform_pct": 5.051734631771151,
+        "neighbour_pct": 0.0,
+        "floor": 0.5580711100672767,
+        "gene_degree": 0.55565765458062,
+        "tv_neg_vs_pos": 0.04808277541083385
+      },
+      {
+        "seed": 4,
+        "policy": "exact",
+        "uniform_pct": 3.530127814972611,
+        "neighbour_pct": 0.0,
+        "floor": 0.5494287908384266,
+        "gene_degree": 0.5441404894109874,
+        "tv_neg_vs_pos": 0.035301278149726126
+      },
+      {
+        "seed": 4,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.530127814972611,
+        "floor": 0.5258662045476687,
+        "gene_degree": 0.524346820406683,
+        "tv_neg_vs_pos": 0.032258064516129045
+      }
+    ]
+  },
+  "digamn": {
+    "summary": {
+      "published": {
+        "floor": [
+          0.5539808457623315,
+          0.004680955871900681
+        ],
+        "gene_degree": [
+          0.5502145699743745,
+          0.003774196993954004
+        ],
+        "uniform_pct": [
+          4.632302405498282,
+          0.4522524777006763
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.044398625429553265,
+          0.004112240632756449
+        ]
+      },
+      "exact": {
+        "floor": [
+          0.5468541467389378,
+          0.005057987805714346
+        ],
+        "gene_degree": [
+          0.5435489425018599,
+          0.005190736244861499
+        ],
+        "uniform_pct": [
+          3.381443298969072,
+          0.581964622131039
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.03353951890034364,
+          0.005265699329038604
+        ]
+      },
+      "neighbour": {
+        "floor": [
+          0.525755482339604,
+          0.0029290726955306856
+        ],
+        "gene_degree": [
+          0.5251021126344753,
+          0.002605899455544052
+        ],
+        "uniform_pct": [
+          0.0,
+          0.0
+        ],
+        "neighbour_pct": [
+          3.381443298969072,
+          0.581964622131039
+        ],
+        "tv_neg_vs_pos": [
+          0.03230240549828178,
+          0.004810996563573874
+        ]
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "policy": "published",
+        "uniform_pct": 5.154639175257732,
+        "neighbour_pct": 0.0,
+        "floor": 0.5617056954924954,
+        "gene_degree": 0.555778273756805,
+        "tv_neg_vs_pos": 0.04810996563573883
+      },
+      {
+        "seed": 0,
+        "policy": "exact",
+        "uniform_pct": 4.329896907216495,
+        "neighbour_pct": 0.0,
+        "floor": 0.5543446581877871,
+        "gene_degree": 0.5515683565380664,
+        "tv_neg_vs_pos": 0.04192439862542953
+      },
+      {
+        "seed": 0,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 4.329896907216495,
+        "floor": 0.530715981152797,
+        "gene_degree": 0.5295865660537784,
+        "tv_neg_vs_pos": 0.039862542955326444
+      },
+      {
+        "seed": 1,
+        "policy": "published",
+        "uniform_pct": 4.1924398625429555,
+        "neighbour_pct": 0.0,
+        "floor": 0.5504325645658412,
+        "gene_degree": 0.5470176308735135,
+        "tv_neg_vs_pos": 0.040549828178694174
+      },
+      {
+        "seed": 1,
+        "policy": "exact",
+        "uniform_pct": 3.2989690721649483,
+        "neighbour_pct": 0.0,
+        "floor": 0.5466711540959601,
+        "gene_degree": 0.5425727140680909,
+        "tv_neg_vs_pos": 0.03298969072164947
+      },
+      {
+        "seed": 1,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.2989690721649483,
+        "floor": 0.5257295024857997,
+        "gene_degree": 0.5240219175493912,
+        "tv_neg_vs_pos": 0.03298969072164948
+      },
+      {
+        "seed": 2,
+        "policy": "published",
+        "uniform_pct": 5.085910652920962,
+        "neighbour_pct": 0.0,
+        "floor": 0.5544443263541998,
+        "gene_degree": 0.5523845963084989,
+        "tv_neg_vs_pos": 0.04948453608247423
+      },
+      {
+        "seed": 2,
+        "policy": "exact",
+        "uniform_pct": 3.3676975945017182,
+        "neighbour_pct": 0.0,
+        "floor": 0.5452252571415075,
+        "gene_degree": 0.5436102549568379,
+        "tv_neg_vs_pos": 0.03367697594501719
+      },
+      {
+        "seed": 2,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.3676975945017182,
+        "floor": 0.5251100010628122,
+        "gene_degree": 0.5251100010628122,
+        "tv_neg_vs_pos": 0.03161512027491409
+      },
+      {
+        "seed": 3,
+        "policy": "published",
+        "uniform_pct": 4.398625429553265,
+        "neighbour_pct": 0.0,
+        "floor": 0.5501772534570919,
+        "gene_degree": 0.5473126203044367,
+        "tv_neg_vs_pos": 0.04261168384879725
+      },
+      {
+        "seed": 3,
+        "policy": "exact",
+        "uniform_pct": 2.7491408934707904,
+        "neighbour_pct": 0.0,
+        "floor": 0.5403124667871188,
+        "gene_degree": 0.5370581358273993,
+        "tv_neg_vs_pos": 0.027491408934707896
+      },
+      {
+        "seed": 3,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 2.7491408934707904,
+        "floor": 0.523391788004393,
+        "gene_degree": 0.5232167782619478,
+        "tv_neg_vs_pos": 0.026804123711340208
+      },
+      {
+        "seed": 4,
+        "policy": "published",
+        "uniform_pct": 4.329896907216495,
+        "neighbour_pct": 0.0,
+        "floor": 0.5531443889420294,
+        "gene_degree": 0.5485797286286179,
+        "tv_neg_vs_pos": 0.04123711340206185
+      },
+      {
+        "seed": 4,
+        "policy": "exact",
+        "uniform_pct": 3.161512027491409,
+        "neighbour_pct": 0.0,
+        "floor": 0.547717197482316,
+        "gene_degree": 0.5429352511189051,
+        "tv_neg_vs_pos": 0.0316151202749141
+      },
+      {
+        "seed": 4,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.161512027491409,
+        "floor": 0.5238301389922179,
+        "gene_degree": 0.5235753002444468,
+        "tv_neg_vs_pos": 0.03024054982817871
+      }
+    ]
+  },
+  "meahne": {
+    "summary": {
+      "published": {
+        "floor": [
+          0.5636274626386834,
+          0.005711602589754232
+        ],
+        "gene_degree": [
+          0.555135537836046,
+          0.00469498108079989
+        ],
+        "uniform_pct": [
+          4.57985531441291,
+          0.46997289683670285
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.045520311630495254,
+          0.004699728968367028
+        ]
+      },
+      "exact": {
+        "floor": [
+          0.5524835261514507,
+          0.003903869383348245
+        ],
+        "gene_degree": [
+          0.5450309657875969,
+          0.0038403821564037726
+        ],
+        "uniform_pct": [
+          3.2609905397885366,
+          0.3335418331327993
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.032609905397885365,
+          0.003335418331327989
+        ]
+      },
+      "neighbour": {
+        "floor": [
+          0.5263793006274912,
+          0.0022219567073287314
+        ],
+        "gene_degree": [
+          0.524154568502689,
+          0.00254373101607624
+        ],
+        "uniform_pct": [
+          0.0,
+          0.0
+        ],
+        "neighbour_pct": [
+          3.2609905397885366,
+          0.3335418331327993
+        ],
+        "tv_neg_vs_pos": [
+          0.03049526989426822,
+          0.0023329186217311694
+        ]
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "policy": "published",
+        "uniform_pct": 4.451864218141346,
+        "neighbour_pct": 0.0,
+        "floor": 0.5627018489667284,
+        "gene_degree": 0.5548515905907607,
+        "tv_neg_vs_pos": 0.04424040066777961
+      },
+      {
+        "seed": 0,
+        "policy": "exact",
+        "uniform_pct": 3.227601558152476,
+        "neighbour_pct": 0.0,
+        "floor": 0.5521919222323486,
+        "gene_degree": 0.5461318468392724,
+        "tv_neg_vs_pos": 0.03227601558152475
+      },
+      {
+        "seed": 0,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.227601558152476,
+        "floor": 0.5281444697447579,
+        "gene_degree": 0.5256217544296451,
+        "tv_neg_vs_pos": 0.031163049526989423
+      },
+      {
+        "seed": 1,
+        "policy": "published",
+        "uniform_pct": 5.147468002225932,
+        "neighbour_pct": 0.0,
+        "floor": 0.5710552878429361,
+        "gene_degree": 0.5594334014924398,
+        "tv_neg_vs_pos": 0.05119643850862548
+      },
+      {
+        "seed": 1,
+        "policy": "exact",
+        "uniform_pct": 3.7006121313299944,
+        "neighbour_pct": 0.0,
+        "floor": 0.5570110977641893,
+        "gene_degree": 0.5476799426732676,
+        "tv_neg_vs_pos": 0.037006121313299944
+      },
+      {
+        "seed": 1,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.7006121313299944,
+        "floor": 0.527882524791675,
+        "gene_degree": 0.5257048243083678,
+        "tv_neg_vs_pos": 0.03311074012242626
+      },
+      {
+        "seed": 2,
+        "policy": "published",
+        "uniform_pct": 4.730105731775181,
+        "neighbour_pct": 0.0,
+        "floor": 0.5648465305280643,
+        "gene_degree": 0.5563259454559926,
+        "tv_neg_vs_pos": 0.04702281580411797
+      },
+      {
+        "seed": 2,
+        "policy": "exact",
+        "uniform_pct": 3.1997774067890927,
+        "neighbour_pct": 0.0,
+        "floor": 0.5524367964414815,
+        "gene_degree": 0.5449578364237186,
+        "tv_neg_vs_pos": 0.031997774067890936
+      },
+      {
+        "seed": 2,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.1997774067890927,
+        "floor": 0.5265253812930659,
+        "gene_degree": 0.5232442759202021,
+        "tv_neg_vs_pos": 0.030606566499721738
+      },
+      {
+        "seed": 3,
+        "policy": "published",
+        "uniform_pct": 3.8675570395102947,
+        "neighbour_pct": 0.0,
+        "floor": 0.5551211225411549,
+        "gene_degree": 0.5473055862906365,
+        "tv_neg_vs_pos": 0.03839732888146911
+      },
+      {
+        "seed": 3,
+        "policy": "exact",
+        "uniform_pct": 2.782415136338342,
+        "neighbour_pct": 0.0,
+        "floor": 0.5464139979790716,
+        "gene_degree": 0.5385021533137062,
+        "tv_neg_vs_pos": 0.027824151363383426
+      },
+      {
+        "seed": 3,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 2.782415136338342,
+        "floor": 0.5226078197478082,
+        "gene_degree": 0.5200779432362539,
+        "tv_neg_vs_pos": 0.026711185308848084
+      },
+      {
+        "seed": 4,
+        "policy": "published",
+        "uniform_pct": 4.702281580411797,
+        "neighbour_pct": 0.0,
+        "floor": 0.564412523314533,
+        "gene_degree": 0.5577611653504,
+        "tv_neg_vs_pos": 0.04674457429048412
+      },
+      {
+        "seed": 4,
+        "policy": "exact",
+        "uniform_pct": 3.394546466332777,
+        "neighbour_pct": 0.0,
+        "floor": 0.5543638163401625,
+        "gene_degree": 0.5478830496880196,
+        "tv_neg_vs_pos": 0.03394546466332776
+      },
+      {
+        "seed": 4,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.394546466332777,
+        "floor": 0.5267363075601486,
+        "gene_degree": 0.5261240446189763,
+        "tv_neg_vs_pos": 0.030884808013355594
+      }
+    ]
+  },
+  "couplemda": {
+    "summary": {
+      "published": {
+        "floor": [
+          0.5773086260184719,
+          0.0021328519539014048
+        ],
+        "gene_degree": [
+          0.5683129204247931,
+          0.0010127878924150882
+        ],
+        "uniform_pct": [
+          6.211424819435325,
+          0.16480499537769047
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.060801050558108985,
+          0.0013615522884653784
+        ]
+      },
+      "exact": {
+        "floor": [
+          0.5673066385460152,
+          0.0021572489231250483
+        ],
+        "gene_degree": [
+          0.5610925752598911,
+          0.0016148272258732026
+        ],
+        "uniform_pct": [
+          5.187130663164806,
+          0.0
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.0516086671043992,
+          0.0003596339839167201
+        ]
+      },
+      "neighbour": {
+        "floor": [
+          0.5302861054981421,
+          0.0008758968553351164
+        ],
+        "gene_degree": [
+          0.5280080136958839,
+          0.0007340436709231854
+        ],
+        "uniform_pct": [
+          0.0,
+          0.0
+        ],
+        "neighbour_pct": [
+          5.187130663164806,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.04858831254103743,
+          0.0
+        ]
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "policy": "published",
+        "uniform_pct": 6.369008535784635,
+        "neighbour_pct": 0.0,
+        "floor": 0.580037154094646,
+        "gene_degree": 0.5697089797109671,
+        "tv_neg_vs_pos": 0.061720288903479956
+      },
+      {
+        "seed": 0,
+        "policy": "exact",
+        "uniform_pct": 5.187130663164806,
+        "neighbour_pct": 0.0,
+        "floor": 0.568192939169978,
+        "gene_degree": 0.5624046950911155,
+        "tv_neg_vs_pos": 0.05187130663164806
+      },
+      {
+        "seed": 0,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 5.187130663164806,
+        "floor": 0.5300780891293018,
+        "gene_degree": 0.5271419326940943,
+        "tv_neg_vs_pos": 0.04858831254103743
+      },
+      {
+        "seed": 1,
+        "policy": "published",
+        "uniform_pct": 6.369008535784635,
+        "neighbour_pct": 0.0,
+        "floor": 0.5786620904502595,
+        "gene_degree": 0.5690226334742959,
+        "tv_neg_vs_pos": 0.06237688772160209
+      },
+      {
+        "seed": 1,
+        "policy": "exact",
+        "uniform_pct": 5.187130663164806,
+        "neighbour_pct": 0.0,
+        "floor": 0.5636650802813847,
+        "gene_degree": 0.5585291238005647,
+        "tv_neg_vs_pos": 0.051214707813525925
+      },
+      {
+        "seed": 1,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 5.187130663164806,
+        "floor": 0.5307101139929701,
+        "gene_degree": 0.5291352252978944,
+        "tv_neg_vs_pos": 0.04858831254103743
+      },
+      {
+        "seed": 2,
+        "policy": "published",
+        "uniform_pct": 6.172028890347997,
+        "neighbour_pct": 0.0,
+        "floor": 0.5748505407778907,
+        "gene_degree": 0.5678691665420006,
+        "tv_neg_vs_pos": 0.06106369008535784
+      },
+      {
+        "seed": 2,
+        "policy": "exact",
+        "uniform_pct": 5.187130663164806,
+        "neighbour_pct": 0.0,
+        "floor": 0.5671022004898407,
+        "gene_degree": 0.5614689447728396,
+        "tv_neg_vs_pos": 0.05187130663164805
+      },
+      {
+        "seed": 2,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 5.187130663164806,
+        "floor": 0.5301449130405355,
+        "gene_degree": 0.527855439617267,
+        "tv_neg_vs_pos": 0.04858831254103743
+      },
+      {
+        "seed": 3,
+        "policy": "published",
+        "uniform_pct": 6.172028890347997,
+        "neighbour_pct": 0.0,
+        "floor": 0.5756138422929828,
+        "gene_degree": 0.5672918941733429,
+        "tv_neg_vs_pos": 0.059750492449113575
+      },
+      {
+        "seed": 3,
+        "policy": "exact",
+        "uniform_pct": 5.187130663164806,
+        "neighbour_pct": 0.0,
+        "floor": 0.5685156339929356,
+        "gene_degree": 0.5606319213943866,
+        "tv_neg_vs_pos": 0.05121470781352593
+      },
+      {
+        "seed": 3,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 5.187130663164806,
+        "floor": 0.5314367701373857,
+        "gene_degree": 0.5281833079043202,
+        "tv_neg_vs_pos": 0.04858831254103743
+      },
+      {
+        "seed": 4,
+        "policy": "published",
+        "uniform_pct": 5.975049244911359,
+        "neighbour_pct": 0.0,
+        "floor": 0.5773795024765804,
+        "gene_degree": 0.5676719282233591,
+        "tv_neg_vs_pos": 0.059093893630991455
+      },
+      {
+        "seed": 4,
+        "policy": "exact",
+        "uniform_pct": 5.187130663164806,
+        "neighbour_pct": 0.0,
+        "floor": 0.5690573387959366,
+        "gene_degree": 0.5624281912405492,
+        "tv_neg_vs_pos": 0.05187130663164805
+      },
+      {
+        "seed": 4,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 5.187130663164806,
+        "floor": 0.5290606411905177,
+        "gene_degree": 0.5277241629658435,
+        "tv_neg_vs_pos": 0.04858831254103743
+      }
+    ]
+  },
+  "couplemda_randomsplit": {
+    "summary": {
+      "published": {
+        "floor": [
+          0.5704330527235616,
+          0.004287367479946185
+        ],
+        "gene_degree": [
+          0.5613991356386805,
+          0.004588007861233219
+        ],
+        "uniform_pct": [
+          5.375914836992681,
+          0.5009940278647157
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.052561543579507645,
+          0.0050010965995917825
+        ]
+      },
+      "exact": {
+        "floor": [
+          0.5583523571619237,
+          0.004711186569230727
+        ],
+        "gene_degree": [
+          0.5509831966140906,
+          0.004516778471380785
+        ],
+        "uniform_pct": [
+          3.8057218895542246,
+          0.5474385211104247
+        ],
+        "neighbour_pct": [
+          0.0,
+          0.0
+        ],
+        "tv_neg_vs_pos": [
+          0.03805721889554225,
+          0.00547438521110424
+        ]
+      },
+      "neighbour": {
+        "floor": [
+          0.5298596419934581,
+          0.003651754188263325
+        ],
+        "gene_degree": [
+          0.5266146792686528,
+          0.0016864458875719853
+        ],
+        "uniform_pct": [
+          0.0,
+          0.0
+        ],
+        "neighbour_pct": [
+          3.8057218895542246,
+          0.5474385211104247
+        ],
+        "tv_neg_vs_pos": [
+          0.03592814371257484,
+          0.005625926322451011
+        ]
+      }
+    },
+    "rows": [
+      {
+        "seed": 0,
+        "policy": "published",
+        "uniform_pct": 5.056553559547572,
+        "neighbour_pct": 0.0,
+        "floor": 0.565477162773588,
+        "gene_degree": 0.5572795416043052,
+        "tv_neg_vs_pos": 0.0499001996007984
+      },
+      {
+        "seed": 0,
+        "policy": "exact",
+        "uniform_pct": 3.925482368596141,
+        "neighbour_pct": 0.0,
+        "floor": 0.5567350550617549,
+        "gene_degree": 0.5492689493490288,
+        "tv_neg_vs_pos": 0.03925482368596141
+      },
+      {
+        "seed": 0,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.925482368596141,
+        "floor": 0.527489266311024,
+        "gene_degree": 0.5244425763686643,
+        "tv_neg_vs_pos": 0.03659347970725216
+      },
+      {
+        "seed": 1,
+        "policy": "published",
+        "uniform_pct": 5.322687957418497,
+        "neighbour_pct": 0.0,
+        "floor": 0.5704541239100863,
+        "gene_degree": 0.5590845366264587,
+        "tv_neg_vs_pos": 0.052561543579507645
+      },
+      {
+        "seed": 1,
+        "policy": "exact",
+        "uniform_pct": 3.7924151696606785,
+        "neighbour_pct": 0.0,
+        "floor": 0.557898839712458,
+        "gene_degree": 0.5505887758747309,
+        "tv_neg_vs_pos": 0.03792415169660679
+      },
+      {
+        "seed": 1,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.7924151696606785,
+        "floor": 0.5302336112870732,
+        "gene_degree": 0.526797369997198,
+        "tv_neg_vs_pos": 0.03393213572854292
+      },
+      {
+        "seed": 2,
+        "policy": "published",
+        "uniform_pct": 6.254158349966733,
+        "neighbour_pct": 0.0,
+        "floor": 0.5751382575279691,
+        "gene_degree": 0.5689255775430732,
+        "tv_neg_vs_pos": 0.061210911510312695
+      },
+      {
+        "seed": 2,
+        "policy": "exact",
+        "uniform_pct": 4.657351962741184,
+        "neighbour_pct": 0.0,
+        "floor": 0.5644607878941607,
+        "gene_degree": 0.5580400520759324,
+        "tv_neg_vs_pos": 0.046573519627411825
+      },
+      {
+        "seed": 2,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 4.657351962741184,
+        "floor": 0.5279146740893905,
+        "gene_degree": 0.5274755434794638,
+        "tv_neg_vs_pos": 0.04524284763805719
+      },
+      {
+        "seed": 3,
+        "policy": "published",
+        "uniform_pct": 5.123087159015303,
+        "neighbour_pct": 0.0,
+        "floor": 0.566887294384396,
+        "gene_degree": 0.5593319902665284,
+        "tv_neg_vs_pos": 0.04923486360612108
+      },
+      {
+        "seed": 3,
+        "policy": "exact",
+        "uniform_pct": 3.32667997338656,
+        "neighbour_pct": 0.0,
+        "floor": 0.5518337908348308,
+        "gene_degree": 0.5456394817373459,
+        "tv_neg_vs_pos": 0.033266799733865614
+      },
+      {
+        "seed": 3,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.32667997338656,
+        "floor": 0.5275857688039313,
+        "gene_degree": 0.5255592164528783,
+        "tv_neg_vs_pos": 0.030605455755156344
+      },
+      {
+        "seed": 4,
+        "policy": "published",
+        "uniform_pct": 5.123087159015303,
+        "neighbour_pct": 0.0,
+        "floor": 0.5742084250217684,
+        "gene_degree": 0.562374032153037,
+        "tv_neg_vs_pos": 0.049900199600798396
+      },
+      {
+        "seed": 4,
+        "policy": "exact",
+        "uniform_pct": 3.32667997338656,
+        "neighbour_pct": 0.0,
+        "floor": 0.560833312306414,
+        "gene_degree": 0.5513787240334147,
+        "tv_neg_vs_pos": 0.03326679973386559
+      },
+      {
+        "seed": 4,
+        "policy": "neighbour",
+        "uniform_pct": 0.0,
+        "neighbour_pct": 3.32667997338656,
+        "floor": 0.5360748894758719,
+        "gene_degree": 0.5287986900450596,
+        "tv_neg_vs_pos": 0.03326679973386559
+      }
+    ]
+  }
+}
