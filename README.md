@@ -2,6 +2,11 @@
 
 A computational pipeline that integrates single-cell RNA-seq transcriptomics, bulk miRNA expression, and validated miRNA–target interaction databases into a heterogeneous graph, then trains a **Heterogeneous Graph Transformer (HGT)** to identify cell-type-specific miRNA regulatory circuits implicated in Multiple Sclerosis (MS).
 
+> **protocheck**, the evaluation checker that accompanies this project's paper (*The Protocol, Not
+> the Model*), lives in its own repository:
+> [github.com/UlisesMoyaSanchez/protocheck](https://github.com/UlisesMoyaSanchez/protocheck)
+> (MIT). The `protocheck/` folder here is a frozen copy of v0.1.0 used by the analysis scripts.
+
 ---
 
 ## Scientific Background

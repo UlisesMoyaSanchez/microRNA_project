@@ -1,98 +1,23 @@
-# protocheck
+# protocheck (vendored copy, frozen at v0.1.0)
 
-Warns about the evaluation errors described in the paper *The Protocol, Not the Model*,
-given the data of a link-prediction experiment. Depends on numpy, scipy and scikit-learn
-only (no torch, no PyG).
-
-| Check | What it warns about | Needs |
-|---|---|---|
-| `edge_leakage` | held-out edges visible to the encoder (either direction), shared with training, or used as evaluation negatives | `encoder_edges` |
-| `negative_matching` | train and eval negatives with different column-degree profiles; eval negatives that do not mirror the held-out positives; declared samplers that differ | `eval_neg` (+ `train_neg`) |
-| `model_free_baseline` | computes the no-learning floor (degree, preferential attachment, common neighbours, Adamic-Adar) and, given your AUROC, the margin over it | held-out positives (+ `model_auroc`) |
-| `dead_candidates` | candidate columns with no positive anywhere, and evaluation negatives that land on them | held-out + train positives |
-
-A check whose input you did not supply is reported as `unchecked`, never as `ok`.
-Thresholds are heuristics (`protocheck.DEFAULT_THRESHOLDS`), not validated cut-offs; read the
-numbers in each finding rather than the status word. The degree-profile distances warn only when
-they also exceed what sampling noise produces at your sample sizes, and fewer than 30 held-out
-positives is itself a warning: the floor and the margin are not readable at that size.
-`dead_candidates` judges the evaluation negatives you supply, not only the share of empty
-columns: a padded matrix scored with degree-matched negatives is reported as `info`.
-
-## Use
-
-```python
-from protocheck import audit
-report = audit(n_rows, n_cols, train_pos, heldout_pos,      # (2, N) arrays of (row, col)
-               encoder_edges=train_pos, train_neg=train_neg, eval_neg=eval_neg,
-               model_auroc=0.91)
-print(report.render()); report.save("audit.json")
-```
+**The canonical home of this tool is
+[github.com/UlisesMoyaSanchez/protocheck](https://github.com/UlisesMoyaSanchez/protocheck).**
+Install it, report issues and read the documentation there:
 
 ```bash
-python -m protocheck --train-pos train_pos.npy --heldout-pos heldout_pos.npy \
-    --encoder-edges encoder_edges.npy --eval-neg eval_neg.npy --train-neg train_neg.npy \
-    --n-rows 495 --n-cols 383 --model-auroc 0.91 --json audit.json
+pip install "git+https://github.com/UlisesMoyaSanchez/protocheck.git@v0.1.0"
 ```
 
-Other input layouts (`python -m protocheck -h`): an HMDD-style 0/1 matrix plus the held-out
-pairs (`--matrix M.csv --heldout-pos F --encoder-edges matrix`), (row, col, label) triples
-(`--labeled-train/--labeled-test`), OGB `split_edge` (`protocheck.io.from_ogb_split_edge`) and
-this repo's `EdgeSplit` (`protocheck.io.from_pyg_edge_split`). Homogeneous undirected graphs:
-`--mode homogeneous`. Exit status 1 if any check fails, 2 on a usage error, and 3 if nothing
-failed but the leakage check could not run because no encoder edges were given
-(`--allow-unchecked` accepts that and exits 0). (row, col, label) files whose negatives use a
-different index base than their positives take `--neg-index-base`.
+This folder is a **frozen copy of release v0.1.0** (`src/protocheck/` at tag `v0.1.0`), kept here
+only so that the paper's analysis scripts import exactly the code that produced the reported
+numbers, without an extra install step:
 
-## Using it in your own project
+- `analysis/validate_protocheck.py`, `analysis/validate_protocheck_ogb.py`
+- `analysis/protocheck_mgcnss.py`
+- `analysis/compare_matched_samplers.py`, `analysis/test_fallback_policy.py`
+- `tests/test_protocheck.py`
 
-`protocheck` inspects the *data* of your experiment (splits and negatives), not your model. Your
-pipeline does not change; you add one step between building the splits and reporting a number.
-
-1. Build your splits and negatives as usual.
-2. Save the pairs as `N x 2` arrays of `(row, col)` (`.npy` or CSV): `train_pos` and `heldout_pos`
-   (required), and, to enable more checks, `encoder_edges` (the edges your model actually uses for
-   message passing), `train_neg`, `eval_neg`, plus your test AUROC (`model_auroc`).
-3. Run the audit, in Python or from the command line:
-
-   ```python
-   from protocheck import audit
-   report = audit(n_rows, n_cols, train_pos, heldout_pos,
-                  encoder_edges=encoder_edges, train_neg=train_neg, eval_neg=eval_neg,
-                  model_auroc=0.91)
-   print(report.render())
-   ```
-
-   or `python -m protocheck --train-pos ... --heldout-pos ... --model-auroc 0.91`. In Colab, open
-   `notebooks/protocheck_colab.ipynb`, upload the files and fill in the names.
-4. Read each finding (`ok`, `warn`, `fail` or `unchecked`). On `fail`, fix the split or the sampler and
-   retrain; on a small margin over the model-free floor, report it next to your number.
-5. Optional: call it at the end of your evaluation script and stop on any non-zero exit status
-   (1 = a check failed, 3 = leakage was not checked).
-
-Two things to keep in mind. The tool takes the files as given: if `encoder_edges` is not what your code
-really feeds the encoder, it can report `ok` wrongly, so build that file from the same object your model
-uses. And it does not retrain anything: to learn how much of your AUROC was inflation, rerun your model on
-the corrected split.
-
-## Examples
-
-`python -m protocheck.examples.make_examples` writes five synthetic datasets, each triggering
-one failure mode (or none: `clean`). They are fictional: `model_auroc` is a made-up number.
-`notebooks/protocheck_colab.ipynb` runs them and has a cell for your own files.
-
-## What it cannot tell you
-
-It inspects the pairs you supply. It cannot see leakage that does not pass through exact
-edges (e.g. node features derived from held-out labels), cannot distinguish a correct
-sampler with a different seed or parameter from a matched one, and does not test whether
-any published number is inflated.
-
-## Verification
-
-`pytest tests/test_protocheck.py` checks that each example triggers its own check (the
-`dead_columns` example also trips `negative_matching` and `model_free_baseline`, mechanically:
-uniform negatives on empty columns both skew the degree profile and inflate the floor; every
-other example triggers its own check and no other), and that the scorers reproduce `training/eval_topology_baseline.py::build_scorers`
-and the OGB formulas. `python analysis/validate_protocheck.py` runs the tool on the paper's
-graphs under the 2x2 protocol grid; read its docstring for what that does and does not show.
+**Do not edit it here.** Changes go to the standalone repository first; to update this copy,
+copy `src/protocheck/` from the new tag over this folder (keeping this README and
+`requirements.txt`) and rerun `pytest tests/test_protocheck.py` and
+`analysis/validate_protocheck.py`.

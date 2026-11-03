@@ -2,15 +2,11 @@
 protocheck.checks -- the four evaluation checks, as pure numpy/scipy functions.
 
 Every function takes (2, N) integer arrays of (row, col) pairs and returns a Finding.
-Nothing here imports torch or PyG: the logic was extracted from
-
-  training/splits.py                  pair_keys, assert_no_edge_leakage, degree_bins,
-                                      gene_in_degree, sample_degree_matched_negatives
-  training/eval_topology_baseline.py  build_scorers (bipartite heuristics)
-  training/eval_ogb_topology_baseline.py  build_dense_scorers (homogeneous heuristics)
-  analysis/graph_candidate_stats.py   gini, stats (dead candidate columns)
-
-and tests/test_protocheck.py checks that the scorers here reproduce the torch originals.
+Nothing here imports torch or PyG. The logic was extracted from the analysis code of the
+paper's research repository (https://github.com/UlisesMoyaSanchez/microRNA_project:
+training/splits.py, training/eval_topology_baseline.py,
+training/eval_ogb_topology_baseline.py, analysis/graph_candidate_stats.py), and
+tests/test_protocheck.py checks that the scorers here reproduce those torch originals.
 
 Status levels: ok / info / warn / error / unchecked. "unchecked" means the input needed
 to run the check was not supplied -- it is never reported as "ok".

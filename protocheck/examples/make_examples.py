@@ -3,12 +3,14 @@ Synthetic datasets that each trigger one failure mode from the paper -- and one 
 triggers none. Fictional data: the graph is random with a skewed column-degree profile,
 and `model_auroc` is a made-up number standing in for "the AUROC you would report".
 
-    python -m protocheck.examples.make_examples            # writes protocheck/examples/data/
-    python -m protocheck --train-pos protocheck/examples/data/leak/train_pos.npy \
-        --heldout-pos protocheck/examples/data/leak/heldout_pos.npy \
-        --encoder-edges protocheck/examples/data/leak/encoder_edges.npy \
-        --eval-neg protocheck/examples/data/leak/eval_neg.npy \
+    python -m protocheck.examples.make_examples protocheck_examples   # writes ./protocheck_examples/
+    protocheck --train-pos protocheck_examples/leak/train_pos.npy \
+        --heldout-pos protocheck_examples/leak/heldout_pos.npy \
+        --encoder-edges protocheck_examples/leak/encoder_edges.npy \
+        --eval-neg protocheck_examples/leak/eval_neg.npy \
         --n-rows 300 --n-cols 250
+
+In Python, `build()` returns the scenarios in memory, so nothing needs writing at all.
 
 Scenario -> what it should flag
   clean                 nothing (leak-free split, degree-matched negatives on both sides)
@@ -29,8 +31,7 @@ from protocheck.checks import (
     column_degree, degree_bins, degree_matched_negatives, model_free_floor, uniform_negatives,
 )
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "data")
+DATA = "protocheck_examples"  # default output folder, relative to the working directory
 N_ROWS, N_COLS, N_EDGES = 300, 250, 6000
 
 
@@ -89,16 +90,18 @@ def build(seed: int = 0) -> dict[str, dict]:
     return out
 
 
-def write(seed: int = 0) -> None:
+def write(seed: int = 0, out_dir: str | None = None) -> None:
+    global DATA
+    DATA = out_dir or DATA
     for name, kw in build(seed).items():
         meta = {k: v for k, v in kw.items() if not isinstance(v, np.ndarray)}
         _save(name, meta, **{k: v for k, v in kw.items() if isinstance(v, np.ndarray)})
         print(f"wrote {os.path.join(DATA, name)}")
 
 
-def load_scenario(name: str) -> dict:
+def load_scenario(name: str, out_dir: str | None = None) -> dict:
     """Read a written scenario back as kwargs for protocheck.audit."""
-    d = os.path.join(DATA, name)
+    d = os.path.join(out_dir or DATA, name)
     with open(os.path.join(d, "scenario.json")) as fh:
         kw = json.load(fh)
     for f in os.listdir(d):
@@ -108,4 +111,5 @@ def load_scenario(name: str) -> dict:
 
 
 if __name__ == "__main__":
-    write()
+    import sys
+    write(out_dir=sys.argv[1] if len(sys.argv) > 1 else None)

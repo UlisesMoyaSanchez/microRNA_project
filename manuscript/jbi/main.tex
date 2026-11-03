@@ -886,11 +886,21 @@ relationships that could have appeared to influence the work reported in this pa
 (Conceptualization, Methodology, Software, Validation, Writing, ...).]
 
 \section*{Data availability}
-Code: this repository. The reporting-standard checker is in \texttt{protocheck/}, with a Colab notebook at \texttt{notebooks/protocheck\_colab.ipynb}. Large data/checkpoints are intentionally untracked: the public
-source (a CZ CELLxGENE Census query, release 2025-11-08, retrieved 2026-05-28; and miRDB
-v6.0) and the exact build scripts are documented so the graph is reconstructible, rather
-than distributing large binaries in-repo.
-[STAGE: finalize the repository URL / DOI before submission.]
+\texttt{protocheck}, the checker for the reporting standard, is released as an open-source Python
+package under the MIT license at \url{https://github.com/UlisesMoyaSanchez/protocheck}; this paper
+uses version 0.1.0. It depends only on numpy, scipy and scikit-learn, installs with \texttt{pip}, and
+includes a Colab notebook for running it on one's own files. The analysis code, including a frozen
+copy of \texttt{protocheck} 0.1.0 so the reported numbers can be regenerated without a separate
+install, is at \url{https://github.com/UlisesMoyaSanchez/microRNA_project}. Large data and
+checkpoints are intentionally untracked: the public sources (a CZ CELLxGENE Census query, release
+2025-11-08, retrieved 2026-05-28; miRDB v6.0; and the published matrices of the surveyed papers)
+and the exact build scripts are documented so every graph is reconstructible, rather than
+distributing large binaries in the repository.
+[STAGE: replace the two GitHub URLs with archived DOIs (Zenodo) before submission, and point the
+analysis-code URL at the release tag that matches the submitted manuscript.]
+%% STAGE (2026-11-03): protocheck split into its own repository (MIT, v0.1.0, CI on Python
+%%   3.9-3.12); the copy in this repo is frozen at v0.1.0 (protocheck/README.md). The previous text
+%%   pointed readers at protocheck/ and notebooks/ inside this repository on a feature branch.
 
 \section*{Funding}
 [STAGE / TODO -- fill in funding source(s), or ``Not applicable'' if none.]

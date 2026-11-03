@@ -68,12 +68,19 @@ def _build(a: argparse.Namespace) -> dict:
     return kw
 
 
+def entry() -> None:
+    """Console-script entry point (`protocheck ...`)."""
+    raise SystemExit(main())
+
+
 def main(argv=None) -> int:
-    p = argparse.ArgumentParser(prog="python -m protocheck", description=__doc__,
+    p = argparse.ArgumentParser(prog="protocheck", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     for f in ("train-pos", "heldout-pos", "encoder-edges", "encoder-edges-rev", "train-neg",
               "eval-neg", "matrix", "labeled-train", "labeled-test"):
         p.add_argument(f"--{f}")
+    from . import __version__
+    p.add_argument("--version", action="version", version=f"protocheck {__version__}")
     p.add_argument("--n-rows", type=int)
     p.add_argument("--n-cols", type=int)
     p.add_argument("--index-base", type=int, default=0, choices=[0, 1])

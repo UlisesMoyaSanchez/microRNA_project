@@ -79,9 +79,9 @@ def from_ogb_split_edge(split_edge: dict, num_nodes: int) -> dict:
 
 
 def from_pyg_edge_split(split, fwd=("miRNA", "regulates", "gene"), which: str = "test") -> dict:
-    """training.splits.EdgeSplit -> kwargs for protocheck.audit (lazy: needs torch only here).
+    """microRNA_project training.splits.EdgeSplit -> kwargs for protocheck.audit (needs torch).
 
-    Lets this repo's own pipeline be audited: encoder_edges are the message-passing graph's
+    For the research repository's EdgeSplit (needs torch). encoder_edges are the message-passing graph's
     forward edges, so a regression in the leak-free split shows up as a failing check.
     """
     mp = split.mp_graph[fwd]

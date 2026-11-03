@@ -133,6 +133,30 @@ empata aproximadamente, y que con 8 contenedores un scorer de solo grado llega a
   - El deck compila.
 - `RESUMEN_AUDITORIA.md` no se tocó: solo trata de nuestro grafo y no repite ninguna de las afirmaciones corregidas.
 
+### `protocheck` sale a su propio repositorio
+
+Para que otros lo usen, `protocheck` se separó en **https://github.com/UlisesMoyaSanchez/protocheck**: público, licencia
+**MIT**, etiqueta **v0.1.0**, clon local en `~/Documents/personal/scripts/protocheck`.
+- **Empaquetado:** `pyproject.toml` con layout `src/`; el nombre de distribución es `lp-protocheck` porque `protocheck` ya
+  existe en PyPI; el import y el comando siguen siendo `protocheck`. Se agregaron `--version`, un README para usuarios
+  externos, `CITATION.cff`, `CHANGELOG.md` y un notebook de Colab que instala la etiqueta v0.1.0.
+- **CI de GitHub Actions** con Python 3.9–3.12, en verde (las acciones van en v7).
+- **Pruebas:** la instalación desde GitHub en un entorno limpio y los 5 ejemplos funcionan.
+- La creación del repo público la bloqueó el clasificador de permisos; el autor corrió `gh repo create` él mismo.
+
+**En este repo:**
+- `protocheck/` queda como **copia congelada de v0.1.0**, sincronizada desde la etiqueta. Respecto de la versión anterior
+  solo cambian docstrings, la entrada de la CLI, `--version` y la carpeta de salida de los ejemplos; **la lógica de los
+  checks es idéntica**, así que la validación (job 565) sigue valiendo. Los 24 tests pasan, incluidas las 2 comparaciones
+  contra torch.
+- `protocheck/README.md` dice que no se edite aquí y explica cómo actualizar la copia.
+- `notebooks/protocheck_colab.ipynb` es el mismo del repo nuevo.
+- El README raíz apunta al repo nuevo.
+- **Manuscrito, "Data availability":** cita `protocheck` en su repositorio (MIT, v0.1.0, `pip`, Colab) y el repo de análisis
+  con su copia congelada. El `[STAGE]` ahora pide reemplazar las dos URL por DOIs de Zenodo antes de someter.
+
+**Pendiente:** el DOI de Zenodo, que tiene que activar el autor, y opcionalmente PyPI.
+
 ---
 
 ## 2026-11-02 — La auditoría independiente: cuatro afirmaciones tocadas y una regla de falsación disparada
