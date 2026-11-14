@@ -26,6 +26,18 @@ one — reformatted here, not re-fetched. The other 19 were freshly fetched and 
 > `results/literature_survey_d4_reaudit.tsv` and `results/literature_survey_adjudication.tsv`.
 > The citation-content verdicts themselves (links, ✅/⚠️/❌ per key) are unaffected and stand.
 
+> **Update, 2026-11-09 — two caveats closed, one reference now published.**
+> `briere2026kgeleakage` is now published (*Bioinformatics* 42(8) btag608, online 2026-08-20,
+> open access, Europe PMC PMC13520922); the bib now cites the journal version, and the published
+> full text confirms the permutation-test detail: *"Using permutation experiments, we also
+> investigate whether node degree acts as an illegitimate predictive feature, and find no evidence
+> that predictions are driven by degree alone."* Its ⚠️ below is therefore ✅. `toutanova2015observed`
+> is likewise ✅ from the ACL Anthology full text (≈81% of FB15K test triples directly linked in
+> training; FB15KSelected built to remove facts entailed by symmetry or inverse relations).
+> `almusawi2023review` (not cited) is now IEEE Access 13:54997–55016 (2025). `huang2023gelato` and
+> `aiyappa2024implicit` are still arXiv-only. `li2010rwrh` was added 2026-11-02 (RWRH, Table 3).
+> No cited DOI has a Crossref correction or retraction. Current per-key state: `references_review.csv`.
+
 **Assessment key:** ✅ Supported — the source states what the sentence claims. ⚠️ Caveat —
 supported but with a nuance, a narrower/broader scope than implied, or a detail I could not
 independently re-confirm this pass. ❌ Mismatch — not found in the review.

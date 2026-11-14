@@ -164,21 +164,33 @@ verdict['hu2020ogb'] = (P3, '✅ Supported (after fix) — now cited only for th
 verdict['ogb2026leaderboard'] = (P3, '✅ Supported — ranks re-read 2026-10-26 (ddi 30th of 32; ppa 14th of 27, BUDDY 13th); '
                                  'heuristic rows submitted by third parties in 2021.')
 
+verdict['li2010rwrh'] = ('2026-11-02', '✅ Supported — the original RWRH method, cited for the RWRH baseline that ModulePred reports.')
+verdict['toutanova2015observed'] = ('2026-11-09', '✅ Supported (full text, ACL Anthology W15-4007): for "almost 81%" of FB15K '
+                                    'test triples the entity pair is directly linked in training (Table 5), and the authors build '
+                                    'FB15KSelected to remove facts "trivially entailed ... due to relation symmetry or the presence '
+                                    'of inverse relations".')
+verdict['briere2026kgeleakage'] = ('2026-11-09', '✅ Supported (full text, Europe PMC PMC13520922): train/test redundancy '
+                                   'inflates KGE link prediction on three biomedical KGs; abstract: "Using permutation experiments, '
+                                   'we also investigate whether node degree acts as an illegitimate predictive feature, and find no '
+                                   'evidence that predictions are driven by degree alone."')
+
 NOTES = {
-    'briere2026kgeleakage': 'OPEN: the sentence says the study\'s permutation test found no evidence of degree exploitation. '
-                            'Not re-confirmed from full text (bioRxiv 403 in Aug, 429 on 2026-10-26). Needs someone with access to read v3. '
-                            'Still a preprint (v3, 2026-07-22).',
-    'toutanova2015observed': 'Claim (inverse-relation leak in FB15k) is in the paper body, not the abstract; no verbatim quote taken.',
+    'briere2026kgeleakage': 'CLOSED 2026-11-09: now published (Bioinformatics 42(8) btag608, online 2026-08-20); bib switched from '
+                            'the bioRxiv preprint, and the permutation-test claim re-confirmed from the published full text.',
+    'li2010rwrh': 'Added 2026-11-02: ModulePred lists RWRH as a baseline, but its own reference for RWRH points to an unrelated '
+                  'paper (Cao et al., AAAI 2015), so the original method is cited directly.',
+    'toutanova2015observed': 'CLOSED 2026-11-09: the claim is in the paper body (Sec. 4 and Table 5), quoted in the verdict.',
     'kotnis2017analysis': 'Shows sampling-method × dataset bias, not degree bias as such; cited for "bias in link prediction generally". '
                           'KBCOM\'18 venue confirmed (Heidelberg CL news, best paper).',
     'barabasi2004networkbiology': 'In the bib but no longer cited; not printed.',
     'vidal2011interactome': 'OPEN by choice: the sentence keeps "drug targets", which this source does not cover (author kept the wording 2026-10-26).',
     'krichene2020sampled': 'About evaluation-time sampled metrics in recommenders; the sentence hedges with "likely rooted in".',
-    'huang2023gelato': 'arXiv-only, no peer-reviewed venue found (2026-10-26).',
-    'aiyappa2024implicit': 'arXiv-only (2026-10-26).',
+    'huang2023gelato': 'arXiv-only, no peer-reviewed venue found (2026-10-26; re-checked 2026-11-09: arXiv shows no journal_ref, '
+                       'Crossref title search finds no published version).',
+    'aiyappa2024implicit': 'arXiv-only (2026-10-26; re-checked 2026-11-09 as for huang2023gelato).',
     'zeng2025gonnmda': 'Crossref title reads "A Ordered"; bib keeps "An". Decide at proofs.',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
-    'almusawi2023review': 'In the bib but not cited; not printed.',
+    'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',
 }
 LINK_FALLBACK = {'hu2020ogb': 'https://arxiv.org/abs/2005.00687', 'li2023evaluating': 'https://arxiv.org/abs/2306.10453',
@@ -198,10 +210,14 @@ def metadata(k, e):
         return 'arXiv comment / journal_ref'
     if k == 'kotnis2017analysis':
         return 'Authors\' institution (KBCOM\'18); arXiv'
-    if k in ('huang2023gelato', 'aiyappa2024implicit', 'almusawi2023review'):
+    if k == 'almusawi2023review':
+        return 'Crossref, published version found 2026-11-09 (was arXiv)'
+    if k in ('huang2023gelato', 'aiyappa2024implicit'):
         return 'arXiv API (no published version)'
     if k == 'briere2026kgeleakage':
-        return 'bioRxiv API (v3, no published version)'
+        return 'Crossref + Europe PMC, published version found 2026-11-09 (was bioRxiv v3)'
+    if k == 'li2010rwrh':
+        return 'Crossref (DOI), matches (2026-11-02)'
     if k in ('hu2020ogb', 'li2023evaluating', 'yun2021neognn'):
         return 'DBLP (2026-08-13 note); not re-checked 2026-10-26'
     return 'Crossref (DOI), matches'
