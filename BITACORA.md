@@ -23,6 +23,60 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-14 — NIMGSA con su propio código: el 0.9354 se reproduce exacto y cae al piso de popularidad
+
+**Por qué.** Hasta hoy, de NIMGSA (`jin2022nimgsa`) solo usábamos su matriz; el manuscrito no
+podía decir que *NIMGSA* se infla, solo que su protocolo tiene los ingredientes. El usuario
+dio el repo (github.com/zhanglabNKU/NIMGSA, commit `5bf10a9`, sin licencia → clonado fuera
+del repo en la DGX, `/raid/home/umoya/scripts/external_code/NIMGSA`; solo se importa su
+`models.py` sin modificar).
+
+**Lo que revela su código y el artículo no dice:**
+1. Los 5 folds son **por filas de miRNA** (cold-start): cada fold pone en cero las filas de
+   20% de los miRNA. Las asociaciones de prueba sí salen de la entrada.
+2. `show_auc` puntúa **la matriz completa** (495 × 383) contra `m-d.txt`: el 80% de las filas
+   evaluadas son de entrenamiento.
+3. `m-m.txt` es fija para los 5 folds y **73.6% de sus entradas son exactamente la GIP de la
+   matriz completa**: los vecinos de un miRNA "de prueba" se eligen con sus asociaciones
+   verdaderas (`d-d.txt`: 17.3%; las enfermedades nunca se ocultan).
+4. Negativos: todos los ceros (uniformes). `m-d.txt` es idéntica a nuestra matriz.
+
+**Experimento** (`analysis/nimgsa_rerun.py`, job 3704, 5 semillas × 5 folds, 300 épocas,
+sus hiperparámetros). Reproduce `fivefoldcv.py` con el mismo orden de RNG; semilla 1, fold 1
+da **0.9354, la cifra publicada**. Luego, por fold: evaluar solo filas de prueba; recalcular
+la parte GIP de las similitudes con la matriz del fold (`refit`; aproximación: la similitud
+funcional restante también sale de HMDD y no se puede recalcular); y negativos emparejados por
+grado (muestreador exacto, 0 fallbacks uniformes, 603 de 27,150 al bin vecino).
+
+| AUROC (media de semillas) | Matriz completa (su evaluación) | Filas de prueba, negativos uniformes | Filas de prueba, emparejados por grado |
+|---|---|---|---|
+| NIMGSA, similitud publicada | **0.9366** | 0.9210 | 0.5417 |
+| NIMGSA, similitud `refit` | 0.8971 | **0.8559** | **0.5264** |
+| Grado de la enfermedad (sin modelo) | 0.8647 | 0.8517 | 0.5254 |
+| Eco de la entrada (sin modelo) | **0.9702** | 0.8517 | 0.5254 |
+| Propagación por similitud publicada (sin modelo) | 0.9211 | 0.8860 | 0.5637 |
+| Propagación por similitud `refit` (sin modelo) | 0.9263 | 0.8917 | 0.5531 |
+
+DE entre semillas ≤ 0.0024; entre folds 0.004–0.013.
+
+**Lectura.**
+- Evaluar sobre filas de entrenamiento cuesta poco (−1.6 pts), pero devolver la entrada sin
+  modelo da 0.970 con su evaluación: **más que NIMGSA**. Esa evaluación no distingue un
+  modelo de una copia de sus datos.
+- La fuga grande es la similitud: recalcular su parte GIP baja 6.5 pts en filas de prueba
+  (0.921 → 0.856), y deja a NIMGSA **0.4 pts sobre el grado de la enfermedad**.
+- Con negativos emparejados, NIMGSA queda en 0.526, **+0.1 pts sobre la popularidad**. Total:
+  0.9366 → 0.5264 (−41 pts).
+- No explicado aún: la propagación sin modelo con la similitud `refit` (0.892 / 0.553) supera al
+  modelo `refit`. Puede ser señal real de la similitud funcional o la fuga residual de esa
+  parte (sale de anotaciones HMDD); no se distingue con estos archivos.
+- Cambio respecto a la Tabla 3: el *artículo* sigue siendo `unclear` en D1/D2 (el codebook
+  clasifica el texto), pero el *código* muestra folds por nodo y entrada enmascarada.
+
+**Pendiente:** decidir con el usuario si y cómo entra al manuscrito. `caaf2f1`
+
+---
+
 ## 2026-11-03 — Adoptado el muestreador emparejado exacto; tablas actualizadas; llega la fase 3 del auditor
 
 ### El muestreador exacto, adoptado para evaluar
