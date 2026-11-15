@@ -23,6 +23,21 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-15 — Orro (ref. 8): D2 de "yes" a "unclear"
+
+El usuario bajó el PDF (`papers/Uncovering miRNA–Disease .pdf`, Biomedicines 14(2):289). Partición por miRNA
+(la más fuerte del survey), pero: "all associations involving training miRNAs are removed from the validation
+graph" ("symmetrically") y las aristas patrón–enfermedad se construyen "(and symmetrically for the validation
+graph)" → leído literalmente, el grafo de validación contiene las asociaciones de los miRNAs held-out (como el
+código de HGDTI y kmerPMTF); "message passing over the remaining graph structure" admite la otra lectura.
+Además: AUC ~0.98 con miRNAs nunca vistos (alto para cold-start), early stopping con la pérdida de validación
+= el conjunto reportado, negativos uniformes, y la prueba de enfermedad held-out dice "no negative samples were
+generated" pero reporta AUC. **Sin código** ("included in the article").
+**Cambios (a pedido del usuario):** Tabla 3 → "unclear§" con nota; `orro2026mirnadisease` annote; conteos del
+texto (11→12 de 19 unclear; 7→6 que quitan aristas; "Five of the six…", "four of the six…");
+`results/literature_survey.tsv`, fila nueva en `literature_survey_adjudication.tsv`, `LITERATURE_SURVEY.md`.
+Pendiente opcional: escribir al autor pidiendo el código (decisión del usuario).
+
 ## 2026-11-15 — NGCN con su propio código: sin fuga, pero el examen es fácil
 
 **Materiales.** `cao2024ngcn` (JCMM 2024, fármaco–blanco; PDF `papers/NGCN_2024.pdf`). Repo

@@ -15,7 +15,7 @@ HGDTI \cite{yu2022hgdti} & drug-target & unclear$^{\ddagger}$ & reliable score-f
 NGCN \cite{cao2024ngcn} & drug-target & yes$^{\ddagger}$ & uniform random from unknown pairs, 1:10 & HNM~\cite{wang2014hnm} \\
 kmerPMTF \cite{zhang2024kmerpmtf} & plant miRNA-target & unclear & all unlabeled pairs, count-matched & no \\
 \hline
-Orro \cite{orro2026mirnadisease} & miRNA-disease & yes (miRNA-level holdout) & uniform random from unannotated pairs & TCRWMDA~\cite{yu2020tcrwmda} \\
+Orro \cite{orro2026mirnadisease} & miRNA-disease & unclear$^{\S}$ & uniform random from unannotated pairs & TCRWMDA~\cite{yu2020tcrwmda} \\
 CoupleMDA \cite{li2025couplemda} & miRNA-disease & yes & uniform random, 1:1 & no \\
 GONNMDA \cite{zeng2025gonnmda} & miRNA-disease & unclear & uniform random, 1:1 & no \\
 DiGAMN \cite{liu2024digamn} & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 & no \\
@@ -45,4 +45,8 @@ code builds the message-passing graph and its features from the full matrix, tes
 (Section~\ref{sec:generalization}). HGDTI's released code propagates at test time over an adjacency built from
 the test labels (Appendix~\ref{app:nimgsa}). NGCN's released code confirms its row: its model reads no
 drug--target edge (Appendix~\ref{app:nimgsa}).
+$^{\S}$Orro~\cite{orro2026mirnadisease} holds out whole miRNAs, the strongest split in the survey, but removes
+``all associations involving training miRNAs \ldots{} from the validation graph'' and builds its
+pattern--disease edges ``symmetrically for the validation graph'', so the graph it validates on may
+hold the held-out miRNAs' own associations; the text does not settle which, and no code is released.
 \end{table}

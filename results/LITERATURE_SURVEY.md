@@ -131,12 +131,14 @@ cell, and ModulePred's model-free-baseline cell resolved from "unclear" to a con
 
 ### Tallies (n = 21 papers; the field-convention row is excluded)
 
+*2026-11-15: Orro's D2 moved from removed to unclear on re-reading its published PDF: its validation graph keeps associations "symmetrically" (adjudication TSV, last row); removed 7 → 6, unclear 11 → 12.*
+
 | Practice | Original pilot (n=6) | Expansion (n=15) | Combined (n=21) |
 |---|---|---|---|
 | Cross-validate over **edges** (not nodes) | 5 / 6 | 14 / 15 | **19 / 21 (90%)** |
-| Held-out edges **removed** from the encoder's input graph | 2 / 6 | 5 / 13 | **7 / 19 (37%)** |
+| Held-out edges **removed** from the encoder's input graph | 2 / 6 | 4 / 13 | **6 / 19 (32%)** |
 | Held-out edges **left in** the encoder's input graph | 1 / 6 | 0 / 13 | **1 / 19 (5%)** ⚠️ |
-| **Unclear** from the methods section | 3 / 6 | 8 / 13 | **11 / 19 (58%)** ⚠️ |
+| **Unclear** from the methods section | 3 / 6 | 9 / 13 | **12 / 19 (63%)** ⚠️ |
 | — D2 **not applicable**: no association graph in the encoder | 0 / 6 | 2 / 15 | **2 / 21** |
 | Negatives = unlabeled pairs, uniform or wholesale | 4 / 6 | 13 / 15 | **17 / 21 (81%)** |
 | Any **model-free / heuristic baseline** reported | 2 / 6 | 4 / 15 | **6 / 21 (29%)** 🔴 |

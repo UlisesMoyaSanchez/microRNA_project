@@ -251,7 +251,7 @@ zhang2025saegraphdti,yang2025dtimhapr,sun2024ingnndti,jia2024modulepred}. A lite
 audit of 21 papers in this space found three gaps behind those numbers. First, 15 report no
 model-free baseline (a simple scorer with no trained parameters, such as node degree, used as a
 sanity-check floor). Second, 16 draw their negatives from unlabeled pairs without
-discussion. Third, for 11 of the 19 papers where the question applies (the other two never
+discussion. Third, for 12 of the 19 papers where the question applies (the other two never
 propagate over an interaction graph), it is unclear whether held-out edges are removed from
 the encoder's input (full results in Related Work below). The last two
 gaps correspond to two protocol failure modes: popularity-biased negative sampling and
@@ -404,9 +404,9 @@ HGDTI~\cite{yu2022hgdti} select them by a criterion of their own, and three pape
 %%   negative" cannot be the evaluation regime, and the paper never says how they were drawn.
 %%   D4: DTI-MHAPR moved from unclear to no -- FSI is named in prose but absent from Tables 2-3,
 %%   and D4 counts only comparators in a results table or figure. Hence 14 -> 15 and 17 -> 16.
-Third, in 11 of the 19 papers where the question applies, it is unclear from the methods
+Third, in 12 of the 19 papers where the question applies, it is unclear from the methods
 section whether held-out edges are removed from the encoder's input. This is a reporting
-gap, not confirmed leakage: after adjudication only MGCNSS~\cite{tian2024mgcnss} clearly leaks and 7 clearly strip
+gap, not confirmed leakage: after adjudication only MGCNSS~\cite{tian2024mgcnss} clearly leaks and 6 clearly strip
 test edges correctly, and our own project's original split was worse than the norm we
 observed. MGCNSS's~\cite{tian2024mgcnss} headline is inflated by its own protocol: its authors
 report that applying their negative selection to the training set only, not to the test set,
@@ -414,10 +414,10 @@ lowers AUROC (reported as AUC) from 0.9874 to 0.9437, and its public code also l
 test associations in the graph the encoder propagates over and keeps the epoch with the best
 test AUROC.
 
-Getting the split right is not protective on its own. Six of the seven papers that strip held-out
+Getting the split right is not protective on its own. Five of the six papers that strip held-out
 edges still draw their negatives from unlabeled pairs and the seventh, SaeGraphDTI~\cite{zhang2025saegraphdti},
 does not say how it draws them; none is degree-matched, and four
-of the seven report no model-free baseline. The two failure modes are independent, so fixing
+of the six report no model-free baseline. The two failure modes are independent, so fixing
 the split is not evidence against the popularity-biased negative sampling this paper
 identifies, which is why, as Results shows, correcting both is super-additive rather than
 redundant.
