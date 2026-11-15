@@ -147,6 +147,12 @@ El único artículo de la encuesta cuyo *modelo* se reentrenó (código `zhangla
 Se reporta como **0.937 → 0.526, +0.1 pts sobre la popularidad**. No decir que "NIMGSA no aprende
 nada": el recálculo de la similitud es parcial (la similitud funcional no se pudo rehacer).
 
+### HybridGNN con su propio código (jobs 3727, 3730; Tabla B.2 del manuscrito)
+
+Fuente: `comparison/hybridgnn_rerun_{hmdd_v4,canonical}.json`. Se reporta como **0.976 → 0.518, por
+debajo del piso de popularidad (0.523)** en sus datos publicados; en la canónica 0.952 → 0.536 (piso
+0.533). Decir siempre "su código publicado sobre sus datos publicados": no son los datos del artículo.
+
 ### Clasificación de tipo celular
 
 **0.9916** (prueba). Real, con partición correcta a nivel de célula, y no afectada por

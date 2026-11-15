@@ -1,0 +1,19 @@
+\begin{table}[h!]
+\caption{HybridGNN~\cite{ahmad2026hybridgnn} rerun with its own released code and the paper's hyper-parameters, AUROC as the mean over five seeds of the five-fold mean (seed SD $\le 0.0076$). Each step adds one correction to the previous one; step 4 scores the step-3 model. Floor: best model-free score on the same test pairs (\texttt{protocheck} 0.2.0); in steps 1--2 the graph holds every test edge, so the floor is the encoder's input handed back. Released data: the HMDD v4.0 file in the repository (1,911 $\times$ 2,360, 31,461 associations); canonical: the HMDD matrix of Table~\ref{tab:datasets} (495 $\times$ 383), on which the paper also reports results (0.9625).}
+\label{tab:hybridgnn_rerun}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\hline
+ & \multicolumn{2}{c}{Released data} & \multicolumn{2}{c}{Canonical HMDD} \\
+\cline{2-3}\cline{4-5}
+Step & HybridGNN & Floor & HybridGNN & Floor \\
+\hline
+1. As released (full-matrix graph and features, epoch by test AUROC) & 0.9762 & 1.000 & 0.9523 & 1.000 \\
+2. Epoch selected on a validation split & 0.9759 & 1.000 & 0.9477 & 1.000 \\
+3. Graph, kernel and factorisation features from training edges only & 0.9302 & 0.9225 & 0.8643 & 0.8919 \\
+4. Degree-matched test negatives & 0.5180 & 0.5230 & 0.5357 & 0.5334 \\
+\hline
+\end{tabular}
+}
+\end{table}

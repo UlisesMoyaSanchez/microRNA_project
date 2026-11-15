@@ -73,7 +73,12 @@ Piso = `protocheck` 0.2.0 sobre los mismos pares (con fuga incluye `input_echo`)
   `fail` contra el eco; (3) fuga `ok`, margen `warn` (v4) / `fail` (canónica); (4) margen `fail`
   (v4) / `warn`–`fail` (canónica), y el aviso de negativos correcto (entrena uniforme, evalúa emparejado).
 
-**Pendiente:** decidir con el usuario si y cómo entra al manuscrito. `2047580`
+**Integrado al manuscrito** (mismo día): §4.2 "Fourth" cubre ahora los dos artículos; Apéndice B
+pasa a "Two surveyed papers rerun with their own code" con la Tabla B.2 (`tableS4_hybridgnn_rerun.tex`);
+nota ‡ también en la fila de HybridGNN de la Tabla 3; HybridGNN como tercer caso del Apéndice C y de la
+Tabla C.1; resumen, Discusión, Conclusión, Limitación (iv), §4.1, tablas E3 y Data availability.
+Resumen en 299 palabras (conteo estricto). **El cuerpo sube a ~6,390 palabras** (límite 6,000): el
+recorte es ahora obligatorio antes de someter. `2047580`
 
 ---
 

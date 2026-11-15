@@ -347,6 +347,27 @@ residual leak). One paper, one matrix: this measures NIMGSA's figure, not the su
 
 ---
 
+### 7. A second paper's own figure — **HybridGNN: 0.976 → 0.518, under the floor.**
+`analysis/hybridgnn_rerun.py` · jobs **3727** (released HMDD v4.0 data), **3730** (canonical) · 2026-11-14 · code @ `f441278` (no licence, cloned outside the repo)
+
+The paper describes `RandomLinkSplit` 80/10/10 with validation; the released code builds the
+message-passing graph, GIP features and an MDMF factorisation from the **full** matrix (test edges
+included), has no validation set and keeps the epoch with the best **test** AUC. Paper's Table 1
+hyper-parameters; 5 seeds × 5 folds.
+
+| AUROC (seed SD ≤ 0.0076) | released data | floor | canonical HMDD | floor |
+|---|:--:|:--:|:--:|:--:|
+| 1. as released | **0.9762** | 1.000 (input echo) | 0.9523 | 1.000 |
+| 2. epoch by validation | 0.9759 | 1.000 | 0.9477 | 1.000 |
+| 3. graph + features from training edges | 0.9302 | 0.9225 | 0.8643 | 0.8919 |
+| 4. degree-matched negatives | **0.5180** | 0.5230 | 0.5357 | 0.5334 |
+
+Step 1 matches the 0.9765 of the paper's ablation table and README (abstract: 0.9715).
+**Caveat that travels with it:** the released data (1,911 × 2,360, 31,461 associations) are not the
+dataset the paper describes (728 × 175, 18,738); this measures the released code on the released data.
+
+---
+
 ## Contribution 3 — the model cannot express the claim it was built for
 
 **Architectural, not statistical.** No retraining fixes this.

@@ -105,6 +105,7 @@ def clean(frag):
     frag = re.sub(r'\s*\((?:Figure|Table|Section|Appendix)s?~?\\ref\{[^}]*\}\)', '', frag)
     frag = re.sub(r'(?:Figure|Table|Section|Appendix|\\S)~?\\ref\{[^}]*\}', '[ref]', frag)
     frag = re.sub(r'\\(?:begin|end)\{[^}]*\}|\\(?:hline|label\{[^}]*\}|cline\{[^}]*\}|multicolumn\{[^}]*\}\{[^}]*\})', ' ', frag)
+    frag = re.sub(r'\^\{\\d?dagger\}', '', frag)
     frag = re.sub(r'\$([^$]*)\$', r'\1', frag)
     frag = frag.replace('&', ' | ')
     frag = re.sub(r'\\[a-zA-Z]+\*?(?=\{)', '', frag)
