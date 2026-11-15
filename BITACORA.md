@@ -23,6 +23,49 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-15 — NGCN con su propio código: sin fuga, pero el examen es fácil
+
+**Materiales.** `cao2024ngcn` (JCMM 2024, fármaco–blanco; PDF `papers/NGCN_2024.pdf`). Repo
+github.com/Junyue28/NGCN @ `7924dbf`: solo `NGCN.rar` y `data.rar`, sin licencia → extraídos fuera del repo
+(DGX `external_code/NGCN`). Mismo dataset de Luo et al. (DTINet) que HGDTI (matriz 708×1512 idéntica; 1,088
+proteínas sin DTI). Control: rasgos publicados por DTINet (GPL-3; `run_DCA.m` los construye solo con redes
+fármaco–fármaco/enfermedad/efecto/similitud y proteína–proteína/enfermedad/similitud, sin DTI).
+
+**Lo que hace el código publicado (`main.py`).**
+- negativos uniformes (ratio × positivos, por defecto 1:1) de todos los pares desconocidos; un solo split
+  80/20 por semilla (el artículo dice CV de 10 folds, 90/10);
+- el modelo es `sigmoid(rasgos_fármaco · W_D · W_P · rasgos_proteína^T)` sobre rasgos **precalculados**
+  (`feature/*.txt`, origen no documentado; correlación 0.90 con los de DTINet); las adyacencias se pasan pero
+  no se usan → **la GCN espectral que describe el artículo no está en el código**;
+- AUROC de prueba en cada época (3000), impresa cada 5; sin validación.
+- **Tabla 2 (Yamanishi: Enzyme, IC, GPCR, NR; 0.944–0.975):** no reproducible. No hay datos ni rasgos ni
+  ruta de código de NGCN para esos datasets (solo `blm.py`/`MOLIERE.py`, baselines, leen `e_admat_dgc.txt`
+  de una ruta Windows `D:\...` con CV sobre todos los pares). Además Yamanishi solo trae DTIs y similitudes
+  química/secuencia: no tiene las redes de enfermedad, efectos secundarios ni PPI con las que NGCN construye
+  sus rasgos, y el artículo no dice cómo los obtuvo ahí.
+
+**Rerun** (`analysis/ngcn_rerun.py`, `training/slurm_ngcn_rerun.sh`; jobs **4134** (1:1) y **4135** (1:10);
+5 semillas, 3000 épocas; `results/comparison/ngcn_rerun_r{1,10}.json`):
+
+| paso | 1:1 | 1:10 |
+|---|---|---|
+| tal cual (última época / mejor época de prueba) | 0.924 / 0.924 | 0.924 / 0.925 |
+| época por validación, negativos uniformes | 0.918 | 0.920 |
+| piso (grado de proteína) | 0.886 | 0.885 |
+| negativos emparejados | **0.671** | **0.753** |
+| piso emparejado (adamic_adar) | 0.725 | 0.725 |
+| con rasgos de DTINet (uniformes / emparejados) | 0.924 / 0.694 | 0.924 / 0.771 |
+
+- Reproduce el 0.910 de su Tabla 1 (1:1): 0.924. Elegir la época con prueba no infla (≤0.0004).
+- **No hay fuga**: el modelo no recibe aristas fármaco–blanco y los rasgos de DTINet, sin DTI, dan lo mismo
+  o más. `protocheck`: fuga ok 10/10.
+- **La inflación es el examen**: 74% de los negativos uniformes caen en proteínas sin ninguna DTI; el grado de
+  la proteína solo da 0.886, margen 3.2–3.5 pts (`warn` 8/10). Con emparejados cae 17–25 pts: con 1:1 queda
+  5.3 pts debajo de adamic_adar (fail 5/5); con 1:10 lo supera por 2.8 (warn 5/5). Es el caso menos inflado
+  de los cuatro: aprende algo real, pero mucho menos de lo que el 0.91 sugiere.
+
+**Pendiente:** decidir con el usuario si entra al manuscrito.
+
 ## 2026-11-14 (madrugada del 15) — HGDTI: el grafo de evaluación se construye con las etiquetas de prueba
 
 **Qué es.** HGDTI (`yu2022hgdti`, *BMC Bioinformatics* 2022, fármaco–blanco, en el survey; PDF en
