@@ -106,6 +106,16 @@ la mide el paso 2 del rerun).
   (AUPR 0.965), no 0.953. Con el grafo de prueba dentro, ambos muestreos dan ≈0.998–0.9995; la
   diferencia 0.987 vs 0.953 de la Fig. 8 no se reproduce con el código publicado.
 
+**¿Por qué el piso con negativos emparejados es 0.740 (vs ~0.52 en miRNA)?** (`analysis/hgdti_floor_diagnostic.py`,
+split propio de 10 folds, mismo muestreador; reproduce 0.75.) No es fuga: el emparejado conserva el fármaco y la
+clase de grado de la proteína (grado 0.51, pref_attach 0.51), y lo que separa es la señal de 3 caminos
+(common_neigh 0.743, adamic_adar 0.751): el 70% de los positivos de prueba tiene un camino fármaco→proteína→fármaco→
+proteína contra 29% de los negativos. Esa señal es **familias de blancos**: la homología de secuencia de la proteína
+con los blancos conocidos del fármaco, sola, da 0.774, y correlaciona con adamic_adar (Spearman 0.71); en fármacos
+sin blancos de entrenamiento (~9%) ambas dan 0.50. Es biología legítima que un modelo debería aprender (los
+inhibidores de cinasas pegan a muchas cinasas), por eso el piso es más alto que en miRNA–enfermedad. Que HGDTI
+(0.573) y aun el brazo B (0.663) queden debajo hace el resultado más fuerte, no más débil.
+
 **Pendiente:** decidir con el usuario si entra al manuscrito (sería el
 tercer artículo medido con su propio código, y el primero de fármaco–blanco). En la Tabla 3 HGDTI
 está como "unclear" en D2 por su texto; el código muestra la fuga.
