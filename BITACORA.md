@@ -73,6 +73,22 @@ Piso = `protocheck` 0.2.0 sobre los mismos pares (con fuga incluye `input_echo`)
   `fail` contra el eco; (3) fuga `ok`, margen `warn` (v4) / `fail` (canónica); (4) margen `fail`
   (v4) / `warn`–`fail` (canónica), y el aviso de negativos correcto (entrena uniforme, evalúa emparejado).
 
+**Reparto sin orden de las tres fugas** (`hybridgnn_leak_factorial.py`, jobs 3749 canónica y 3750
+v4; 8 combinaciones grafo × GIP × MDMF, época por validación, cada modelo con negativos uniformes y
+emparejados; Shapley sobre los 24 órdenes). Total desde "todas las fugas, uniformes" hasta "ninguna,
+emparejados":
+
+| factor | HMDD v4.0 (45.8 pts) | canónica (41.1 pts) |
+|---|---|---|
+| negativos uniformes | **40.6** | **30.5** |
+| grafo con aristas de prueba | 2.9 | 5.9 |
+| similitud GIP de la matriz completa | 2.3 | 4.7 |
+| MDMF de la matriz completa | 0.0 | 0.0 |
+
+DE entre semillas ≤ 0.6 pts. MDMF no aporta nada (con o sin fuga da lo mismo). Interacción: con
+negativos emparejados las fugas pesan más (canónica: 0.672 con grafo+GIP con fuga contra 0.537 sin
+ninguna; con uniformes 0.948 contra 0.864): cuando la popularidad ya no separa, el modelo usa la fuga.
+
 **Integrado al manuscrito** (mismo día): §4.2 "Fourth" cubre ahora los dos artículos; Apéndice B
 pasa a "Two surveyed papers rerun with their own code" con la Tabla B.2 (`tableS4_hybridgnn_rerun.tex`);
 nota ‡ también en la fila de HybridGNN de la Tabla 3; HybridGNN como tercer caso del Apéndice C y de la
