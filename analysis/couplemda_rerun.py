@@ -99,10 +99,13 @@ def main() -> None:
         m = types.ModuleType(name)
         setattr(m, cls, None)
         sys.modules[name] = m
+    import utils.pytorchtools as UP
     import utils.tools as UT
-    for name in ("methods", "methods.CoupleGNN", "methods.CoupleGNN.utils"):
+    for name in ("methods", "methods.CoupleGNN"):
         sys.modules.setdefault(name, types.ModuleType(name))
+    sys.modules["methods.CoupleGNN.utils"] = utils
     sys.modules["methods.CoupleGNN.utils.tools"] = UT
+    sys.modules["methods.CoupleGNN.utils.pytorchtools"] = UP
     import scripts.data_loader as DLM
     from model.MAGNN_lp import MAGNN_lp
     from utils.pytorchtools import datalodaer_gen
