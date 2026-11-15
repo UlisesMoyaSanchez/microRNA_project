@@ -91,6 +91,18 @@ def main() -> None:
     stub.send_email = lambda *x, **k: None
     sys.modules["utils.com_reminder"] = stub
     utils.com_reminder = stub
+    # The released tree does not import as published: model/__init__.py imports MAGNN_nc and MAGNN_nc_mb,
+    # which are not in the repository (node-classification variants, unused here), and MAGNN_lp.py imports
+    # its helpers from methods.CoupleGNN.utils.tools, the folder's name before it was renamed CoupleMDA.
+    # Both are bridged in sys.modules; no file of theirs is edited.
+    for name, cls in (("model.MAGNN_nc", "MAGNN_nc"), ("model.MAGNN_nc_mb", "MAGNN_nc_mb")):
+        m = types.ModuleType(name)
+        setattr(m, cls, None)
+        sys.modules[name] = m
+    import utils.tools as UT
+    for name in ("methods", "methods.CoupleGNN", "methods.CoupleGNN.utils"):
+        sys.modules.setdefault(name, types.ModuleType(name))
+    sys.modules["methods.CoupleGNN.utils.tools"] = UT
     import scripts.data_loader as DLM
     from model.MAGNN_lp import MAGNN_lp
     from utils.pytorchtools import datalodaer_gen
