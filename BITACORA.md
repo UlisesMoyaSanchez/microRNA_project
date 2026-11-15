@@ -165,7 +165,16 @@ DE entre semillas ≤ 0.0024; entre folds 0.004–0.013.
 - Cambio respecto a la Tabla 3: el *artículo* sigue siendo `unclear` en D1/D2 (el codebook
   clasifica el texto), pero el *código* muestra folds por nodo y entrada enmascarada.
 
-**Integrado al manuscrito** (§4.2, Apéndice B, nota ‡ en Tabla 3) en `d5913c3`. `caaf2f1`
+**Integrado al manuscrito** (§4.2, Apéndice B, nota ‡ en Tabla 3) en `d5913c3`.
+
+**Reparto sin orden (job 3753, 2026-11-14, `nimgsa_rerun.py --full-matched`).** Se reentrenó con el
+mismo orden de RNG (todas las cifras del job 3704 salen idénticas) y se agregó la celda que faltaba:
+matriz completa con negativos emparejados (0.5416 con la similitud publicada, 0.5343 recalculada).
+Shapley sobre los tres factores, de 0.9366 a 0.5264 (41.0 pts):
+**negativos uniformes 36.5 pts, similitud con fuga 3.0, evaluar la matriz completa 1.5** (DE entre
+semillas ≤ 0.2 pts). Con negativos emparejados, evaluar las filas de entrenamiento ya casi no cambia
+nada (0.5416 frente a 0.5417): la ventaja de esas filas con negativos uniformes era popularidad.
+La similitud funcional no recalculable deja los 3.0 pts como cota inferior. `caaf2f1`
 
 **`protocheck` sobre NIMGSA** (`analysis/protocheck_nimgsa.py`, job 3711, semilla 1, 5 folds;
 AUROC del modelo por fold desde el job 3704):
