@@ -36,7 +36,10 @@ generated" pero reporta AUC. **Sin código** ("included in the article").
 **Cambios (a pedido del usuario):** Tabla 3 → "unclear§" con nota; `orro2026mirnadisease` annote; conteos del
 texto (11→12 de 19 unclear; 7→6 que quitan aristas; "Five of the six…", "four of the six…");
 `results/literature_survey.tsv`, fila nueva en `literature_survey_adjudication.tsv`, `LITERATURE_SURVEY.md`.
-Pendiente opcional: escribir al autor pidiendo el código (decisión del usuario).
+**Correo enviado al autor (2026-11-15, por el usuario):** 4 preguntas (¿el grafo de validación contiene las
+asociaciones miRNA–enfermedad de los miRNAs de validación?; ¿aristas patrón–enfermedad desde ellas?; ¿early
+stopping y AUC sobre el mismo conjunto?; ¿qué negativos en la prueba de enfermedad held-out?) y petición de
+código o folds. Si responde: D2 → yes (no las contiene) o no (las contiene); actualizar Tabla 3 y nota §.
 
 ## 2026-11-15 — NGCN con su propio código: sin fuga, pero el examen es fácil
 
