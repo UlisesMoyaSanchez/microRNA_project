@@ -1,0 +1,22 @@
+\begin{table}[h!]
+\caption{NIMGSA~\cite{jin2022nimgsa} rerun with its own code on its own matrix (canonical HMDD~\cite{li2014hmdd}, 495 $\times$ 383), AUROC as the mean over five seeds of the five-fold mean (seed SD $\le 0.0024$, fold SD 0.004--0.013). Columns move from the published evaluation to the corrected one; the recomputed rows replace, in each fold, the entries of the miRNA and disease similarity that equal a Gaussian interaction-profile kernel of the full matrix (73.6\% and 17.3\%) with the same kernel on the fold's training rows. Model-free rows use no training. The similarity vote (similarity times the training matrix) scoring above the model with the recomputed similarity is not explained: the functional-similarity part it keeps may carry signal or residual leakage.}
+\label{tab:nimgsa_rerun}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+ & Whole matrix & Held-out rows, & Held-out rows, \\
+ & (published evaluation) & all unlabeled negatives & degree-matched negatives \\
+\hline
+NIMGSA, published similarity & 0.9366 & 0.9210 & 0.5417 \\
+NIMGSA, similarity kernel recomputed per fold & 0.8971 & 0.8559 & 0.5264 \\
+\hline
+\emph{Model-free} & & & \\
+Disease training degree & 0.8647 & 0.8517 & 0.5254 \\
+Input matrix handed back unchanged & 0.9702 & 0.8517 & 0.5254 \\
+Similarity vote, published similarity & 0.9211 & 0.8860 & 0.5637 \\
+Similarity vote, recomputed similarity & 0.9263 & 0.8917 & 0.5531 \\
+\hline
+\end{tabular}
+}
+\end{table}

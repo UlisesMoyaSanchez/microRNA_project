@@ -124,14 +124,14 @@ Biomedical Interaction Graphs}
 
 \textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free scores from graph topology alone) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph; rerun with its own code, one paper's model fell from 0.937 to 0.526. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, with no false alarms.
 
 \textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
 %% 2026-10-12: Abstract rewritten to follow the five contributions (C1 six graphs, C2 sources,
 %% C3 floor on other papers' data, C4 protocol not model, C5 standard + protocheck) and the
 %% experiments E1--E7, and to report protocheck's validation (80 audits with known ground
-%% truth). 274 words against the 300 limit. Decisions kept on record:
+%% truth). 274 words against the 300 limit (2026-11-14: about 287 after adding the NIMGSA rerun; 300 when every number range counts as two words). Decisions kept on record:
 %% - "Model-free" is defined where it first appears (Methods): "parameter-free scores from graph
 %%   topology alone".
 %% - The 21-paper survey is named once, as the source of the seven audited papers (not a
@@ -177,7 +177,8 @@ Biomedical Interaction Graphs}
 %% the symmetry, not the claim: it states a LIMITATION (a single model class), which is not
 %% what a highlight is for, and bullet 3 already carries the across-architecture
 %% generality. What actually prevents the misreading -- that we re-ran the surveyed papers'
-%% own models, which we never did (\S\ref{sec:generalization}: "measured with our
+%% own models, which we never did (2026-11-14: except NIMGSA, rerun in \S\ref{sec:generalization};
+%% the highlights still do not claim it) (\S\ref{sec:generalization}: "measured with our
 %% architecture on other people's graphs") -- is the word "our", not the word
 %% "architecture". Do not restore "architecture" here, and do not write "the correct
 %% protocol": the paper says "corrected" throughout, and claiming the correct protocol is
@@ -610,7 +611,7 @@ that share no data, no node types and no size land in the same 0.022-wide band. 
 graph's $+0.359$ is inside that range, near its upper end: it is a member of the
 distribution, not an outlier. The trained arm is our architecture on their graphs, not each
 paper's own model, so the table is evidence about the protocol, not about their reported
-numbers (Discussion).
+numbers (Discussion); the one paper whose own model we reran is NIMGSA (Section~\ref{sec:generalization}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
@@ -648,7 +649,7 @@ that divergence begins.
 
 \subsection{Published results against a model-free floor (E3, E4)}
 \label{sec:generalization}
-Table~\ref{tab:validation_cases} gives the ten cases, and three results stand out. First, on
+Table~\ref{tab:validation_cases} gives the ten cases, and four results stand out. First, on
 the seven surveyed papers' own matrices the trained models beat the model-free floor by 4.7
 AUROC points on average per paper (3.9 per distinct graph), but the gap runs from $-9.2$
 points (DiGAMN~\cite{liu2024digamn}) to $+3.3$: on MEAHNE's~\cite{huang2022meahne} graph the heuristic beats the paper's own model
@@ -661,6 +662,23 @@ heuristics reproduce the leaderboards exactly and the floor is not uniform: on o
 best heuristic ranks 30th of 32~\cite{ogb2026leaderboard}, while on ogbl-ppa a zero-parameter formula ranks 14th of 27,
 essentially tied with the entry just above it, BUDDY \cite{chamberlain2023buddy} (0.4933 vs.\
 0.4934 Hits@100).
+
+Fourth, for one paper we could measure the inflation of its own model rather than ours.
+NIMGSA~\cite{jin2022nimgsa} released its code, and the code settles what its text leaves unclear
+(Table~\ref{tab:literature_survey}). Its five folds hold out whole miRNAs and remove their rows from the
+model's input, but the reported AUROC is computed over the whole matrix, training rows included, and the
+miRNA similarity graph the model propagates over is fixed across folds: 73.6\% of its entries equal a
+Gaussian interaction-profile kernel computed on the full association matrix, held-out miRNAs included.
+Running the released code with its published settings reproduces the paper's 0.9354 exactly (first fold,
+published seed; 0.9366 averaged over five seeds). Correcting one step at a time
+(Table~\ref{tab:nimgsa_rerun}), it falls to 0.921 when only the held-out rows are scored, to 0.856 when the
+kernel part of the similarity is recomputed in each fold without them, and to 0.526 with degree-matched
+negatives, 0.1 points above what a disease's training degree alone achieves. Under the published
+evaluation, handing the input matrix back unchanged scores 0.970, more than the model. The recomputation
+is partial: the rest of the similarity, miRNA functional similarity, is itself derived from disease
+annotations and could not be rebuilt from the released files, so the corrected figures may still be
+optimistic. Measured with the paper's own model, one published figure therefore loses 41 points and
+lands on the popularity floor.
 
 \input{tables/table5_hmdd_survey_audit.tex}
 
@@ -774,7 +792,10 @@ weakness against a floor also appears in published work. Across the seven survey
 beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN~\cite{liu2024digamn}) to 3.3 below it (MEAHNE~\cite{huang2022meahne}), and on
 ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY~\cite{chamberlain2023buddy}. OGB's leaderboards already list such heuristics~\cite{ogb2026leaderboard}, and the
 gap persists, so reporting a baseline does not by itself raise the bar. A headline within a few points of the
-floor is hard to read as evidence of learning.
+floor is hard to read as evidence of learning. Where a paper releases its code, the gap can be measured on
+its own model: NIMGSA's~\cite{jin2022nimgsa} 0.937 falls to 0.526, 0.1 points above disease popularity,
+once only held-out miRNAs are scored, its similarity graph is rebuilt without them and negatives are
+degree-matched (Section~\ref{sec:generalization}).
 
 \subsection{A minimum reporting standard and \texttt{protocheck}}
 \label{sec:standard}
@@ -830,9 +851,12 @@ PageRank \cite{liben2007link}) may sit higher, so the 3.6-point margin is an upp
 (iii) None of the four trained models encodes pairwise structure as SEAL \cite{zhang2018seal}, NBFNet
 \cite{zhu2021nbfnet} or BUDDY \cite{chamberlain2023buddy} do, so 3.6 points is not a ceiling for trained models,
 and whether a structure-aware architecture closes it is open. (iv) The six-graph experiment retrains our
-architecture on each paper's graph, not each paper's model, and six of the seven audited protocols are
+architecture on each paper's graph, not each paper's model (NIMGSA's released code is the one exception,
+Section~\ref{sec:generalization}), and six of the seven audited protocols are
 reconstructed from the paper's matrix and stated negative ratio; it shows that the conventional protocol inflates
-a trained model on those graphs, not that those papers' figures are inflated by that amount. (v) The survey that
+a trained model on those graphs, not that those papers' figures are inflated by that amount; a paper's own
+figure we measured only for NIMGSA, and there only approximately, since part of its similarity input could
+not be rebuilt without the held-out miRNAs. (v) The survey that
 motivates the study is a two-rater instrument (Cohen's $\kappa$ 0.44 and 0.49 before adjudication) and is not
 itself a result. (vi) The label source, miRDB, is itself a prediction model, so a better architecture would not
 lift the information ceiling. (vii) Unlabeled pairs are not all true negatives: some are associations not yet
@@ -856,7 +880,8 @@ biomedical interaction graphs. Correcting both conventions drops every one into 
 one dataset. The two failures compound on our graph, negative sampling carries most of the loss on the five
 surveyed graphs, part of it label noise, and candidate columns that can never be positive raise the model-free floor on their own.
 Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the
-heuristic wins outright on MEAHNE's graph; on OGB it ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
+heuristic wins outright on MEAHNE's graph; rerun with its own released code, NIMGSA's 0.937 falls to
+0.526, the level of disease popularity; on OGB the heuristic ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
 On our graph the inflation recurs across four trained models, a graph-free MLP included, and
 cell typing survives the same audit by 32 points, so the effect follows the evaluation protocol, not the model.
 Under the corrected protocol our model exceeds its model-free floor by 3.6 points.
@@ -877,6 +902,18 @@ corrected protocol is within the seed spread and is not read as an ordering.
 
 \input{tables/tableS1_architecture_grid.tex}
 
+\section{NIMGSA rerun with its own code}
+\label{app:nimgsa}
+\setcounter{table}{0}
+NIMGSA's code (github.com/zhanglabNKU/NIMGSA, commit \texttt{5bf10a9}) carries no licence, so it is not
+redistributed: \texttt{analysis/nimgsa\_rerun.py} imports its model module unmodified from a separate clone
+and reproduces its cross-validation script, with the same random-number order, before applying each
+correction. Five seeds of five folds, 300 epochs, the published hyper-parameters. Degree-matched negatives
+use the exact sampler (\S\ref{sec:methods_negatives}); no positive fell back to a uniform negative, and
+2.2\% took the nearest degree bin.
+
+\input{tables/tableS2_nimgsa_rerun.tex}
+
 \section*{Declaration of competing interest}
 The authors declare that they have no known competing financial interests or personal
 relationships that could have appeared to influence the work reported in this paper.
@@ -895,7 +932,8 @@ install, is at \url{https://github.com/UlisesMoyaSanchez/microRNA_project}. Larg
 checkpoints are intentionally untracked: the public sources (a CZ CELLxGENE Census query, release
 2025-11-08, retrieved 2026-05-28; miRDB v6.0; and the published matrices of the surveyed papers)
 and the exact build scripts are documented so every graph is reconstructible, rather than
-distributing large binaries in the repository.
+distributing large binaries in the repository. NIMGSA's code, which has no licence, is not redistributed;
+the rerun script fetches it at a pinned commit (Appendix~\ref{app:nimgsa}).
 [STAGE: replace the two GitHub URLs with archived DOIs (Zenodo) before submission, and point the
 analysis-code URL at the release tag that matches the submitted manuscript.]
 %% STAGE (2026-11-03): protocheck split into its own repository (MIT, v0.1.0, CI on Python

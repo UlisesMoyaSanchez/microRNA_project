@@ -320,6 +320,33 @@ this document exists to criticise; the transductive columns are not used that wa
 
 ---
 
+### 6. Is a published paper's own figure inflated? — **Yes, for the one we could rerun: 0.937 → 0.526.**
+`analysis/nimgsa_rerun.py` · job **3704** · 2026-11-14 · NIMGSA code @ `5bf10a9` (no licence, cloned outside the repo)
+
+Everything in §5 retrains *our* architecture on other people's graphs. NIMGSA (Jin et al. 2022)
+released its code, so its own model could be rerun. The code shows what the paper does not:
+folds over miRNA rows (held-out rows zeroed in the input), but AUROC over the **whole** matrix
+(training rows included), and a fixed miRNA similarity whose entries are 73.6% the GIP kernel of
+the **full** association matrix. Reproduction is exact: seed 1, fold 1 = **0.9354**, the paper's figure.
+
+**AUROC, mean of 5 seeds × 5 folds** (seed SD ≤ 0.0024):
+
+| | whole matrix *(published evaluation)* | held-out rows, all unlabeled negatives | held-out rows, degree-matched *(corrected)* |
+|---|:--:|:--:|:--:|
+| NIMGSA, published similarity | **0.9366** | 0.9210 | 0.5417 |
+| NIMGSA, GIP part recomputed per fold | 0.8971 | 0.8559 | **0.5264** |
+| disease training degree (model-free) | 0.8647 | 0.8517 | 0.5254 |
+| input matrix echoed back (model-free) | **0.9702** | 0.8517 | 0.5254 |
+| similarity vote, published / recomputed | 0.9211 / 0.9263 | 0.8860 / 0.8917 | 0.5637 / 0.5531 |
+
+**Caveats that travel with it.** The recomputation is partial: the non-GIP part of `m-m.txt`
+(miRNA functional similarity) is itself derived from HMDD annotations and cannot be rebuilt from
+the released files, so 0.856 / 0.526 may still be optimistic. The model-free similarity vote
+beating the recomputed model is not explained (signal in the functional similarity, or its
+residual leak). One paper, one matrix: this measures NIMGSA's figure, not the survey's.
+
+---
+
 ## Contribution 3 — the model cannot express the claim it was built for
 
 **Architectural, not statistical.** No retraining fixes this.

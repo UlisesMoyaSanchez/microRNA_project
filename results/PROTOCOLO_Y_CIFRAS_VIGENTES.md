@@ -133,6 +133,20 @@ asociaciones conocidas" y "TV 0.52–0.56": eran un error de base de índices (l
 son base 0). Lo vigente es 0 asociaciones conocidas, TV 0.53–0.58 y un margen de 2.6–4.1
 puntos (job 672).
 
+### NIMGSA con su propio código (job 3704, 5 semillas × 5 folds; Apéndice B del manuscrito)
+
+El único artículo de la encuesta cuyo *modelo* se reentrenó (código `zhanglabNKU/NIMGSA` @
+`5bf10a9`). Fuente: `comparison/nimgsa_rerun.json`.
+
+| evaluación | NIMGSA | piso (grado de la enfermedad) |
+|---|:--:|:--:|
+| publicada (matriz completa) | 0.9366 (0.9354 en semilla 1, fold 1 = el artículo) | 0.8647 |
+| filas de prueba, similitud recalculada | 0.8559 | 0.8517 |
+| + negativos emparejados por grado | **0.5264** | 0.5254 |
+
+Se reporta como **0.937 → 0.526, +0.1 pts sobre la popularidad**. No decir que "NIMGSA no aprende
+nada": el recálculo de la similitud es parcial (la similitud funcional no se pudo rehacer).
+
 ### Clasificación de tipo celular
 
 **0.9916** (prueba). Real, con partición correcta a nivel de célula, y no afectada por
