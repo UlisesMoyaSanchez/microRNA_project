@@ -175,9 +175,17 @@ verdict['briere2026kgeleakage'] = ('2026-11-09', '✅ Supported (full text, Euro
                                    'we also investigate whether node degree acts as an illegitimate predictive feature, and find no '
                                    'evidence that predictions are driven by degree alone."')
 
+verdict['luo2017dtinet'] = ('2026-11-15', '✅ Supported (full text, Europe PMC PMC5603535, and its released code): the drug, '
+                            'protein, disease and side-effect networks NGCN and HGDTI reuse are DTINet\'s ("Data sets"); DTINet '
+                            'learns node features by RWR + DCA on each network, and its src/run_DCA.m builds the released feature '
+                            'files from the drug-drug, drug-disease, drug-side-effect, drug-similarity, protein-protein, '
+                            'protein-disease and protein-similarity networks only, with no drug-target edge.')
+
 NOTES = {
     'briere2026kgeleakage': 'CLOSED 2026-11-09: now published (Bioinformatics 42(8) btag608, online 2026-08-20); bib switched from '
                             'the bioRxiv preprint, and the permutation-test claim re-confirmed from the published full text.',
+    'luo2017dtinet': 'Added 2026-11-15 with the NGCN rerun (Appendix B): source of the data NGCN and HGDTI use and of the '
+                     'DTI-free control features.',
     'li2010rwrh': 'Added 2026-11-02: ModulePred lists RWRH as a baseline, but its own reference for RWRH points to an unrelated '
                   'paper (Cao et al., AAAI 2015), so the original method is cited directly.',
     'toutanova2015observed': 'CLOSED 2026-11-09: the claim is in the paper body (Sec. 4 and Table 5), quoted in the verdict.',
@@ -219,6 +227,8 @@ def metadata(k, e):
         return 'Crossref + Europe PMC, published version found 2026-11-09 (was bioRxiv v3)'
     if k == 'li2010rwrh':
         return 'Crossref (DOI), matches (2026-11-02)'
+    if k == 'luo2017dtinet':
+        return 'Crossref (DOI), matches (2026-11-15)'
     if k in ('hu2020ogb', 'li2023evaluating', 'yun2021neognn'):
         return 'DBLP (2026-08-13 note); not re-checked 2026-10-26'
     return 'Crossref (DOI), matches'
