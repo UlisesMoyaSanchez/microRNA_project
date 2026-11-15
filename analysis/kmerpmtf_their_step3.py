@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -93,7 +94,10 @@ def main() -> None:
            "--lr", str(a.lr), "--epoch", str(a.epoch), "--kfold", str(a.kfold), "--chebconvk", str(a.chebconvk),
            "--D", "256", "--sim", "cosine"]
     print("Running their script:", " ".join(cmd), "(sha256", sha[:16] + ")", flush=True)
-    p = subprocess.run(cmd, cwd=run, capture_output=True, text=True)
+    # their script imports torch before numpy; under this conda env MKL's Intel threading layer then clashes
+    # with libgomp, so the layer is set from outside (an environment variable, the script is untouched)
+    env = dict(os.environ, MKL_THREADING_LAYER="GNU")
+    p = subprocess.run(cmd, cwd=run, capture_output=True, text=True, env=env)
     log = re.sub(r"\x1b\[[0-9;]*m", "", p.stdout + p.stderr)
     (run / f"step3_K{a.chebconvk}.log").write_text(log)
     folds = [float(m.group(1)) for m in re.finditer(r"on test dataset =+\s*\n\s*METHOD:\S+ LOSS:\S+ AUC:([\d.]+)", log)]
@@ -104,6 +108,8 @@ def main() -> None:
     path = ROOT / f"results/comparison/kmerpmtf_their_step3_{a.species}_K{a.chebconvk}.json"
     path.write_text(json.dumps(out, indent=2))
     print("fold AUROCs:", folds, "\nWrote", path)
+    if p.returncode != 0 or not folds:
+        sys.exit(f"their step3_train.py failed (return code {p.returncode})")
 
 
 if __name__ == "__main__":
