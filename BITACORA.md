@@ -84,7 +84,29 @@ la mide el paso 2 del rerun).
   brazo B 0.842 / 0.782 / 0.556; brazo C 0.963 (Fig. 8: 0.953). Cifras definitivas: pendientes.
 - Detalles: cada época ~2.5 s (su `forward` recorre los pares en Python); una tarea por semilla.
 
-**Pendiente:** resultados finales; luego decidir con el usuario si entra al manuscrito (sería el
+**Resultados finales (2026-11-15; 3 semillas × 10 folds, 1000 épocas; media ± DE entre semillas;
+`results/comparison/hgdti_rerun_s1{0,1,2}.json`, `hgdti_negatives_arm_s1{0,1,2}.json`).**
+
+| paso | AUROC | piso sin modelo | margen | `protocheck` (30 folds) |
+|---|---|---|---|---|
+| 1 tal cual (grafo con etiquetas de prueba) | 0.9995 ± 0.0000 (AUPR 0.994) | 1.000 (eco) | −0.0005 | fuga error 30/30; piso error 30/30 |
+| 2 grafo de entrenamiento | 0.946 ± 0.007 | 0.887 (grado proteína) | +0.060 | fuga ok; piso ok 22, warn 7, error 1 |
+| 3 + negativos de prueba uniformes | 0.880 ± 0.001 | 0.885 (grado) | −0.004 | piso error 17, warn 13 |
+| 4 + emparejados por grado | **0.573 ± 0.008** | 0.740 (adamic_adar) | **−0.167** | piso error 30/30; TV 0.00 |
+
+- Paso 1: el piso corregido (sin eco) sería 0.887; TV de negativos vs positivos 0.68; 74% de los
+  negativos de prueba caen en proteínas sin ninguna DTI (columnas muertas).
+- Con negativos emparejados el modelo queda **17 pts por debajo** de un puntaje sin aprendizaje
+  (`protocheck`: los negativos de entrenamiento —"confiables"— difieren de los de evaluación, TV 0.70).
+- **Brazo B** (entrenado con negativos al azar, mismos exámenes): confiables **0.923 ± 0.004**,
+  uniformes **0.902 ± 0.004**, emparejados **0.663 ± 0.012**. Frente al brazo con negativos
+  confiables (0.946 / 0.880 / 0.573): solo gana en su propio examen (+2.3 pts) y pierde en los otros
+  dos (−2.2 y −9.0 pts). Los negativos "confiables" no hacen un mejor modelo; hacen un examen más fácil.
+- **Brazo C** (barra "random sampling" de la Fig. 8 con su flujo publicado): **0.998 ± 0.001**
+  (AUPR 0.965), no 0.953. Con el grafo de prueba dentro, ambos muestreos dan ≈0.998–0.9995; la
+  diferencia 0.987 vs 0.953 de la Fig. 8 no se reproduce con el código publicado.
+
+**Pendiente:** decidir con el usuario si entra al manuscrito (sería el
 tercer artículo medido con su propio código, y el primero de fármaco–blanco). En la Tabla 3 HGDTI
 está como "unclear" en D2 por su texto; el código muestra la fuga.
 

@@ -1,0 +1,1258 @@
+{
+  "meta": {
+    "hgdti_tools": "reconstructed from tools.cpython-37.pyc (sha256 da4e0532b9494fb4)",
+    "epochs": 1000,
+    "seeds": [
+      12
+    ],
+    "cuda": true,
+    "n_dti": 1923,
+    "proteins_without_dti": 1088
+  },
+  "runs": [
+    {
+      "seed": 12,
+      "fold": 1,
+      "n_test_pos": 193,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.9998248634608596,
+        "aupr": 0.9981291648918345,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=193 (100.0% of 193 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.676 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6763746197516296
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9998) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0002.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8746130156087072,
+            "margin": -0.00017513653914036365
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.1% of candidate columns have no positive (1,105 of 1,512); 72.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7249089963598544
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9401194700637766,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.676 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6763746197516296
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0655 (0.9401 vs gene_degree 0.8746).",
+            "floor": 0.8746130156087072,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8746130156087072,
+            "margin": 0.06550645445506942
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.1% of candidate columns have no positive (1,105 of 1,512); 72.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7249089963598544
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.882453220220677,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.680 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6803108808290156
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0040 (model 0.8825 vs gene_degree 0.8784); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.8784396896560981,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8784396896560981,
+            "margin": 0.004013530564578871
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.1% of candidate columns have no positive (1,105 of 1,512); 73.7% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7367875647668394
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.6149963757416306,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.681 > 0.1, and above the 0.077 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.6150) does not beat a no-learning heuristic (adamic_adar, 0.7396); margin -0.1246.",
+            "floor": 0.739576901393326,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.739576901393326,
+            "margin": -0.12458052565169542
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.1% of candidate columns have no positive (1,105 of 1,512), but only 14.5% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.14507772020725387
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 2,
+      "n_test_pos": 193,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.999843724318921,
+        "aupr": 0.998638074577331,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=193 (100.0% of 193 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.719 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7188842994134272
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9998) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0002.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8959190491972011,
+            "margin": -0.00015627568107901002
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.5% of candidate columns have no positive (1,111 of 1,512); 74.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7436297451898076
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.971859599772592,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.719 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7188842994134272
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0759 (0.9719 vs gene_degree 0.8959).",
+            "floor": 0.8959190491972011,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8959190491972011,
+            "margin": 0.07594055057539084
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.5% of candidate columns have no positive (1,111 of 1,512); 74.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7436297451898076
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.9080565921232785,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.719 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7186528497409326
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0115 (model 0.9081 vs gene_degree 0.8965); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.8965180273295927,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8965180273295927,
+            "margin": 0.011538564793685757
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.5% of candidate columns have no positive (1,111 of 1,512); 74.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7440414507772021
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5743778356465946,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.718 > 0.1, and above the 0.078 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5744) does not beat a no-learning heuristic (adamic_adar, 0.7233); margin -0.1489.",
+            "floor": 0.7233214314478241,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7233214314478241,
+            "margin": -0.1489435958012295
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.5% of candidate columns have no positive (1,111 of 1,512), but only 11.9% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.11917098445595854
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 3,
+      "n_test_pos": 193,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.9994045357669229,
+        "aupr": 0.9931441124884369,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=193 (100.0% of 193 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.649 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6487946564494704
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9994) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0006.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.881646768461412,
+            "margin": -0.0005954642330771032
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512); 74.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7441497659906396
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9419301124376581,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.649 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6487946564494704
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0603 (0.9419 vs gene_degree 0.8816).",
+            "floor": 0.881646768461412,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.881646768461412,
+            "margin": 0.06028334397624613
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512); 74.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7441497659906396
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.8675266450106043,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.654 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6544041450777203
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8675) does not beat a no-learning heuristic (gene_degree, 0.8816); margin -0.0141.",
+            "floor": 0.8815820558941181,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8815820558941181,
+            "margin": -0.014055410883513808
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512); 72.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7238341968911917
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.6010899621466348,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.654 > 0.1, and above the 0.078 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.6011) does not beat a no-learning heuristic (adamic_adar, 0.7309); margin -0.1298.",
+            "floor": 0.7308652581277351,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7308652581277351,
+            "margin": -0.12977529598110027
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512), but only 12.4% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.12435233160621761
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 4,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.999859161033108,
+        "aupr": 0.9986002208316878,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.632 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6324671736869475
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9999) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0001.",
+            "floor": 0.9999999999999999,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8585990314612584,
+            "margin": -0.00014083896689187636
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512); 73.3% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7327093083723349
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9309428627145087,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.632 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6324671736869475
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0723 (0.9309 vs gene_degree 0.8586).",
+            "floor": 0.8585990314612584,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8585990314612584,
+            "margin": 0.07234383125325028
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512); 73.3% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7327093083723349
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.8619194878472223,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.632 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6317708333333334
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0046 (model 0.8619 vs gene_degree 0.8573); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.85731201171875,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.85731201171875,
+            "margin": 0.004607476128472232
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512); 73.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7390625
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.546630859375,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.631 > 0.1, and above the 0.078 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5466) does not beat a no-learning heuristic (adamic_adar, 0.7136); margin -0.1670.",
+            "floor": 0.7136094835069445,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7136094835069445,
+            "margin": -0.16697862413194453
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512), but only 16.1% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.16145833333333334
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 5,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.9991630915236609,
+        "aupr": 0.9908827457352123,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.687 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.687158736349454
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9992) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0008.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8966783671346855,
+            "margin": -0.0008369084763391044
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512); 74.0% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7399895995839834
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9585581339920264,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.687 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.687158736349454
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0619 (0.9586 vs gene_degree 0.8967).",
+            "floor": 0.8966783671346855,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8966783671346855,
+            "margin": 0.06187976685734087
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512); 74.0% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7399895995839834
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.8854031032986112,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.668 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6682291666666667
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8854) does not beat a no-learning heuristic (gene_degree, 0.8928); margin -0.0074.",
+            "floor": 0.8928276909722224,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8928276909722224,
+            "margin": -0.007424587673611205
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512); 72.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7291666666666666
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5843370225694444,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.687 > 0.1, and above the 0.077 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5843) does not beat a no-learning heuristic (adamic_adar, 0.7452); margin -0.1609.",
+            "floor": 0.7452392578125,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7452392578125,
+            "margin": -0.16090223524305558
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512), but only 9.9% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.09895833333333333
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 6,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.9995070636158779,
+        "aupr": 0.9942082706894966,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.710 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7095683827353094
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9995) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0005.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.9041252275091003,
+            "margin": -0.0004929363841220669
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512); 73.1% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7306292251690067
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9399592650372681,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.710 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7095683827353094
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0358 (model 0.9400 vs gene_degree 0.9041); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.9041252275091003,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.9041252275091003,
+            "margin": 0.03583403752816783
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512); 73.1% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7306292251690067
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.8716254340277777,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.690 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6895833333333332
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8716) does not beat a no-learning heuristic (gene_degree, 0.8964); margin -0.0248.",
+            "floor": 0.8963935004340278,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8963935004340278,
+            "margin": -0.024768066406250067
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512); 70.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7088541666666667
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5806477864583334,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.710 > 0.1, and above the 0.078 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5806) does not beat a no-learning heuristic (adamic_adar, 0.7404); margin -0.1598.",
+            "floor": 0.7404106987847223,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7404106987847223,
+            "margin": -0.15976291232638895
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.2% of candidate columns have no positive (1,107 of 1,512), but only 9.9% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.09895833333333333
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 7,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.9988922473565609,
+        "aupr": 0.985567375798247,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.682 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6824947997919917
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9989) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0011.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8793944466111978,
+            "margin": -0.0011077526434390972
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "72.9% of candidate columns have no positive (1,103 of 1,512); 72.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7285491419656787
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9715207358294331,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.682 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6824947997919917
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0921 (0.9715 vs gene_degree 0.8794).",
+            "floor": 0.8793944466111978,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8793944466111978,
+            "margin": 0.09212628921823529
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "72.9% of candidate columns have no positive (1,103 of 1,512); 72.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7285491419656787
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.9034722222222221,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.684 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6838541666666667
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0214 (model 0.9035 vs gene_degree 0.8821); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.8820624457465278,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8820624457465278,
+            "margin": 0.02140977647569431
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "72.9% of candidate columns have no positive (1,103 of 1,512); 73.0% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7296875
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5763617621527778,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.692 > 0.1, and above the 0.077 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5764) does not beat a no-learning heuristic (adamic_adar, 0.7338); margin -0.1575.",
+            "floor": 0.7338189019097221,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7338189019097221,
+            "margin": -0.1574571397569443
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "72.9% of candidate columns have no positive (1,103 of 1,512), but only 13.5% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.13541666666666666
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 8,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.999309347373895,
+        "aupr": 0.9918847482757546,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.655 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6548361934477379
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9993) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0007.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8839080646559196,
+            "margin": -0.000690652626105015
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512); 75.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7545501820072803
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9466572412896516,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.655 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6548361934477379
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0627 (0.9467 vs gene_degree 0.8839).",
+            "floor": 0.8839080646559196,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8839080646559196,
+            "margin": 0.06274917663373192
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512); 75.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7545501820072803
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.855392795138889,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.633 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6328125
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8554) does not beat a no-learning heuristic (gene_degree, 0.8743); margin -0.0189.",
+            "floor": 0.8742607964409723,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8742607964409723,
+            "margin": -0.018868001302083326
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512); 73.7% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7369791666666666
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5614420572916666,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.634 > 0.1, and above the 0.076 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5614) does not beat a no-learning heuristic (adamic_adar, 0.7058); margin -0.1444.",
+            "floor": 0.705810546875,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.705810546875,
+            "margin": -0.14436848958333337
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.3% of candidate columns have no positive (1,109 of 1,512), but only 13.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.13020833333333334
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 9,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.9992768460738429,
+        "aupr": 0.9914881406983801,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.702 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7022068382735309
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9993) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0007.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8781851274050961,
+            "margin": -0.0007231539261570719
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "72.9% of candidate columns have no positive (1,102 of 1,512); 71.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.719188767550702
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9419689287571503,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.702 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7022068382735309
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0638 (0.9420 vs gene_degree 0.8782).",
+            "floor": 0.8781851274050961,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8781851274050961,
+            "margin": 0.06378380135205419
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "72.9% of candidate columns have no positive (1,102 of 1,512); 71.9% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.719188767550702
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.8775417751736111,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.702 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7020833333333333
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8775) does not beat a no-learning heuristic (gene_degree, 0.8792); margin -0.0017.",
+            "floor": 0.8792087131076389,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.8792087131076389,
+            "margin": -0.0016669379340278345
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "72.9% of candidate columns have no positive (1,102 of 1,512); 71.8% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7177083333333333
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5980631510416666,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.704 > 0.1, and above the 0.078 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5981) does not beat a no-learning heuristic (adamic_adar, 0.7557); margin -0.1576.",
+            "floor": 0.7556694878472222,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.7556694878472222,
+            "margin": -0.15760633680555558
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "72.9% of candidate columns have no positive (1,102 of 1,512), but only 14.1% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.140625
+          }
+        }
+      }
+    },
+    {
+      "seed": 12,
+      "fold": 10,
+      "n_test_pos": 192,
+      "n_test_neg": 1923,
+      "released": {
+        "auc": 0.999829368174727,
+        "aupr": 0.9983478039255453,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=192 (100.0% of 192 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.724 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7241452158086323
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9998) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0002.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.9040561622464898,
+            "margin": -0.00017063182527299325
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512); 73.0% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7301092043681747
+          }
+        }
+      },
+      "train_graph": {
+        "auc": 0.9599719405442885,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.724 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7241452158086323
+          },
+          "model_free_baseline": {
+            "status": "ok",
+            "message": "Model clears the model-free floor by +0.0559 (0.9600 vs gene_degree 0.9041).",
+            "floor": 0.9040561622464898,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.9040561622464898,
+            "margin": 0.0559157782977987
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512); 73.0% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.7301092043681747
+          }
+        }
+      },
+      "uniform": {
+        "auc": 0.8976508246527779,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.720 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.7203124999999999
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8977) does not beat a no-learning heuristic (gene_degree, 0.9022); margin -0.0045.",
+            "floor": 0.9021999782986111,
+            "heuristic": "gene_degree",
+            "floor_corrected": 0.9021999782986111,
+            "margin": -0.004549153645833193
+          },
+          "dead_candidates": {
+            "status": "warn",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512); 73.4% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model.",
+            "eval_negatives_on_dead_columns": 0.734375
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5779351128472223,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 0,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.724 > 0.1, and above the 0.077 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.0
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5779) does not beat a no-learning heuristic (adamic_adar, 0.7556); margin -0.1777.",
+            "floor": 0.755615234375,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.755615234375,
+            "margin": -0.17768012152777768
+          },
+          "dead_candidates": {
+            "status": "info",
+            "message": "73.7% of candidate columns have no positive (1,115 of 1,512), but only 8.9% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would.",
+            "eval_negatives_on_dead_columns": 0.08854166666666667
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "released": {
+      "auc_mean": 0.9994910248698377,
+      "auc_sd": 0.0,
+      "floor_mean": 1.0,
+      "per_seed": [
+        0.9994910248698377
+      ]
+    },
+    "train_graph": {
+      "auc_mean": 0.9503488290438353,
+      "auc_sd": 0.0,
+      "floor_mean": 0.8857125260291068,
+      "per_seed": [
+        0.9503488290438353
+      ]
+    },
+    "uniform": {
+      "auc_mean": 0.8811042099715671,
+      "auc_sd": 0.0,
+      "floor_mean": 0.884080490959856,
+      "per_seed": [
+        0.8811042099715671
+      ]
+    },
+    "matched": {
+      "auc_mean": 0.5815881925270971,
+      "auc_sd": 0.0,
+      "floor_mean": 0.7343937202079996,
+      "per_seed": [
+        0.5815881925270971
+      ]
+    }
+  }
+}
