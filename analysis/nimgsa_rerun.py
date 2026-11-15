@@ -127,8 +127,10 @@ def train_fold(LP, a0: torch.Tensor, gm, gd, epochs: int) -> np.ndarray:
     return (ALPHA * yl + (1 - ALPHA) * yd.t()).cpu().numpy()
 
 
-def evaluate(score: np.ndarray, y: np.ndarray, test_rows: np.ndarray, matched_neg: np.ndarray):
-    """AUROC of one score matrix under the three evaluations."""
+def evaluate(score: np.ndarray, y: np.ndarray, test_rows: np.ndarray, matched_neg: np.ndarray,
+             full_matched_neg: np.ndarray | None = None):
+    """AUROC of one score matrix under the three evaluations (four with full_matched_neg:
+    every positive of the matrix against one degree-matched negative each)."""
     full = float(roc_auc_score(y.flatten(), score.flatten()))
     sub_y, sub_s = y[test_rows].flatten(), score[test_rows].flatten()
     test = float(roc_auc_score(sub_y, sub_s))
@@ -136,7 +138,33 @@ def evaluate(score: np.ndarray, y: np.ndarray, test_rows: np.ndarray, matched_ne
     pos = score[test_rows[pr], pc]
     neg = score[matched_neg[0], matched_neg[1]]
     matched = float(roc_auc_score(np.r_[np.ones(len(pos)), np.zeros(len(neg))], np.r_[pos, neg]))
-    return {"full": full, "test_rows": test, "test_rows_matched": matched}
+    res = {"full": full, "test_rows": test, "test_rows_matched": matched}
+    if full_matched_neg is not None:
+        fp = score[y > 0]
+        fn = score[full_matched_neg[0], full_matched_neg[1]]
+        res["full_matched"] = float(roc_auc_score(np.r_[np.ones(len(fp)), np.zeros(len(fn))],
+                                                  np.r_[fp, fn]))
+    return res
+
+
+def shapley3(cell: dict) -> dict:
+    """cell[(e, s, n)] = AUROC with 1 = leaky level (whole-matrix scoring, published similarity,
+    uniform negatives). Shapley value of each factor: mean over the 6 removal orders."""
+    import itertools
+    out = {}
+    for i, name in enumerate(("whole_matrix_scoring", "similarity_leak", "uniform_negatives")):
+        tot = 0.0
+        for order in itertools.permutations(range(3)):
+            state = [1, 1, 1]
+            for j in order:
+                if j == i:
+                    before = cell[tuple(state)]
+                    state[j] = 0
+                    tot += before - cell[tuple(state)]
+                    break
+                state[j] = 0
+        out[name] = tot / 6
+    return out
 
 
 def main() -> None:
@@ -145,6 +173,9 @@ def main() -> None:
     ap.add_argument("--seeds", type=int, nargs="+", default=[1, 2, 3, 4, 5])
     ap.add_argument("--epochs", type=int, default=300)
     ap.add_argument("--no-cuda", action="store_true")
+    ap.add_argument("--full-matched", action="store_true",
+                    help="also score the whole matrix against degree-matched negatives and give the "
+                         "three-factor Shapley split; writes nimgsa_rerun_factorial.json")
     args = ap.parse_args()
 
     sys.path.insert(0, str(args.nimgsa_dir))
@@ -191,7 +222,11 @@ def main() -> None:
             scored = torch.from_numpy(np.vstack([test_rows[pr], pc])).long()
             neg, n_unif, n_nb = sample_degree_matched_negatives_exact(
                 scored, all_pos, bins, n_d, torch.Generator().manual_seed(1000 * seed + i))
-            folds.append((test_rows, a0, neg.numpy(), col_deg.numpy(), {
+            neg_full = None
+            if args.full_matched:  # own generator: the torch RNG stream is untouched
+                neg_full = sample_degree_matched_negatives_exact(
+                    all_pos, all_pos, bins, n_d, torch.Generator().manual_seed(2000 * seed + i))[0].numpy()
+            folds.append((test_rows, a0, neg.numpy(), col_deg.numpy(), neg_full, {
                 "seed": seed, "fold": i + 1, "n_test_rows": int(len(test_rows)),
                 "n_test_pos": int(len(pr)), "matched_uniform_fallback": n_unif,
                 "matched_neighbour_fallback": n_nb}))
@@ -202,7 +237,7 @@ def main() -> None:
                 torch.manual_seed(10_000 + seed)
                 if dev.type == "cuda":
                     torch.cuda.manual_seed(10_000 + seed)
-            for test_rows, a0, neg, col_deg, rec in folds:
+            for test_rows, a0, neg, col_deg, neg_full, rec in folds:
                 tie = col_deg[None, :] / (col_deg.max() + 1.0) * 1e-3
                 if sim == "published":
                     mm_s, dd_s = mm, dd
@@ -214,7 +249,7 @@ def main() -> None:
                 a0t = torch.from_numpy(a0).float().to(dev)
                 score = train_fold(LP, a0t, gm, gd, args.epochs)
                 fold_scores[sim].append(score)
-                rec[f"model_{sim}"] = evaluate(score, y, test_rows, neg)
+                rec[f"model_{sim}"] = evaluate(score, y, test_rows, neg, neg_full)
                 rec[f"model_{sim}"]["full_aupr"] = auroc_aupr_full(score, y)[1]
                 rec[f"sim_propagation_{sim}"] = evaluate(mm_s @ a0 + tie, y, test_rows, neg)
                 if sim == "published":
@@ -250,12 +285,33 @@ def main() -> None:
         summ[f"{m}.{e}"] = {"mean": st.mean(per_seed),
                             "sd": st.stdev(per_seed) if len(per_seed) > 1 else 0.0,
                             "per_seed": per_seed}
+    if args.full_matched:
+        for sim in ("published", "refit"):
+            per_seed = [st.mean(r[f"model_{sim}"]["full_matched"] for r in out["runs"] if r["seed"] == s)
+                        for s in args.seeds]
+            summ[f"model_{sim}.full_matched"] = {"mean": st.mean(per_seed),
+                                                 "sd": st.stdev(per_seed) if len(per_seed) > 1 else 0.0,
+                                                 "per_seed": per_seed}
+        ev = {(1, 1): "full", (0, 1): "test_rows", (1, 0): "full_matched", (0, 0): "test_rows_matched"}
+        sh = []
+        for s_ in args.seeds:
+            cell = {}
+            for (e, n), key in ev.items():
+                for simv, sim in ((1, "published"), (0, "refit")):
+                    cell[(e, simv, n)] = st.mean(r[f"model_{sim}"][key] for r in out["runs"] if r["seed"] == s_)
+            sh.append(shapley3(cell))
+        out["shapley"] = {k: {"mean": st.mean(x[k] for x in sh),
+                              "sd": st.stdev(x[k] for x in sh) if len(sh) > 1 else 0.0} for k in sh[0]}
     out["summary"] = summ
     print("\n=== summary (mean over folds, then over seeds) ===")
     for k, v in summ.items():
         print(f"  {k:42} {v['mean']:.4f} +- {v['sd']:.4f}")
     print("  their 'Max result' per seed:", out["max_result"])
-    tag = "" if args.epochs >= 300 else "_smoke"
+    if args.full_matched:
+        print("=== Shapley split of the model's inflation (whole/published/uniform -> rows/refit/matched) ===")
+        for k, v in out["shapley"].items():
+            print(f"  {k:24} {v['mean']:+.4f} +- {v['sd']:.4f}")
+    tag = ("_factorial" if args.full_matched else "") + ("" if args.epochs >= 300 else "_smoke")
     path = ROOT / f"results/comparison/nimgsa_rerun{tag}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, indent=2))
