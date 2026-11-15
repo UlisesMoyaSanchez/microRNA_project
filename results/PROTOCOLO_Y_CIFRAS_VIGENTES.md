@@ -153,6 +153,13 @@ Fuente: `comparison/hybridgnn_rerun_{hmdd_v4,canonical}.json`. Se reporta como *
 debajo del piso de popularidad (0.523)** en sus datos publicados; en la canónica 0.952 → 0.536 (piso
 0.533). Decir siempre "su código publicado sobre sus datos publicados": no son los datos del artículo.
 
+### HGDTI con su propio código (jobs 3772–3774, 3779–3781; Tabla B.3 del manuscrito)
+
+Fuente: `comparison/hgdti_rerun_s1{0,1,2}.json`, `hgdti_negatives_arm_s1{0,1,2}.json`. Se reporta como
+**0.9995 → 0.573, 17 pts debajo de un piso sin modelo (0.740, Adamic–Adar)**. El piso es señal real de
+familias de blancos (homología sola 0.774), no fuga. Decir siempre "módulo reconstruido desde el bytecode
+publicado": solo se publicó compilado.
+
 ### Clasificación de tipo celular
 
 **0.9916** (prueba). Real, con partición correcta a nivel de célula, y no afectada por

@@ -1,0 +1,19 @@
+\begin{table}[h!]
+\caption{HGDTI~\cite{yu2022hgdti} rerun with its own released pipeline (model module rebuilt from the released bytecode), AUROC as the mean over three seeds of the ten-fold mean (seed SD $\le 0.008$). Each step adds one correction to the previous one; steps 3--4 score the step-2 model. Floor: best model-free score on the same test pairs (\texttt{protocheck} 0.2.0; in step 1 the propagated adjacency holds every test edge, so the floor is the input handed back; steps 2--3 protein degree, step 4 Adamic--Adar). Random-trained: the same folds, positives and test sets, with training and validation negatives drawn uniformly from unknown pairs instead of the paper's similarity-filtered ``reliable'' ones. The released pipeline run with uniform negatives, the ``random sampling'' bar of the paper's Fig.~8 (0.953), gives 0.9976.}
+\label{tab:hgdti_rerun}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+ & \multicolumn{2}{c}{Reliable negatives (as released)} & Random-trained \\
+\cline{2-3}
+Step & HGDTI & Floor & HGDTI \\
+\hline
+1. As released (adjacency from the test labels, reliable test negatives) & 0.9995 & 1.000 & -- \\
+2. Propagation over training edges only & 0.9462 & 0.8865 & 0.9234 \\
+3. Uniform test negatives & 0.8801 & 0.8845 & 0.9016 \\
+4. Degree-matched test negatives & 0.5728 & 0.7395 & 0.6631 \\
+\hline
+\end{tabular}
+}
+\end{table}

@@ -366,6 +366,20 @@ Step 1 matches the 0.9765 of the paper's ablation table and README (abstract: 0.
 **Caveat that travels with it:** the released data (1,911 × 2,360, 31,461 associations) are not the
 dataset the paper describes (728 × 175, 18,738); this measures the released code on the released data.
 
+### 8. A third paper's own figure — **HGDTI (drug–target): 0.9995 → 0.573, 17 points under the floor.**
+`analysis/hgdti_rerun.py`, `analysis/hgdti_negatives_arm.py` · jobs **3772–3774**, **3779–3781** · 2026-11-15 · authors' shared folder (no licence; model module released only compiled, rebuilt from its `.pyc` with decompyle3, binary never run)
+
+The released code passes an adjacency built from the **test labels** at test time, and samples "reliable" negatives (scored with all DTIs) once, before the split; 1,088/1,512 proteins have no DTI. 3 seeds × 10 folds, 1,000 epochs.
+
+| step | AUROC | floor |
+|---|---|---|
+| as released | 0.9995 | 1.000 (input echo) |
+| training adjacency | 0.946 | 0.887 (protein degree) |
+| + uniform test negatives | 0.880 | 0.885 |
+| + degree-matched | **0.573** | 0.740 (Adamic–Adar) |
+
+Trained on random negatives (same folds and tests): 0.923 / 0.902 / 0.663 on reliable / uniform / matched — reliable negatives make the test easier, not the model better. Fig. 8's random bar with the released pipeline: 0.998, not 0.953. The 0.740 floor is real target-family signal (homology alone 0.774; `analysis/hgdti_floor_diagnostic.py`), not leakage. Manuscript: §4.2, Table B.3.
+
 ---
 
 ## Contribution 3 — the model cannot express the claim it was built for

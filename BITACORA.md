@@ -116,9 +116,12 @@ sin blancos de entrenamiento (~9%) ambas dan 0.50. Es biología legítima que un
 inhibidores de cinasas pegan a muchas cinasas), por eso el piso es más alto que en miRNA–enfermedad. Que HGDTI
 (0.573) y aun el brazo B (0.663) queden debajo hace el resultado más fuerte, no más débil.
 
-**Pendiente:** decidir con el usuario si entra al manuscrito (sería el
-tercer artículo medido con su propio código, y el primero de fármaco–blanco). En la Tabla 3 HGDTI
-está como "unclear" en D2 por su texto; el código muestra la fuga.
+**Integrado al manuscrito (2026-11-15, a pedido del usuario):** resumen ("three papers' models fell to
+0.52--0.57, at or below the floor"; 291 palabras), §4.2 (párrafo "Fourth": HGDTI en ~95 palabras), Discusión,
+Conclusión, Limitación (iv) (módulo reconstruido desde bytecode), Apéndice B → "Three surveyed papers" con
+párrafo de HGDTI (incluye la explicación del piso 0.740) y Tabla B.3 (`tables/tableS5_hgdti_rerun.tex`),
+Tabla 3 (‡ en la celda D2 de HGDTI), E3 en las tablas resumen, disponibilidad de datos. Compila (46 págs.).
+El cuerpo sube ~135 palabras: el recorte a 6,000 sigue pendiente (ahora ~525 de exceso).
 
 ---
 

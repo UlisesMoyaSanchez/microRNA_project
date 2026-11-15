@@ -11,7 +11,7 @@ Paper & Task & Held-out edges & Negative sampling & Model-free \\
 MGCNSS \cite{tian2024mgcnss} & miRNA-disease & no & distance-based selection (paper's own contribution) & no \\
 NIMGSA \cite{jin2022nimgsa} & miRNA-disease & unclear$^{\ddagger}$ & all unlabeled pairs (implicit: full-matrix loss) & SPM~\cite{lu2015spm} \\
 HybridGNN \cite{ahmad2026hybridgnn} & miRNA-disease & yes$^{\ddagger}$ & uniform random from unknown pairs & no \\
-HGDTI \cite{yu2022hgdti} & drug-target & unclear & reliable score-filtered (non-uniform) & no \\
+HGDTI \cite{yu2022hgdti} & drug-target & unclear$^{\ddagger}$ & reliable score-filtered (non-uniform) & no \\
 NGCN \cite{cao2024ngcn} & drug-target & yes & uniform random from unknown pairs, 1:10 & HNM~\cite{wang2014hnm} \\
 kmerPMTF \cite{zhang2024kmerpmtf} & plant miRNA-target & unclear & all unlabeled pairs, count-matched & no \\
 \hline
@@ -42,5 +42,6 @@ does not: its folds remove the held-out miRNAs' rows from the model's input, but
 matrix, training rows included, over a similarity graph built from all associations
 (Section~\ref{sec:generalization}). HybridGNN's text describes a held-out edge split, but its released
 code builds the message-passing graph and its features from the full matrix, test edges included
-(Section~\ref{sec:generalization}).
+(Section~\ref{sec:generalization}). HGDTI's released code propagates at test time over an adjacency built from
+the test labels (Appendix~\ref{app:nimgsa}).
 \end{table}
