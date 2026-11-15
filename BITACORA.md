@@ -23,6 +23,60 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-14 (noche) — HybridGNN con su propio código: 0.976 reproducido; corregido, debajo del piso
+
+**Por qué.** El usuario encontró el repo de HybridGNN (`ahmad2026hybridgnn`, ref. 4):
+github.com/mbasharatahmad/HybridGNN-miRNA-disease, commit `f441278`, sin licencia → clonado fuera
+del repo (`/raid/home/umoya/scripts/external_code/`), `cv_mirna_split.py` importado sin modificar
+(con `optuna` sustituido por un módulo vacío: solo lo usa la ruta de tuning, que no corremos).
+El artículo (PDF en `papers/hybridGNNpdf`, no versionado) se comparó con el código.
+
+**El código no implementa el protocolo que describe el artículo:**
+
+| | artículo | código |
+|---|---|---|
+| partición | `RandomLinkSplit` 80/10/10, validación | KFold 5 sobre positivos (80/20), sin validación |
+| grafo | aristas de entrenamiento | **matriz completa**, una vez para todos los folds |
+| características | promedio secuencia + GIP + funcional | solo GIP **de la matriz completa** → PCA; MDMF **reconstruye la matriz completa** |
+| selección | Optuna y early stopping sobre validación | **mejor época por AUC de prueba** ("We'll use test_mask … as the validation") |
+| negativos | 20% / 10% dinámicos | uniformes 1:1 fijos |
+| datos | 728 × 175, 18,738 | `alldata.xlsx` (HMDD v4.0) da 1,911 × 2,360, 31,461 |
+
+Explica por qué su "cold-miRNA" (0.968) casi no cae: las asociaciones de esos miRNA siguen en el
+grafo y en las características. En la Tabla 3, HybridGNN es "yes" en D2 por su texto; su código
+lo contradice (mismo tratamiento que NIMGSA: fila intacta + nota).
+
+**Experimento** (`analysis/hybridgnn_rerun.py`, jobs 3727 y 3730; el 3726 falló por un lock de
+git al compartir el clon con el 3727; 5 semillas × 5 folds, 200 épocas, hiperparámetros de su
+Tabla 1). Pasos: (1) su función tal cual; (2) mejor época por validación (1/8 de los positivos de
+entrenamiento + tantos negativos); (3) grafo, GIP, PCA y MDMF solo con positivos de entrenamiento;
+(4) el modelo del paso 3 con negativos emparejados (exacto; 0 fallback uniforme, ~3% al bin vecino).
+Piso = `protocheck` 0.2.0 sobre los mismos pares (con fuga incluye `input_echo`).
+
+| AUROC (media ± DE entre semillas) | HMDD v4.0 (sus datos) | piso | HMDD canónica (5,430) | piso |
+|---|---|---|---|---|
+| 1. tal cual | **0.9762 ± 0.0009** | 1.000 (eco) | 0.9523 ± 0.0047 | 1.000 (eco) |
+| 2. selección por validación | 0.9759 | 1.000 | 0.9477 | 1.000 |
+| 3. sin fuga en grafo ni características | 0.9302 | 0.9225 | **0.8643** | **0.8919** |
+| 4. + negativos emparejados | **0.5180** | **0.5230** | 0.5357 | 0.5334 |
+
+**Lectura.**
+- El paso 1 reproduce su cifra: 0.9762 frente a 0.9765 del README y de su ablación (el resumen dice
+  0.9715). En la canónica da 0.9523 frente a su 0.9625 (Tabla 2); usamos los hiperparámetros de su
+  Tabla 1, no unos ajustados a esa matriz.
+- Elegir la época con la prueba vale poco (−0.03 y −0.5 pts).
+- Las fugas de grafo y características valen 4.6 pts (v4) y 8.3 pts (canónica). Sin ellas el modelo
+  queda +0.8 pts sobre el piso en v4 y **2.8 pts debajo** en la canónica.
+- Con negativos emparejados queda en el piso: −0.5 pts (v4) y +0.2 (canónica). Total:
+  0.976 → 0.518 (−46 pts) en sus propios datos.
+- `protocheck` en cada paso: (1, 2) fuga `fail` (100% de los positivos de prueba en el grafo), margen
+  `fail` contra el eco; (3) fuga `ok`, margen `warn` (v4) / `fail` (canónica); (4) margen `fail`
+  (v4) / `warn`–`fail` (canónica), y el aviso de negativos correcto (entrena uniforme, evalúa emparejado).
+
+**Pendiente:** decidir con el usuario si y cómo entra al manuscrito. `2047580`
+
+---
+
 ## 2026-11-14 (tarde) — `protocheck` 0.2.0 y el ejemplo detallado de NIMGSA y MGCNSS (Apéndice C)
 
 **Por qué 0.2.0.** En NIMGSA publicado (job 3711, versión 0.1.0) la fuga salía `fail` pero el

@@ -1,0 +1,3010 @@
+{
+  "meta": {
+    "repo_commit": "f441278",
+    "dataset": "canonical",
+    "shape": [
+      495,
+      383
+    ],
+    "n_associations": 5430,
+    "params": {
+      "hidden_dim": 117,
+      "learning_rate": 0.0076,
+      "dropout": 0.4493,
+      "num_heads": 12,
+      "num_layers": 2,
+      "pca_dim": 32,
+      "latent_dim": 42,
+      "out_channels": 22,
+      "lambda_reg": 0.0121,
+      "weight_decay": 1.75e-05
+    },
+    "epochs": 200,
+    "seeds": [
+      42,
+      1,
+      2,
+      3,
+      4
+    ],
+    "device": "cuda:0",
+    "torch": "2.1.1"
+  },
+  "runs": [
+    {
+      "seed": 42,
+      "fold": 1,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9473149815668358,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.580 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.580110497237569
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9473) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0527.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.9084696743078662,
+            "margin": -0.0526850184331642
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9464641223134553,
+        "best_val_auc": 0.9291264342086967,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.586 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5856353591160222
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9465) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0535.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.906615335307225,
+            "margin": -0.053535877686544664
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8678874610393794,
+        "best_val_auc": 0.8583003503488227,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.586 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5856353591160222
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8679) does not beat a no-learning heuristic (pref_attach, 0.9066); margin -0.0387.",
+            "floor": 0.906615335307225,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.906615335307225,
+            "margin": -0.03872787426784563
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.535577108960858,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 32,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.580 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.024861878453038694
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0028 (model 0.5356 vs adamic_adar 0.5328); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5327866975977535,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5327866975977535,
+            "margin": 0.002790411363104428
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "fold": 2,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9467337518526432,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.566 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5662983425414365
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9467) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0533.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.894855502307961,
+            "margin": -0.05326624814735681
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9471492187526497,
+        "best_val_auc": 0.9400014922892734,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.570 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5699815837937385
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9471) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0529.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8941343704743786,
+            "margin": -0.05285078124735032
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.862376165427049,
+        "best_val_auc": 0.8590498865520995,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.570 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5699815837937385
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8624) does not beat a no-learning heuristic (adamic_adar, 0.8941); margin -0.0318.",
+            "floor": 0.8941343704743786,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8941343704743786,
+            "margin": -0.031758205047329624
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5427006705127031,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 24,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.576 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.022099447513812168
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0065 (model 0.5427 vs adamic_adar 0.5362); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5361812317491326,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5361812317491326,
+            "margin": 0.006519438763570529
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "fold": 3,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9430856981030968,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.559 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5589318600368325
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9431) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0569.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.888253818056022,
+            "margin": -0.05691430189690316
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9425048923347205,
+        "best_val_auc": 0.947691869397556,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.557 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5570902394106814
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9425) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0575.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8856156032409811,
+            "margin": -0.05749510766527954
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.3% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8504840613330891,
+        "best_val_auc": 0.8678713510983589,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.557 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5570902394106814
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8505) does not beat a no-learning heuristic (pref_attach, 0.8856); margin -0.0351.",
+            "floor": 0.8856156032409811,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8856156032409811,
+            "margin": -0.03513154190789203
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.3% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5132991802583695,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 26,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.559 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.023941068139963162
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5133) does not beat a no-learning heuristic (adamic_adar, 0.5335); margin -0.0202.",
+            "floor": 0.533524363318173,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.533524363318173,
+            "margin": -0.020225183059803475
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.3% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "fold": 4,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9462903045287587,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.584 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.583793738489871
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9463) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0537.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8899970832527837,
+            "margin": -0.05370969547124127
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9490947061038023,
+        "best_val_auc": 0.9576359424654654,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.591 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5911602209944751
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9491) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0509.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8897524665167593,
+            "margin": -0.05090529389619769
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8630650773785904,
+        "best_val_auc": 0.8759890655895051,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.591 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5911602209944751
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8631) does not beat a no-learning heuristic (pref_attach, 0.8898); margin -0.0267.",
+            "floor": 0.8897524665167593,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8897524665167593,
+            "margin": -0.026687389138168927
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5500167034651635,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 26,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.587 > 0.1, and above the 0.052 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.023941068139963176
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0171 (model 0.5500 vs adamic_adar 0.5329); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5329058263721431,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5329058263721431,
+            "margin": 0.017110877093020394
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "fold": 5,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.939008187241605,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.556 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5561694290976059
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9390) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0610.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8939618245271308,
+            "margin": -0.06099181275839505
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9404949652194853,
+        "best_val_auc": 0.9401032392851933,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.552 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5524861878453038
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9405) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0595.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8937396769193722,
+            "margin": -0.05950503478051472
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8588798842797499,
+        "best_val_auc": 0.8536589915516077,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.552 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5524861878453038
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8589) does not beat a no-learning heuristic (pref_attach, 0.8937); margin -0.0349.",
+            "floor": 0.8937396769193722,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8937396769193722,
+            "margin": -0.034859792639622245
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5447385780518164,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 27,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.548 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.018416206261510137
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0171 (model 0.5447 vs adamic_adar 0.5276); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5276336362002245,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5276336362002245,
+            "margin": 0.017104941851591837
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 1,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9611038192430701,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.584 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.583793738489871
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9611) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0389.",
+            "floor": 0.9999999999999999,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8980427269551534,
+            "margin": -0.0388961807569298
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.949327452356969,
+        "best_val_auc": 0.9538407795176514,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.577 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5773480662983426
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9493) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0507.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8936281791696766,
+            "margin": -0.050672547643030974
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8585330966019895,
+        "best_val_auc": 0.8657244894844478,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.577 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5773480662983426
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8585) does not beat a no-learning heuristic (adamic_adar, 0.8936); margin -0.0351.",
+            "floor": 0.8936281791696766,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8936281791696766,
+            "margin": -0.03509508256768712
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5434747955733273,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 47,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.577 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.03683241252302026
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0161 (model 0.5435 vs adamic_adar 0.5274); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5273868997351187,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5273868997351187,
+            "margin": 0.016087895838208688
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 2,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9587089493266044,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.583 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5828729281767956
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9587) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0413.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8971948353224871,
+            "margin": -0.04129105067339556
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9522747236721169,
+        "best_val_auc": 0.9526130324335508,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.581 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5810313075506446
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9523) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0477.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8975717231532072,
+            "margin": -0.04772527632788315
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8558923381120506,
+        "best_val_auc": 0.8599690010819099,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.581 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5810313075506446
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8559) does not beat a no-learning heuristic (adamic_adar, 0.8976); margin -0.0417.",
+            "floor": 0.8975717231532072,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8975717231532072,
+            "margin": -0.04167938504115665
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.53806143144457,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 23,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.578 > 0.1, and above the 0.050 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.02117863720073665
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5381) does not beat a no-learning heuristic (adamic_adar, 0.5391); margin -0.0010.",
+            "floor": 0.5391077297192801,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5391077297192801,
+            "margin": -0.0010462982747101446
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.1% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 3,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9574299047987275,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5782688766114181
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9574) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0426.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.902300838734403,
+            "margin": -0.04257009520127253
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9523455226234445,
+        "best_val_auc": 0.9618431807467551,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.576 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.576427255985267
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9523) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0477.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8986735583298571,
+            "margin": -0.04765447737655548
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8703476186115605,
+        "best_val_auc": 0.8571336514622739,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.576 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.576427255985267
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8703) does not beat a no-learning heuristic (adamic_adar, 0.8987); margin -0.0283.",
+            "floor": 0.8986735583298571,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8986735583298571,
+            "margin": -0.028325939718296556
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5444948092074249,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 50,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.570 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.04051565377532229
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0114 (model 0.5445 vs adamic_adar 0.5330); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5330478482206146,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5330478482206146,
+            "margin": 0.011446960986810306
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 4,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9536627222747914,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.600 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.6003683241252302
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9537) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0463.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8991097985748638,
+            "margin": -0.04633727772520857
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9508638319953603,
+        "best_val_auc": 0.9460232186644689,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.594 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5939226519337018
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9509) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0491.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.898163127566992,
+            "margin": -0.04913616800463971
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8699173136079823,
+        "best_val_auc": 0.8583953142116812,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.594 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5939226519337018
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8699) does not beat a no-learning heuristic (adamic_adar, 0.8982); margin -0.0282.",
+            "floor": 0.898163127566992,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.898163127566992,
+            "margin": -0.028245813959009713
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5246130222588512,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 20,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.591 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.014732965009208093
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5246) does not beat a no-learning heuristic (adamic_adar, 0.5264); margin -0.0017.",
+            "floor": 0.5263584071846945,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5263584071846945,
+            "margin": -0.0017453849258433074
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 5,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9528610407361056,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.572 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5718232044198894
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9529) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0471.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8884361147570452,
+            "margin": -0.04713895926389444
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9477914966643942,
+        "best_val_auc": 0.9566829122703486,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5782688766114181
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9478) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0522.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8831991120878824,
+            "margin": -0.05220850333560578
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.1% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8483897690004035,
+        "best_val_auc": 0.8762468246458357,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5782688766114181
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8484) does not beat a no-learning heuristic (adamic_adar, 0.8832); margin -0.0348.",
+            "floor": 0.8831991120878824,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8831991120878824,
+            "margin": -0.03480934308747885
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.1% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.540389317922055,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 24,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.571 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.019337016574585628
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0098 (model 0.5404 vs adamic_adar 0.5306); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5305809075153722,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5305809075153722,
+            "margin": 0.009808410406682788
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.1% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 1,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9568270538479018,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.571 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5709023941068141
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9568) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0432.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8908496382894294,
+            "margin": -0.04317294615209821
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9528360279329419,
+        "best_val_auc": 0.9498099026959563,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.573 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.572744014732965
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9528) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0472.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8903006284572782,
+            "margin": -0.047163972067058135
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8731308228957874,
+        "best_val_auc": 0.8653446340330135,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.573 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.572744014732965
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8731) does not beat a no-learning heuristic (pref_attach, 0.8903); margin -0.0172.",
+            "floor": 0.8903006284572782,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8903006284572782,
+            "margin": -0.017169805561490836
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5339533964843022,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 41,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.581 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.028545119705340696
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0055 (model 0.5340 vs adamic_adar 0.5284); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5284331980098288,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5284331980098288,
+            "margin": 0.005520198474473381
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 2,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9493609440764595,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.554 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5543278084714549
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9494) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0506.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8913914410427033,
+            "margin": -0.050639055923540455
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9442617237976049,
+        "best_val_auc": 0.938994197029666,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.553 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5534069981583793
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9443) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0557.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8870654979328401,
+            "margin": -0.05573827620239513
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8506680538173778,
+        "best_val_auc": 0.8522497956581164,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.553 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5534069981583793
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8507) does not beat a no-learning heuristic (pref_attach, 0.8871); margin -0.0364.",
+            "floor": 0.8870654979328401,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8870654979328401,
+            "margin": -0.03639744411546231
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5164253567080099,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 32,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.563 > 0.1, and above the 0.051 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.022099447513812168
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5164) does not beat a no-learning heuristic (adamic_adar, 0.5328); margin -0.0163.",
+            "floor": 0.5327561734989774,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5327561734989774,
+            "margin": -0.016330816790967484
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 3,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9536652659496895,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.567 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5672191528545119
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9537) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0463.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8941301310162151,
+            "margin": -0.04633473405031052
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9478970591726613,
+        "best_val_auc": 0.9513581528172048,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.561 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5607734806629834
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9479) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0521.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8942149201794817,
+            "margin": -0.052102940827338684
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8708203181967719,
+        "best_val_auc": 0.8747935383874458,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.561 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5607734806629834
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8708) does not beat a no-learning heuristic (pref_attach, 0.8942); margin -0.0234.",
+            "floor": 0.8942149201794817,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8942149201794817,
+            "margin": -0.023394601982709817
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5366017859989349,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 38,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.567 > 0.1, and above the 0.052 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.022099447513812154
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0029 (model 0.5366 vs adamic_adar 0.5337); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5336854627283796,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5336854627283796,
+            "margin": 0.0029163232705553543
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 4,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9555123978714528,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.536 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5359116022099448
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9555) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0445.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8983348256226069,
+            "margin": -0.04448760212854719
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9514459096011857,
+        "best_val_auc": 0.9403491278586668,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5386740331491713
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9514) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0486.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8968247306248284,
+            "margin": -0.04855409039881431
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.6% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8632270246804297,
+        "best_val_auc": 0.8571234767626819,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5386740331491713
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8632) does not beat a no-learning heuristic (pref_attach, 0.8968); margin -0.0336.",
+            "floor": 0.8968247306248284,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8968247306248284,
+            "margin": -0.033597705944398704
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.6% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5387664533371319,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 41,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.548 > 0.1, and above the 0.052 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.03775322283609574
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5388) does not beat a no-learning heuristic (adamic_adar, 0.5445); margin -0.0057.",
+            "floor": 0.5444591977588529,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5444591977588529,
+            "margin": -0.005692744421720963
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.6% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 5,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9529064029384533,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.563 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5626151012891345
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9529) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0471.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8845892304196386,
+            "margin": -0.0470935970615467
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9417286475450145,
+        "best_val_auc": 0.9413157243199062,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.557 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5570902394106814
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9417) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0583.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8777068940372869,
+            "margin": -0.05827135245498549
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8605235222096734,
+        "best_val_auc": 0.8672981763546765,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.557 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5570902394106814
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8605) does not beat a no-learning heuristic (adamic_adar, 0.8777); margin -0.0172.",
+            "floor": 0.8777068940372869,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8777068940372869,
+            "margin": -0.017183371827613425
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5236116622406723,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 25,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.569 > 0.1, and above the 0.054 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.023020257826887658
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5236) does not beat a no-learning heuristic (adamic_adar, 0.5290); margin -0.0054.",
+            "floor": 0.5290199390196337,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5290199390196337,
+            "margin": -0.005408276778961385
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 1,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9583579221906806,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.584 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.583793738489871
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9584) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0416.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8981635515128081,
+            "margin": -0.04164207780931939
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9534299760216246,
+        "best_val_auc": 0.9432251762766705,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.586 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5856353591160222
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9534) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0466.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8940411023947852,
+            "margin": -0.0465700239783754
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.3% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.874032979592944,
+        "best_val_auc": 0.8479865965290709,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.586 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5856353591160222
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8740) does not beat a no-learning heuristic (adamic_adar, 0.8940); margin -0.0200.",
+            "floor": 0.8940411023947852,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8940411023947852,
+            "margin": -0.020008122801841166
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.3% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5216025830170697,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 33,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.580 > 0.1, and above the 0.051 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.023941068139963162
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5216) does not beat a no-learning heuristic (adamic_adar, 0.5365); margin -0.0149.",
+            "floor": 0.5365114855400561,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5365114855400561,
+            "margin": -0.014908902522986378
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.3% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 2,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9560452977625835,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.583 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5828729281767956
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9560) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0440.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.88689210409396,
+            "margin": -0.04395470223741649
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9496712724140153,
+        "best_val_auc": 0.9436423389599422,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.577 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5773480662983426
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9497) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0503.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8838753056649337,
+            "margin": -0.05032872758598472
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.4% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8725589199895539,
+        "best_val_auc": 0.8575711635447296,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.577 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5773480662983426
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8726) does not beat a no-learning heuristic (pref_attach, 0.8839); margin -0.0113.",
+            "floor": 0.8838753056649337,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8838753056649337,
+            "margin": -0.011316385675379736
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.4% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5456644757146879,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 31,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.562 > 0.1, and above the 0.055 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.025782688766114198
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0184 (model 0.5457 vs adamic_adar 0.5273); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5272881203599131,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5272881203599131,
+            "margin": 0.018376355354774776
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.4% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 3,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9491366767396194,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.578 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5782688766114181
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9491) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0509.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8906474161350387,
+            "margin": -0.050863323260380566
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9419351091575687,
+        "best_val_auc": 0.9400913688023361,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.580 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.580110497237569
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9419) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0581.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8883509016479623,
+            "margin": -0.05806489084243127
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8627267686171566,
+        "best_val_auc": 0.8618852361717353,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.580 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.580110497237569
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8627) does not beat a no-learning heuristic (pref_attach, 0.8884); margin -0.0256.",
+            "floor": 0.8883509016479623,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8883509016479623,
+            "margin": -0.025624133030805685
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5226387065921879,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 13,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.571 > 0.1, and above the 0.054 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.011970534069981581
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5226) does not beat a no-learning heuristic (adamic_adar, 0.5328); margin -0.0101.",
+            "floor": 0.5327883933810188,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5327883933810188,
+            "margin": -0.01014968678883088
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.2% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 4,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9531060814179462,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.584 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.583793738489871
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9531) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0469.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8987536840891439,
+            "margin": -0.04689391858205383
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9507752273197466,
+        "best_val_auc": 0.935938395585537,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.585 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5847145488029466
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9508) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0492.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8961773653632876,
+            "margin": -0.04922477268025338
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8676144399336609,
+        "best_val_auc": 0.8519360757540301,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.585 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5847145488029466
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8676) does not beat a no-learning heuristic (adamic_adar, 0.8962); margin -0.0286.",
+            "floor": 0.8961773653632876,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8961773653632876,
+            "margin": -0.028562925429626684
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.516153183493924,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 32,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.578 > 0.1, and above the 0.051 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.026703499079189688
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5162) does not beat a no-learning heuristic (adamic_adar, 0.5371); margin -0.0209.",
+            "floor": 0.5370761813674118,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5370761813674118,
+            "margin": -0.020922997873487725
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 5,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9549811937635875,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.579 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5791896869244935
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9550) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0450.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8959246936567532,
+            "margin": -0.04501880623641252
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9468100620995832,
+        "best_val_auc": 0.9481904296775637,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.583 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5828729281767956
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9468) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0532.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8914851330681128,
+            "margin": -0.05318993790041682
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.3% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8700131253624738,
+        "best_val_auc": 0.8610339529725385,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.583 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5828729281767956
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8700) does not beat a no-learning heuristic (adamic_adar, 0.8915); margin -0.0215.",
+            "floor": 0.8914851330681128,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8914851330681128,
+            "margin": -0.021472007705639062
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.3% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5287252966772822,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 18,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.573 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.01657458563535913
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5287) does not beat a no-learning heuristic (adamic_adar, 0.5367); margin -0.0080.",
+            "floor": 0.5367306655271002,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5367306655271002,
+            "margin": -0.008005368849818062
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.3% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "fold": 1,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9535881078111169,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.577 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5773480662983426
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9536) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0464.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.9012040909075493,
+            "margin": -0.046411892188883086
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9506365970378058,
+        "best_val_auc": 0.9465658693093754,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.573 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.572744014732965
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9506) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0494.",
+            "floor": 0.9999999999999999,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8977972623274963,
+            "margin": -0.0493634029621941
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.1% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.862790784435423,
+        "best_val_auc": 0.8631112874725707,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.573 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.572744014732965
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8628) does not beat a no-learning heuristic (adamic_adar, 0.8978); margin -0.0350.",
+            "floor": 0.8977972623274963,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.8977972623274963,
+            "margin": -0.03500647789207334
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.1% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5305737004364947,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 30,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.559 > 0.1, and above the 0.052 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.023020257826887658
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5306) does not beat a no-learning heuristic (adamic_adar, 0.5339); margin -0.0033.",
+            "floor": 0.5338669115377702,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5338669115377702,
+            "margin": -0.0032932111012755616
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.1% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "fold": 2,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9474506442280626,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.556 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5561694290976058
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9475) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0525.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8851441754932184,
+            "margin": -0.05254935577193742
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9368965131304497,
+        "best_val_auc": 0.9491705924049257,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.552 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5515653775322285
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9369) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0631.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8812141977758104,
+            "margin": -0.06310348686955025
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.860099152447524,
+        "best_val_auc": 0.8739643003706982,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.552 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5515653775322285
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8601) does not beat a no-learning heuristic (pref_attach, 0.8812); margin -0.0211.",
+            "floor": 0.8812141977758104,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8812141977758104,
+            "margin": -0.021115045328286453
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5425510176395375,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 23,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.542 > 0.1, and above the 0.052 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.018416206261510124
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0114 (model 0.5426 vs adamic_adar 0.5311); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5311070242734417,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5311070242734417,
+            "margin": 0.011443993366095806
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "2.9% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "fold": 3,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9568622413506574,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.561 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5607734806629834
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9569) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0431.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8920888319105712,
+            "margin": -0.04313775864934255
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9508146542806657,
+        "best_val_auc": 0.9517753155004766,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.563 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5626151012891345
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9508) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0492.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8902438197178895,
+            "margin": -0.049185345719334306
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.871109449243511,
+        "best_val_auc": 0.8700928271759442,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.563 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5626151012891345
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8711) does not beat a no-learning heuristic (pref_attach, 0.8902); margin -0.0191.",
+            "floor": 0.8902438197178895,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8902438197178895,
+            "margin": -0.019134370474378493
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5451303039861082,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 31,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.555 > 0.1, and above the 0.054 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.028545119705340696
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.5451) does not beat a no-learning heuristic (adamic_adar, 0.5459); margin -0.0008.",
+            "floor": 0.5459158755837734,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5459158755837734,
+            "margin": -0.0007855715976652355
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "3.7% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "fold": 4,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9557027495429864,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.575 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5745856353591159
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9557) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0443.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.9023801166020573,
+            "margin": -0.044297250457013604
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9517053644407816,
+        "best_val_auc": 0.9400150585553961,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.582 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5819521178637201
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9517) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0483.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8975174580887165,
+            "margin": -0.048294635559218424
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.7% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8766326153386987,
+        "best_val_auc": 0.8455243192278081,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.582 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5819521178637201
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8766) does not beat a no-learning heuristic (pref_attach, 0.8975); margin -0.0209.",
+            "floor": 0.8975174580887165,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8975174580887165,
+            "margin": -0.020884842750017785
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.7% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5625532051999498,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 30,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.567 > 0.1, and above the 0.053 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.023941068139963148
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0324 (model 0.5626 vs adamic_adar 0.5301); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5301400038663859,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5301400038663859,
+            "margin": 0.032413201333563846
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "4.7% dead candidate columns."
+          }
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "fold": 5,
+      "n_test_pos": 1086,
+      "released": {
+        "auc": 0.9485325539513445,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.546 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5460405156537753
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9485) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0515.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8916517437739317,
+            "margin": -0.051467446048655496
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "0.0% dead candidate columns."
+          }
+        }
+      },
+      "val_selection": {
+        "auc": 0.9431696393747309,
+        "best_val_auc": 0.9514242883645526,
+        "audit": {
+          "edge_leakage": {
+            "status": "error",
+            "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=1,086 (100.0% of 1,086 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation.",
+            "fraction_heldout_in_encoder": 1.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5386740331491713
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9432) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0568.",
+            "floor": 1.0,
+            "heuristic": "input_echo",
+            "floor_corrected": 0.8886349453449053,
+            "margin": -0.05683036062526914
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      },
+      "no_leak": {
+        "auc": 0.8664990384908885,
+        "best_val_auc": 0.8857177741827172,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.539 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree.",
+            "tv_eval_neg_vs_heldout_pos": 0.5386740331491713
+          },
+          "model_free_baseline": {
+            "status": "error",
+            "message": "Your model (AUROC 0.8665) does not beat a no-learning heuristic (pref_attach, 0.8886); margin -0.0221.",
+            "floor": 0.8886349453449053,
+            "heuristic": "pref_attach",
+            "floor_corrected": 0.8886349453449053,
+            "margin": -0.022135906854016785
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      },
+      "matched": {
+        "auc": 0.5509905070052806,
+        "uniform_fallback": 0,
+        "neighbour_fallback": 17,
+        "audit": {
+          "edge_leakage": {
+            "status": "ok",
+            "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative.",
+            "fraction_heldout_in_encoder": 0.0
+          },
+          "negative_matching": {
+            "status": "warn",
+            "message": "train and eval negatives differ (TV=0.533 > 0.1, and above the 0.051 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on.",
+            "tv_eval_neg_vs_heldout_pos": 0.015653775322283625
+          },
+          "model_free_baseline": {
+            "status": "warn",
+            "message": "Margin over the model-free floor is only +0.0149 (model 0.5510 vs adamic_adar 0.5361); below 0.05, so most of the number may be graph structure.",
+            "floor": 0.5360506564377021,
+            "heuristic": "adamic_adar",
+            "floor_corrected": 0.5360506564377021,
+            "margin": 0.014939850567578516
+          },
+          "dead_candidates": {
+            "status": "ok",
+            "message": "1.8% dead candidate columns."
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "released": {
+      "auc_mean": 0.9523293957245913,
+      "auc_sd": 0.0046591286759148235,
+      "floor_mean": 1.0,
+      "per_seed": [
+        0.9444865846585879,
+        0.9567532872758598,
+        0.9536544129367914,
+        0.9543254343748835,
+        0.9524272593768336
+      ]
+    },
+    "val_selection": {
+      "auc_mean": 0.9476929886145111,
+      "auc_sd": 0.0020185970433724615,
+      "floor_mean": 1.0,
+      "per_seed": [
+        0.9451415809448226,
+        0.950520605462457,
+        0.9476338736098816,
+        0.9485243294025076,
+        0.9466445536528867
+      ]
+    },
+    "no_leak": {
+      "auc_mean": 0.8643287920257487,
+      "auc_sd": 0.00399317283580391,
+      "floor_mean": 0.8918617326156778,
+      "per_seed": [
+        0.8605385298915715,
+        0.8606160271867973,
+        0.863673948360008,
+        0.8693892466991578,
+        0.8674262079912091
+      ]
+    },
+    "matched": {
+      "auc_mean": 0.5357322900874685,
+      "auc_sd": 0.0076284595195910965,
+      "floor_mean": 0.5334137134601101,
+      "per_seed": [
+        0.5372664482497821,
+        0.5382066752812457,
+        0.5298717309538102,
+        0.5269568490990304,
+        0.5463597468534741
+      ]
+    }
+  }
+}
