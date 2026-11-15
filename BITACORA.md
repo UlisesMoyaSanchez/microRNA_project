@@ -128,6 +128,12 @@ evaluations"): párrafo y 4 filas en `tableS3_protocheck_cases.tex` (rangos sobr
 entrenamiento: margen −0.5 a +9.2 (22 ok, 7 warn, 1 fail); uniformes: 13 warn, 17 fail; emparejados: margen
 −22.1 a −12.5 (fail 30/30), negativos warn por desajuste entrenamiento–evaluación (TV 0.63–0.74). El usuario
 pidió no preocuparse aún por el límite de palabras: se corrige al final.
+**Lo que los autores de HGDTI reconocen (pp. 12–13; no hay sección de limitaciones):** (1) posibles "easy
+predictions" por proteínas homólogas y fármacos similares, probado quitando positivos redundantes (Figs. 4b–e,
+5b–e: "still remarkably outperforms"); el examen no cambia, así que no puede ver la fuga; (2) AUPR
+"unsatisfactory" en DTIs únicas (Fig. 4f); (3) arranque en frío ("cannot aggregate the multi-source
+information"). No mencionan: adyacencia de prueba, negativos antes del split, 72% proteínas sin DTI, baseline
+sin aprendizaje, pruebas estadísticas. Agregado como frase en el Apéndice B (a pedido del usuario).
 
 ---
 

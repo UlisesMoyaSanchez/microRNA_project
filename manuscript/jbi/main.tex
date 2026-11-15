@@ -967,7 +967,14 @@ drug's training targets alone reaches 0.774 (Spearman 0.71 with Adamic--Adar; \t
 an independent split). \texttt{analysis/hgdti\_negatives\_arm.py} trains the same model with random negatives on
 the same folds (Table~\ref{tab:hgdti_rerun}, last column): it loses 2.3 points on the reliable test and gains
 2.2 and 9.0 on the uniform and matched ones, so the reliable negatives make the test easier rather than the
-model better. \texttt{protocheck} reports the leak in all 30 step-1 audits and none in steps 2--4, and in step~4 a
+model better. The paper anticipates part of this: it warns that homologous proteins and similar drugs ``may affect the
+veracity of the predictive power by easy predictions'' and tests it by removing redundant positives, after
+which HGDTI ``still remarkably outperforms'' its comparators, and it concedes poor performance on drugs and
+proteins with a single interaction and on nodes absent from the graph. Removing positives leaves the test
+unchanged, however: the held-out labels still enter the adjacency, the negatives are still the reliable ones,
+and every comparator is scored on that same test, so the check cannot reveal the leak. Neither the
+test-label adjacency, the negatives drawn before the split, nor the proteins without interactions is
+mentioned. \texttt{protocheck} reports the leak in all 30 step-1 audits and none in steps 2--4, and in step~4 a
 training--evaluation negative mismatch (TV 0.70) and a model under its floor in all 30 (by 16.7 points on average).
 
 \input{tables/tableS5_hgdti_rerun.tex}
