@@ -23,6 +23,22 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-15 — CoupleMDA (ref. 9) con su propio código: en curso
+
+Repo github.com/lizhj39/CoupleMDA @ `c9128cb` (sin licencia; datos de Zou en el repo) → DGX `external_code/CoupleMDA`.
+DGL 2.1.0 **CPU** + torchdata 0.7.1 con `pip --target external_code/pydeps_dgl` (data.dgl.ai, que aloja las ruedas
+CUDA, no responde); `PYTHONNOUSERSITE=1` para que `~/.local/datasets` no rompa torchdata con este pyarrow.
+**El código publicado no importa tal cual:** faltan `model/MAGNN_nc.py`, `model/MAGNN_nc_mb.py`, `utils/com_reminder.py`,
+y `MAGNN_lp.py`/`base_MAGNN.py` importan de `methods.CoupleGNN.*` (la carpeta se llama `CoupleMDA`). Puenteado en
+`sys.modules` desde `analysis/couplemda_rerun.py`, sin editar sus archivos.
+**Lectura del código:** prueba fija (`link.dat.test`), validación (~11%) borrada del grafo, meta-rutas sobre el grafo de
+entrenamiento, early stopping con validación → split limpio por diseño, salvo que **43 de las 1,523 aristas de prueba
+también están en `link.dat`** (2.8%; `protocheck`: heldout_in_encoder 42). Negativos (entrenamiento y prueba):
+conservan la enfermedad y cambian el miRNA al azar (el texto dice "node pairs that did not have any existing edges").
+**Prueba corta (job 4175, 1 época, semilla 5555):** sus negativos 0.950 (artículo 0.9536) vs piso grado-miRNA 0.948;
+uniformes 0.953 vs pref_attach 0.968; emparejados por miRNA 0.525 (piso 0.537); por enfermedad 0.506 (0.533).
+Corrida completa: job 4186 (3 semillas, 100 épocas con early stopping).
+
 ## 2026-11-15 — kmerPMTF: validación con su `step3_train.py` original (job 4158)
 
 Su script, byte-idéntico (sha256 19a2edc394ccece1), sobre los `process_data/*.csv` escritos desde
