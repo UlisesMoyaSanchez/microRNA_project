@@ -803,7 +803,7 @@ Given how directly the inflation problem responds to a small set of checks, we p
 
 \input{tables/table5_correct_protocol_checklist.tex}
 
-\texttt{protocheck} takes the train and held-out pairs of a link-prediction experiment and, optionally, the edges the encoder sees, the training and evaluation negatives and the model's AUROC. It reports each check as ok, warn or fail; a check whose input was not supplied is reported as unchecked, never as passed. It needs only numpy, scipy and scikit-learn, and runs from the command line, from Python, or in a Colab notebook on the user's own files (Data availability). It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. The tool inspects the experiment's data, not the model: the user runs it on the saved splits and negatives before reporting a number, and revises the split or the sampler if a check fails. It takes the supplied edges as given, so it shows that the files are consistent with the protocol, not that the user's code behaves as the files say. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs. The degree-profile check compares each distance with what sampling noise alone produces at the observed sample sizes, so a small test set is not flagged for histogram noise, and it warns outright when fewer than 30 held-out positives are given; from the command line, a run whose leakage check could not be performed exits with a non-zero status rather than as a pass.
+\texttt{protocheck} takes the train and held-out pairs of a link-prediction experiment and, optionally, the edges the encoder sees, the training and evaluation negatives and the model's AUROC. It reports each check as ok, warn or fail; a check whose input was not supplied is reported as unchecked, never as passed. When held-out edges reach the encoder, the floor also includes handing the encoder's input back unchanged, and the margin is never reported as ok. It needs only numpy, scipy and scikit-learn, and runs from the command line, from Python, or in a Colab notebook on the user's own files (Data availability). It also runs a fourth, diagnostic check for candidate columns that carry no positive anywhere (Section~\ref{sec:dead_columns}), which is not part of the standard. The tool inspects the experiment's data, not the model: the user runs it on the saved splits and negatives before reporting a number, and revises the split or the sampler if a check fails. It takes the supplied edges as given, so it shows that the files are consistent with the protocol, not that the user's code behaves as the files say. It cannot see leakage that does not pass through exact edges, such as node features derived from held-out labels, and it does not show that any published number is inflated. Its thresholds are heuristics, not validated cut-offs. The degree-profile check compares each distance with what sampling noise alone produces at the observed sample sizes, so a small test set is not flagged for histogram noise, and it warns outright when fewer than 30 held-out positives are given; from the command line, a run whose leakage check could not be performed exits with a non-zero status rather than as a pass.
 
 We validated the implementation, not the claim. On the five HMDD-type graphs under the $2\times2$ grid,
 where the true state of every cell is known by construction (four seeds, 80 audits), the leakage check
@@ -820,28 +820,29 @@ leakage beyond exact edges, no model was trained, so the margin check was exerci
 computation, and the empty-column check is not independently validated. An independent stress test with
 synthetic cases built to break the tool found no leaked set reported as clean once the encoder's edges were
 supplied; the false alarms it found on small test sets, and the zero exit status of an unchecked leakage
-test, were fixed before the validation above was re-run, with unchanged detection counts.
+test, were fixed before the validation above was re-run, with unchanged detection counts; it was re-run again with version 0.2.0, with the same counts.
 %% STAGE (2026-11-02): fixes E-1..E-6 from the independent audit (BITACORA 2026-11-02), commit f091c10;
 %%   validation re-run as job 565 (b621390): 40/40, 40/40, 0 false alarms, ddi 2/2, parity 7.35e-10.
 %%   Only change: dead_candidates goes warn -> info on the degree-matched cells of MEAHNE/CoupleMDA.
 
-On a published paper's own files the tool behaves as intended, and the case also shows its main limit.
-MGCNSS~\cite{tian2024mgcnss} is the one surveyed paper whose repository ships both its five
-cross-validation folds and the precomputed network its model reads. Given the split files alone,
-\texttt{protocheck} reports the leakage check as unchecked, because a split does not show what the encoder
-sees. Given that network as the encoder's edges as well, it fails the leakage check on every fold
-(all 1,086 held-out positives are in the encoder's input), warns that the evaluation negatives do not
-mirror the positives' column degrees (TV 0.53--0.58, while training and evaluation negatives match each
-other at 0.02--0.04), and puts the reported 0.9874 only 2.6 to 4.1 points above a floor that sees the same
-edges. Its fold files store positives 1-based and negatives 0-based, so they must be read with separate
-index bases (\texttt{--neg-index-base}); read with one base, a few negatives fall on known associations.
-%% STAGE (2026-11-03): corrected after the independent audit's F3-2. The earlier text said "11-14
-%%   evaluation negatives are known associations", TV 0.52-0.56, 0.02-0.06 and 2.2-2.9 points: all
-%%   artefacts of reading the 0-based negatives as 1-based (job 672 checks both bases per fold:
-%%   0 known associations with the right base, 11-14 plus 1-9 out-of-range rows with the wrong one). It cannot see the two other
-choices behind that number: that the test negatives were picked by the paper's own selector, and that
-the public code keeps the epoch with the best test AUROC. A leak-free claim therefore needs the encoder's
-edge set, not only the split.
+On two published papers' own evaluations the tool behaves as intended, and they also mark where it stops
+(Appendix~\ref{app:protocheck_cases}, Table~\ref{tab:protocheck_cases}). Given the split files alone, it
+can check the negatives and the floor but reports leakage as unchecked, because a split does not show what
+the encoder sees. Given the encoder's input as well, the leakage check fails for both: every held-out
+positive of every MGCNSS~\cite{tian2024mgcnss} fold is in the network its model reads, and
+NIMGSA~\cite{jin2022nimgsa} scores its training rows together with its held-out ones, so 77--83\% of the
+positives it scores are in the input. Handing that input back then matches or beats both reported figures
+(1.000 against 0.9874; 0.966--0.974 against 0.934--0.938), so neither margin can be read. On NIMGSA,
+scoring only the held-out rows passes every edge check with a margin of 6.1--8.8 points, yet rebuilding its
+similarity graph without those rows removes 6.5 of them (Section~\ref{sec:generalization}): that leak runs
+through a node feature, which the tool cannot see. A leak-free claim therefore needs the encoder's edges
+and its features, not only the split.
+%% STAGE (2026-11-14): this paragraph condensed the MGCNSS-only one into both cases; the detail
+%%   (index bases, TV values, the two choices the tool cannot see) moved to Appendix C. protocheck
+%%   0.2.0 adds input_echo to the floor under leakage: the MGCNSS margin reads -1.3 points against
+%%   it (the four topology heuristics still sit 2.6-4.1 points below 0.9874). Validation re-run with
+%%   0.2.0 as jobs 3716/3719: 40/40, 40/40, 0 false alarms, ddi 2/2, parity 7.35e-10, x-check
+%%   unchanged; only the reference floor of the leaked cells changes.
 
 \subsection{Limitations}
 \label{sec:limitations}
@@ -914,6 +915,63 @@ use the exact sampler (\S\ref{sec:methods_negatives}); no positive fell back to 
 
 \input{tables/tableS2_nimgsa_rerun.tex}
 
+\section{\texttt{protocheck} on two published evaluations}
+\label{app:protocheck_cases}
+\setcounter{table}{0}
+Both cases use \texttt{protocheck} 0.2.0 (\texttt{analysis/protocheck\_mgcnss.py},
+\texttt{analysis/protocheck\_nimgsa.py}); Table~\ref{tab:protocheck_cases} gives every scenario fold by fold
+as ranges. Each scenario is what someone holding a given set of files could audit.
+
+\paragraph{MGCNSS} Its repository ships five cross-validation folds of 1,086 held-out positives and 1,086
+negatives each, and the precomputed network its model reads; the model builds its propagated adjacency from
+that network's association matrix, so that matrix is the encoder's edge set. The fold files store positives
+1-based and negatives 0-based, and must be read with separate index bases (\texttt{--neg-index-base}): read
+with one base, 11--14 negatives per fold land on known associations and 1--9 fall outside the matrix; with
+the right bases, none does. From the folds alone the tool warns that the evaluation negatives do not mirror
+the positives' column degrees (TV 0.53--0.58, against a sampling-noise quantile of about 0.07), while
+training and evaluation negatives match each other (TV 0.02--0.04), and it finds the reported 0.9874 6.3 to
+9.1 points above a floor that sees only the training edges. With the network supplied it fails the leakage
+check on every fold: all 1,086 held-out positives are in the encoder's input. The four topology heuristics,
+seeing that same input, sit 2.6 to 4.1 points below 0.9874, but returning the input itself separates every
+held-out positive from every negative (AUROC 1.000), so the margin is $-1.3$ points and the check fails.
+Two choices behind the number are outside what the tool can see: the test negatives were picked by the
+paper's own selector, of which it sees only the degree profile, and the public code keeps the epoch with the
+best test AUROC, which is training code, not data.
+
+\paragraph{NIMGSA} The paper ships no split files: its folds are generated by its cross-validation script,
+which sets the rows of 20\% of the miRNAs to zero in the input matrix. They are rebuilt here with the same
+random-number order as the rerun of Appendix~\ref{app:nimgsa}, which reproduced the paper's 0.9354, and each
+audit is given that fold's measured AUROC, so every margin is per fold. Training negatives are every zero of
+the input matrix, since the reconstruction loss treats each as a zero target. Four scenarios follow, from what
+a reader can check to the corrected protocol.
+\begin{enumerate}
+\item \emph{As published, split only.} The script scores every positive of the matrix (5,430) against every
+zero, so those are the held-out set and its negatives. The tool warns that the negatives do not mirror the
+positives (TV 0.58, sampling-noise quantile 0.02) and finds the model 7.0 to 7.4 points above a disease's
+training degree (0.865); leakage is unchecked.
+\item \emph{As published, with the encoder's input.} Supplying the fold's input matrix fails the leakage check:
+77--83\% of the scored positives are in it, because the training rows are scored too. Returning the input
+then reaches 0.966--0.974, above the model in every fold (margin $-2.9$ to $-3.9$ points), and the margin
+check fails. Version 0.1.0, whose leaked floor held only the four topology heuristics, had reported this
+margin as ok at $+7$ points, because none of them scores a pair by its own edge; that is why 0.2.0 adds the
+returned input to the floor.
+\item \emph{Held-out rows only.} Scoring only the zeroed rows (913--1,225 positives per fold) against their
+zeros passes the leakage check, keeps the negative warning (TV 0.54--0.59) and reports a margin of 6.1 to
+8.8 points, as ok. This is the scenario the tool gets wrong: the miRNA similarity graph the model propagates
+over is fixed across folds and 73.6\% a kernel of the full association matrix, so held-out associations reach
+the model as a node feature. Rebuilding that kernel without the held-out rows lowers the model from 0.921 to
+0.856, 0.4 points above the floor (Table~\ref{tab:nimgsa_rerun}).
+\item \emph{Corrected.} With one degree-matched negative per held-out positive (no uniform fallback; 8--40
+positives per fold took the nearest degree bin) and the AUROC of the model whose similarity was rebuilt, the
+evaluation negatives now mirror the positives (TV 0.01--0.04, under the noise quantile), and the margin is
+$-1.7$ to $+1.2$ points: a warning in three folds and a failure in two. The remaining warning is correct: the
+model still trains on every zero and is scored on matched negatives (TV 0.54--0.58 between the two).
+\end{enumerate}
+The rebuilt similarity in the last scenario is not something the tool checks; it is supplied as the model's
+measured AUROC. What the tool contributes there is the floor and the negative profile.
+
+\input{tables/tableS3_protocheck_cases.tex}
+
 \section*{Declaration of competing interest}
 The authors declare that they have no known competing financial interests or personal
 relationships that could have appeared to influence the work reported in this paper.
@@ -925,9 +983,9 @@ relationships that could have appeared to influence the work reported in this pa
 \section*{Data availability}
 \texttt{protocheck}, the checker for the reporting standard, is released as an open-source Python
 package under the MIT license at \url{https://github.com/UlisesMoyaSanchez/protocheck}; this paper
-uses version 0.1.0. It depends only on numpy, scipy and scikit-learn, installs with \texttt{pip}, and
+uses version 0.2.0. It depends only on numpy, scipy and scikit-learn, installs with \texttt{pip}, and
 includes a Colab notebook for running it on one's own files. The analysis code, including a frozen
-copy of \texttt{protocheck} 0.1.0 so the reported numbers can be regenerated without a separate
+copy of \texttt{protocheck} 0.2.0 so the reported numbers can be regenerated without a separate
 install, is at \url{https://github.com/UlisesMoyaSanchez/microRNA_project}. Large data and
 checkpoints are intentionally untracked: the public sources (a CZ CELLxGENE Census query, release
 2025-11-08, retrieved 2026-05-28; miRDB v6.0; and the published matrices of the surveyed papers)

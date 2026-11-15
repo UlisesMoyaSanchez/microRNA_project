@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-02T23:22:01.803346+00:00",
+  "generated_utc": "2026-11-15T00:23:20.621185+00:00",
   "seeds": [
     42,
     43,
@@ -118,7 +118,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.6243093922651934,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.882477132362667,
-      "floor_reference": 0.8970778262771792,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -137,7 +137,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.6022099447513812,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.865071612927295,
-      "floor_reference": 0.8792517525920047,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -156,7 +156,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.576427255985267,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8531739975377227,
-      "floor_reference": 0.8702624055024776,
+      "floor_reference": 0.9999999999999999,
       "best_heuristic": "gene_degree"
     },
     {
@@ -175,7 +175,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.6151012891344383,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8812307316626476,
-      "floor_reference": 0.8935065067203891,
+      "floor_reference": 0.9999999999999999,
       "best_heuristic": "gene_degree"
     },
     {
@@ -194,7 +194,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.034990791896869225,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.560317314964609,
-      "floor_reference": 0.5920912060071426,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -213,7 +213,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.0294659300184162,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5541327933959417,
-      "floor_reference": 0.5835224131674179,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -232,7 +232,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.03314917127071823,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5567849984229216,
-      "floor_reference": 0.5879450159234049,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -251,7 +251,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.03314917127071823,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5564085345380178,
-      "floor_reference": 0.5897052389528199,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -422,7 +422,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.5952525867315885,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8808141957858807,
-      "floor_reference": 0.8918232943093203,
+      "floor_reference": 0.9999999999999999,
       "best_heuristic": "gene_degree"
     },
     {
@@ -441,7 +441,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.5855143031040779,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8675022198974678,
-      "floor_reference": 0.8783586946817665,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -460,7 +460,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.6007303712720633,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8699849487802881,
-      "floor_reference": 0.8815347131951743,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -479,7 +479,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.5855143031040779,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8709988593968621,
-      "floor_reference": 0.8835008551745189,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -498,7 +498,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04930006086427267,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5595119596628794,
-      "floor_reference": 0.5740484447011224,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -517,7 +517,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04443091905051735,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5524579275252098,
-      "floor_reference": 0.5675554529831828,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -536,7 +536,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04138770541692027,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5524701522421798,
-      "floor_reference": 0.5683265362672161,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -555,7 +555,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04686548995739501,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5542592210484436,
-      "floor_reference": 0.569874629970783,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -726,7 +726,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.6467353951890034,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8873017560019366,
-      "floor_reference": 0.898487972508591,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -745,7 +745,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.588316151202749,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8640058572761303,
-      "floor_reference": 0.8772945524970183,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -764,7 +764,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.5841924398625429,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8620294989430924,
-      "floor_reference": 0.874910310459253,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -783,7 +783,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.606872852233677,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.8738340359702885,
-      "floor_reference": 0.8858508992572123,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -802,7 +802,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04673539518900342,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5562147353007167,
-      "floor_reference": 0.5748163106245793,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -821,7 +821,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04467353951890034,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5580205713206032,
-      "floor_reference": 0.5767310258499546,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -840,7 +840,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04054982817869415,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5537334230819192,
-      "floor_reference": 0.5702998311309503,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -859,7 +859,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04123711340206185,
       "dead_column_fraction": 0.0,
       "floor_corrected": 0.5520579586920324,
-      "floor_reference": 0.5698959624945383,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1030,7 +1030,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.9326655537006121,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.9880162603287679,
-      "floor_reference": 0.9931588122664095,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1049,7 +1049,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.9257095158597664,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.9859498487090801,
-      "floor_reference": 0.9926654638953379,
+      "floor_reference": 1.0000000000000002,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1068,7 +1068,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.9273789649415692,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.9862659477909297,
-      "floor_reference": 0.9932556239004661,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1087,7 +1087,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.9137451307735114,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.9846943167816019,
-      "floor_reference": 0.9913214428053434,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1106,7 +1106,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04424040066777961,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.5597669971191088,
-      "floor_reference": 0.5776217565973587,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1125,7 +1125,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04841402337228713,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.568283014509126,
-      "floor_reference": 0.586536091346209,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1144,7 +1144,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.0489705063995548,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.569114797153111,
-      "floor_reference": 0.585171941487838,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1163,7 +1163,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.04757929883138564,
       "dead_column_fraction": 0.9242128490197743,
       "floor_corrected": 0.5654579805766675,
-      "floor_reference": 0.5825153311538522,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1334,7 +1334,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.7438456420492349,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.9453450605995815,
-      "floor_reference": 0.9518833258300431,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1353,7 +1353,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.7524950099800399,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.9518835471660361,
-      "floor_reference": 0.9574282351243399,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1372,7 +1372,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.729208250166334,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.9400440635694678,
-      "floor_reference": 0.9486285800543512,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1391,7 +1391,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.7418496340652029,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.9455362948974527,
-      "floor_reference": 0.9533060735924469,
+      "floor_reference": 1.0,
       "best_heuristic": "gene_degree"
     },
     {
@@ -1410,7 +1410,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.05322687957418496,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.5667217350617018,
-      "floor_reference": 0.58190339215116,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1429,7 +1429,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.05123087159015305,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.5787909654189072,
-      "floor_reference": 0.5951921838292809,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1448,7 +1448,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.05123087159015304,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.5724507959020968,
-      "floor_reference": 0.5895211130190273,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {
@@ -1467,7 +1467,7 @@
       "tv_eval_neg_vs_heldout_pos": 0.05522288755821689,
       "dead_column_fraction": 0.557012542759407,
       "floor_corrected": 0.5815501399064811,
-      "floor_reference": 0.5979095258141955,
+      "floor_reference": 1.0,
       "best_heuristic": "adamic_adar"
     },
     {

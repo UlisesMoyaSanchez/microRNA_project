@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-15T00:07:29.099111+00:00",
+  "generated_utc": "2026-11-15T00:24:46.206331+00:00",
   "paper": "NIMGSA (jin2022nimgsa)",
   "seed": 1,
   "model_auroc_source": "results/comparison/nimgsa_rerun.json (job 3704)",
@@ -9,7 +9,7 @@
   "folds": {
     "1": {
       "published_split_only": {
-        "generated_utc": "2026-11-15T00:07:30.965917+00:00",
+        "generated_utc": "2026-11-15T00:24:48.117010+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -59,8 +59,10 @@
               },
               "reference_floor": 0.8645747989435395,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9353580554814278,
-              "margin": 0.0707832565378883
+              "margin": 0.0707832565378883,
+              "margin_interpretable": true
             }
           },
           {
@@ -82,7 +84,7 @@
         ]
       },
       "published": {
-        "generated_utc": "2026-11-15T00:07:30.966086+00:00",
+        "generated_utc": "2026-11-15T00:24:48.117217+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -120,8 +122,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "ok",
-            "message": "Model clears the model-free floor by +0.0708 (0.9354 vs gene_degree 0.8646).",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9743). Your model (AUROC 0.9354) does not beat a no-learning heuristic (input_echo, 0.9743); margin -0.0390.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -141,17 +143,20 @@
                   "gene_degree": 0.8645747989435395,
                   "pref_attach": 0.8098558594722107,
                   "common_neigh": 0.8059427204033274,
-                  "adamic_adar": 0.8113635122906964
+                  "adamic_adar": 0.8113635122906964,
+                  "input_echo": 0.9743293685312832
                 },
-                "best": "gene_degree",
-                "floor": 0.8645747989435395,
+                "best": "input_echo",
+                "floor": 0.9743293685312832,
                 "n_pos": 5430,
                 "n_neg": 184155
               },
-              "reference_floor": 0.8645747989435395,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 0.9743293685312832,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9353580554814278,
-              "margin": 0.0707832565378883
+              "margin": -0.03897131304985535,
+              "margin_interpretable": false
             }
           },
           {
@@ -173,7 +178,7 @@
         ]
       },
       "test_rows": {
-        "generated_utc": "2026-11-15T00:07:30.966228+00:00",
+        "generated_utc": "2026-11-15T00:24:48.117377+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -229,8 +234,10 @@
               },
               "reference_floor": 0.8454896767916982,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9209952495588826,
-              "margin": 0.07550557276718439
+              "margin": 0.07550557276718439,
+              "margin_interpretable": true
             }
           },
           {
@@ -252,7 +259,7 @@
         ]
       },
       "corrected": {
-        "generated_utc": "2026-11-15T00:07:30.966342+00:00",
+        "generated_utc": "2026-11-15T00:24:48.117536+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -308,8 +315,10 @@
               },
               "reference_floor": 0.524494073076134,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.5366466363312455,
-              "margin": 0.012152563255111493
+              "margin": 0.012152563255111493,
+              "margin_interpretable": true
             }
           },
           {
@@ -337,7 +346,7 @@
     },
     "2": {
       "published_split_only": {
-        "generated_utc": "2026-11-15T00:07:32.734962+00:00",
+        "generated_utc": "2026-11-15T00:24:49.929091+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -387,8 +396,10 @@
               },
               "reference_floor": 0.8644762901657279,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9366789961395019,
-              "margin": 0.07220270597377398
+              "margin": 0.07220270597377398,
+              "margin_interpretable": true
             }
           },
           {
@@ -410,7 +421,7 @@
         ]
       },
       "published": {
-        "generated_utc": "2026-11-15T00:07:32.735151+00:00",
+        "generated_utc": "2026-11-15T00:24:49.929231+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -448,8 +459,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "ok",
-            "message": "Model clears the model-free floor by +0.0722 (0.9367 vs gene_degree 0.8645).",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9658). Your model (AUROC 0.9367) does not beat a no-learning heuristic (input_echo, 0.9658); margin -0.0291.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -469,17 +480,20 @@
                   "gene_degree": 0.8644762901657279,
                   "pref_attach": 0.7767326111956394,
                   "common_neigh": 0.778726832674033,
-                  "adamic_adar": 0.7848175272521701
+                  "adamic_adar": 0.7848175272521701,
+                  "input_echo": 0.9657637600401976
                 },
-                "best": "gene_degree",
-                "floor": 0.8644762901657279,
+                "best": "input_echo",
+                "floor": 0.9657637600401976,
                 "n_pos": 5430,
                 "n_neg": 184155
               },
-              "reference_floor": 0.8644762901657279,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 0.9657637600401976,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9366789961395019,
-              "margin": 0.07220270597377398
+              "margin": -0.029084763900695698,
+              "margin_interpretable": false
             }
           },
           {
@@ -501,7 +515,7 @@
         ]
       },
       "test_rows": {
-        "generated_utc": "2026-11-15T00:07:32.735293+00:00",
+        "generated_utc": "2026-11-15T00:24:49.929376+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -557,8 +571,10 @@
               },
               "reference_floor": 0.8367691285727823,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9247576630874421,
-              "margin": 0.08798853451465982
+              "margin": 0.08798853451465982,
+              "margin_interpretable": true
             }
           },
           {
@@ -580,7 +596,7 @@
         ]
       },
       "corrected": {
-        "generated_utc": "2026-11-15T00:07:32.735409+00:00",
+        "generated_utc": "2026-11-15T00:24:49.929493+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -636,8 +652,10 @@
               },
               "reference_floor": 0.5240701723122159,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.5328973999927797,
-              "margin": 0.008827227680563876
+              "margin": 0.008827227680563876,
+              "margin_interpretable": true
             }
           },
           {
@@ -665,7 +683,7 @@
     },
     "3": {
       "published_split_only": {
-        "generated_utc": "2026-11-15T00:07:34.482452+00:00",
+        "generated_utc": "2026-11-15T00:24:51.723746+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -715,8 +733,10 @@
               },
               "reference_floor": 0.864833198853176,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9383771727645753,
-              "margin": 0.07354397391139933
+              "margin": 0.07354397391139933,
+              "margin_interpretable": true
             }
           },
           {
@@ -738,7 +758,7 @@
         ]
       },
       "published": {
-        "generated_utc": "2026-11-15T00:07:34.482596+00:00",
+        "generated_utc": "2026-11-15T00:24:51.723942+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -776,8 +796,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "ok",
-            "message": "Model clears the model-free floor by +0.0735 (0.9384 vs gene_degree 0.8648).",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9706). Your model (AUROC 0.9384) does not beat a no-learning heuristic (input_echo, 0.9706); margin -0.0322.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -797,17 +817,20 @@
                   "gene_degree": 0.864833198853176,
                   "pref_attach": 0.7709282330977396,
                   "common_neigh": 0.7697841992240402,
-                  "adamic_adar": 0.7752725537024345
+                  "adamic_adar": 0.7752725537024345,
+                  "input_echo": 0.9706220173543655
                 },
-                "best": "gene_degree",
-                "floor": 0.864833198853176,
+                "best": "input_echo",
+                "floor": 0.9706220173543655,
                 "n_pos": 5430,
                 "n_neg": 184155
               },
-              "reference_floor": 0.864833198853176,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 0.9706220173543655,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9383771727645753,
-              "margin": 0.07354397391139933
+              "margin": -0.032244844589790156,
+              "margin_interpretable": false
             }
           },
           {
@@ -829,7 +852,7 @@
         ]
       },
       "test_rows": {
-        "generated_utc": "2026-11-15T00:07:34.482735+00:00",
+        "generated_utc": "2026-11-15T00:24:51.724088+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -885,8 +908,10 @@
               },
               "reference_floor": 0.8633562682234857,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9248012201555118,
-              "margin": 0.06144495193202615
+              "margin": 0.06144495193202615,
+              "margin_interpretable": true
             }
           },
           {
@@ -908,7 +933,7 @@
         ]
       },
       "corrected": {
-        "generated_utc": "2026-11-15T00:07:34.482853+00:00",
+        "generated_utc": "2026-11-15T00:24:51.724198+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -964,8 +989,10 @@
               },
               "reference_floor": 0.5298875610630374,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.5132916717274804,
-              "margin": -0.016595889335557
+              "margin": -0.016595889335557,
+              "margin_interpretable": true
             }
           },
           {
@@ -993,7 +1020,7 @@
     },
     "4": {
       "published_split_only": {
-        "generated_utc": "2026-11-15T00:07:36.245754+00:00",
+        "generated_utc": "2026-11-15T00:24:53.462810+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1043,8 +1070,10 @@
               },
               "reference_floor": 0.8651027366899521,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.937194859922878,
-              "margin": 0.07209212323292591
+              "margin": 0.07209212323292591,
+              "margin_interpretable": true
             }
           },
           {
@@ -1066,7 +1095,7 @@
         ]
       },
       "published": {
-        "generated_utc": "2026-11-15T00:07:36.245932+00:00",
+        "generated_utc": "2026-11-15T00:24:53.462937+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1104,8 +1133,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "ok",
-            "message": "Model clears the model-free floor by +0.0721 (0.9372 vs gene_degree 0.8651).",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9744). Your model (AUROC 0.9372) does not beat a no-learning heuristic (input_echo, 0.9744); margin -0.0372.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -1125,17 +1154,20 @@
                   "gene_degree": 0.8651027366899521,
                   "pref_attach": 0.7989795928673863,
                   "common_neigh": 0.797089626887191,
-                  "adamic_adar": 0.8023511251656501
+                  "adamic_adar": 0.8023511251656501,
+                  "input_echo": 0.9743821750564132
                 },
-                "best": "gene_degree",
-                "floor": 0.8651027366899521,
+                "best": "input_echo",
+                "floor": 0.9743821750564132,
                 "n_pos": 5430,
                 "n_neg": 184155
               },
-              "reference_floor": 0.8651027366899521,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 0.9743821750564132,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.937194859922878,
-              "margin": 0.07209212323292591
+              "margin": -0.03718731513353524,
+              "margin_interpretable": false
             }
           },
           {
@@ -1157,7 +1189,7 @@
         ]
       },
       "test_rows": {
-        "generated_utc": "2026-11-15T00:07:36.246050+00:00",
+        "generated_utc": "2026-11-15T00:24:53.463063+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1213,8 +1245,10 @@
               },
               "reference_floor": 0.858827573411513,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9229837626806483,
-              "margin": 0.06415618926913536
+              "margin": 0.06415618926913536,
+              "margin_interpretable": true
             }
           },
           {
@@ -1236,7 +1270,7 @@
         ]
       },
       "corrected": {
-        "generated_utc": "2026-11-15T00:07:36.246149+00:00",
+        "generated_utc": "2026-11-15T00:24:53.463164+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1292,8 +1326,10 @@
               },
               "reference_floor": 0.5218449455639946,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.5272773000477446,
-              "margin": 0.005432354483750013
+              "margin": 0.005432354483750013,
+              "margin_interpretable": true
             }
           },
           {
@@ -1321,7 +1357,7 @@
     },
     "5": {
       "published_split_only": {
-        "generated_utc": "2026-11-15T00:07:37.964481+00:00",
+        "generated_utc": "2026-11-15T00:24:55.177686+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1371,8 +1407,10 @@
               },
               "reference_floor": 0.8646799904776348,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9344269307727952,
-              "margin": 0.06974694029516038
+              "margin": 0.06974694029516038,
+              "margin_interpretable": true
             }
           },
           {
@@ -1394,7 +1432,7 @@
         ]
       },
       "published": {
-        "generated_utc": "2026-11-15T00:07:37.964612+00:00",
+        "generated_utc": "2026-11-15T00:24:55.177877+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1432,8 +1470,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "ok",
-            "message": "Model clears the model-free floor by +0.0697 (0.9344 vs gene_degree 0.8647).",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9665). Your model (AUROC 0.9344) does not beat a no-learning heuristic (input_echo, 0.9665); margin -0.0320.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -1453,17 +1491,20 @@
                   "gene_degree": 0.8646799904776348,
                   "pref_attach": 0.7665853475480784,
                   "common_neigh": 0.7666450833389461,
-                  "adamic_adar": 0.7718743083797264
+                  "adamic_adar": 0.7718743083797264,
+                  "input_echo": 0.9664762098626483
                 },
-                "best": "gene_degree",
-                "floor": 0.8646799904776348,
+                "best": "input_echo",
+                "floor": 0.9664762098626483,
                 "n_pos": 5430,
                 "n_neg": 184155
               },
-              "reference_floor": 0.8646799904776348,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 0.9664762098626483,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9344269307727952,
-              "margin": 0.06974694029516038
+              "margin": -0.03204927908985311,
+              "margin_interpretable": false
             }
           },
           {
@@ -1485,7 +1526,7 @@
         ]
       },
       "test_rows": {
-        "generated_utc": "2026-11-15T00:07:37.964731+00:00",
+        "generated_utc": "2026-11-15T00:24:55.178006+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1541,8 +1582,10 @@
               },
               "reference_floor": 0.8527355571030331,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.9146788156012432,
-              "margin": 0.06194325849821014
+              "margin": 0.06194325849821014,
+              "margin_interpretable": true
             }
           },
           {
@@ -1564,7 +1607,7 @@
         ]
       },
       "corrected": {
-        "generated_utc": "2026-11-15T00:07:37.964827+00:00",
+        "generated_utc": "2026-11-15T00:24:55.178105+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -1620,8 +1663,10 @@
               },
               "reference_floor": 0.5214074135776761,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "gene_degree",
               "model_auroc": 0.5197441066222408,
-              "margin": -0.001663306955435262
+              "margin": -0.001663306955435262,
+              "margin_interpretable": true
             }
           },
           {

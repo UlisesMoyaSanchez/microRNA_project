@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-03T16:58:59.425127+00:00",
+  "generated_utc": "2026-11-15T00:24:42.876986+00:00",
   "index_base": {
     "positives": 1,
     "negatives": 0,
@@ -87,7 +87,7 @@
   "folds": {
     "test7_1": {
       "split_only": {
-        "generated_utc": "2026-11-03T16:58:59.173238+00:00",
+        "generated_utc": "2026-11-15T00:24:42.615375+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -137,8 +137,10 @@
               },
               "reference_floor": 0.9093620802512472,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "pref_attach",
               "model_auroc": 0.9874,
-              "margin": 0.07803791974875285
+              "margin": 0.07803791974875285,
+              "margin_interpretable": true
             }
           },
           {
@@ -160,7 +162,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-11-03T16:58:59.173379+00:00",
+        "generated_utc": "2026-11-15T00:24:42.615514+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -198,8 +200,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0307 (model 0.9874 vs pref_attach 0.9567); below 0.05, so most of the number may be graph structure.",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9874) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0126.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -219,17 +221,20 @@
                   "gene_degree": 0.8624300065457234,
                   "pref_attach": 0.9566638347086136,
                   "common_neigh": 0.9461525221384505,
-                  "adamic_adar": 0.9537509030045888
+                  "adamic_adar": 0.9537509030045888,
+                  "input_echo": 1.0
                 },
-                "best": "pref_attach",
-                "floor": 0.9566638347086136,
+                "best": "input_echo",
+                "floor": 1.0,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9566638347086136,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 1.0,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9874,
-              "margin": 0.030736165291386452
+              "margin": -0.012599999999999945,
+              "margin_interpretable": false
             }
           },
           {
@@ -253,7 +258,7 @@
     },
     "test71": {
       "split_only": {
-        "generated_utc": "2026-11-03T16:58:59.236553+00:00",
+        "generated_utc": "2026-11-15T00:24:42.681035+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -303,8 +308,10 @@
               },
               "reference_floor": 0.9240386604668832,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "pref_attach",
               "model_auroc": 0.9874,
-              "margin": 0.06336133953311684
+              "margin": 0.06336133953311684,
+              "margin_interpretable": true
             }
           },
           {
@@ -326,7 +333,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-11-03T16:58:59.236683+00:00",
+        "generated_utc": "2026-11-15T00:24:42.681166+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -364,8 +371,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0264 (model 0.9874 vs pref_attach 0.9610); below 0.05, so most of the number may be graph structure.",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9874) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0126.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -385,17 +392,20 @@
                   "gene_degree": 0.8719925283789329,
                   "pref_attach": 0.9610423470997019,
                   "common_neigh": 0.9482697075452181,
-                  "adamic_adar": 0.9555081584132896
+                  "adamic_adar": 0.9555081584132896,
+                  "input_echo": 0.9999999999999999
                 },
-                "best": "pref_attach",
-                "floor": 0.9610423470997019,
+                "best": "input_echo",
+                "floor": 0.9999999999999999,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9610423470997019,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 0.9999999999999999,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9874,
-              "margin": 0.026357652900298123
+              "margin": -0.012599999999999834,
+              "margin_interpretable": false
             }
           },
           {
@@ -419,7 +429,7 @@
     },
     "test72": {
       "split_only": {
-        "generated_utc": "2026-11-03T16:58:59.299201+00:00",
+        "generated_utc": "2026-11-15T00:24:42.746140+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -469,8 +479,10 @@
               },
               "reference_floor": 0.9103905728016713,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "pref_attach",
               "model_auroc": 0.9874,
-              "margin": 0.0770094271983287
+              "margin": 0.0770094271983287,
+              "margin_interpretable": true
             }
           },
           {
@@ -492,7 +504,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-11-03T16:58:59.299327+00:00",
+        "generated_utc": "2026-11-15T00:24:42.746269+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -530,8 +542,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0329 (model 0.9874 vs pref_attach 0.9545); below 0.05, so most of the number may be graph structure.",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9874) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0126.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -551,17 +563,20 @@
                   "gene_degree": 0.8713260855556573,
                   "pref_attach": 0.9544902645082738,
                   "common_neigh": 0.942309453313391,
-                  "adamic_adar": 0.9498747664058552
+                  "adamic_adar": 0.9498747664058552,
+                  "input_echo": 1.0
                 },
-                "best": "pref_attach",
-                "floor": 0.9544902645082738,
+                "best": "input_echo",
+                "floor": 1.0,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9544902645082738,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 1.0,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9874,
-              "margin": 0.032909735491726266
+              "margin": -0.012599999999999945,
+              "margin_interpretable": false
             }
           },
           {
@@ -585,7 +600,7 @@
     },
     "test73": {
       "split_only": {
-        "generated_utc": "2026-11-03T16:58:59.361658+00:00",
+        "generated_utc": "2026-11-15T00:24:42.811074+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -635,8 +650,10 @@
               },
               "reference_floor": 0.9056457712252712,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "pref_attach",
               "model_auroc": 0.9874,
-              "margin": 0.08175422877472882
+              "margin": 0.08175422877472882,
+              "margin_interpretable": true
             }
           },
           {
@@ -658,7 +675,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-11-03T16:58:59.361785+00:00",
+        "generated_utc": "2026-11-15T00:24:42.811204+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -696,8 +713,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0373 (model 0.9874 vs pref_attach 0.9501); below 0.05, so most of the number may be graph structure.",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9874) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0126.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -717,17 +734,20 @@
                   "gene_degree": 0.8544691520066203,
                   "pref_attach": 0.9500519757570824,
                   "common_neigh": 0.9390069154041562,
-                  "adamic_adar": 0.9475952097514322
+                  "adamic_adar": 0.9475952097514322,
+                  "input_echo": 1.0
                 },
-                "best": "pref_attach",
-                "floor": 0.9500519757570824,
+                "best": "input_echo",
+                "floor": 1.0,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9500519757570824,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 1.0,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9874,
-              "margin": 0.03734802424291761
+              "margin": -0.012599999999999945,
+              "margin_interpretable": false
             }
           },
           {
@@ -751,7 +771,7 @@
     },
     "test74": {
       "split_only": {
-        "generated_utc": "2026-11-03T16:58:59.424842+00:00",
+        "generated_utc": "2026-11-15T00:24:42.876700+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -801,8 +821,10 @@
               },
               "reference_floor": 0.8963261703448208,
               "reference": "corrected (heuristics see training edges only)",
+              "reference_heuristic": "pref_attach",
               "model_auroc": 0.9874,
-              "margin": 0.0910738296551793
+              "margin": 0.0910738296551793,
+              "margin_interpretable": true
             }
           },
           {
@@ -824,7 +846,7 @@
         ]
       },
       "with_encoder": {
-        "generated_utc": "2026-11-03T16:58:59.424967+00:00",
+        "generated_utc": "2026-11-15T00:24:42.876830+00:00",
         "dataset": {
           "n_rows": 495,
           "n_cols": 383,
@@ -862,8 +884,8 @@
           },
           {
             "check": "model_free_baseline",
-            "status": "warn",
-            "message": "Margin over the model-free floor is only +0.0409 (model 0.9874 vs pref_attach 0.9465); below 0.05, so most of the number may be graph structure.",
+            "status": "error",
+            "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (1.0000). Your model (AUROC 0.9874) does not beat a no-learning heuristic (input_echo, 1.0000); margin -0.0126.",
             "evidence": {
               "negatives": "supplied by the user",
               "floor_corrected": {
@@ -883,17 +905,20 @@
                   "gene_degree": 0.8512522511522848,
                   "pref_attach": 0.9465234747277418,
                   "common_neigh": 0.9353228262602212,
-                  "adamic_adar": 0.9430666205413618
+                  "adamic_adar": 0.9430666205413618,
+                  "input_echo": 1.0
                 },
-                "best": "pref_attach",
-                "floor": 0.9465234747277418,
+                "best": "input_echo",
+                "floor": 1.0,
                 "n_pos": 1086,
                 "n_neg": 1086
               },
-              "reference_floor": 0.9465234747277418,
-              "reference": "as evaluated (heuristics see the same leaked edges the encoder does)",
+              "reference_floor": 1.0,
+              "reference": "as evaluated (heuristics see the same leaked edges the encoder does, and input_echo returns the encoder's input)",
+              "reference_heuristic": "input_echo",
               "model_auroc": 0.9874,
-              "margin": 0.04087652527225827
+              "margin": -0.012599999999999945,
+              "margin_interpretable": false
             }
           },
           {

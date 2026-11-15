@@ -23,6 +23,39 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-14 (tarde) — `protocheck` 0.2.0 y el ejemplo detallado de NIMGSA y MGCNSS (Apéndice C)
+
+**Por qué 0.2.0.** En NIMGSA publicado (job 3711, versión 0.1.0) la fuga salía `fail` pero el
+margen salía `ok` a +7 pts, porque ninguna de las cuatro heurísticas puntúa un par por su propia
+arista (la diagonal de co-vecinos se anula a propósito), mientras que devolver la entrada da
+0.970. **Cambio:** si hay positivos evaluados dentro de la entrada del encoder, el piso "as
+evaluated" incluye `input_echo` (1 si el par está en la entrada; grado como desempate) y el margen
+nunca sale `ok` (`margin_interpretable: false`). El mensaje ahora nombra la heurística de la que
+sale el piso (antes nombraba la del piso corregido). Sin fuga no cambia nada. 28 tests (4 nuevos).
+Repo público: commit `e1d082d`, CI verde, etiqueta `v0.2.0`; copia congelada idéntica a la etiqueta.
+
+**Validación repetida con 0.2.0** (jobs 3716 y 3719, idénticos): 40/40 fugas, 40/40 negativos,
+0 falsas alarmas; x-check del piso igual (0.0114, 0.0002, 0.0106, 0.0008, 0.0018; Welch |z| ≤ 1.69);
+ogbl-ddi 2/2, paridad 7.35e-10. Ningún estado cambió; solo el piso de referencia de las 40 celdas
+con fuga (ahora 1.000 por `input_echo`), que el manuscrito no reporta.
+
+**MGCNSS cambia de lectura:** con la red del encoder, `input_echo` = 1.000 (todos los positivos de
+prueba están en la entrada, ningún negativo) → margen −1.3 pts, `fail`. Las cuatro heurísticas
+siguen 2.6–4.1 pts debajo de 0.9874, como decía el texto.
+
+**NIMGSA con 0.2.0:** publicado + entrada → fuga `fail` (77–83%), eco 0.966–0.974, margen −2.9 a
+−3.9 `fail`; solo filas de prueba → todo `ok`, margen +6.1 a +8.8 (el punto ciego: fuga por la
+similitud); corregido → margen −1.7 a +1.2 (3 warn, 2 fail).
+
+**Manuscrito:** §5.1 condensa el párrafo de MGCNSS en uno que cubre los dos casos y remite al
+**Apéndice C** (texto detallado por escenario + Tabla C.1, `tables/tableS3_protocheck_cases.tex`).
+Una frase nueva en la descripción de la herramienta (eco y margen bajo fuga), la validación dice
+"re-run again with version 0.2.0, with the same counts", Data availability cita 0.2.0.
+**Aviso de extensión:** el cuerpo (sin tablas, figuras ni apéndices) ya estaba en ~6,240 palabras
+contra el límite de 6,000 de JBI; este cambio suma 11. Hay que recortar antes de someter.
+
+---
+
 ## 2026-11-14 — NIMGSA con su propio código: el 0.9354 se reproduce exacto y cae al piso de popularidad
 
 **Por qué.** Hasta hoy, de NIMGSA (`jin2022nimgsa`) solo usábamos su matriz; el manuscrito no

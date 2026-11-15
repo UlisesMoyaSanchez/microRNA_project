@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-02T23:23:22.204671+00:00",
+  "generated_utc": "2026-11-15T00:24:40.956731+00:00",
   "dataset": "ogbl-ddi",
   "seed": 42,
   "confusion": {
@@ -64,7 +64,7 @@
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.31988682709069943,
       "dead_column_fraction": 0.0,
-      "floor_reference": 0.9620039728178119,
+      "floor_reference": 1.0,
       "heuristics_corrected": {
         "node_degree": 0.7848414927639078,
         "pref_attach": 0.8592433336606945,
@@ -87,7 +87,7 @@
       "heldout_in_encoder_fraction": 1.0,
       "tv_eval_neg_vs_heldout_pos": 0.007708500325869557,
       "dead_column_fraction": 0.0,
-      "floor_reference": 0.8635499850084261,
+      "floor_reference": 1.0,
       "heuristics_corrected": {
         "node_degree": 0.5709232590458614,
         "pref_attach": 0.5651460194406671,
