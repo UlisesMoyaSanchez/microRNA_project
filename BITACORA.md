@@ -23,6 +23,73 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-14 (madrugada del 15) — HGDTI: el grafo de evaluación se construye con las etiquetas de prueba
+
+**Qué es.** HGDTI (`yu2022hgdti`, *BMC Bioinformatics* 2022, fármaco–blanco, en el survey; PDF en
+`papers/hgdti_yu.pdf`). El artículo dice que "dataset, code and materials" están en un Google Drive
+(`1go6xZXRR6gFosogrGzNkzWiEzD4WSy9Z`) y un servidor de la universidad (no responde). El usuario bajó
+la carpeta completa → `papers/HGDTI_drive/` y `papers/HGDTI_drive.zip` (gitignored; sin licencia).
+
+**El modelo no tiene código fuente publicado.** `src/` trae `HGDTI.py`, `args.py`, `utils.py`,
+`setup.py`, pero el módulo del modelo (`tools`) solo está compilado: `tools.so` (Cython) y
+`tools.cpython-36/37.pyc`. El `readme.ipynb` lista `src/tools.py` y un `run.ipynb` que no están; el
+enlace de Colab del readme pide sesión. **Reconstrucción:** `tools.py` descompilado con decompyle3
+3.9.3 desde `tools.cpython-37.pyc` (sha256 `da4e0532b9494fb4…`), limpio, sin cambios salvo un
+encabezado; vive solo en `external_code/HGDTI/src/tools.py` (DGX), no en el repo. No se ejecutó el
+binario.
+
+**Lo que hace el código:**
+1. **Grafo de evaluación = etiquetas de prueba.** `train_and_evaluate` llama
+   `model(DTItest, *DTI_normalize(DTItest))`, y `DTI_normalize` pone en la matriz fármaco–proteína
+   cada par de prueba con su etiqueta: todo positivo de prueba es una arista. El modelo agrega con
+   esa matriz (`node_het_agg`: `d_p_agg = matmul(drug_protein_normalize, protein_agg)`, 10 rondas).
+   En entrenamiento usa la matriz de entrenamiento; en validación, la de validación (misma fuga
+   en la selección de época).
+2. **Negativos "confiables":** el 50% de los pares desconocidos menos parecidos a las interacciones
+   conocidas (`exp(-(s^DT + s^TD))`), calculado con **todas** las DTIs (prueba incluida); luego 10
+   por positivo, muestreados **una vez antes** del `StratifiedKFold` (cambian también la prueba).
+3. **Columnas muertas:** 1,088 de 1,512 proteínas (72%) sin ninguna DTI; 72.5% de los negativos
+   confiables caen ahí.
+4. Bueno: época elegida por AUPR de validación (10% del entrenamiento), no por la prueba.
+5. Sus resultados guardados en el Drive: AUROC 0.988–0.9999 por fold (artículo: 0.979).
+
+**Controles sin modelo (local, sus datos):** su propio puntaje de similitud separa positivos de
+sus negativos confiables con AUROC **0.937**, y de negativos uniformes con **0.824**; el grado de la
+proteína (sin contar el propio par) da 0.89 contra ambos.
+
+**Figura 8** ("random sampling" baja 3.4 pts de AUROC → "the importance of negative sampling
+technology is self-evident"): **no se sigue.** Como los negativos se muestrean antes del split,
+cambiar el muestreo cambia el examen, no solo el entrenamiento; y sin modelo el examen ya es 11 pts
+más fácil con negativos confiables, más que los 3.4 que "pierde" el modelo. Además la selección usa
+las DTIs de prueba, el eje empieza en 0.8, y "as expected / self-evident" es circular.
+
+**Figura 9** (ablación de redes y características): medida dentro de la evaluación con fuga y con
+negativos fáciles; **nunca quita la red fármaco–proteína**, que es la que filtra las etiquetas, así
+que las caídas pequeñas (0.5–1.2 pts en a–c) son "sobre un grafo con fuga". "Significantly reduced"
+sin prueba estadística; los "10 trials" parecen los 10 folds de una sola CV (no independientes).
+El panel d (sin huella ni PseAAC: 0.87 y mucha varianza) es el más informativo. **Figura 10:** con
+0 capas (sin pasar mensajes por el grafo) ya da 0.958; con 1 capa salta a 0.99. Compatible con que
+casi todo el puntaje sea examen fácil y el salto sea la entrada de la red con fuga (interpretación;
+la mide el paso 2 del rerun).
+
+**Experimentos en curso** (`analysis/hgdti_rerun.py`, jobs 3772–3774, semillas 10/11/12;
+`analysis/hgdti_negatives_arm.py`, jobs 3779–3781):
+- rerun: (1) tal cual; (2) todas las pasadas con el grafo de entrenamiento; (3) negativos de prueba
+  uniformes; (4) emparejados por grado; `protocheck` en cada paso.
+- brazos de negativos (responde la Fig. 8 con su código): B = entrenado con negativos al azar,
+  evaluado en los **mismos** tres exámenes (confiables, uniformes, emparejados); C = su barra de
+  "random sampling" con el flujo publicado.
+- Pruebas cortas (local, 20–30 épocas, 1 fold): tal cual **0.989** (piso 1.000 = eco), grafo de
+  entrenamiento 0.885 (piso 0.896), uniformes 0.811 (piso 0.895), emparejados 0.534 (piso 0.748);
+  brazo B 0.842 / 0.782 / 0.556; brazo C 0.963 (Fig. 8: 0.953). Cifras definitivas: pendientes.
+- Detalles: cada época ~2.5 s (su `forward` recorre los pares en Python); una tarea por semilla.
+
+**Pendiente:** resultados finales; luego decidir con el usuario si entra al manuscrito (sería el
+tercer artículo medido con su propio código, y el primero de fármaco–blanco). En la Tabla 3 HGDTI
+está como "unclear" en D2 por su texto; el código muestra la fuga.
+
+---
+
 ## 2026-11-14 (noche) — HybridGNN con su propio código: 0.976 reproducido; corregido, debajo del piso
 
 **Por qué.** El usuario encontró el repo de HybridGNN (`ahmad2026hybridgnn`, ref. 4):
