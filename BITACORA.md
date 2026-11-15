@@ -23,6 +23,15 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-15 — kmerPMTF: validación con su `step3_train.py` original (job 4158)
+
+Su script, byte-idéntico (sha256 19a2edc394ccece1), sobre los `process_data/*.csv` escritos desde
+`analysis/kmerpmtf_rerun.py` (peach, ChebConv K=2, lr 1e-4, 3000 épocas, 5 folds, su semilla 123; MKL_THREADING_LAYER=GNU
+por un choque MKL/libgomp del entorno). AUROC por fold: 0.846 / 0.873 / 0.883 / 0.870 / 0.903 (media 0.875).
+Mi reimplementación, misma semilla y K (job 4147): 0.838 / 0.868 / 0.889 / 0.875 → diferencias ≤ 0.009, del
+orden del no-determinismo de GPU y del orden de aristas. **El rerun reproduce su script.**
+`results/comparison/kmerpmtf_their_step3_Prunus_persica_K2.json`.
+
 ## 2026-11-15 — Orro (ref. 8): D2 de "yes" a "unclear"
 
 El usuario bajó el PDF (`papers/Uncovering miRNA–Disease .pdf`, Biomedicines 14(2):289). Partición por miRNA

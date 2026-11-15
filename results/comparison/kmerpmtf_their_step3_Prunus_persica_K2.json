@@ -1,0 +1,23 @@
+{
+  "species": "Prunus_persica",
+  "args": {
+    "repo": "/raid/home/umoya/scripts/external_code/kmerPMTF",
+    "data": "/raid/home/umoya/scripts/external_code/kmerPMTF/data",
+    "species": "Prunus_persica",
+    "chebconvk": 2,
+    "lr": 0.0001,
+    "epoch": 3000,
+    "kfold": 5,
+    "work": "/raid/home/umoya/scripts/microRNA_project/results/kmerpmtf_work"
+  },
+  "step3_sha256": "19a2edc394ccece184c13ae6572d75087bcfa618e027a0b07e3b4cabc180a4ea",
+  "returncode": 0,
+  "fold_auroc": [
+    0.84613,
+    0.87283,
+    0.88294,
+    0.87015,
+    0.90265
+  ],
+  "mean_auroc": 0.8749400000000002
+}
