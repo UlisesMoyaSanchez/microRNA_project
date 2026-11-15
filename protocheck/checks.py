@@ -296,6 +296,18 @@ class TopologyScorer:
         return out
 
 
+def _input_echo_auroc(visible, enc_keys, pos, neg, n_cols, undirected) -> float:
+    """AUROC of handing the encoder's input back: 1 if a pair is an input edge, plus its
+    column degree (scaled below 1) as the tie-breaker."""
+    pos, neg = as_pairs(pos), as_pairs(neg)
+    pairs = np.concatenate([pos, neg], axis=1)
+    y = np.concatenate([np.ones(pos.shape[1]), np.zeros(neg.shape[1])])
+    deg = column_degree(as_pairs(visible), n_cols, undirected).astype(np.float64)
+    in_input = np.isin(pair_keys(pairs, n_cols, undirected), enc_keys).astype(np.float64)
+    score = in_input + deg[pairs[1]] / (deg.max() + 1.0)
+    return float(roc_auc_score(y, score))
+
+
 def model_free_floor(visible_edges, pos, neg, n_rows, n_cols, mode="bipartite") -> dict:
     """AUROC of each no-learning heuristic on pos-vs-neg, scoring from `visible_edges`."""
     pos, neg = as_pairs(pos), as_pairs(neg)
@@ -444,17 +456,32 @@ def check_baseline_margin(n_rows, n_cols, train_pos, heldout_pos, eval_neg=None,
                        f"read (minimum {thr['min_heldout_positives']}). Evaluate on more "
                        "held-out edges before reporting either.", ev)
     reference, ref_label = corrected["floor"], "corrected (heuristics see training edges only)"
+    best = corrected["best"]
+    leaked = False
     if encoder_edges is not None:
         enc = as_pairs(encoder_edges)
-        if _overlap(pair_keys(heldout, n_cols, undirected), pair_keys(enc, n_cols, undirected)):
-            seen = model_free_floor(np.concatenate([train_pos, enc], axis=1), heldout,
-                                    eval_neg, n_rows, n_cols, mode)
+        enc_keys = pair_keys(enc, n_cols, undirected)
+        if _overlap(pair_keys(heldout, n_cols, undirected), enc_keys):
+            leaked = True
+            visible = np.concatenate([train_pos, enc], axis=1)
+            seen = model_free_floor(visible, heldout, eval_neg, n_rows, n_cols, mode)
+            # The four heuristics never score a pair by its own edge (the co-neighbour
+            # diagonal is zeroed), so under leakage they understate what the encoder's input
+            # gives away. input_echo does exactly that: 1 if the pair is in the input,
+            # column degree as the tie-breaker. On a leak-free set-up it is not computed.
+            seen["heuristics"]["input_echo"] = _input_echo_auroc(
+                visible, enc_keys, heldout, eval_neg, n_cols, undirected)
+            seen["best"] = max(seen["heuristics"], key=seen["heuristics"].get)
+            seen["floor"] = seen["heuristics"][seen["best"]]
             ev["floor_as_evaluated"] = seen
-            reference = seen["floor"]
-            ref_label = "as evaluated (heuristics see the same leaked edges the encoder does)"
+            reference, best = seen["floor"], seen["best"]
+            ref_label = ("as evaluated (heuristics see the same leaked edges the encoder does, "
+                         "and input_echo returns the encoder's input)")
     ev["reference_floor"] = reference
     ev["reference"] = ref_label
-    best = corrected["best"]
+    ev["reference_heuristic"] = best
+    leak_note = ("Held-out edges are in the encoder's input, so the floor is computed as "
+                 f"evaluated, input_echo included ({ev.get('floor_as_evaluated', {}).get('heuristics', {}).get('input_echo', float('nan')):.4f}): ")
     if model_auroc is None:
         return Finding(name, "info",
                        f"Best model-free heuristic reaches AUROC {reference:.4f} ({ref_label}). "
@@ -462,10 +489,17 @@ def check_baseline_margin(n_rows, n_cols, train_pos, heldout_pos, eval_neg=None,
                        "margin over this floor alongside its AUROC.", ev)
     margin = float(model_auroc) - reference
     ev["model_auroc"], ev["margin"] = float(model_auroc), margin
+    ev["margin_interpretable"] = not leaked
     if margin < 0:
         return Finding(name, "error",
+                       (leak_note if leaked else "") +
                        f"Your model (AUROC {model_auroc:.4f}) does not beat a no-learning "
                        f"heuristic ({best}, {reference:.4f}); margin {margin:+.4f}.", ev)
+    if leaked:
+        return Finding(name, "warn",
+                       leak_note + f"the model clears it by {margin:+.4f} ({model_auroc:.4f} vs "
+                       f"{best} {reference:.4f}), but a margin over a leaked floor is not "
+                       "evidence of learning. Fix the leak, then read the margin.", ev)
     if margin < thr["margin_warn"]:
         return Finding(name, "warn",
                        f"Margin over the model-free floor is only {margin:+.4f} "

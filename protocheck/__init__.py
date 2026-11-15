@@ -8,7 +8,7 @@ missing model-free baselines and dead candidate columns.
 Depends on numpy, scipy and scikit-learn only.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 from .audit import Report, audit
 from .checks import DEFAULT_THRESHOLDS, SCOPE_NOTE, Finding

@@ -9,10 +9,12 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+
 from protocheck import audit  # noqa: E402
 from protocheck import io as lio  # noqa: E402
 from protocheck.checks import (  # noqa: E402
-    TopologyScorer, check_leakage, degree_bins, degree_matched_negatives, uniform_negatives,
+    TopologyScorer, check_baseline_margin, check_leakage, degree_bins, degree_matched_negatives,
+    uniform_negatives,
 )
 from protocheck.cli import main as cli_main  # noqa: E402
 from protocheck.examples.make_examples import N_COLS, N_ROWS, build  # noqa: E402
@@ -20,7 +22,8 @@ from protocheck.examples.make_examples import N_COLS, N_ROWS, build  # noqa: E40
 # scenario -> {check: expected status}. Checks not listed must be "ok".
 EXPECTED = {
     "clean": {},
-    "leak": {"edge_leakage": "error"},
+    # 0.2.0: under leakage the floor includes input_echo, which beats the example's model
+    "leak": {"edge_leakage": "error", "model_free_baseline": "error"},
     "mismatched_negatives": {"negative_matching": "warn"},
     "dead_columns": {"dead_candidates": "warn"},
     "weak_margin": {"model_free_baseline": "warn"},
@@ -270,3 +273,45 @@ def test_labeled_triples_with_mixed_index_bases(tmp_path):
     (tmp_path / "t.txt").write_text("1 1 1\n3 2 1\n0 4 0\n")
     p, n = lio.load_labeled_pairs(str(tmp_path / "t.txt"), index_base=1, neg_index_base=0)
     assert p.tolist() == [[0, 2], [0, 1]] and n.tolist() == [[0], [4]]
+
+
+def test_input_echo_only_under_leakage(scenarios):
+    clean = audit(**scenarios["clean"])
+    ev = next(f for f in clean.findings if f.check == "model_free_baseline").evidence
+    assert "floor_as_evaluated" not in ev and ev["margin_interpretable"]
+    assert ev["reference_floor"] == ev["floor_corrected"]["floor"]
+    leak = audit(**scenarios["leak"])
+    ev = next(f for f in leak.findings if f.check == "model_free_baseline").evidence
+    assert "input_echo" in ev["floor_as_evaluated"]["heuristics"]
+    assert not ev["margin_interpretable"]
+    assert ev["reference_heuristic"] == ev["floor_as_evaluated"]["best"]
+
+
+def test_leaked_margin_is_never_ok(scenarios):
+    kw = dict(scenarios["leak"], model_auroc=1.0)
+    f = next(x for x in audit(**kw).findings if x.check == "model_free_baseline")
+    assert f.status == "warn" and "not evidence of learning" in f.message
+
+
+def test_input_echo_recovers_a_fully_leaked_set():
+    rng = np.random.default_rng(3)
+    n_rows, n_cols = 60, 40
+    pos = np.unique(np.stack([rng.integers(0, n_rows, 600), rng.integers(0, n_cols, 600)]), axis=1)
+    train, held = pos[:, ::2], pos[:, 1::2]
+    neg = uniform_negatives(held, pos, n_rows, n_cols, rng)
+    f = check_baseline_margin(n_rows, n_cols, train, held, neg, encoder_edges=pos, model_auroc=0.9)
+    assert f.evidence["floor_as_evaluated"]["heuristics"]["input_echo"] == pytest.approx(1.0)
+    assert f.status == "error"
+
+
+def test_input_echo_undirected():
+    rng = np.random.default_rng(4)
+    n = 50
+    e = rng.integers(0, n, (2, 400))
+    e = np.unique(np.sort(e[:, e[0] != e[1]], axis=0), axis=1)
+    train, held = e[:, ::2], e[:, 1::2]
+    neg = uniform_negatives(held, e, n, n, rng, True)
+    flipped = held[::-1]  # the encoder holds the reverse direction only
+    f = check_baseline_margin(n, n, train, held, neg, encoder_edges=np.concatenate([train, flipped], 1),
+                              model_auroc=0.9, mode="homogeneous")
+    assert f.evidence["floor_as_evaluated"]["heuristics"]["input_echo"] == pytest.approx(1.0)
