@@ -3,7 +3,7 @@
 # inputs (analysis/kmerpmtf_their_step3.py). Usage: SPECIES=Prunus_persica K=2 sbatch --export=ALL ...
 #SBATCH --job-name=kmer_s3
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=300gb
+#SBATCH --mem=200gb
 #SBATCH --output=logs/kmerpmtf_their_step3_%j.out
 #SBATCH --nodelist=dgxa100jal
 #SBATCH --gres=gpu:1
