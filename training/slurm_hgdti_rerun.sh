@@ -7,7 +7,8 @@
 # they live in /raid/home/$USER/scripts/external_code/HGDTI, with src/tools.py reconstructed from
 # the released tools.cpython-37.pyc (decompyle3; the authors released no source for it).
 #
-# Usage: SEEDS=10 sbatch --export=ALL training/slurm_hgdti_rerun.sh   (one job per seed)
+# Usage: SEEDS=10 sbatch --export=ALL training/slurm_hgdti_rerun.sh   (one job per seed;
+#        SCRIPT=hgdti_negatives_arm.py for the training-negatives arms)
 # =============================================================================
 #SBATCH --job-name=hgdti_rerun
 #SBATCH --cpus-per-task=8
@@ -31,6 +32,6 @@ source /shared/apps/Python/Tensorflow/3.11.6/etc/profile.d/conda.sh
 conda activate mirna_ms
 set -u
 
-python analysis/hgdti_rerun.py --repo "${REPO_DIR}" --seeds ${SEEDS:-10} --epochs "${EPOCHS:-1000}" 2>&1 \
+python "analysis/${SCRIPT:-hgdti_rerun.py}" --repo "${REPO_DIR}" --seeds ${SEEDS:-10} --epochs "${EPOCHS:-1000}" 2>&1 \
     | grep --line-buffered -v -E "Epoch: |^folder |UserWarning|warnings.warn|_register_pytree"
 echo "Done: $(date)"
