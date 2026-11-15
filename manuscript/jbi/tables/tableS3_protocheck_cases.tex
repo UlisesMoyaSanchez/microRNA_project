@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{\texttt{protocheck} 0.2.0 on four published evaluations, ranges over five folds (HybridGNN: 25 audits, five seeds of its released data; HGDTI: 30 audits, three seeds of ten folds). ``Model'' is the AUROC given to the tool: MGCNSS's reported five-fold mean; NIMGSA's, HybridGNN's and HGDTI's per-fold values from the reruns (Tables~\ref{tab:nimgsa_rerun}, \ref{tab:hybridgnn_rerun} and~\ref{tab:hgdti_rerun}), with NIMGSA's similarity rebuilt in its corrected row. TV: total-variation distance between degree-bin histograms of the evaluation negatives and the held-out positives (train neg.: training against evaluation negatives). Floor: best model-free score the tool compares against; ``input'' is the encoder's input handed back. Status: ok / warn / fail / unchecked.}
+\caption{\texttt{protocheck} 0.2.0 on five published evaluations, ranges over five folds (HybridGNN: 25 audits, five seeds of its released data; HGDTI: 30 audits, three seeds of ten folds; NGCN: five seeds of its single split per negative ratio). ``Model'' is the AUROC given to the tool: MGCNSS's reported five-fold mean; NIMGSA's, HybridGNN's, HGDTI's and NGCN's per-fold values from the reruns (Tables~\ref{tab:nimgsa_rerun}, \ref{tab:hybridgnn_rerun}, \ref{tab:hgdti_rerun} and~\ref{tab:ngcn_rerun}), with NIMGSA's similarity rebuilt in its corrected row. TV: total-variation distance between degree-bin histograms of the evaluation negatives and the held-out positives (train neg.: training against evaluation negatives). Floor: best model-free score the tool compares against; ``input'' is the encoder's input handed back. Status: ok / warn / fail / unchecked.}
 \label{tab:protocheck_cases}
 \footnotesize
 \resizebox{\textwidth}{!}{%
@@ -23,6 +23,11 @@ HGDTI & As released (adjacency from test labels) & 0.998--1.000 & fail: 100\% in
  & Propagation over training edges & 0.884--0.972 & ok & warn: TV 0.63--0.75 & 0.859--0.917 (protein degree) & $-0.5$ to $+9.2$ & 22 ok, 7 warn, 1 fail \\
  & + uniform test negatives & 0.849--0.914 & ok & warn: TV 0.62--0.74 & 0.847--0.909 (protein degree) & $-3.1$ to $+2.5$ & 13 warn, 17 fail \\
  & + degree-matched negatives & 0.514--0.615 & ok & warn: train neg.\ TV 0.63--0.74 (0.00 vs.\ pos.) & 0.701--0.773 (Adamic--Adar) & $-22.1$ to $-12.5$ & fail \\
+\hline
+NGCN, 1:1 & Validation-selected, uniform negatives & 0.910--0.927 & ok & warn: TV 0.65--0.72 & 0.865--0.906 (protein degree) & $+2.1$ to $+5.6$ & 1 ok, 4 warn \\
+ & + degree-matched negatives & 0.655--0.688 & ok & warn: train neg.\ TV 0.65--0.71 & 0.715--0.733 (Adamic--Adar) & $-7.4$ to $-2.7$ & fail \\
+NGCN, 1:10 & Validation-selected, uniform negatives & 0.909--0.935 & ok & warn: TV 0.64--0.70 & 0.867--0.894 (protein degree) & $+2.2$ to $+5.2$ & 1 ok, 4 warn \\
+ & + degree-matched negatives & 0.732--0.759 & ok & warn: train neg.\ TV 0.66--0.70 & 0.715--0.733 (Adamic--Adar) & $+0.4$ to $+4.4$ & warn \\
 \hline
 \end{tabular}
 }

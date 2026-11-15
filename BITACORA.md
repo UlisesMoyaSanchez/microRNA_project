@@ -64,7 +64,14 @@ fármaco–fármaco/enfermedad/efecto/similitud y proteína–proteína/enfermed
   5.3 pts debajo de adamic_adar (fail 5/5); con 1:10 lo supera por 2.8 (warn 5/5). Es el caso menos inflado
   de los cuatro: aprende algo real, pero mucho menos de lo que el 0.91 sugiere.
 
-**Pendiente:** decidir con el usuario si entra al manuscrito.
+**Integrado al manuscrito (a pedido del usuario; "vale la pena mencionar los negativos emparejados": sí, es el
+único caso sin fuga, así que aísla el efecto de los negativos).** Resumen ("four papers' models fell from
+0.92--1.00 to 0.52--0.75, at most 2.8 points above the floor"; 295 palabras), §4.2 (NGCN: sin fuga, 74% de
+negativos en proteínas muertas, matched cuesta 17–25 pts; cierre: las tres evaluaciones con fuga quedan en o
+bajo el piso, la que no fuga conserva ≤2.8), Discusión, Conclusión, Limitación (iv) (el modelo publicado omite
+la GCN), Apéndice B → "Four surveyed papers" + párrafo NGCN (incluye Tabla 2 / Yamanishi no verificable) y
+Tabla B.4 (`tableS6_ngcn_rerun.tex`), Apéndice C → "five published evaluations" + párrafo y 4 filas, Tabla 3
+(‡: el código confirma su fila), E3, disponibilidad. Nueva referencia `luo2017dtinet` (verificada en Crossref).
 
 ## 2026-11-14 (madrugada del 15) — HGDTI: el grafo de evaluación se construye con las etiquetas de prueba
 
