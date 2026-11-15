@@ -481,7 +481,7 @@ def check_baseline_margin(n_rows, n_cols, train_pos, heldout_pos, eval_neg=None,
     ev["reference"] = ref_label
     ev["reference_heuristic"] = best
     leak_note = ("Held-out edges are in the encoder's input, so the floor is computed as "
-                 f"evaluated, input_echo included ({ev.get('floor_as_evaluated', {}).get('heuristics', {}).get('input_echo', float('nan')):.4f}): ")
+                 f"evaluated, input_echo included ({ev.get('floor_as_evaluated', {}).get('heuristics', {}).get('input_echo', float('nan')):.4f}). ")
     if model_auroc is None:
         return Finding(name, "info",
                        f"Best model-free heuristic reaches AUROC {reference:.4f} ({ref_label}). "
@@ -497,7 +497,7 @@ def check_baseline_margin(n_rows, n_cols, train_pos, heldout_pos, eval_neg=None,
                        f"heuristic ({best}, {reference:.4f}); margin {margin:+.4f}.", ev)
     if leaked:
         return Finding(name, "warn",
-                       leak_note + f"the model clears it by {margin:+.4f} ({model_auroc:.4f} vs "
+                       leak_note + f"The model clears it by {margin:+.4f} ({model_auroc:.4f} vs "
                        f"{best} {reference:.4f}), but a margin over a leaked floor is not "
                        "evidence of learning. Fix the leak, then read the margin.", ev)
     if margin < thr["margin_warn"]:
