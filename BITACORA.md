@@ -122,6 +122,12 @@ Conclusión, Limitación (iv) (módulo reconstruido desde bytecode), Apéndice B
 párrafo de HGDTI (incluye la explicación del piso 0.740) y Tabla B.3 (`tables/tableS5_hgdti_rerun.tex`),
 Tabla 3 (‡ en la celda D2 de HGDTI), E3 en las tablas resumen, disponibilidad de datos. Compila (46 págs.).
 El cuerpo sube ~135 palabras: el recorte a 6,000 sigue pendiente (ahora ~525 de exceso).
+**Apéndice C (mismo día, a pedido del usuario):** HGDTI como cuarto caso de `protocheck` ("on four published
+evaluations"): párrafo y 4 filas en `tableS3_protocheck_cases.tex` (rangos sobre 30 folds). Tal cual: fuga fail
+30/30, negativos warn (TV 0.63–0.75), columnas muertas warn, margen fail contra el eco (1.000); grafo de
+entrenamiento: margen −0.5 a +9.2 (22 ok, 7 warn, 1 fail); uniformes: 13 warn, 17 fail; emparejados: margen
+−22.1 a −12.5 (fail 30/30), negativos warn por desajuste entrenamiento–evaluación (TV 0.63–0.74). El usuario
+pidió no preocuparse aún por el límite de palabras: se corrige al final.
 
 ---
 

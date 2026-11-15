@@ -972,11 +972,12 @@ training--evaluation negative mismatch (TV 0.70) and a model under its floor in 
 
 \input{tables/tableS5_hgdti_rerun.tex}
 
-\section{\texttt{protocheck} on three published evaluations}
+\section{\texttt{protocheck} on four published evaluations}
 \label{app:protocheck_cases}
 \setcounter{table}{0}
-All three cases use \texttt{protocheck} 0.2.0 (\texttt{analysis/protocheck\_mgcnss.py},
-\texttt{analysis/protocheck\_nimgsa.py}, and the audits inside \texttt{analysis/hybridgnn\_rerun.py});
+All four cases use \texttt{protocheck} 0.2.0 (\texttt{analysis/protocheck\_mgcnss.py},
+\texttt{analysis/protocheck\_nimgsa.py}, and the audits inside \texttt{analysis/hybridgnn\_rerun.py} and
+\texttt{analysis/hgdti\_rerun.py});
 Table~\ref{tab:protocheck_cases} gives every scenario fold by fold as ranges. Each scenario is what someone holding a given set of files could audit.
 
 \paragraph{MGCNSS} Its repository ships five cross-validation folds of 1,086 held-out positives and 1,086
@@ -1039,6 +1040,23 @@ under disease degree, a failure on every audit; the remaining negative warning i
 model trains on uniform negatives. The leak here runs through edges, so the tool sees it, but two parts of it
 are features (the kernel similarity and the factorisation of the full matrix) that it cannot see; it flags the
 evaluation because the graph leaks as well. The epoch kept by test AUROC is training code, outside its scope.
+
+\paragraph{HGDTI} The paper ships no split files: its folds are drawn at run time, so each of the 30 folds of
+the rerun (three seeds of ten, 192--193 test positives each; Table~\ref{tab:hgdti_rerun}) is audited with the
+adjacency its model propagates over at test time as the encoder's edges. As released, the leakage check fails
+on every audit: every test positive is in that adjacency, because it is built from the test labels. The
+negatives warn (TV 0.63--0.75), the dead-candidate check warns (about 1,100 of 1,512 proteins have no training
+positive, and 74\% of the test negatives sit on them), and returning the input scores 1.000, so the model's
+0.998--1.000 fails the margin check; without the returned input the floor would be protein degree, 0.887.
+Propagating over training edges, leakage is ok and the negatives and dead candidates still warn; the model
+clears protein degree by $-0.5$ to $+9.2$ points (22 ok, 7 warn, 1 fail). With uniform test negatives it
+sits 3.1 points under to 2.5 over that floor (17 fail, 13 warn). With degree-matched negatives the profile
+matches (TV 0.00), the dead-candidate check drops to information (12\% of negatives on dead columns), and the
+model fails the margin on every audit, 12.5 to 22.1 points under Adamic--Adar; the negative check now warns
+for the other reason it can, training against evaluation negatives (TV 0.63--0.74), which the random-trained
+arm of Table~\ref{tab:hgdti_rerun} confirms costs the model 9.0 points on that test. The leak runs through an
+edge, so the tool sees it from the released pipeline alone; the reliable negatives, chosen with every
+interaction, are a selection effect the tool reports only through their degree profile.
 
 \input{tables/tableS3_protocheck_cases.tex}
 
