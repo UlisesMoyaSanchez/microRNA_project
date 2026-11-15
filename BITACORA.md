@@ -73,7 +73,26 @@ DE entre semillas ≤ 0.0024; entre folds 0.004–0.013.
 - Cambio respecto a la Tabla 3: el *artículo* sigue siendo `unclear` en D1/D2 (el codebook
   clasifica el texto), pero el *código* muestra folds por nodo y entrada enmascarada.
 
-**Pendiente:** decidir con el usuario si y cómo entra al manuscrito. `caaf2f1`
+**Integrado al manuscrito** (§4.2, Apéndice B, nota ‡ en Tabla 3) en `d5913c3`. `caaf2f1`
+
+**`protocheck` sobre NIMGSA** (`analysis/protocheck_nimgsa.py`, job 3711, semilla 1, 5 folds;
+AUROC del modelo por fold desde el job 3704):
+
+| escenario | edge_leakage | negative_matching | model_free_baseline |
+|---|---|---|---|
+| publicado, solo los pares (lo que ve un lector) | unchecked | warn (TV 0.58) | ok, +0.070 a +0.074 |
+| publicado + entrada del modelo (A0) | **fail** (83.2% de los positivos evaluados están en la entrada) | warn | ok, +0.070 a +0.074 |
+| solo filas de prueba | ok | warn (TV 0.57) | ok, +0.061 a +0.088 |
+| corregido (emparejados, similitud recalculada) | ok | warn (entrena con todos los ceros, evalúa emparejados) | **warn** en 3 folds (+0.005 a +0.012), **fail** en 2 (−0.002, −0.017) |
+
+Dos límites de la herramienta que este caso deja a la vista:
+1. **La fuga por similitud no se ve** (está en su alcance declarado): "solo filas de prueba" sale
+   con fuga `ok` y margen de 6–9 pts, y 6.5 de esos puntos desaparecen al recalcular la similitud.
+2. **Con fuga, el piso no captura el eco.** Las heurísticas ven las mismas aristas filtradas pero
+   ninguna puntúa "la arista ya está en la entrada", así que el piso queda en 0.865 (grado) y el
+   margen sale `ok` (+0.07), cuando devolver la entrada da 0.970. El `fail` de fuga sí lo cubre,
+   pero el margen aislado engaña. Posible mejora para 0.2.0: una heurística "eco" en el piso.
+
 
 ---
 
