@@ -547,8 +547,16 @@
   volume  = {24},
   number  = {1},
   doi     = {10.1186/s12859-023-05441-7},
-  annote  = {Literature-survey row: uniform-random 5:1 negatives, no model-free
-             baseline; test-edge removal unclear.}
+  annote  = {Literature-survey row: test-edge removal unclear from the text;
+             uniform-random negatives, 5 per positive in training as stated; no
+             model-free baseline. Released code (github.com/shiyangl/HMCDA, MAGNN
+             adaptation): metapaths are built from training associations only, but
+             the association file has 168 duplicate rows (2,160 rows, 1,992 pairs), so
+             in the one released split 56 of 432 test positives (13\%) are also
+             training edges; training draws one negative per positive, not five;
+             test negatives uniform 1:1; the reported fivefold CV is five 70/10/20
+             rotations, of which only one split is released; checkpoint chosen by
+             validation loss.}
 }
 
 @article{wang2026higldp,

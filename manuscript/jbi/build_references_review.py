@@ -215,6 +215,9 @@ NOTES = {
     'li2022cksnpgnn': 'Code read 2026-11-16 (supplement zip): GAEMDA code; disease features 96% GIP of the full matrix '
                       '(verified identical), fixed across folds; all sampled pairs are graph edges at test time; 0.9371 = '
                       'best of 15 variants on the reported CV. Annote was stale (said no baseline; LLCMDA). Rerun for E4.',
+    'liang2023hmcda': 'Code read 2026-11-16 (shiyangl/HMCDA @4d9e8bb): metapaths from training CDAs only, but 168 '
+                      'duplicate rows put 56/432 test positives in training; 1:1 training negatives (text: 5:1); one of '
+                      'five 70/10/20 rotations released. Annote was stale. Rerun for E4.',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
     'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',
