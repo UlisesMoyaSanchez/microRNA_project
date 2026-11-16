@@ -206,6 +206,9 @@ NOTES = {
                     'headline is the mean of its hyper-parameter-selection CV; E3 exclusion reason reworded in Datasets.',
     'li2025couplemda': 'Reran 2026-11-16 (Appendix B, Table B.5): 0.949 vs miRNA-degree floor 0.946; disease-anchored '
                        'negatives; annote rewritten (the old one called negatives and baseline unclear).',
+    'yu2022hlgnnmda': 'Code read 2026-11-16 (repo e3ac824): annote was stale (said removal unclear, no baseline; '
+                      'Table 3 says yes and BNPMDA). Code masks test links both ways, last epoch reported; single 90/10 '
+                      'split, not the tenfold CV of the text. Table 3 note added; rerun with matched negatives.',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
     'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',
