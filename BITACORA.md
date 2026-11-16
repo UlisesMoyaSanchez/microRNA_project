@@ -23,6 +23,35 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-16 — HMCDA (ref. 16) con su propio código; E4 exhaustivo; MGCNSS en curso
+
+**Decisión (usuario):** E4 es exhaustivo (opción a): entra todo artículo encuestado con código publicado
+ejecutable. Reglas para Métodos: (1) ejecutable = corre con su entorno fijado y arreglos mínimos de
+compatibilidad, sin tocar modelo ni lazo de entrenamiento; (2) tope: se excluye con razón escrita si no corre
+tras esos arreglos o le faltan datos/archivos no publicados; (3) los modelos sin grafo entran solo con
+negativos emparejados contra el piso. MGCNSS se incluye.
+
+**HMCDA** (job 4869; `analysis/hmcda_rerun{,_mg}.py`, entorno `hmcda_py36`: Python 3.6, torch 1.2 CPU,
+DGL 0.3.1). Partición publicada (ex5, 5 semillas) y las 5 rotaciones de su `gendata.py` (random.seed(0)):
+
+| Paso | ex5 (5 semillas) | piso | rotaciones | piso |
+|---|---|---|---|---|
+| tal como se publicó | 0.832 ± 0.040 | 0.849 | 0.835 ± 0.065 | 0.834 |
+| sin duplicados | 0.862 ± 0.044 | 0.853 | 0.819 ± 0.042 | 0.841 |
+| emparejados (enfermedad) | 0.506 | 0.521 | 0.503 | 0.515 |
+| emparejados (circRNA) | 0.531 | 0.510 | 0.521 | 0.507 |
+
+No reproduce el 0.9135 del artículo: su propio lazo (early stopping, paciencia 5) para casi siempre en la
+época 6 con el mejor checkpoint en la época 0. Ya publicado queda en el piso de popularidad; la fuga por
+duplicados (56/432) no cambia nada medible.
+
+**MGCNSS** (job 4875, ~5 h; `analysis/mgcnss_rerun.py`): `src/Utils.py` solo como bytecode (get_model leído con
+dis de Python 3.6). Hallazgos del código: la red propagada tiene las 5,430 asociaciones; A[1] y B[0] son
+exactamente el GIP de la matriz completa; las features RWR tienen bloque enfermedad→miRNA no nulo; los
+negativos (base 0) se leen como base 1 (desplazados); el bloque enfermedad→miRNA de la adyacencia está volteado
+en ambos ejes; Adam se re-crea cada época; reporta la mejor época sobre prueba. Primer fold: 0.9872 (paper
+0.9874).
+
 ## 2026-11-16 — E3: el piso estaba subestimado (negativos con miRNA fijo)
 
 Las corridas de DiGAMN con su propio código (jobs 4688–4690, semillas 521/1/2) dieron un piso sin fuga de
