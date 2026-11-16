@@ -29,7 +29,7 @@ mkdir -p "$W"
 EPOCHS="${EPOCHS:-200}"
 SEEDS="${SEEDS:-123 1 2}"
 FOLDS="${FOLDS:-1 2 3 4 5}"
-PAR="${PAR:-4}"
+PAR="${PAR:-1}"   # 4 in parallel ran out of GPU memory (smoke job 4907)
 SMOKE=""; [ "$EPOCHS" -lt 200 ] && SMOKE="--smoke"
 export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 PYTHONNOUSERSITE=1 TF_CPP_MIN_LOG_LEVEL=3 CUDA_DEVICE_ORDER=PCI_BUS_ID
 
