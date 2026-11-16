@@ -526,8 +526,14 @@
   number  = {10},
   pages   = {1759},
   doi     = {10.3390/genes13101759},
-  annote  = {Literature-survey row: uniform-random 1:1 negatives (16{,}427 sampled),
-             no model-free baseline; test-edge removal unclear.}
+  annote  = {Literature-survey row: test-edge removal unclear, uniform-random 1:1
+             negatives (16{,}427 sampled, fixed seed), LLCMDA as baseline. Released
+             code (zip linked from the supplement) is GAEMDA's with CKSNAP miRNA
+             features. Disease features are 96\% a Gaussian interaction-profile
+             kernel of the full association matrix, fixed across folds; every sampled
+             pair, positive or negative, test included, is an edge of the graph
+             propagated over at test time. Headline 0.9371 AUROC is the best of 15
+             feature variants chosen on the reported 5-fold CV.}
 }
 
 @article{liang2023hmcda,

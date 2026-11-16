@@ -212,6 +212,9 @@ NOTES = {
     'huang2022meahne': 'Code read 2026-11-16 (repo 96f3faa): metapath adjlists and split files unreleased, no '
                        'preprocessing script; released adjM holds all associations, 2 gene-gene edges (text 105,171); '
                        'training uses no target masks; 0.9520 = mean of 3 repeats on one split. Not rerunnable. Table 3 note added.',
+    'li2022cksnpgnn': 'Code read 2026-11-16 (supplement zip): GAEMDA code; disease features 96% GIP of the full matrix '
+                      '(verified identical), fixed across folds; all sampled pairs are graph edges at test time; 0.9371 = '
+                      'best of 15 variants on the reported CV. Annote was stale (said no baseline; LLCMDA). Rerun for E4.',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
     'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',
