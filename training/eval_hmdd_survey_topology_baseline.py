@@ -32,6 +32,8 @@ Uniform negatives come in two forms (--uniform):
               DiGAMN, CoupleMDA: sample uniformly among the zeros of the association matrix). Both
               endpoints' popularity then separates the classes, and preferential attachment rises
               (DiGAMN 0.826 -> 0.92; its own code's split gives 0.920). Outputs get a `_unifall` suffix.
+  keep_disease each negative keeps its test positive's disease and draws a miRNA uniformly: CoupleMDA's
+              released data loader (its own-code rerun, Table B.5). Outputs get a `_unifkeepd` suffix.
 Degree-matched negatives are unaffected by this flag.
 
 Two data regimes per paper (see each paper's own docstring note in
@@ -159,6 +161,15 @@ def uniform_all_negatives(k: int, all_pos: torch.Tensor, n_mirna: int, n_disease
     return out[:, :k]
 
 
+def draw_uniform(kind: str, tiled: torch.Tensor, all_pos: torch.Tensor, n_mirna: int, n_disease: int,
+                 generator: torch.Generator) -> torch.Tensor:
+    if kind == "all":
+        return uniform_all_negatives(tiled.shape[1], all_pos, n_mirna, n_disease, generator)
+    if kind == "keep_disease":  # the miRNA-side sampler run on the transposed problem
+        return uniform_negatives(tiled.flip(0), all_pos.flip(0), n_disease, n_mirna, generator).flip(0)
+    return uniform_negatives(tiled, all_pos, n_mirna, n_disease, generator)
+
+
 def build_scoring_matrix(
     train_pairs: torch.Tensor,
     all_pairs: torch.Tensor,
@@ -202,6 +213,15 @@ def score_pairs(scorers: dict[str, torch.Tensor], pos: torch.Tensor, neg: torch.
     return out
 
 
+def both_orientations(A: torch.Tensor) -> dict[str, torch.Tensor]:
+    """The four scorers on A and on A transposed (miRNA and disease roles swapped, scores mapped back), as
+    protocheck does. With keep-miRNA negatives only the disease side can separate; with negatives that vary
+    the miRNA, the swapped orientation's 'gene_degree' is miRNA degree. Keys: <name> and <name>_T."""
+    out = build_scorers(A)
+    out.update({f"{k}_T": v.T.contiguous() for k, v in build_scorers(A.T.contiguous()).items()})
+    return out
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -220,7 +240,7 @@ def main() -> None:
                    help="Degree-matched sampler: retry-based (published), exact enumeration "
                         "with uniform fallback, or exact with nearest-bin fallback. A "
                         "non-default value adds a `_policy<name>` suffix.")
-    p.add_argument("--uniform", default="keep_mirna", choices=["keep_mirna", "all"],
+    p.add_argument("--uniform", default="keep_mirna", choices=["keep_mirna", "all", "keep_disease"],
                    help="Uniform negatives keep the miRNA (published default) or are drawn over all "
                         "non-positive pairs, as the papers' code does; `all` adds a `_unifall` suffix.")
     p.add_argument("--n-tries", type=int, default=16,
@@ -251,6 +271,8 @@ def main() -> None:
             suffix += f"_policy{args.policy}"
         if args.uniform == "all":
             suffix += "_unifall"
+        elif args.uniform == "keep_disease":
+            suffix += "_unifkeepd"
         args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}{suffix}.json"
 
     log.info("=" * 78)
@@ -297,14 +319,13 @@ def main() -> None:
                  f"train_pos={train_pos.shape[1]:,}  test_pos={test_pos.shape[1]:,}  "
                  f"negative_ratio=1:{ratio}")
 
-        scorers = build_scorers(build_scoring_matrix(
+        scorer_fn = build_scorers if args.uniform == "keep_mirna" else both_orientations
+        scorers = scorer_fn(build_scoring_matrix(
             train_pos, all_pos, n_mirna, n_disease, args.edge_regime
         ))
 
         tiled = test_pos.repeat(1, ratio)
-        unif_neg = (uniform_all_negatives(tiled.shape[1], all_pos, n_mirna, n_disease, gen)
-                    if args.uniform == "all" else
-                    uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen))
+        unif_neg = draw_uniform(args.uniform, tiled, all_pos, n_mirna, n_disease, gen)
         # Degree bins stay on train_pos in BOTH regimes: the negatives must be the
         # same pairs across the two rows, or the row difference would confound the
         # edge regime with a different negative set.
@@ -347,14 +368,13 @@ def main() -> None:
                  f"seed={seed}): train_pos={train_pos.shape[1]:,}  test_pos={test_pos.shape[1]:,}  "
                  f"negative_ratio=1:{ratio}")
 
-        scorers = build_scorers(build_scoring_matrix(
+        scorer_fn = build_scorers if args.uniform == "keep_mirna" else both_orientations
+        scorers = scorer_fn(build_scoring_matrix(
             train_pos, all_pos, n_mirna, n_disease, args.edge_regime
         ))
 
         tiled = test_pos.repeat(1, ratio)
-        unif_neg = (uniform_all_negatives(tiled.shape[1], all_pos, n_mirna, n_disease, gen)
-                    if args.uniform == "all" else
-                    uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen))
+        unif_neg = draw_uniform(args.uniform, tiled, all_pos, n_mirna, n_disease, gen)
 
         # Degree bins stay on train_pos in BOTH regimes -- see the Mode B note.
         deg = gene_in_degree(train_pos, n_disease)
@@ -379,11 +399,11 @@ def main() -> None:
     log.info("-" * 78)
     for sampler_name, per_heur in results.items():
         for name in ORDER:
-            log.info(f"  [{sampler_name:<12}] {name:<16} "
-                     f"AUROC={per_heur[name]['auroc']:.4f}  AUPRC={per_heur[name]['auprc']:.4f}")
-    best_auroc = max(
-        per_heur[name]["auroc"] for per_heur in results.values() for name in ORDER
-    )
+            for key in (name, f"{name}_T"):
+                if key in per_heur:
+                    log.info(f"  [{sampler_name:<12}] {key:<16} "
+                             f"AUROC={per_heur[key]['auroc']:.4f}  AUPRC={per_heur[key]['auprc']:.4f}")
+    best_auroc = max(v["auroc"] for per_heur in results.values() for v in per_heur.values())
     log.info("-" * 78)
     log.info(f"Best model-free heuristic AUROC : {best_auroc:.4f}")
     log.info(f"Paper's own reported AUROC      : {ref['headline_auroc']}")
