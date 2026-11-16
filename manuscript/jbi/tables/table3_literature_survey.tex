@@ -21,7 +21,7 @@ GONNMDA \cite{zeng2025gonnmda} & miRNA-disease & unclear$^{\P}$ & uniform random
 DiGAMN \cite{liu2024digamn} & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 & no \\
 DGNMDA \cite{lu2024dgnmda} & miRNA-disease & unclear & uniform random from 0-labeled pairs, 1:1 & no \\
 HLGNN-MDA \cite{yu2022hlgnnmda} & miRNA-disease & yes$^{\ddagger}$ & uniform random, 1:1 & BNPMDA~\cite{chen2018bnpmda} \\
-MEAHNE \cite{huang2022meahne} & miRNA-disease & unclear & uniform random, 1:1 & no \\
+MEAHNE \cite{huang2022meahne} & miRNA-disease & unclear$^{\ddagger}$ & uniform random, 1:1 & no \\
 CKSNP-GNN \cite{li2022cksnpgnn} & miRNA-disease & unclear & uniform random, 1:1 & LLCMDA~\cite{qu2018llcmda} \\
 HMCDA \cite{liang2023hmcda} & circRNA-disease & unclear & uniform random, 5:1 & no \\
 HiGLDP \cite{wang2026higldp} & lncRNA-disease & unclear & not described (1:1 ratio only) & no \\
@@ -49,7 +49,8 @@ held-out positives as edges. CoupleMDA's released code confirms its row, except 
 positives are also training edges; its negatives keep each positive's disease and draw the miRNA at random, not
 uniform pairs as its text says (\ref{app:nimgsa}). HLGNN-MDA's released code confirms its row: it masks the test
 positives in both directions and reports the last epoch, though its script runs one 90/10 split, not the
-tenfold cross-validation its text reports.
+tenfold cross-validation its text reports. MEAHNE's released code cannot settle its row: it reads metapath
+neighbour lists and splits that it does not release, and the adjacency it does release holds every association.
 $^{\S}$Orro~\cite{orro2026mirnadisease} holds out whole miRNAs, the strongest split in the survey, but removes
 ``all associations involving training miRNAs \ldots{} from the validation graph'' and builds its
 pattern--disease edges ``symmetrically for the validation graph'', so the graph it validates on may

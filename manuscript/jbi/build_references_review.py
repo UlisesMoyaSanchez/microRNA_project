@@ -209,6 +209,9 @@ NOTES = {
     'yu2022hlgnnmda': 'Code read 2026-11-16 (repo e3ac824): annote was stale (said removal unclear, no baseline; '
                       'Table 3 says yes and BNPMDA). Code masks test links both ways, last epoch reported; single 90/10 '
                       'split, not the tenfold CV of the text. Table 3 note added; rerun with matched negatives.',
+    'huang2022meahne': 'Code read 2026-11-16 (repo 96f3faa): metapath adjlists and split files unreleased, no '
+                       'preprocessing script; released adjM holds all associations, 2 gene-gene edges (text 105,171); '
+                       'training uses no target masks; 0.9520 = mean of 3 repeats on one split. Not rerunnable. Table 3 note added.',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
     'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',
