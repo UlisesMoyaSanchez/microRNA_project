@@ -1,0 +1,653 @@
+{
+  "meta": {
+    "repo_commit": "c9128cb",
+    "seeds": [
+      5555,
+      1,
+      2
+    ],
+    "epochs": 100,
+    "device": "cpu",
+    "reported_auroc": 0.9536
+  },
+  "runs": [
+    {
+      "seed": 5555,
+      "n_test_pos": 1523,
+      "theirs": {
+        "auc": 0.9514616976118859,
+        "ap": 0.9471493484184367,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5017). The model clears it by +0.0320 (0.9515 vs adamic_adar 0.9195), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.9195080121869569,
+              "heuristic": "adamic_adar",
+              "margin": 0.031953685424929046
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.6% of candidate columns have no positive (992 of 1,754), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.780 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9479). The model clears it by +0.0036 (0.9515 vs input_echo 0.9479), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.9478801515307634,
+              "heuristic": "input_echo",
+              "margin": 0.0035815460811224886
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090); 58.0% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.9478801515307634,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "uniform": {
+        "auc": 0.954092619665458,
+        "ap": 0.9552542312190333,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.711 > 0.1, and above the 0.041 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on; eval negatives do not mirror the held-out positives' column-degree profile (TV=0.695 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9181). Your model (AUROC 0.9541) does not beat a no-learning heuristic (pref_attach, 0.9680); margin -0.0140.",
+              "floor": 0.9680495479901308,
+              "heuristic": "pref_attach",
+              "margin": -0.013956928324672768
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "56.6% of candidate columns have no positive (992 of 1,754); 55.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.756 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9334). Your model (AUROC 0.9541) does not beat a no-learning heuristic (pref_attach, 0.9680); margin -0.0140.",
+              "floor": 0.9680495479901308,
+              "heuristic": "pref_attach",
+              "margin": -0.013956928324672768
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090); 55.2% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.9680495479901308,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.524164604107127,
+        "ap": 0.5472723438787674,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5017). The model clears it by +0.0031 (0.5242 vs adamic_adar 0.5211), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5210986799475238,
+              "heuristic": "adamic_adar",
+              "margin": 0.0030659241596031617
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.6% of candidate columns have no positive (992 of 1,754), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.787 > 0.1, and above the 0.036 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5365). Your model (AUROC 0.5242) does not beat a no-learning heuristic (input_echo, 0.5365); margin -0.0124.",
+              "floor": 0.5365319855884535,
+              "heuristic": "input_echo",
+              "margin": -0.012367381481326545
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090), but only 1.7% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "floor": 0.5365319855884535,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.511556872106363,
+        "ap": 0.5191285399734795,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5311). Your model (AUROC 0.5116) does not beat a no-learning heuristic (adamic_adar, 0.5333); margin -0.0217.",
+              "floor": 0.5332780922333802,
+              "heuristic": "adamic_adar",
+              "margin": -0.02172122012701716
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.6% of candidate columns have no positive (992 of 1,754), but only 3.3% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=42, heldout_in_train_pos=42 (2.8% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.787 > 0.1, and above the 0.036 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5129). Your model (AUROC 0.5116) does not beat a no-learning heuristic (adamic_adar, 0.5319); margin -0.0203.",
+              "floor": 0.5318683232673529,
+              "heuristic": "adamic_adar",
+              "margin": -0.02031145116098987
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "floor": 0.5332780922333802,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "n_test_pos": 1523,
+      "theirs": {
+        "auc": 0.9435187057372423,
+        "ap": 0.9410647558314487,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5013). The model clears it by +0.0255 (0.9435 vs adamic_adar 0.9181), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.918064184582301,
+              "heuristic": "adamic_adar",
+              "margin": 0.02545452115494129
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.767 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9423). The model clears it by +0.0012 (0.9435 vs input_echo 0.9423), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.9423382936794495,
+              "heuristic": "input_echo",
+              "margin": 0.0011804120577927346
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090); 57.3% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.9423382936794495,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "uniform": {
+        "auc": 0.9392702139098066,
+        "ap": 0.9420683774081433,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.734 > 0.1, and above the 0.040 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on; eval negatives do not mirror the held-out positives' column-degree profile (TV=0.716 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9253). Your model (AUROC 0.9393) does not beat a no-learning heuristic (pref_attach, 0.9716); margin -0.0323.",
+              "floor": 0.971572245917167,
+              "heuristic": "pref_attach",
+              "margin": -0.03230203200736037
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754); 56.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.749 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9293). Your model (AUROC 0.9393) does not beat a no-learning heuristic (pref_attach, 0.9716); margin -0.0323.",
+              "floor": 0.971572245917167,
+              "heuristic": "pref_attach",
+              "margin": -0.03230203200736037
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090); 55.5% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.971572245917167,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5219529482062953,
+        "ap": 0.5479380629244,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5013). Your model (AUROC 0.5220) does not beat a no-learning heuristic (adamic_adar, 0.5227); margin -0.0008.",
+              "floor": 0.522731770113674,
+              "heuristic": "adamic_adar",
+              "margin": -0.0007788219073786573
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.783 > 0.1, and above the 0.037 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5347). Your model (AUROC 0.5220) does not beat a no-learning heuristic (input_echo, 0.5347); margin -0.0128.",
+              "floor": 0.5347311889612072,
+              "heuristic": "input_echo",
+              "margin": -0.012778240754911852
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090), but only 1.8% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "floor": 0.5347311889612072,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5191829893051564,
+        "ap": 0.5263502202158798,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5332). Your model (AUROC 0.5192) does not beat a no-learning heuristic (adamic_adar, 0.5480); margin -0.0288.",
+              "floor": 0.5479580121654009,
+              "heuristic": "adamic_adar",
+              "margin": -0.02877502286024447
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754), but only 3.2% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=35, heldout_in_train_pos=35 (2.3% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.783 > 0.1, and above the 0.036 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5095). Your model (AUROC 0.5192) does not beat a no-learning heuristic (common_neigh, 0.5468); margin -0.0277.",
+              "floor": 0.5468448551408497,
+              "heuristic": "common_neigh",
+              "margin": -0.0276618658356933
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "floor": 0.5479580121654009,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "n_test_pos": 1523,
+      "theirs": {
+        "auc": 0.950919130564869,
+        "ap": 0.9425850049630016,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5015). The model clears it by +0.0274 (0.9509 vs adamic_adar 0.9235), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.9234818792953224,
+              "heuristic": "adamic_adar",
+              "margin": 0.027437251269546548
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.789 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9471). The model clears it by +0.0038 (0.9509 vs input_echo 0.9471), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.9471472441172325,
+              "heuristic": "input_echo",
+              "margin": 0.0037718864476364855
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090); 58.1% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.9471472441172325,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "uniform": {
+        "auc": 0.9570863308887279,
+        "ap": 0.957343647101884,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.744 > 0.1, and above the 0.041 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on; eval negatives do not mirror the held-out positives' column-degree profile (TV=0.727 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9326). Your model (AUROC 0.9571) does not beat a no-learning heuristic (pref_attach, 0.9712); margin -0.0141.",
+              "floor": 0.9711853139150232,
+              "heuristic": "pref_attach",
+              "margin": -0.014098983026295309
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754); 58.6% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.763 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.9327). Your model (AUROC 0.9571) does not beat a no-learning heuristic (pref_attach, 0.9712); margin -0.0141.",
+              "floor": 0.9711853139150232,
+              "heuristic": "pref_attach",
+              "margin": -0.014098983026295309
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090); 54.8% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.9711853139150232,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5280229305173594,
+        "ap": 0.5532211095056545,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5015). The model clears it by +0.0062 (0.5280 vs adamic_adar 0.5219), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.521871897268799,
+              "heuristic": "adamic_adar",
+              "margin": 0.006151033248560367
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.780 > 0.1, and above the 0.038 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5410). Your model (AUROC 0.5280) does not beat a no-learning heuristic (input_echo, 0.5410); margin -0.0130.",
+              "floor": 0.5410063853480599,
+              "heuristic": "input_echo",
+              "margin": -0.012983454830700514
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090), but only 1.8% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "floor": 0.5410063853480599,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5138461299686272,
+        "ap": 0.5166128521494628,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "ok",
+              "message": "Negative degree profiles are consistent."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5303). Your model (AUROC 0.5138) does not beat a no-learning heuristic (adamic_adar, 0.5322); margin -0.0184.",
+              "floor": 0.532218178776812,
+              "heuristic": "adamic_adar",
+              "margin": -0.01837204880818477
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "56.7% of candidate columns have no positive (995 of 1,754), but only 3.3% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=39, heldout_in_train_pos=39 (2.6% of 1,523 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.780 > 0.1, and above the 0.038 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.5119). Your model (AUROC 0.5138) does not beat a no-learning heuristic (adamic_adar, 0.5316); margin -0.0178.",
+              "floor": 0.5316062010865137,
+              "heuristic": "adamic_adar",
+              "margin": -0.017760071117886467
+            },
+            "dead_candidates": {
+              "status": "info",
+              "message": "54.8% of candidate columns have no positive (1,145 of 2,090), but only 0.0% of your evaluation negatives sit there, so they do not inflate this floor. A uniform sampler on the same candidate space would."
+            }
+          },
+          "floor": 0.532218178776812,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "theirs": {
+      "auc": 0.9486331779713324,
+      "sd": 0.004437562892521777,
+      "floor": 0.9457885631091485,
+      "floor_heuristic": "input_echo (disease_x_mirna)"
+    },
+    "uniform": {
+      "auc": 0.9501497214879975,
+      "sd": 0.009540091224931647,
+      "floor": 0.9702690359407736,
+      "floor_heuristic": "pref_attach (mirna_x_disease)"
+    },
+    "matched_mirna": {
+      "auc": 0.5247134942769273,
+      "sd": 0.003071991475905346,
+      "floor": 0.5374231866325735,
+      "floor_heuristic": "input_echo (disease_x_mirna)"
+    },
+    "matched_disease": {
+      "auc": 0.5148619971267155,
+      "sd": 0.003913234652380917,
+      "floor": 0.5378180943918643,
+      "floor_heuristic": "adamic_adar (mirna_x_disease)"
+    }
+  }
+}

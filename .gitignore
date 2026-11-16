@@ -90,3 +90,5 @@ protocheck/examples/data/
 papers/
 # LibreOffice lock files
 .~lock.*#
+results/couplemda_work/
+results/kmerpmtf_work/
