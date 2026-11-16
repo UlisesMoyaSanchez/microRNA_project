@@ -43,11 +43,11 @@ matrix, training rows included, over a similarity graph built from all associati
 (Section~\ref{sec:generalization}). HybridGNN's text describes a held-out edge split, but its released
 code builds the message-passing graph and its features from the full matrix, test edges included
 (Section~\ref{sec:generalization}). HGDTI's released code propagates at test time over an adjacency built from
-the test labels (Appendix~\ref{app:nimgsa}). NGCN's released code confirms its row: its model reads no
-drug--target edge (Appendix~\ref{app:nimgsa}). kmerPMTF's released code evaluates over a graph that holds the
+the test labels (\ref{app:nimgsa}). NGCN's released code confirms its row: its model reads no
+drug--target edge (\ref{app:nimgsa}). kmerPMTF's released code evaluates over a graph that holds the
 held-out positives as edges. CoupleMDA's released code confirms its row, except that 42 of its 1,523 test
 positives are also training edges; its negatives keep each positive's disease and draw the miRNA at random, not
-uniform pairs as its text says (Appendix~\ref{app:nimgsa}).
+uniform pairs as its text says (\ref{app:nimgsa}).
 $^{\S}$Orro~\cite{orro2026mirnadisease} holds out whole miRNAs, the strongest split in the survey, but removes
 ``all associations involving training miRNAs \ldots{} from the validation graph'' and builds its
 pattern--disease edges ``symmetrically for the validation graph'', so the graph it validates on may
