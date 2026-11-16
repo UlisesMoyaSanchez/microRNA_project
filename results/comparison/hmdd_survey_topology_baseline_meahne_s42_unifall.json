@@ -1,0 +1,104 @@
+{
+  "paper": "meahne",
+  "tier": 2,
+  "edge_regime": "held_out",
+  "uniform_negatives": "all",
+  "n_mirna": 1296,
+  "n_disease": 11783,
+  "n_positives_total": 17972,
+  "seed": 42,
+  "best_model_free_auroc": 0.984584266611421,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.984584266611421,
+        "auprc": 0.9819948107574172,
+        "n_pairs": 7188
+      },
+      "pref_attach": {
+        "auroc": 0.9782121178901706,
+        "auprc": 0.978761572224404,
+        "n_pairs": 7188
+      },
+      "common_neigh": {
+        "auroc": 0.9759548313534366,
+        "auprc": 0.9763399626770446,
+        "n_pairs": 7188
+      },
+      "adamic_adar": {
+        "auroc": 0.9760450624286009,
+        "auprc": 0.9764723142578284,
+        "n_pairs": 7188
+      },
+      "gene_degree_T": {
+        "auroc": 0.8626529747687437,
+        "auprc": 0.8454696719748361,
+        "n_pairs": 7188
+      },
+      "pref_attach_T": {
+        "auroc": 0.9782121178901706,
+        "auprc": 0.978761572224404,
+        "n_pairs": 7188
+      },
+      "common_neigh_T": {
+        "auroc": 0.9759548313534366,
+        "auprc": 0.9763399626770446,
+        "n_pairs": 7188
+      },
+      "adamic_adar_T": {
+        "auroc": 0.9760470365962686,
+        "auprc": 0.9764690397089731,
+        "n_pairs": 7188
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5555920970119927,
+        "auprc": 0.5665027207813056,
+        "n_pairs": 7188
+      },
+      "pref_attach": {
+        "auroc": 0.5580565937354938,
+        "auprc": 0.578811728114633,
+        "n_pairs": 7188
+      },
+      "common_neigh": {
+        "auroc": 0.563999767435307,
+        "auprc": 0.5852381912541178,
+        "n_pairs": 7188
+      },
+      "adamic_adar": {
+        "auroc": 0.5651695972605056,
+        "auprc": 0.5853551775059571,
+        "n_pairs": 7188
+      },
+      "gene_degree_T": {
+        "auroc": 0.49999999999999994,
+        "auprc": 0.4999999999999999,
+        "n_pairs": 7188
+      },
+      "pref_attach_T": {
+        "auroc": 0.5580565937354938,
+        "auprc": 0.578811728114633,
+        "n_pairs": 7188
+      },
+      "common_neigh_T": {
+        "auroc": 0.563999767435307,
+        "auprc": 0.5852381912541178,
+        "n_pairs": 7188
+      },
+      "adamic_adar_T": {
+        "auroc": 0.5642494028723443,
+        "auprc": 0.5863196825207871,
+        "n_pairs": 7188
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.952,
+    "negative_sampling": "uniform random, 1:1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9655430/",
+    "caveat": "0.9520 is MEAHNE's own reported number (Table 3) on a 70/10/20 train/val/ test split, 1:1 negatives. No split file is bundled; this run uses a single random 80/20 edge split (matching their test fraction) with 1:1 uniform negatives as an approximation, not a reproduction of their exact split.\n"
+  }
+}

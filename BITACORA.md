@@ -23,6 +23,34 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-16 — E3: el piso estaba subestimado (negativos con miRNA fijo)
+
+Las corridas de DiGAMN con su propio código (jobs 4688–4690, semillas 521/1/2) dieron un piso sin fuga de
+0.920 (`pref_attach`), contra 0.871 en E3. Causa: `eval_topology_baseline.uniform_negatives` conserva el
+miRNA del positivo y sortea la enfermedad, así que la popularidad del miRNA no separa. El código de los
+artículos sortea sobre todos los pares desconocidos (HLGNN-MDA `sample_neg`, CKSNP-GNN `sample()`, DiGAMN
+`torch.randint` sobre los ceros; NIMGSA evalúa sobre toda la matriz); CoupleMDA conserva la enfermedad.
+
+Arreglo: `--uniform {keep_mirna,all,keep_disease}` en `eval_hmdd_survey_topology_baseline.py`; los modos nuevos
+puntúan las heurísticas en ambas orientaciones (como protocheck). 4 semillas (42/7/123/2024), held_out y seen:
+`results/comparison/hmdd_survey_topology_baseline_*_{unifall,unifkeepd}.json`.
+
+| Matriz | antes (s42, miRNA fijo) | ahora (media 4) | publicado | brecha |
+|---|---|---|---|---|
+| canónica (NIMGSA/HLGNN) | 0.8680 | 0.8974 | 0.9354/0.9309 | −3.8/−3.3 |
+| DiGAMN | 0.8714 | 0.9182 | 0.9635 | −4.5 |
+| CKSNP-GNN | 0.8822 | 0.9235 | 0.9371 | −1.4 |
+| CoupleMDA (enfermedad fija) | 0.9406 | 0.9461 | 0.9536 | −0.8 |
+| MEAHNE | 0.9848 | 0.9838 | 0.9520 | +3.2 |
+
+Media por artículo 4.7 → 2.5 puntos; por grafo 3.9 → 1.6. Concuerda con los pisos de las corridas con código
+propio (DiGAMN 0.920, HLGNN 0.891 en su split, CKSNP ~0.92, CoupleMDA 0.946). La Tabla 6 (rejilla de
+protocolo) y la Tabla 7 conservan negativos con miRNA fijo; su pie de tabla ahora lo dice.
+
+DiGAMN (3 semillas): publicado 0.962 (piso 1.0, eco) → aristas quitadas 0.942 (piso 0.920) → validación
+0.942 (0.918) → emparejados 0.517 (0.526). HLGNN-MDA h1: uniforme 0.923 vs piso 0.891; emparejados 0.535/0.522
+vs 0.539/0.524; entrenado con emparejados: 0.604/0.553 vs 0.540/0.524, pero 0.485 contra uniformes.
+
 ## 2026-11-16 — DiGAMN (ref. 11): su "remoción de aristas de prueba" no quita las aristas de prueba
 
 Repo github.com/yinboliu-git/GAMN @ `6695f4e` (sin licencia; Data1 = carpeta `MDA-CF`, 917×792, 14,550, la matriz

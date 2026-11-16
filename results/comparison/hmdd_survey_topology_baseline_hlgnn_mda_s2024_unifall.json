@@ -1,0 +1,104 @@
+{
+  "paper": "hlgnn_mda",
+  "tier": 2,
+  "edge_regime": "held_out",
+  "uniform_negatives": "all",
+  "n_mirna": 495,
+  "n_disease": 383,
+  "n_positives_total": 5430,
+  "seed": 2024,
+  "best_model_free_auroc": 0.9043256039532099,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8523939372356697,
+        "auprc": 0.849409934424402,
+        "n_pairs": 1086
+      },
+      "pref_attach": {
+        "auroc": 0.9023941068139963,
+        "auprc": 0.9210454079990794,
+        "n_pairs": 1086
+      },
+      "common_neigh": {
+        "auroc": 0.9013189802237755,
+        "auprc": 0.9208303812036005,
+        "n_pairs": 1086
+      },
+      "adamic_adar": {
+        "auroc": 0.9034692334042171,
+        "auprc": 0.9238178534280566,
+        "n_pairs": 1086
+      },
+      "gene_degree_T": {
+        "auroc": 0.788986905161625,
+        "auprc": 0.7580818175018871,
+        "n_pairs": 1086
+      },
+      "pref_attach_T": {
+        "auroc": 0.9023941068139963,
+        "auprc": 0.9210454079990794,
+        "n_pairs": 1086
+      },
+      "common_neigh_T": {
+        "auroc": 0.9013189802237755,
+        "auprc": 0.9208303812036005,
+        "n_pairs": 1086
+      },
+      "adamic_adar_T": {
+        "auroc": 0.9043256039532099,
+        "auprc": 0.923302849950964,
+        "n_pairs": 1086
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.542319967169636,
+        "auprc": 0.5510132816035275,
+        "n_pairs": 1086
+      },
+      "pref_attach": {
+        "auroc": 0.5391454608969337,
+        "auprc": 0.5485434966773153,
+        "n_pairs": 1086
+      },
+      "common_neigh": {
+        "auroc": 0.552333567351424,
+        "auprc": 0.5622911403304378,
+        "n_pairs": 1086
+      },
+      "adamic_adar": {
+        "auroc": 0.5570342785629254,
+        "auprc": 0.5647095372566273,
+        "n_pairs": 1086
+      },
+      "gene_degree_T": {
+        "auroc": 0.49999999999999994,
+        "auprc": 0.5,
+        "n_pairs": 1086
+      },
+      "pref_attach_T": {
+        "auroc": 0.5391454608969337,
+        "auprc": 0.5485434966773153,
+        "n_pairs": 1086
+      },
+      "common_neigh_T": {
+        "auroc": 0.552333567351424,
+        "auprc": 0.5622911403304378,
+        "n_pairs": 1086
+      },
+      "adamic_adar_T": {
+        "auroc": 0.552226733005708,
+        "auprc": 0.560889766556223,
+        "n_pairs": 1086
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.93086,
+    "negative_sampling": "uniform random, 1:1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9657597/",
+    "caveat": "HLGNN-MDA's repo bundles train5430_idx.txt/test2792_idx.txt, but those feed a different, non-headline SEAL invocation (see Python/Main.py) -- NOT used here. This run instead reconstructs the paper's own stated protocol for its headline number: 10-fold CV, 1:1 uniform negatives, approximated here as a single random 90/10 slice (light audit, not a full 10-fold replication).\n"
+  }
+}

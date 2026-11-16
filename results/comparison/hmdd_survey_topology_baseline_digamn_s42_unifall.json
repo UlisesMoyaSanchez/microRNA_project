@@ -1,0 +1,104 @@
+{
+  "paper": "digamn",
+  "tier": 2,
+  "edge_regime": "held_out",
+  "uniform_negatives": "all",
+  "n_mirna": 917,
+  "n_disease": 792,
+  "n_positives_total": 14550,
+  "seed": 42,
+  "best_model_free_auroc": 0.9040760028814019,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.8586185803190799,
+        "auprc": 0.8629081456168552,
+        "n_pairs": 2910
+      },
+      "pref_attach": {
+        "auroc": 0.9039560231929241,
+        "auprc": 0.921509210566698,
+        "n_pairs": 2910
+      },
+      "common_neigh": {
+        "auroc": 0.9022059257684722,
+        "auprc": 0.920163083085972,
+        "n_pairs": 2910
+      },
+      "adamic_adar": {
+        "auroc": 0.903550265112599,
+        "auprc": 0.9214843694204031,
+        "n_pairs": 2910
+      },
+      "gene_degree_T": {
+        "auroc": 0.8231133312077089,
+        "auprc": 0.8068175677781481,
+        "n_pairs": 2910
+      },
+      "pref_attach_T": {
+        "auroc": 0.9039560231929241,
+        "auprc": 0.921509210566698,
+        "n_pairs": 2910
+      },
+      "common_neigh_T": {
+        "auroc": 0.9022059257684722,
+        "auprc": 0.920163083085972,
+        "n_pairs": 2910
+      },
+      "adamic_adar_T": {
+        "auroc": 0.9040760028814019,
+        "auprc": 0.9214312091449965,
+        "n_pairs": 2910
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5505204237077975,
+        "auprc": 0.5675742128484861,
+        "n_pairs": 2910
+      },
+      "pref_attach": {
+        "auroc": 0.5465891994662321,
+        "auprc": 0.5698789230069363,
+        "n_pairs": 2910
+      },
+      "common_neigh": {
+        "auroc": 0.5560928661683259,
+        "auprc": 0.5783435463541833,
+        "n_pairs": 2910
+      },
+      "adamic_adar": {
+        "auroc": 0.5570045228563669,
+        "auprc": 0.5776309184791698,
+        "n_pairs": 2910
+      },
+      "gene_degree_T": {
+        "auroc": 0.4999999999999999,
+        "auprc": 0.5,
+        "n_pairs": 2910
+      },
+      "pref_attach_T": {
+        "auroc": 0.5465891994662321,
+        "auprc": 0.5698789230069363,
+        "n_pairs": 2910
+      },
+      "common_neigh_T": {
+        "auroc": 0.5560928661683259,
+        "auprc": 0.5783435463541833,
+        "n_pairs": 2910
+      },
+      "adamic_adar_T": {
+        "auroc": 0.5567990458308238,
+        "auprc": 0.5808036138636209,
+        "n_pairs": 2910
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.9635,
+    "negative_sampling": "uniform random, 1:1 (balanced) -- 1:5 and 1:10 also tested, not reproduced here",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11610307/",
+    "caveat": "96.35% is DiGAMN's own reported number on \"Data1\" (1:1 balanced negatives). No split file is bundled; this run uses a single random 90/10 edge split with 1:1 uniform negatives as an honest approximation, not a reproduction of DiGAMN's own exact split.\n"
+  }
+}

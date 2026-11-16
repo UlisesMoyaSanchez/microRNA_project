@@ -124,7 +124,7 @@ Biomedical Interaction Graphs}
 
 \textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free topology scores) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph; rerun with their own code, six papers' models fell from 0.86--1.00 to 0.50--0.75, at most 2.8 points above the floor. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, without false alarms.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 2.5 points, and the heuristic won on the sparsest graph; rerun with their own code, six papers' models fell from 0.86--1.00 to 0.50--0.75, at most 2.8 points above the floor. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, without false alarms.
 
 \textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
@@ -145,7 +145,7 @@ Biomedical Interaction Graphs}
 \begin{highlights}
 \item Correcting the protocol drops AUROC from 0.88--0.99 to 0.61--0.63 on six graphs.
 \item Negatives drive most of the loss on five graphs; empty columns alone raise the floor.
-\item On 7 of 21 papers' own data, trained models beat a model-free floor by 4.7 points.
+\item On 7 of 21 papers' own data, trained models beat a model-free floor by 2.5 points.
 \item Four trained models inflate by 0.24--0.31 on our graph, a graph-free MLP included.
 \item Standard: leak-free split, matched negatives, baseline with margin; tool: protocheck.
 \end{highlights}
@@ -447,7 +447,10 @@ recoverable: GONNMDA's~\cite{zeng2025gonnmda} code link points to an empty repos
 open leaderboards~\cite{ogb2026leaderboard}, used only as an external check on the model-free baselines. In the
 results table, only MGCNSS uses the paper's own exact test splits, all five of its published cross-validation folds (Tier 1); CoupleMDA's~\cite{li2025couplemda}
 positive edges are exact but its negatives are not (Tier 1/2); the other five rows (NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}, DiGAMN~\cite{liu2024digamn}, MEAHNE~\cite{huang2022meahne} and CKSNP-GNN~\cite{li2022cksnpgnn}) use
-an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2).
+an exact association matrix with a self-generated split at the paper's stated ratio (Tier 2). Where a paper's
+negatives are generated here, they are drawn as its released code draws them: uniformly over every unknown pair
+(NIMGSA, HLGNN-MDA, CKSNP-GNN and DiGAMN; MEAHNE, whose split is unreleased, as its text states), and for
+CoupleMDA by keeping each test positive's disease and drawing the miRNA; the floor is averaged over four splits.
 
 \paragraph{Our graph} We build a heterogeneous graph from public multiple-sclerosis
 single-cell RNA-seq data (blood, brain and cerebrospinal fluid) queried from the CZ
@@ -650,13 +653,17 @@ that divergence begins.
 \subsection{Published results against a model-free floor (E3, E4)}
 \label{sec:generalization}
 Table~\ref{tab:validation_cases} gives the ten cases, and four results stand out. First, on
-the seven surveyed papers' own matrices the trained models beat the model-free floor by 4.7
-AUROC points on average per paper (3.9 per distinct graph), but the gap runs from $-9.2$
-points (DiGAMN~\cite{liu2024digamn}) to $+3.3$: on MEAHNE's~\cite{huang2022meahne} graph the heuristic beats the paper's own model
-(0.9848 vs.\ 0.9520), and with degree-matched negatives every heuristic falls to
-0.52--0.55. Second, the floor replicates. The untrained comparators that NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}
-and CKSNP-GNN~\cite{li2022cksnpgnn} report (0.8960, 0.8565 and 0.9190) sit beside the 0.8842 and 0.8924 that our
-best heuristic reaches on their matrices under the conventional protocol, and CKSNP-GNN's
+the seven surveyed papers' own matrices the trained models beat the model-free floor by 2.5
+AUROC points on average per paper (1.6 per distinct graph), but the gap runs from $-7.0$
+points (MGCNSS~\cite{tian2024mgcnss}) to $+3.2$: on MEAHNE's~\cite{huang2022meahne} graph the heuristic beats the paper's own model
+(0.9838 vs.\ 0.9520), CoupleMDA~\cite{li2025couplemda} and CKSNP-GNN~\cite{li2022cksnpgnn} clear it by 0.8 and 1.4 points, and with degree-matched negatives every heuristic falls to
+0.55--0.58. The floor depends on how the negatives are drawn. The papers' released code draws them over every
+unknown pair, so the popularity of both endpoints separates the classes; drawn instead by keeping each
+positive's miRNA and replacing the disease, as in the protocol grid (Table~\ref{tab:protocol_grid}), the
+floor is 2.9--4.7 points lower on the three graphs with no empty candidate columns, and the mean gap widens to 4.7 points. Second, the floor
+replicates. The untrained comparators that NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}
+and CKSNP-GNN~\cite{li2022cksnpgnn} report (0.8960, 0.8565 and 0.9190) sit at or below the 0.897 and 0.924 that our
+best heuristic reaches on their matrices with test edges held out, and CKSNP-GNN's
 is a number transferred from other papers, not measured on its own data. Third, on OGB the
 heuristics reproduce the leaderboards exactly and the floor is not uniform: on ogbl-ddi the
 best heuristic ranks 30th of 32~\cite{ogb2026leaderboard}, while on ogbl-ppa a zero-parameter formula ranks 14th of 27,
@@ -824,7 +831,7 @@ with ours each lose 0.26--0.38 AUROC between the protocols and land in the same 
 (Table~\ref{tab:discrimination}); four trained models inflate by 0.24--0.31, a graph-free MLP
 included, and cell typing on the same graph survives the same audit by 32 points (Section~\ref{sec:celltype}). The
 weakness against a floor also appears in published work. Across the seven surveyed papers the trained models
-beat the floor by 4.7 points on average, from 9.2 points above it (DiGAMN~\cite{liu2024digamn}) to 3.3 below it (MEAHNE~\cite{huang2022meahne}), and on
+beat the floor by 2.5 points on average, from 7.0 points above it (MGCNSS~\cite{tian2024mgcnss}) to 3.2 below it (MEAHNE~\cite{huang2022meahne}), and on
 ogbl-ppa a zero-parameter formula ranks 14th of 27, tied with BUDDY~\cite{chamberlain2023buddy}. OGB's leaderboards already list such heuristics~\cite{ogb2026leaderboard}, and the
 gap persists, so reporting a baseline does not by itself raise the bar. A headline within a few points of the
 floor is hard to read as evidence of learning. Where a paper releases its code, the gap can be measured on
@@ -921,7 +928,7 @@ biomedical interaction graphs. Correcting both conventions drops every one into 
 0.26--0.38. Five of those graphs are other groups' published matrices, so the inflation is not a property of
 one dataset. The two failures compound on our graph, negative sampling carries most of the loss on the five
 surveyed graphs, part of it label noise, and candidate columns that can never be positive raise the model-free floor on their own.
-Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the
+Against the surveyed papers' own numbers, trained models beat that floor by 2.5 points on average and the
 heuristic wins outright on MEAHNE's graph; rerun with their own released code, NIMGSA's 0.937 and
 HybridGNN's 0.976 fall to 0.526 and 0.518, the level of disease popularity, and HGDTI's 0.9995 to 0.573, under
 a 0.740 floor, NGCN's 0.924, without any leak, to 0.671--0.753 against 0.725, and kmerPMTF's 0.86--0.91 and CoupleMDA's 0.949 to 0.50--0.52, under their floors; on OGB the heuristic ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.

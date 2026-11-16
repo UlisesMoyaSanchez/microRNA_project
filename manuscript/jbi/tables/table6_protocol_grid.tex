@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{The model-free protocol grid: best of the four heuristics in each cell, on our graph and on each distinct graph behind the surveyed papers. Inflation is the seen, uniform cell minus the held-out, degree-matched one. The MGCNSS row is the mean over the paper's five published folds. Empty and Gini are defined in \S\ref{sec:data}. Degree-matched cells use the exact sampler with a nearest-bin fallback (\S\ref{sec:methods_negatives}); one split per graph, as in Table~\ref{tab:validation_cases}.}
+\caption{The model-free protocol grid: best of the four heuristics in each cell, on our graph and on each distinct graph behind the surveyed papers. Inflation is the seen, uniform cell minus the held-out, degree-matched one. The MGCNSS row is the mean over the paper's five published folds. Empty and Gini are defined in \S\ref{sec:data}. Degree-matched cells use the exact sampler with a nearest-bin fallback (\S\ref{sec:methods_negatives}); one split per graph. Uniform negatives keep each positive's miRNA and draw the disease (the gene, on our graph), so miRNA popularity cannot separate the classes; Table~\ref{tab:validation_cases} instead draws them as each paper's released code does, which raises the floor on three graphs (\S\ref{sec:generalization}).}
 \label{tab:protocol_grid}
 \footnotesize
 \resizebox{\textwidth}{!}{%

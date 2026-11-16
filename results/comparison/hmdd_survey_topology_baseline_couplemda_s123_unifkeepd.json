@@ -1,0 +1,105 @@
+{
+  "paper": "couplemda",
+  "tier": 1,
+  "edge_regime": "held_out",
+  "uniform_negatives": "keep_disease",
+  "n_mirna": 2090,
+  "n_disease": 1754,
+  "n_positives_total": 15032,
+  "seed": 123,
+  "best_model_free_auroc": 0.9457366129071895,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.5,
+        "auprc": 0.5000000000000001,
+        "n_pairs": 3046
+      },
+      "pref_attach": {
+        "auroc": 0.9164321722211708,
+        "auprc": 0.9100307138225456,
+        "n_pairs": 3046
+      },
+      "common_neigh": {
+        "auroc": 0.9139644298476114,
+        "auprc": 0.9051889047605308,
+        "n_pairs": 3046
+      },
+      "adamic_adar": {
+        "auroc": 0.9169346449214475,
+        "auprc": 0.909447362964952,
+        "n_pairs": 3046
+      },
+      "gene_degree_T": {
+        "auroc": 0.9457366129071895,
+        "auprc": 0.9375985341096188,
+        "n_pairs": 3046
+      },
+      "pref_attach_T": {
+        "auroc": 0.9164321722211708,
+        "auprc": 0.9100307138225456,
+        "n_pairs": 3046
+      },
+      "common_neigh_T": {
+        "auroc": 0.9139644298476114,
+        "auprc": 0.9051889047605308,
+        "n_pairs": 3046
+      },
+      "adamic_adar_T": {
+        "auroc": 0.9121925183948985,
+        "auprc": 0.9027003067464335,
+        "n_pairs": 3046
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5694944965120073,
+        "auprc": 0.5843409225762431,
+        "n_pairs": 3046
+      },
+      "pref_attach": {
+        "auroc": 0.5700323212169367,
+        "auprc": 0.5900827990345923,
+        "n_pairs": 3046
+      },
+      "common_neigh": {
+        "auroc": 0.5773710955974252,
+        "auprc": 0.5968797565458273,
+        "n_pairs": 3046
+      },
+      "adamic_adar": {
+        "auroc": 0.5782622247878771,
+        "auprc": 0.5962356230796313,
+        "n_pairs": 3046
+      },
+      "gene_degree_T": {
+        "auroc": 0.49999999999999994,
+        "auprc": 0.49999999999999994,
+        "n_pairs": 3046
+      },
+      "pref_attach_T": {
+        "auroc": 0.5700323212169367,
+        "auprc": 0.5900827990345923,
+        "n_pairs": 3046
+      },
+      "common_neigh_T": {
+        "auroc": 0.5773710955974252,
+        "auprc": 0.5968797565458273,
+        "n_pairs": 3046
+      },
+      "adamic_adar_T": {
+        "auroc": 0.5775806208932934,
+        "auprc": 0.5989563060960098,
+        "n_pairs": 3046
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 1,
+    "negatives_exact": false,
+    "headline_auroc": 0.9536,
+    "negative_sampling": "uniform random, 1:1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12112494/",
+    "caveat": "0.9536 is CoupleMDA's own reported number (Table 3). Positive train/test split is exact (CoupleMDA's own bundled link.dat/link.dat.test, link-type 12, 43 leaking pairs removed from train). Negatives are self-generated at their stated 1:1 ratio, not their own exact (unpublished, runtime- generated) negative pairs -- so this is an exact-positives / approximate- negatives hybrid, not a full reproduction.\n"
+  }
+}

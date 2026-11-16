@@ -1,0 +1,104 @@
+{
+  "paper": "cksnp_gnn",
+  "tier": 2,
+  "edge_regime": "held_out",
+  "uniform_negatives": "all",
+  "n_mirna": 901,
+  "n_disease": 877,
+  "n_positives_total": 16427,
+  "seed": 42,
+  "best_model_free_auroc": 0.9210585197201355,
+  "results": {
+    "uniform": {
+      "gene_degree": {
+        "auroc": 0.856716500293208,
+        "auprc": 0.8517674700478001,
+        "n_pairs": 3286
+      },
+      "pref_attach": {
+        "auroc": 0.9210585197201355,
+        "auprc": 0.9331525807596805,
+        "n_pairs": 3286
+      },
+      "common_neigh": {
+        "auroc": 0.9180727252117006,
+        "auprc": 0.9300133935603365,
+        "n_pairs": 3286
+      },
+      "adamic_adar": {
+        "auroc": 0.9192833426377013,
+        "auprc": 0.9314214265901435,
+        "n_pairs": 3286
+      },
+      "gene_degree_T": {
+        "auroc": 0.8455301433737032,
+        "auprc": 0.8248250961543043,
+        "n_pairs": 3286
+      },
+      "pref_attach_T": {
+        "auroc": 0.9210585197201355,
+        "auprc": 0.9331525807596805,
+        "n_pairs": 3286
+      },
+      "common_neigh_T": {
+        "auroc": 0.9180727252117006,
+        "auprc": 0.9300133935603365,
+        "n_pairs": 3286
+      },
+      "adamic_adar_T": {
+        "auroc": 0.9186830349452795,
+        "auprc": 0.9304922897625492,
+        "n_pairs": 3286
+      }
+    },
+    "degree_matched": {
+      "gene_degree": {
+        "auroc": 0.5517540801845116,
+        "auprc": 0.5757072660553539,
+        "n_pairs": 3286
+      },
+      "pref_attach": {
+        "auroc": 0.5490461201526682,
+        "auprc": 0.5748539495980214,
+        "n_pairs": 3286
+      },
+      "common_neigh": {
+        "auroc": 0.5552520162447966,
+        "auprc": 0.5806865561102025,
+        "n_pairs": 3286
+      },
+      "adamic_adar": {
+        "auroc": 0.555727668868721,
+        "auprc": 0.5804918825424195,
+        "n_pairs": 3286
+      },
+      "gene_degree_T": {
+        "auroc": 0.5,
+        "auprc": 0.5,
+        "n_pairs": 3286
+      },
+      "pref_attach_T": {
+        "auroc": 0.5490461201526682,
+        "auprc": 0.5748539495980214,
+        "n_pairs": 3286
+      },
+      "common_neigh_T": {
+        "auroc": 0.5552520162447966,
+        "auprc": 0.5806865561102025,
+        "n_pairs": 3286
+      },
+      "adamic_adar_T": {
+        "auroc": 0.5559290062527575,
+        "auprc": 0.581907388314997,
+        "n_pairs": 3286
+      }
+    }
+  },
+  "paper_reference": {
+    "tier": 2,
+    "headline_auroc": 0.9371,
+    "negative_sampling": "uniform random, 1:1 (16,427 negatives)",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9602123/",
+    "caveat": "0.9371 is CKSNP-GNN's own reported 5-fold CV mean (Table 1). No split file is bundled; this run uses a single random 90/10 edge split with 1:1 uniform negatives as an approximation. Data source is a shared institutional mirror whose bundled code is a different model (\"GAEMDA\") -- notably, GAEMDA is itself one of CKSNP-GNN's own comparison baselines in Table 1 (93.56%), which corroborates (does not just excuse) reusing this mirror's data: both papers evidently drew from the same shared benchmark. Data trusted via exact positive-count match (16,427); code in the mirror is not used or claimed to be CKSNP-GNN's own.\n"
+  }
+}
