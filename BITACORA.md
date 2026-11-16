@@ -23,6 +23,22 @@ trabajo, no por commit.
 
 ---
 
+## 2026-11-16 — DiGAMN (ref. 11): su "remoción de aristas de prueba" no quita las aristas de prueba
+
+Repo github.com/yinboliu-git/GAMN @ `6695f4e` (sin licencia; Data1 = carpeta `MDA-CF`, 917×792, 14,550, la matriz
+de E3). El artículo dice *"We masked 20% of the association information during cross-validation in the test set to
+prevent information leakage"*. El código (`train_model.py`) hace `graph.remove_edges((_src, _tgt))` por cada positivo
+de prueba, pero en DGL `remove_edges` recibe **IDs de arista**: borra las aristas cuyo ID es igual al índice de nodo.
+Verificado con DGL 2.1.0 en un grafo de juguete (quitar (2,5) borra (1,4) y (3,0); (2,5) y (5,2) quedan).
+Simulado en Data1: por fold se borran ~5,850 aristas m→d del frente de la lista, sin preferencia (≈40 % de las de
+prueba y ≈40 % de las de entrenamiento); **las aristas d→m de todos los positivos de prueba quedan intactas**, así que
+el 100 % de los positivos de prueba es adyacente en el grafo de paso de mensajes. Además: métricas de prueba cada
+20 épocas hasta 5,000 y el script reporta la de mejor AUPR media de prueba; rejilla de 448 configuraciones sobre los
+mismos folds; negativos uniformes 1:1 sorteados una vez y antes de fijar la semilla. Similitudes: secuencia y
+semántica de enfermedad (no derivadas de asociaciones). Pendiente: rerun (decisión del usuario).
+
+---
+
 ## 2026-11-16 — CoupleMDA y kmerPMTF: corridas completas
 
 **CoupleMDA (job 4186, 3 semillas 5555/1/2, 100 épocas con early stopping, CPU).** Mismo checkpoint, cuatro juegos de
