@@ -24,6 +24,16 @@ their negative count from scored_pos.shape[1], so this produces exactly r negati
 per positive with zero changes to training/splits.py (verified locally this session
 across r in {1, 5, 10, 50} with a leak-free check against the true-positive set).
 
+Uniform negatives come in two forms (--uniform):
+  keep_mirna  (default, the published E3 artifacts) each negative keeps its test positive's miRNA and
+              draws a disease uniformly; miRNA popularity cannot separate the classes.
+  all         each negative is a pair drawn uniformly from every non-positive (miRNA, disease) cell,
+              which is what the surveyed papers' released code does (NIMGSA, HLGNN-MDA, CKSNP-GNN,
+              DiGAMN, CoupleMDA: sample uniformly among the zeros of the association matrix). Both
+              endpoints' popularity then separates the classes, and preferential attachment rises
+              (DiGAMN 0.826 -> 0.92; its own code's split gives 0.920). Outputs get a `_unifall` suffix.
+Degree-matched negatives are unaffected by this flag.
+
 Two data regimes per paper (see each paper's own docstring note in
 download_hmdd_survey_canonical5430.py for why it's tiered the way it is):
   Tier 1 (exact split)   a paper's own bundled, labeled train/test file is used
@@ -134,6 +144,21 @@ def load_pair_list(path: str) -> torch.Tensor:
     return torch.tensor(pairs, dtype=torch.long).T if pairs else torch.empty((2, 0), dtype=torch.long)
 
 
+def uniform_all_negatives(k: int, all_pos: torch.Tensor, n_mirna: int, n_disease: int,
+                          generator: torch.Generator) -> torch.Tensor:
+    """k pairs drawn uniformly (with replacement, as the papers' torch.randint / np.random.choice
+    over the zero cells do) from every (miRNA, disease) cell that is not a known positive."""
+    true_keys = pair_keys(all_pos, n_disease)
+    out = torch.empty((2, 0), dtype=torch.long)
+    while out.shape[1] < k:
+        m = torch.randint(0, n_mirna, (2 * k,), generator=generator)
+        d = torch.randint(0, n_disease, (2 * k,), generator=generator)
+        cand = torch.stack([m, d])
+        cand = cand[:, ~torch.isin(pair_keys(cand, n_disease), true_keys)]
+        out = torch.cat([out, cand], dim=1)
+    return out[:, :k]
+
+
 def build_scoring_matrix(
     train_pairs: torch.Tensor,
     all_pairs: torch.Tensor,
@@ -195,6 +220,9 @@ def main() -> None:
                    help="Degree-matched sampler: retry-based (published), exact enumeration "
                         "with uniform fallback, or exact with nearest-bin fallback. A "
                         "non-default value adds a `_policy<name>` suffix.")
+    p.add_argument("--uniform", default="keep_mirna", choices=["keep_mirna", "all"],
+                   help="Uniform negatives keep the miRNA (published default) or are drawn over all "
+                        "non-positive pairs, as the papers' code does; `all` adds a `_unifall` suffix.")
     p.add_argument("--n-tries", type=int, default=16,
                    help="Retry budget of the degree-matched sampler (16 = published). "
                         "A non-default value adds an `_ntries<N>` suffix to the output.")
@@ -221,6 +249,8 @@ def main() -> None:
             suffix += f"_ntries{args.n_tries}"
         if args.policy != "tries":
             suffix += f"_policy{args.policy}"
+        if args.uniform == "all":
+            suffix += "_unifall"
         args.out = f"results/comparison/hmdd_survey_topology_baseline_{paper}{suffix}.json"
 
     log.info("=" * 78)
@@ -272,7 +302,9 @@ def main() -> None:
         ))
 
         tiled = test_pos.repeat(1, ratio)
-        unif_neg = uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen)
+        unif_neg = (uniform_all_negatives(tiled.shape[1], all_pos, n_mirna, n_disease, gen)
+                    if args.uniform == "all" else
+                    uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen))
         # Degree bins stay on train_pos in BOTH regimes: the negatives must be the
         # same pairs across the two rows, or the row difference would confound the
         # edge regime with a different negative set.
@@ -320,7 +352,9 @@ def main() -> None:
         ))
 
         tiled = test_pos.repeat(1, ratio)
-        unif_neg = uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen)
+        unif_neg = (uniform_all_negatives(tiled.shape[1], all_pos, n_mirna, n_disease, gen)
+                    if args.uniform == "all" else
+                    uniform_negatives(tiled, all_pos, n_mirna, n_disease, gen))
 
         # Degree bins stay on train_pos in BOTH regimes -- see the Mode B note.
         deg = gene_in_degree(train_pos, n_disease)
@@ -359,6 +393,7 @@ def main() -> None:
         "paper": paper,
         "tier": tier,
         "edge_regime": args.edge_regime,
+        "uniform_negatives": args.uniform,
         "n_mirna": n_mirna,
         "n_disease": n_disease,
         "n_positives_total": n_positives_total,
