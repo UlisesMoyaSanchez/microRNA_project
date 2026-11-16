@@ -155,9 +155,9 @@ def metapaths(repo, train_pos):
     d_d = dd.to_numpy(dtype=np.int32) - 1
     d_d = d_d[np.lexsort([d_d[:, 1], d_d[:, 0]])]     # their 1-1 rows carry no offset: never matched below
     adj, idx = [[], []], [[], []]
-    for i, (mps, targets, off) in enumerate(((("c_d_c", c_d_c), ("c_m_c", c_m_c)), range(N_C), 0),
-                                            ((("d_c_d", d_c_d), ("d_m_d", d_m_d), ("d_d", d_d)), range(N_D), N_C))):
-        for _, arr in mps:
+    modes = [([c_d_c, c_m_c], range(N_C), 0), ([d_c_d, d_m_d, d_d], range(N_D), N_C)]
+    for i, (mps, targets, off) in enumerate(modes):
+        for arr in mps:
             lines, mapping = [], {}
             left = right = 0
             for t in targets:
