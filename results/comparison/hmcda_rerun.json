@@ -1,0 +1,2161 @@
+{
+  "meta": {
+    "splits": {
+      "ex5": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rot1": [
+        1
+      ],
+      "rot2": [
+        1
+      ],
+      "rot3": [
+        1
+      ],
+      "rot4": [
+        1
+      ],
+      "rot5": [
+        1
+      ]
+    }
+  },
+  "runs": [
+    {
+      "split": "ex5",
+      "seed": 1,
+      "released_theirs": {
+        "auc": 0.78873563957476,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.574 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8489). Your model (AUROC 0.7887) does not beat a no-learning heuristic (input_echo, 0.8489); margin -0.0601.",
+              "floor": 0.8488815385290502,
+              "heuristic": "input_echo",
+              "margin": -0.06014589895429023
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.424 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.4051). The model clears it by +0.2166 (0.7887 vs adamic_adar 0.5721), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5721295199227664,
+              "heuristic": "adamic_adar",
+              "margin": 0.2166061196519936
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.6% dead candidate columns."
+            }
+          },
+          "floor": 0.8488815385290502,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8021663933873902,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.588 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8022) does not beat a no-learning heuristic (gene_degree, 0.8528); margin -0.0507.",
+              "floor": 0.8528419172974551,
+              "heuristic": "gene_degree",
+              "margin": -0.05067552391006491
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.531 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.2450 (0.8022 vs adamic_adar 0.5572).",
+              "floor": 0.5572033422429865,
+              "heuristic": "adamic_adar",
+              "margin": 0.24496305114440364
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.8528419172974551,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5045428000269536,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5045) does not beat a no-learning heuristic (gene_degree, 0.5208); margin -0.0162.",
+              "floor": 0.5207739044495856,
+              "heuristic": "gene_degree",
+              "margin": -0.01623110442263198
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5045) does not beat a no-learning heuristic (common_neigh, 0.5099); margin -0.0054.",
+              "floor": 0.5099138608746434,
+              "heuristic": "common_neigh",
+              "margin": -0.00537106084768979
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5207739044495856,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5290087823723636,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0187 (model 0.5290 vs adamic_adar 0.5103); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5103041261427191,
+              "heuristic": "adamic_adar",
+              "margin": 0.018704656229644456
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0195 (model 0.5290 vs common_neigh 0.5095); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5095179802789694,
+              "heuristic": "common_neigh",
+              "margin": 0.019490802093394155
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5103041261427191,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      },
+      "test_rows_also_training": 56
+    },
+    {
+      "split": "ex5",
+      "seed": 2,
+      "released_theirs": {
+        "auc": 0.8974354852537724,
+        "epochs": 12,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.574 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8489). The model clears it by +0.0486 (0.8974 vs input_echo 0.8489), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.8488815385290502,
+              "heuristic": "input_echo",
+              "margin": 0.04855394672472213
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.424 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.4051). The model clears it by +0.3253 (0.8974 vs adamic_adar 0.5721), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5721295199227664,
+              "heuristic": "adamic_adar",
+              "margin": 0.325305965331006
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.6% dead candidate columns."
+            }
+          },
+          "floor": 0.8488815385290502,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8794894544147707,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.588 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0266 (model 0.8795 vs gene_degree 0.8528); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.8528419172974551,
+              "heuristic": "gene_degree",
+              "margin": 0.0266475371173156
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.531 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.3223 (0.8795 vs adamic_adar 0.5572).",
+              "floor": 0.5572033422429865,
+              "heuristic": "adamic_adar",
+              "margin": 0.32228611217178416
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.8528419172974551,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5066878551694706,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5067) does not beat a no-learning heuristic (gene_degree, 0.5208); margin -0.0141.",
+              "floor": 0.5207739044495856,
+              "heuristic": "gene_degree",
+              "margin": -0.014086049280115032
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5067) does not beat a no-learning heuristic (common_neigh, 0.5099); margin -0.0032.",
+              "floor": 0.5099138608746434,
+              "heuristic": "common_neigh",
+              "margin": -0.003226005705172841
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5207739044495856,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5345174187462096,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0242 (model 0.5345 vs adamic_adar 0.5103); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5103041261427191,
+              "heuristic": "adamic_adar",
+              "margin": 0.024213292603490477
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0250 (model 0.5345 vs common_neigh 0.5095); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5095179802789694,
+              "heuristic": "common_neigh",
+              "margin": 0.024999438467240176
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5103041261427191,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      },
+      "test_rows_also_training": 56
+    },
+    {
+      "split": "ex5",
+      "seed": 3,
+      "released_theirs": {
+        "auc": 0.8194337277091907,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.574 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8489). Your model (AUROC 0.8194) does not beat a no-learning heuristic (input_echo, 0.8489); margin -0.0294.",
+              "floor": 0.8488815385290502,
+              "heuristic": "input_echo",
+              "margin": -0.029447810819859588
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.424 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.4051). The model clears it by +0.2473 (0.8194 vs adamic_adar 0.5721), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5721295199227664,
+              "heuristic": "adamic_adar",
+              "margin": 0.24730420778642426
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.6% dead candidate columns."
+            }
+          },
+          "floor": 0.8488815385290502,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8493576065227645,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.588 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8494) does not beat a no-learning heuristic (gene_degree, 0.8528); margin -0.0035.",
+              "floor": 0.8528419172974551,
+              "heuristic": "gene_degree",
+              "margin": -0.00348431077469058
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.531 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.2922 (0.8494 vs adamic_adar 0.5572).",
+              "floor": 0.5572033422429865,
+              "heuristic": "adamic_adar",
+              "margin": 0.292154264279778
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.8528419172974551,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.4992868533950271,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4993) does not beat a no-learning heuristic (gene_degree, 0.5208); margin -0.0215.",
+              "floor": 0.5207739044495856,
+              "heuristic": "gene_degree",
+              "margin": -0.021487051054558504
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4993) does not beat a no-learning heuristic (common_neigh, 0.5099); margin -0.0106.",
+              "floor": 0.5099138608746434,
+              "heuristic": "common_neigh",
+              "margin": -0.010627007479616313
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5207739044495856,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.517952202331484,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0076 (model 0.5180 vs adamic_adar 0.5103); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5103041261427191,
+              "heuristic": "adamic_adar",
+              "margin": 0.007648076188764841
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0084 (model 0.5180 vs common_neigh 0.5095); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5095179802789694,
+              "heuristic": "common_neigh",
+              "margin": 0.00843422205251454
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5103041261427191,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      },
+      "test_rows_also_training": 56
+    },
+    {
+      "split": "ex5",
+      "seed": 4,
+      "released_theirs": {
+        "auc": 0.8199588477366255,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.574 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8489). Your model (AUROC 0.8200) does not beat a no-learning heuristic (input_echo, 0.8489); margin -0.0289.",
+              "floor": 0.8488815385290502,
+              "heuristic": "input_echo",
+              "margin": -0.02892269079242471
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.424 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.4051). The model clears it by +0.2478 (0.8200 vs adamic_adar 0.5721), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5721295199227664,
+              "heuristic": "adamic_adar",
+              "margin": 0.24782932781385913
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.6% dead candidate columns."
+            }
+          },
+          "floor": 0.8488815385290502,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.921626872711754,
+        "epochs": 11,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.588 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0688 (0.9216 vs gene_degree 0.8528).",
+              "floor": 0.8528419172974551,
+              "heuristic": "gene_degree",
+              "margin": 0.06878495541429896
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.531 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.3644 (0.9216 vs adamic_adar 0.5572).",
+              "floor": 0.5572033422429865,
+              "heuristic": "adamic_adar",
+              "margin": 0.3644235304687675
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.8528419172974551,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5020945171941331,
+        "epochs": 11,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5021) does not beat a no-learning heuristic (gene_degree, 0.5208); margin -0.0187.",
+              "floor": 0.5207739044495856,
+              "heuristic": "gene_degree",
+              "margin": -0.018679387255452484
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5021) does not beat a no-learning heuristic (common_neigh, 0.5099); margin -0.0078.",
+              "floor": 0.5099138608746434,
+              "heuristic": "common_neigh",
+              "margin": -0.007819343680510293
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5207739044495856,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5420307270726175,
+        "epochs": 11,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0317 (model 0.5420 vs adamic_adar 0.5103); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5103041261427191,
+              "heuristic": "adamic_adar",
+              "margin": 0.03172660092989832
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0325 (model 0.5420 vs common_neigh 0.5095); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5095179802789694,
+              "heuristic": "common_neigh",
+              "margin": 0.03251274679364802
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5103041261427191,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      },
+      "test_rows_also_training": 56
+    },
+    {
+      "split": "ex5",
+      "seed": 5,
+      "released_theirs": {
+        "auc": 0.8337084190672152,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.574 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8489). Your model (AUROC 0.8337) does not beat a no-learning heuristic (input_echo, 0.8489); margin -0.0152.",
+              "floor": 0.8488815385290502,
+              "heuristic": "input_echo",
+              "margin": -0.015173119461835083
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=52, heldout_in_train_pos=52, eval_negatives_that_are_real_edges=3 (12.3% of 422 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.424 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.4051). The model clears it by +0.2616 (0.8337 vs adamic_adar 0.5721), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5721295199227664,
+              "heuristic": "adamic_adar",
+              "margin": 0.26157889914444876
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.6% dead candidate columns."
+            }
+          },
+          "floor": 0.8488815385290502,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8579546730756272,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.588 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0051 (model 0.8580 vs gene_degree 0.8528); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.8528419172974551,
+              "heuristic": "gene_degree",
+              "margin": 0.005112755778172162
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.531 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.3008 (0.8580 vs adamic_adar 0.5572).",
+              "floor": 0.5572033422429865,
+              "heuristic": "adamic_adar",
+              "margin": 0.3007513308326407
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.8528419172974551,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5186035803328766,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5186) does not beat a no-learning heuristic (gene_degree, 0.5208); margin -0.0022.",
+              "floor": 0.5207739044495856,
+              "heuristic": "gene_degree",
+              "margin": -0.0021703241167090326
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0087 (model 0.5186 vs common_neigh 0.5099); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5099138608746434,
+              "heuristic": "common_neigh",
+              "margin": 0.008689719458233158
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5207739044495856,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5304687675478987,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0202 (model 0.5305 vs adamic_adar 0.5103); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5103041261427191,
+              "heuristic": "adamic_adar",
+              "margin": 0.020164641405179595
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.2% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0210 (model 0.5305 vs common_neigh 0.5095); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5095179802789694,
+              "heuristic": "common_neigh",
+              "margin": 0.020950787268929294
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.4% dead candidate columns."
+            }
+          },
+          "floor": 0.5103041261427191,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      },
+      "test_rows_also_training": 56
+    },
+    {
+      "split": "rot1",
+      "seed": 1,
+      "released_theirs": {
+        "auc": 0.861725550573048,
+        "epochs": 13,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=44, heldout_in_train_pos=44, eval_negatives_that_are_real_edges=2 (10.5% of 419 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.567 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8317). The model clears it by +0.0301 (0.8617 vs input_echo 0.8317), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.8316674880529822,
+              "heuristic": "input_echo",
+              "margin": 0.03005806252006582
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.1% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=44, heldout_in_train_pos=44, eval_negatives_that_are_real_edges=2 (10.5% of 419 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.478 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.3625). The model clears it by +0.3061 (0.8617 vs adamic_adar 0.5557), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5556623050130407,
+              "heuristic": "adamic_adar",
+              "margin": 0.3060632455600073
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8316674880529822,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8397252237114163,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.573 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0026 (model 0.8397 vs gene_degree 0.8371); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.8371420759735932,
+              "heuristic": "gene_degree",
+              "margin": 0.0025831477378230883
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.537 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.2824 (0.8397 vs adamic_adar 0.5573).",
+              "floor": 0.5572906283286151,
+              "heuristic": "adamic_adar",
+              "margin": 0.28243459538280125
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.8% dead candidate columns."
+            }
+          },
+          "floor": 0.8371420759735932,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5103810071712965,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5104) does not beat a no-learning heuristic (gene_degree, 0.5141); margin -0.0037.",
+              "floor": 0.5141062080986096,
+              "heuristic": "gene_degree",
+              "margin": -0.0037252009273130993
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0092 (model 0.5104 vs pref_attach 0.5012); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5011505972283139,
+              "heuristic": "pref_attach",
+              "margin": 0.009230409942982631
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.8% dead candidate columns."
+            }
+          },
+          "floor": 0.5141062080986096,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5306474672620912,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0268 (model 0.5306 vs common_neigh 0.5038); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5038134893284956,
+              "heuristic": "common_neigh",
+              "margin": 0.026833977933595654
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0266 (model 0.5306 vs adamic_adar 0.5041); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.504078354532043,
+              "heuristic": "adamic_adar",
+              "margin": 0.02656911273004825
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.8% dead candidate columns."
+            }
+          },
+          "floor": 0.504078354532043,
+          "floor_heuristic": "adamic_adar (disease_x_circrna)"
+        }
+      }
+    },
+    {
+      "split": "rot2",
+      "seed": 1,
+      "released_theirs": {
+        "auc": 0.8000471536351166,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=40, heldout_in_train_pos=40, eval_negatives_that_are_real_edges=3 (9.4% of 425 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.550 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8151). Your model (AUROC 0.8000) does not beat a no-learning heuristic (input_echo, 0.8151); margin -0.0150.",
+              "floor": 0.8150898692810457,
+              "heuristic": "input_echo",
+              "margin": -0.015042715645929072
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.6% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=40, heldout_in_train_pos=40, eval_negatives_that_are_real_edges=3 (9.4% of 425 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.451 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.3752). The model clears it by +0.2431 (0.8000 vs adamic_adar 0.5569), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5569144880174292,
+              "heuristic": "adamic_adar",
+              "margin": 0.24313266561768743
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.8150898692810457,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.7871501730103807,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.553 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7872) does not beat a no-learning heuristic (gene_degree, 0.8165); margin -0.0293.",
+              "floor": 0.8164982698961937,
+              "heuristic": "gene_degree",
+              "margin": -0.02934809688581297
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.6% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.489 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.2284 (0.7872 vs adamic_adar 0.5588).",
+              "floor": 0.5587958477508651,
+              "heuristic": "adamic_adar",
+              "margin": 0.2283543252595156
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.8% dead candidate columns."
+            }
+          },
+          "floor": 0.8164982698961937,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5023058823529412,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5023) does not beat a no-learning heuristic (gene_degree, 0.5114); margin -0.0091.",
+              "floor": 0.5114269896193773,
+              "heuristic": "gene_degree",
+              "margin": -0.009121107266436113
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.6% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5023) does not beat a no-learning heuristic (adamic_adar, 0.5023); margin -0.0000.",
+              "floor": 0.502311418685121,
+              "heuristic": "adamic_adar",
+              "margin": -5.536332179811865e-06
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.8% dead candidate columns."
+            }
+          },
+          "floor": 0.5114269896193773,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5274574394463667,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0165 (model 0.5275 vs common_neigh 0.5109); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5109231833910034,
+              "heuristic": "common_neigh",
+              "margin": 0.016534256055363294
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "6.6% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0165 (model 0.5275 vs common_neigh 0.5109); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5109231833910034,
+              "heuristic": "common_neigh",
+              "margin": 0.016534256055363294
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.8% dead candidate columns."
+            }
+          },
+          "floor": 0.5109231833910034,
+          "floor_heuristic": "common_neigh (circrna_x_disease)"
+        }
+      }
+    },
+    {
+      "split": "rot3",
+      "seed": 1,
+      "released_theirs": {
+        "auc": 0.7814107510288065,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=41, heldout_in_train_pos=41, eval_negatives_that_are_real_edges=2 (9.6% of 428 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.555 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8291). Your model (AUROC 0.7814) does not beat a no-learning heuristic (input_echo, 0.8291); margin -0.0477.",
+              "floor": 0.8291174498096228,
+              "heuristic": "input_echo",
+              "margin": -0.04770669878081624
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=41, heldout_in_train_pos=41, eval_negatives_that_are_real_edges=2 (9.6% of 428 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.457 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.3683). The model clears it by +0.2186 (0.7814 vs adamic_adar 0.5629), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5628596616476289,
+              "heuristic": "adamic_adar",
+              "margin": 0.21855108938117762
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "7.6% dead candidate columns."
+            }
+          },
+          "floor": 0.8291174498096228,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8820584767228579,
+        "epochs": 10,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.570 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0438 (model 0.8821 vs gene_degree 0.8383); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.8383046554284216,
+              "heuristic": "gene_degree",
+              "margin": 0.04375382129443628
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.488 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.3341 (0.8821 vs adamic_adar 0.5480).",
+              "floor": 0.5479790811424579,
+              "heuristic": "adamic_adar",
+              "margin": 0.3340793955804
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.8383046554284216,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5084832736483536,
+        "epochs": 10,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5085) does not beat a no-learning heuristic (gene_degree, 0.5121); margin -0.0036.",
+              "floor": 0.5120998558826098,
+              "heuristic": "gene_degree",
+              "margin": -0.003616582234256205
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0080 (model 0.5085 vs pref_attach 0.5004); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5004367193641367,
+              "heuristic": "pref_attach",
+              "margin": 0.008046554284216856
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.5120998558826098,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.514018691588785,
+        "epochs": 10,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0140 (model 0.5140 vs gene_degree 0.5000); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.4999999999999999,
+              "heuristic": "gene_degree",
+              "margin": 0.014018691588785104
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.9% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0141 (model 0.5140 vs gene_degree 0.4999); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.4999344920953795,
+              "heuristic": "gene_degree",
+              "margin": 0.014084199493405503
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.4999999999999999,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      }
+    },
+    {
+      "split": "rot4",
+      "seed": 1,
+      "released_theirs": {
+        "auc": 0.9362247085048011,
+        "epochs": 15,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=45, heldout_in_train_pos=45, eval_negatives_that_are_real_edges=3 (10.6% of 425 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.560 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8410). The model clears it by +0.0952 (0.9362 vs input_echo 0.8410), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.8409831154684096,
+              "heuristic": "input_echo",
+              "margin": 0.09524159303639146
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.1% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=45, heldout_in_train_pos=45, eval_negatives_that_are_real_edges=3 (10.6% of 425 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.495 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.3705). The model clears it by +0.3732 (0.9362 vs adamic_adar 0.5631), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5630528322440088,
+              "heuristic": "adamic_adar",
+              "margin": 0.3731718762607923
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "7.7% dead candidate columns."
+            }
+          },
+          "floor": 0.8409831154684096,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.7828705882352942,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.576 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7829) does not beat a no-learning heuristic (gene_degree, 0.8488); margin -0.0659.",
+              "floor": 0.8487557093425606,
+              "heuristic": "gene_degree",
+              "margin": -0.06588512110726641
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.1% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.527 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.2238 (0.7829 vs adamic_adar 0.5590).",
+              "floor": 0.559033910034602,
+              "heuristic": "adamic_adar",
+              "margin": 0.2238366782006922
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.8487557093425606,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.4890961937716263,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4891) does not beat a no-learning heuristic (gene_degree, 0.5227); margin -0.0336.",
+              "floor": 0.5227072664359862,
+              "heuristic": "gene_degree",
+              "margin": -0.03361107266435992
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.1% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4891) does not beat a no-learning heuristic (adamic_adar, 0.5151); margin -0.0260.",
+              "floor": 0.5150975778546713,
+              "heuristic": "adamic_adar",
+              "margin": -0.026001384083044976
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.5227072664359862,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5013204152249134,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5013) does not beat a no-learning heuristic (adamic_adar, 0.5121); margin -0.0108.",
+              "floor": 0.5121328719723183,
+              "heuristic": "adamic_adar",
+              "margin": -0.01081245674740483
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "2.1% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5013) does not beat a no-learning heuristic (adamic_adar, 0.5121); margin -0.0107.",
+              "floor": 0.5120581314878891,
+              "heuristic": "adamic_adar",
+              "margin": -0.010737716262975705
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "8.2% dead candidate columns."
+            }
+          },
+          "floor": 0.5121328719723183,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      }
+    },
+    {
+      "split": "rot5",
+      "seed": 1,
+      "released_theirs": {
+        "auc": 0.7951442472565158,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=48, heldout_in_train_pos=48, eval_negatives_that_are_real_edges=3 (11.3% of 423 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.584 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.8542). Your model (AUROC 0.7951) does not beat a no-learning heuristic (input_echo, 0.8542); margin -0.0590.",
+              "floor": 0.8541748752298398,
+              "heuristic": "input_echo",
+              "margin": -0.059030627973324035
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.1% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "error",
+              "message": "Evaluation is not leak-free: heldout_in_encoder_fwd=48, heldout_in_train_pos=48, eval_negatives_that_are_real_edges=3 (11.3% of 423 held-out edges are in the encoder's input). A model can recover these edges from its own neighbourhood, so a metric computed here measures memorisation."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.449 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Held-out edges are in the encoder's input, so the floor is computed as evaluated, input_echo included (0.3989). The model clears it by +0.2168 (0.7951 vs adamic_adar 0.5783), but a margin over a leaked floor is not evidence of learning. Fix the leak, then read the margin.",
+              "floor": 0.5783233736100166,
+              "heuristic": "adamic_adar",
+              "margin": 0.21682087364649916
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "9.2% dead candidate columns."
+            }
+          },
+          "floor": 0.8541748752298398,
+          "floor_heuristic": "input_echo (circrna_x_disease)"
+        }
+      },
+      "dedup_theirs": {
+        "auc": 0.8053585500394012,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.603 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8054) does not beat a no-learning heuristic (gene_degree, 0.8654); margin -0.0601.",
+              "floor": 0.8654270688373602,
+              "heuristic": "gene_degree",
+              "margin": -0.06006851879795905
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.5% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.489 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.2347 (0.8054 vs adamic_adar 0.5707).",
+              "floor": 0.5706760782209703,
+              "heuristic": "adamic_adar",
+              "margin": 0.23468247181843083
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "10.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8654270688373602,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_disease": {
+        "auc": 0.5045297296693101,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5045) does not beat a no-learning heuristic (gene_degree, 0.5144); margin -0.0098.",
+              "floor": 0.5143744166680639,
+              "heuristic": "gene_degree",
+              "margin": -0.009844686998753849
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.5% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5045) does not beat a no-learning heuristic (common_neigh, 0.5050); margin -0.0004.",
+              "floor": 0.504965656768886,
+              "heuristic": "common_neigh",
+              "margin": -0.0004359270995759612
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "10.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5143744166680639,
+          "floor_heuristic": "gene_degree (circrna_x_disease)"
+        }
+      },
+      "dedup_matched_circrna": {
+        "auc": 0.5332562077695622,
+        "epochs": 6,
+        "audit": {
+          "circrna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0234 (model 0.5333 vs adamic_adar 0.5098); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5098474814032381,
+              "heuristic": "adamic_adar",
+              "margin": 0.023408726366324073
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "4.5% dead candidate columns."
+            }
+          },
+          "disease_x_circrna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "info",
+              "message": "Negative degree profiles are consistent (train_neg not supplied: train-vs-eval matching was not checked)."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0234 (model 0.5333 vs common_neigh 0.5098); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5098083597404557,
+              "heuristic": "common_neigh",
+              "margin": 0.02344784802910649
+            },
+            "dead_candidates": {
+              "status": "warn",
+              "message": "26.7% of evaluation negatives sit on such columns. A scorer that just ranks by column degree separates these negatives for free, inflating the model-free floor; restrict the candidate space to columns that can be positive, or report the floor next to the model."
+            }
+          },
+          "floor": 0.5098474814032381,
+          "floor_heuristic": "adamic_adar (circrna_x_disease)"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "ex5_seeds": {
+      "released_theirs": {
+        "mean": 0.8318544238683128,
+        "sd": 0.040184950212041146,
+        "n": 5
+      },
+      "dedup_theirs": {
+        "mean": 0.8621190000224613,
+        "sd": 0.043638943110237506,
+        "n": 5
+      },
+      "dedup_matched_disease": {
+        "mean": 0.5062431212236922,
+        "sd": 0.007440940924080434,
+        "n": 5
+      },
+      "dedup_matched_circrna": {
+        "mean": 0.5307955796141147,
+        "sd": 0.008779698392787229,
+        "n": 5
+      },
+      "floor_released_theirs": {
+        "mean": 0.8488815385290502,
+        "sd": 0.0,
+        "n": 5
+      },
+      "floor_dedup_theirs": {
+        "mean": 0.8528419172974551,
+        "sd": 0.0,
+        "n": 5
+      },
+      "floor_dedup_matched_disease": {
+        "mean": 0.5207739044495856,
+        "sd": 0.0,
+        "n": 5
+      },
+      "floor_dedup_matched_circrna": {
+        "mean": 0.5103041261427191,
+        "sd": 0.0,
+        "n": 5
+      }
+    },
+    "rotations": {
+      "released_theirs": {
+        "mean": 0.8349104821996576,
+        "sd": 0.06450319119854665,
+        "n": 5
+      },
+      "dedup_theirs": {
+        "mean": 0.81943260234387,
+        "sd": 0.04156562790129519,
+        "n": 5
+      },
+      "dedup_matched_disease": {
+        "mean": 0.5029592173227055,
+        "sd": 0.008376678047366283,
+        "n": 5
+      },
+      "dedup_matched_circrna": {
+        "mean": 0.5213400442583437,
+        "sd": 0.013420444769375641,
+        "n": 5
+      },
+      "floor_released_theirs": {
+        "mean": 0.83420655956838,
+        "sd": 0.01451248695142199,
+        "n": 5
+      },
+      "floor_dedup_theirs": {
+        "mean": 0.8412255558956259,
+        "sd": 0.017881985210778408,
+        "n": 5
+      },
+      "floor_dedup_matched_disease": {
+        "mean": 0.5149429473409294,
+        "sd": 0.004520872107116127,
+        "n": 5
+      },
+      "floor_dedup_matched_circrna": {
+        "mean": 0.5073963782597205,
+        "sd": 0.005162274851312701,
+        "n": 5
+      }
+    }
+  }
+}
