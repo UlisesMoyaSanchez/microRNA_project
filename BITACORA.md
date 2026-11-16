@@ -23,7 +23,42 @@ trabajo, no por commit.
 
 ---
 
-## 2026-11-15 — CoupleMDA (ref. 9) con su propio código: en curso
+## 2026-11-16 — CoupleMDA y kmerPMTF: corridas completas
+
+**CoupleMDA (job 4186, 3 semillas 5555/1/2, 100 épocas con early stopping, CPU).** Mismo checkpoint, cuatro juegos de
+negativos de prueba (AUROC media ± sd; piso = el mayor de `protocheck` en ambas orientaciones):
+
+| negativos | AUROC | piso | heurístico |
+|---|---|---|---|
+| suyos (enfermedad fija, miRNA al azar) | 0.949 ± 0.004 | 0.946 | grado del miRNA (input_echo) |
+| uniformes 1:1 (lo que dice el texto) | 0.950 ± 0.010 | 0.970 | pref_attach |
+| emparejados por grado de miRNA | 0.525 ± 0.003 | 0.537 | grado del miRNA |
+| emparejados por grado de enfermedad | 0.515 ± 0.004 | 0.538 | adamic_adar |
+
+Artículo 0.9536 → reproducido. **La fuente es el muestreo de negativos, no una fuga de aristas:** su muestreador
+conserva la enfermedad y deja libre la popularidad del miRNA, y el grado del miRNA solo ya da 0.946. Con negativos
+emparejados (de cualquier lado) el modelo queda en 0.52, debajo del piso. Las 43 aristas de prueba que también están
+en `link.dat` (2.8 %) no pueden explicar 0.43 puntos. `results/comparison/couplemda_rerun.json`.
+
+**kmerPMTF (jobs 4147–4150, 4 especies, semillas 123/1/2, 5 folds, 3000 épocas).** AUROC media:
+
+| especie | artículo | K=2 grafo publicado, sus neg. | K=2 grafo de entrenamiento, sus neg. | K=2 entrenamiento, emparejados | K=1 sus neg. | piso (entrenamiento, sus neg.) |
+|---|---|---|---|---|---|---|
+| Arabidopsis | 0.84 | 0.855 | 0.396 | 0.510 | 0.544 | 0.561 |
+| durazno | 0.82 | 0.865 | 0.500 | 0.507 | 0.624 | 0.643 |
+| tomate | 0.80 | 0.883 | 0.566 | 0.517 | 0.719 | 0.569 |
+| arroz | 0.91 | 0.909 | 0.644 | 0.501 | 0.743 | 0.689 |
+
+**La fuente es el grafo de evaluación construido con las etiquetas de prueba** (como HGDTI): con el grafo publicado
+`protocheck` da piso 1.0 (input_echo: las aristas de prueba están en la entrada). Solo ChebConv con K≥2 propaga sobre
+ese grafo en prueba (GCNConv `cached=True` reutiliza el de entrenamiento), y por eso K=1 da lo mismo con ambos grafos
+(diferencias < 1e-5) y queda en o debajo del piso salvo tomate y arroz. Con el grafo de entrenamiento, K=2 cae a
+0.40–0.64 con sus negativos y a 0.50–0.52 con emparejados. Abierto: por qué Arabidopsis K=2 con el grafo de
+entrenamiento queda debajo de azar (0.396). `results/comparison/kmerpmtf_rerun_*.json`.
+
+---
+
+## 2026-11-15 — CoupleMDA (ref. 9) con su propio código: inicio
 
 Repo github.com/lizhj39/CoupleMDA @ `c9128cb` (sin licencia; datos de Zou en el repo) → DGX `external_code/CoupleMDA`.
 DGL 2.1.0 **CPU** + torchdata 0.7.1 con `pip --target external_code/pydeps_dgl` (data.dgl.ai, que aloja las ruedas
