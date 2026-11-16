@@ -160,6 +160,19 @@ Fuente: `comparison/hgdti_rerun_s1{0,1,2}.json`, `hgdti_negatives_arm_s1{0,1,2}.
 familias de blancos (homología sola 0.774), no fuga. Decir siempre "módulo reconstruido desde el bytecode
 publicado": solo se publicó compilado.
 
+### kmerPMTF con su propio código (jobs 4147–4150; Tabla B.6 del manuscrito)
+
+Fuente: `comparison/kmerpmtf_rerun_*.json`. Se reporta como **0.86–0.91 (K=2, grafo de evaluación con las
+aristas de prueba) → 0.40–0.64 sobre el grafo de entrenamiento y 0.50–0.52 con negativos emparejados, debajo
+del piso**. Contra todos los pares no etiquetados (lo que dice su texto) sí supera el piso por 5–20 pts. Sus
+0.80–0.91 son "AUROC" en su Tabla 2 y "AUPRC" en su texto.
+
+### CoupleMDA con su propio código (job 4186; Tabla B.5 del manuscrito)
+
+Fuente: `comparison/couplemda_rerun.json`. Se reporta como **0.949 (artículo 0.9536) contra 0.946 del grado
+del miRNA; 0.515–0.525 con negativos emparejados (piso 0.537–0.538)**. La fuente son sus negativos (enfermedad
+fija, miRNA al azar), no la fuga menor (42 de 1,523 aristas de prueba también en entrenamiento).
+
 ### Clasificación de tipo celular
 
 **0.9916** (prueba). Real, con partición correcta a nivel de célula, y no afectada por

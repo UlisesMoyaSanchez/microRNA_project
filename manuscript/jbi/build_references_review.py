@@ -197,7 +197,13 @@ NOTES = {
     'huang2023gelato': 'arXiv-only, no peer-reviewed venue found (2026-10-26; re-checked 2026-11-09: arXiv shows no journal_ref, '
                        'Crossref title search finds no published version).',
     'aiyappa2024implicit': 'arXiv-only (2026-10-26; re-checked 2026-11-09 as for huang2023gelato).',
-    'zeng2025gonnmda': 'Crossref title reads "A Ordered"; bib keeps "An". Decide at proofs.',
+    'zeng2025gonnmda': 'Crossref title reads "A Ordered"; bib keeps "An". Decide at proofs. 2026-11-16: its code link is an '
+                       'empty repository (README only); Table 3 note added; named among the three E3 exclusions in Datasets.',
+    'zhang2024kmerpmtf': 'Reran 2026-11-16 (Appendix B, Table B.6): released code evaluates over a graph holding the test '
+                         'edges; annote rewritten (the old one said it strips held-out edges, contradicting Table 3). Its '
+                         '0.80--0.91 are AUROC in its Table 2 and AUPRC in its text.',
+    'li2025couplemda': 'Reran 2026-11-16 (Appendix B, Table B.5): 0.949 vs miRNA-degree floor 0.946; disease-anchored '
+                       'negatives; annote rewritten (the old one called negatives and baseline unclear).',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
     'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',

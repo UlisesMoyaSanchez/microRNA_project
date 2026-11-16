@@ -13,11 +13,11 @@ NIMGSA \cite{jin2022nimgsa} & miRNA-disease & unclear$^{\ddagger}$ & all unlabel
 HybridGNN \cite{ahmad2026hybridgnn} & miRNA-disease & yes$^{\ddagger}$ & uniform random from unknown pairs & no \\
 HGDTI \cite{yu2022hgdti} & drug-target & unclear$^{\ddagger}$ & reliable score-filtered (non-uniform) & no \\
 NGCN \cite{cao2024ngcn} & drug-target & yes$^{\ddagger}$ & uniform random from unknown pairs, 1:10 & HNM~\cite{wang2014hnm} \\
-kmerPMTF \cite{zhang2024kmerpmtf} & plant miRNA-target & unclear & all unlabeled pairs, count-matched & no \\
+kmerPMTF \cite{zhang2024kmerpmtf} & plant miRNA-target & unclear$^{\ddagger}$ & all unlabeled pairs, count-matched & no \\
 \hline
 Orro \cite{orro2026mirnadisease} & miRNA-disease & unclear$^{\S}$ & uniform random from unannotated pairs & TCRWMDA~\cite{yu2020tcrwmda} \\
-CoupleMDA \cite{li2025couplemda} & miRNA-disease & yes & uniform random, 1:1 & no \\
-GONNMDA \cite{zeng2025gonnmda} & miRNA-disease & unclear & uniform random, 1:1 & no \\
+CoupleMDA \cite{li2025couplemda} & miRNA-disease & yes$^{\ddagger}$ & uniform random, 1:1 & no \\
+GONNMDA \cite{zeng2025gonnmda} & miRNA-disease & unclear$^{\P}$ & uniform random, 1:1 & no \\
 DiGAMN \cite{liu2024digamn} & miRNA-disease & yes & uniform random, 1:1 / 1:5 / 1:10 & no \\
 DGNMDA \cite{lu2024dgnmda} & miRNA-disease & unclear & uniform random from 0-labeled pairs, 1:1 & no \\
 HLGNN-MDA \cite{yu2022hlgnnmda} & miRNA-disease & yes & uniform random, 1:1 & BNPMDA~\cite{chen2018bnpmda} \\
@@ -44,9 +44,15 @@ matrix, training rows included, over a similarity graph built from all associati
 code builds the message-passing graph and its features from the full matrix, test edges included
 (Section~\ref{sec:generalization}). HGDTI's released code propagates at test time over an adjacency built from
 the test labels (Appendix~\ref{app:nimgsa}). NGCN's released code confirms its row: its model reads no
-drug--target edge (Appendix~\ref{app:nimgsa}).
+drug--target edge (Appendix~\ref{app:nimgsa}). kmerPMTF's released code evaluates over a graph that holds the
+held-out positives as edges. CoupleMDA's released code confirms its row, except that 42 of its 1,523 test
+positives are also training edges; its negatives keep each positive's disease and draw the miRNA at random, not
+uniform pairs as its text says (Appendix~\ref{app:nimgsa}).
 $^{\S}$Orro~\cite{orro2026mirnadisease} holds out whole miRNAs, the strongest split in the survey, but removes
 ``all associations involving training miRNAs \ldots{} from the validation graph'' and builds its
 pattern--disease edges ``symmetrically for the validation graph'', so the graph it validates on may
 hold the held-out miRNAs' own associations; the text does not settle which, and no code is released.
+$^{\P}$GONNMDA's~\cite{zeng2025gonnmda} code link points to an empty repository, and its features include miRNA
+functional similarity and Gaussian interaction-profile kernels computed from the association matrix, with no
+statement that they are recomputed per fold.
 \end{table}

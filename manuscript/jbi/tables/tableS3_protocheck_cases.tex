@@ -1,5 +1,5 @@
 \begin{table}[h!]
-\caption{\texttt{protocheck} 0.2.0 on five published evaluations, ranges over five folds (HybridGNN: 25 audits, five seeds of its released data; HGDTI: 30 audits, three seeds of ten folds; NGCN: five seeds of its single split per negative ratio). ``Model'' is the AUROC given to the tool: MGCNSS's reported five-fold mean; NIMGSA's, HybridGNN's, HGDTI's and NGCN's per-fold values from the reruns (Tables~\ref{tab:nimgsa_rerun}, \ref{tab:hybridgnn_rerun}, \ref{tab:hgdti_rerun} and~\ref{tab:ngcn_rerun}), with NIMGSA's similarity rebuilt in its corrected row. TV: total-variation distance between degree-bin histograms of the evaluation negatives and the held-out positives (train neg.: training against evaluation negatives). Floor: best model-free score the tool compares against; ``input'' is the encoder's input handed back. Status: ok / warn / fail / unchecked.}
+\caption{\texttt{protocheck} 0.2.0 on seven published evaluations, ranges over five folds (HybridGNN: 25 audits, five seeds of its released data; HGDTI: 30 audits, three seeds of ten folds; NGCN: five seeds of its single split per negative ratio; CoupleMDA: three seeds of its fixed test set, the higher-floor orientation; kmerPMTF: 60 audits, four species by three seeds of five folds, $K=2$). ``Model'' is the AUROC given to the tool: MGCNSS's reported five-fold mean; the other six papers' per-fold values from the reruns (Tables~\ref{tab:nimgsa_rerun}, \ref{tab:hybridgnn_rerun}, \ref{tab:hgdti_rerun}, \ref{tab:ngcn_rerun}, \ref{tab:couplemda_rerun} and~\ref{tab:kmerpmtf_rerun}), with NIMGSA's similarity rebuilt in its corrected row. TV: total-variation distance between degree-bin histograms of the evaluation negatives and the held-out positives (train neg.: training against evaluation negatives). Floor: best model-free score the tool compares against; ``input'' is the encoder's input handed back. Status: ok / warn / fail / unchecked.}
 \label{tab:protocheck_cases}
 \footnotesize
 \resizebox{\textwidth}{!}{%
@@ -28,6 +28,16 @@ NGCN, 1:1 & Validation-selected, uniform negatives & 0.910--0.927 & ok & warn: T
  & + degree-matched negatives & 0.655--0.688 & ok & warn: train neg.\ TV 0.65--0.71 & 0.715--0.733 (Adamic--Adar) & $-7.4$ to $-2.7$ & fail \\
 NGCN, 1:10 & Validation-selected, uniform negatives & 0.909--0.935 & ok & warn: TV 0.64--0.70 & 0.867--0.894 (protein degree) & $+2.2$ to $+5.2$ & 1 ok, 4 warn \\
  & + degree-matched negatives & 0.732--0.759 & ok & warn: train neg.\ TV 0.66--0.70 & 0.715--0.733 (Adamic--Adar) & $+0.4$ to $+4.4$ & warn \\
+\hline
+CoupleMDA & As released (disease kept, miRNA random) & 0.944--0.952 & fail: 42/1,523 in input & warn: TV 0.77--0.79 (miRNA side) & 0.942--0.948 (input; miRNA degree) & $+0.1$ to $+0.4$ & warn \\
+ & Uniform test negatives & 0.939--0.957 & fail: 42/1,523 in input & warn: TV 0.70--0.76 & 0.968--0.972 (pref.\ attach.) & $-3.2$ to $-1.4$ & fail \\
+ & miRNA degree-matched & 0.522--0.528 & fail: 42/1,523 in input & warn: train neg.\ TV 0.78--0.79 & 0.535--0.541 (input; miRNA degree) & $-1.3$ to $-1.2$ & fail \\
+ & Disease degree-matched & 0.512--0.519 & fail: 42/1,523 in input & warn: train neg.\ TV 0.78--0.79 & 0.532--0.548 (Adamic--Adar) & $-2.9$ to $-1.8$ & fail \\
+\hline
+kmerPMTF & As released (evaluation graph holds the test edges) & 0.813--0.931 & fail: 100\% in input & warn: TV 0.31--0.61 & 1.000 (input) & $-18.7$ to $-6.9$ & fail \\
+ & Evaluation over the training graph & 0.377--0.654 & ok & warn: TV 0.31--0.61 & 0.551--0.696 (common neigh., Adamic--Adar) & $-18.3$ to $+3.6$ & 7 warn, 53 fail \\
+ & + degree-matched negatives & 0.489--0.529 & ok & warn: train neg.\ TV 0.32--0.60 & 0.556--0.651 (common neigh., Adamic--Adar) & $-15.4$ to $-3.8$ & fail \\
+ & Training graph, all unlabeled pairs & 0.735--0.864 & ok & warn: TV 0.20--0.80 & 0.602--0.813 (pref.\ attach., gene degree) & $+4.7$ to $+19.6$ & 53 ok, 7 warn \\
 \hline
 \end{tabular}
 }

@@ -124,7 +124,7 @@ Biomedical Interaction Graphs}
 
 \textbf{Methods:} We compared a conventional protocol (edges seen during message passing, uniform negatives) with a corrected one (held-out edges, degree-matched negatives). We retrained one architecture on six graphs (ours and five from published papers) and scored four model-free heuristics (parameter-free topology scores) on ten cases: those graphs, two Open Graph Benchmark (OGB) datasets and seven papers from a 21-paper survey. We also added empty candidate columns to a matrix that had none, compared four trained models and a cell-typing task on our graph, and validated the tool, protocheck, on 80 audits with known ground truth.
 
-\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph; rerun with their own code, four papers' models fell from 0.92--1.00 to 0.52--0.75, at most 2.8 points above the floor. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, without false alarms.
+\textbf{Results:} The conventional protocol overstated the Area Under the Receiver Operating Characteristic curve (AUROC): 0.879--0.992 fell to 0.612--0.633 on every graph. Negative sampling carried 0.30--0.45 of the heuristics' loss on the five published graphs, a sixth or more of it label noise on the one graph we could check; on ours the two failures compound. Empty candidate columns raised a model-free floor from 0.859 to 0.982. Across seven papers, trained models beat that floor by 4.7 points, and the heuristic won on the sparsest graph; rerun with their own code, six papers' models fell from 0.86--1.00 to 0.50--0.75, at most 2.8 points above the floor. Four trained models inflated by 0.24--0.31, a graph-free MLP included; cell typing kept a 32-point margin. \texttt{protocheck} flagged every seeded leak and negative mismatch, without false alarms.
 
 \textbf{Conclusion:} The inflation follows the evaluation protocol, not the model or dataset. We propose a minimum reporting standard (a leak-free edge split, matched negative sampling, and a model-free baseline with its margin stated); \texttt{protocheck} verifies it.
 \end{abstract}
@@ -443,7 +443,7 @@ could obtain (MGCNSS~\cite{tian2024mgcnss}, NIMGSA~\cite{jin2022nimgsa} and
 HLGNN-MDA~\cite{yu2022hlgnnmda}) share a byte-identical HMDD~\cite{li2014hmdd} matrix. Each comes
 from the paper's own repository, or a shared mirror for CKSNP-GNN~\cite{li2022cksnpgnn}, and was verified against
 that paper's reported counts. Three further papers were excluded because no usable data was
-recoverable (Discussion). ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
+recoverable: GONNMDA's~\cite{zeng2025gonnmda} code link points to an empty repository, Orro et al.~\cite{orro2026mirnadisease} release neither data nor code, and DGNMDA's~\cite{lu2024dgnmda} only data source does not respond. ogbl-ddi and ogbl-ppa \cite{hu2020ogb} are public benchmarks with
 open leaderboards~\cite{ogb2026leaderboard}, used only as an external check on the model-free baselines. In the
 results table, only MGCNSS uses the paper's own exact test splits, all five of its published cross-validation folds (Tier 1); CoupleMDA's~\cite{li2025couplemda}
 positive edges are exact but its negatives are not (Tier 1/2); the other five rows (NIMGSA~\cite{jin2022nimgsa}, HLGNN-MDA~\cite{yu2022hlgnnmda}, DiGAMN~\cite{liu2024digamn}, MEAHNE~\cite{huang2022meahne} and CKSNP-GNN~\cite{li2022cksnpgnn}) use
@@ -611,7 +611,7 @@ that share no data, no node types and no size land in the same 0.022-wide band. 
 graph's $+0.359$ is inside that range, near its upper end: it is a member of the
 distribution, not an outlier. The trained arm is our architecture on their graphs, not each
 paper's own model, so the table is evidence about the protocol, not about their reported
-numbers (Discussion); the four papers whose own models we reran are NIMGSA, HybridGNN, HGDTI and NGCN (Section~\ref{sec:generalization}).
+numbers (Discussion); the six papers whose own models we reran are NIMGSA, HybridGNN, HGDTI, kmerPMTF, NGCN and CoupleMDA (Section~\ref{sec:generalization}).
 
 \begin{figure}[h!]
 \includegraphics[width=\textwidth]{../../results/figures/manuscript/fig4_cross_graph_collapse.pdf}
@@ -663,7 +663,7 @@ best heuristic ranks 30th of 32~\cite{ogb2026leaderboard}, while on ogbl-ppa a z
 essentially tied with the entry just above it, BUDDY \cite{chamberlain2023buddy} (0.4933 vs.\
 0.4934 Hits@100).
 
-Fourth, for four papers we could measure the inflation of their own models rather than ours, because all four
+Fourth, for six papers we could measure the inflation of their own models rather than ours, because all six
 released their code, and in both the code shows what the text does not (Table~\ref{tab:literature_survey}).
 NIMGSA's~\cite{jin2022nimgsa} folds remove held-out miRNAs' rows from the model's input, but the reported
 AUROC is computed over the whole matrix, training rows included, over a miRNA similarity graph that is fixed
@@ -684,20 +684,36 @@ only compiled (we rebuilt it from its bytecode), scores 0.9995 with its own pipe
 adjacency built from the test labels and samples similarity-filtered ``reliable'' negatives before the split.
 Propagating over training edges, then uniform and degree-matched test negatives give 0.946, 0.880 and 0.573
 (Table~\ref{tab:hgdti_rerun}); the last is 17 points under a three-path heuristic (0.740) that tracks target
-families, and the same model trained on random negatives scores higher on both corrected tests. Under these three
-published evaluations, handing the input back unchanged scores more than the model (0.970 for NIMGSA, 1.000 for
-HybridGNN and HGDTI). NGCN~\cite{cao2024ngcn}, on the same drug--target data as HGDTI, does not leak: its model
+families, and the same model trained on random negatives scores higher on both corrected tests.
+kmerPMTF~\cite{zhang2024kmerpmtf}, a plant miRNA--target model, removes each fold's test pairs from its training
+graph but is evaluated over a second graph, every edge except the training pairs, so the held-out positives are
+edges of the graph its spectral layer propagates over at test time. With the configuration its README gives,
+its code scores 0.855--0.909 on the paper's four species (the paper reports 0.80--0.91;
+Table~\ref{tab:kmerpmtf_rerun}); evaluated over the training graph, the same models score 0.40--0.64, under a
+common-neighbour or Adamic--Adar floor on every species, and 0.50--0.52 with degree-matched negatives. Against
+every remaining unlabeled pair, the negatives its text describes, they clear the floor by 5 to 20 points, so
+there is signal beyond popularity on that easier test, but not on the 1:1 negatives its code draws. Under these
+four published evaluations, handing the input back unchanged scores more than the model (0.970 for NIMGSA, 1.000
+for HybridGNN, HGDTI and kmerPMTF). NGCN~\cite{cao2024ngcn}, on the same drug--target data as HGDTI, does not leak: its model
 never sees a drug--target edge, and features built without any (DTINet's~\cite{luo2017dtinet}) score the same.
 It reproduces 0.924 (the paper reports 0.910; Table~\ref{tab:ngcn_rerun}), but 74\% of its uniform negatives sit
 on proteins with no interaction, so protein degree alone reaches 0.886. Degree-matched negatives alone, with no
 leak to remove, cost it 17 to 25 points: trained on as many negatives as positives it ends 5.3 points under the
-three-path floor (0.671 against 0.725), and trained on ten times as many it clears it by 2.8 (0.753). Two caveats bound these
+three-path floor (0.671 against 0.725), and trained on ten times as many it clears it by 2.8 (0.753).
+CoupleMDA~\cite{li2025couplemda} holds out a fixed test set that its graph never sees (42 of its 1,523 test
+positives, 2.8\%, are nonetheless also training edges), but its negatives, for training and test alike, keep
+each positive's disease and replace the miRNA by a random one, which leaves miRNA popularity free. Its code
+reproduces the paper's 0.954 (0.949 over three seeds; Table~\ref{tab:couplemda_rerun}), and miRNA degree
+alone scores 0.946 on the same pairs; with the uniform negatives its text describes, it scores 0.950 against
+preferential attachment's 0.970, and with negatives matched on the degree of either side, 0.515--0.525, under
+floors of 0.537--0.538. Two caveats bound these
 figures: NIMGSA's functional similarity is derived from disease annotations and could not be rebuilt
 without the held-out rows, so its corrected figures may still be optimistic; and HybridGNN's released data
 (31,461 associations) are not the dataset its paper describes (18,738), so what is measured is its released
-code on its released data. Measured with the papers' own models, the three figures whose evaluations leak land at
-or below a model-free floor, and the one that does not leak keeps a margin of at most 2.8 points once its
-negatives are matched.
+code on its released data. Measured with the papers' own models, the four figures whose evaluations leak land at
+or below a model-free floor once the leak is removed and negatives are matched; CoupleMDA's, whose leak is
+marginal, sits 0.3 points above miRNA degree as published and under the floor with matched negatives; and NGCN's,
+which does not leak, keeps a margin of at most 2.8 points once its negatives are matched.
 
 \input{tables/table5_hmdd_survey_audit.tex}
 
@@ -816,7 +832,9 @@ its own model: NIMGSA's~\cite{jin2022nimgsa} 0.937 and HybridGNN's~\cite{ahmad20
 0.526 and 0.518, at the level of disease popularity, and HGDTI's~\cite{yu2022hgdti} 0.9995 to 0.573, under a
 model-free floor of 0.740, once their leaks are removed and negatives are
 degree-matched; NGCN's~\cite{cao2024ngcn} 0.924, which does not leak, falls to 0.671--0.753 with matched negatives
-alone, against a floor of 0.725 (Section~\ref{sec:generalization}).
+alone, against a floor of 0.725; kmerPMTF's~\cite{zhang2024kmerpmtf} 0.86--0.91 falls to 0.50--0.52; and
+CoupleMDA's~\cite{li2025couplemda} 0.949, 0.3 points above miRNA degree as published, to 0.515--0.525, both under
+their floors (Section~\ref{sec:generalization}).
 
 \subsection{A minimum reporting standard and \texttt{protocheck}}
 \label{sec:standard}
@@ -873,14 +891,14 @@ PageRank \cite{liben2007link}) may sit higher, so the 3.6-point margin is an upp
 (iii) None of the four trained models encodes pairwise structure as SEAL \cite{zhang2018seal}, NBFNet
 \cite{zhu2021nbfnet} or BUDDY \cite{chamberlain2023buddy} do, so 3.6 points is not a ceiling for trained models,
 and whether a structure-aware architecture closes it is open. (iv) The six-graph experiment retrains our
-architecture on each paper's graph, not each paper's model (NIMGSA's, HybridGNN's, HGDTI's and NGCN's released code are the
+architecture on each paper's graph, not each paper's model (NIMGSA's, HybridGNN's, HGDTI's, kmerPMTF's, NGCN's and CoupleMDA's released code are the
 exceptions, Section~\ref{sec:generalization}), and six of the seven audited protocols are
 reconstructed from the paper's matrix and stated negative ratio; it shows that the conventional protocol inflates
 a trained model on those graphs, not that those papers' figures are inflated by that amount; a paper's own
-figure we measured only for NIMGSA, HybridGNN, HGDTI and NGCN, the first only approximately, since part of its similarity
-input could not be rebuilt without the held-out miRNAs, and the second on released data that differ from
-the dataset its paper describes, and the third with a model module rebuilt from bytecode, since only a compiled
-one is released; NGCN's released model omits the graph convolution its paper describes, so what is measured is the released model. (v) The survey that
+figure we measured only for these six, NIMGSA's only approximately, since part of its similarity
+input could not be rebuilt without the held-out miRNAs, HybridGNN's on released data that differ from
+the dataset its paper describes, and HGDTI's with a model module rebuilt from bytecode, since only a compiled
+one is released; NGCN's released model omits the graph convolution its paper describes, and kmerPMTF's spectral layer is run with the $K=2$ of its README rather than the $K=1$ of its text and code default (Table~\ref{tab:kmerpmtf_rerun} gives both), so in both what is measured is the released code. (v) The survey that
 motivates the study is a two-rater instrument (Cohen's $\kappa$ 0.44 and 0.49 before adjudication) and is not
 itself a result. (vi) The label source, miRDB, is itself a prediction model, so a better architecture would not
 lift the information ceiling. (vii) Unlabeled pairs are not all true negatives: some are associations not yet
@@ -906,7 +924,7 @@ surveyed graphs, part of it label noise, and candidate columns that can never be
 Against the surveyed papers' own numbers, trained models beat that floor by 4.7 points on average and the
 heuristic wins outright on MEAHNE's graph; rerun with their own released code, NIMGSA's 0.937 and
 HybridGNN's 0.976 fall to 0.526 and 0.518, the level of disease popularity, and HGDTI's 0.9995 to 0.573, under
-a 0.740 floor, and NGCN's 0.924, without any leak, to 0.671--0.753 against 0.725; on OGB the heuristic ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
+a 0.740 floor, NGCN's 0.924, without any leak, to 0.671--0.753 against 0.725, and kmerPMTF's 0.86--0.91 and CoupleMDA's 0.949 to 0.50--0.52, under their floors; on OGB the heuristic ranks 30th of 32 on ogbl-ddi and 14th of 27 on ogbl-ppa.
 On our graph the inflation recurs across four trained models, a graph-free MLP included, and
 cell typing survives the same audit by 32 points, so the effect follows the evaluation protocol, not the model.
 Under the corrected protocol our model exceeds its model-free floor by 3.6 points.
@@ -927,7 +945,7 @@ corrected protocol is within the seed spread and is not read as an ordering.
 
 \input{tables/tableS1_architecture_grid.tex}
 
-\section{Four surveyed papers rerun with their own code}
+\section{Six surveyed papers rerun with their own code}
 \label{app:nimgsa}
 \setcounter{table}{0}
 NIMGSA's code (github.com/zhanglabNKU/NIMGSA, commit \texttt{5bf10a9}) carries no licence, so it is not
@@ -1008,12 +1026,54 @@ built from, so those figures could not be checked.
 
 \input{tables/tableS6_ngcn_rerun.tex}
 
-\section{\texttt{protocheck} on five published evaluations}
+CoupleMDA's code (github.com/lizhj39/CoupleMDA, commit \texttt{c9128cb}), which ships Zou et al.'s heterogeneous
+graph it is trained on, carries no licence either. The released tree does not import as published: two model
+modules and a notification helper it imports are missing, and two files import from the folder's earlier name;
+\texttt{analysis/couplemda\_rerun.py} bridges these in memory, edits none of its files, and calls its training
+function with the released parameters (100 epochs, early stopping on validation AUROC with a patience of 30) on
+CPU. The paper describes a random 75/10/15 split of all edges; the code holds out a fixed test file of 1,528
+miRNA--disease pairs (1,523 of them scored), moves about 11\% of the rest to validation, removes both
+from the graph and enumerates its metapaths on what remains, so the split is clean by design, except that 42
+of the test pairs are also in the training file. Its negatives, for training, validation and test, keep each
+positive's disease and draw a miRNA not linked to it; the paper says only that they ``were sampled from node pairs
+that did not have any existing edges''. Each seed trains one model as released, whose selected checkpoint is
+scored on the same test positives against the four negative sets of Table~\ref{tab:couplemda_rerun}; the
+degree-matched sets use the exact sampler with degrees from the training graph, and none needed a fallback.
+Holding the disease fixed already matches disease popularity, so the released test is easy only on the miRNA
+side, and that side alone scores 0.946; with both sides free (uniform pairs) preferential attachment reaches
+0.970 and the model falls below it. The model's 0.949 is therefore within 0.3 points of what miRNA degree gives
+for free, and matching either side's degree leaves it at 0.515--0.525, 1.2 to 2.9 points under the floor.
+
+\input{tables/tableS7_couplemda_rerun.tex}
+
+kmerPMTF's code (github.com/Weihankk/kmerPMTF, commit \texttt{c4f9a3e}) carries no licence; its data are on figshare
+(24916023, CC BY 4.0). Its training script builds, per fold, a training graph of every edge (gene--gene and
+miRNA--miRNA $k$-mer similarities of at least 0.4, plus every miRNA--gene positive) minus the fold's test pairs,
+and an evaluation graph of every edge minus the fold's training pairs, so the held-out positives are edges of
+the graph scored at test time. Its two graph-convolution layers cache the normalised training graph on their
+first call and reuse it at test time, so only the spectral layer sees the evaluation graph, and with $K=1$,
+the simplification its text states and its code's default, that layer does not propagate. Its preprocessing
+counts $k$-mers with one table lookup per $k$-mer and would take days per genome;
+\texttt{analysis/kmerpmtf\_rerun.py} reimplements it vectorised with the same outputs and reruns the model and
+training loop (3,000 epochs, no validation, the last epoch) on three seeds of five folds per species. On peach
+with $K=2$ and its seed, the released training script, unmodified and run on the reimplemented preprocessing,
+gives fold AUROCs within 0.009 of the rerun's (mean 0.875). Its negatives are as many
+unlabeled pairs as positives, drawn only among genes and miRNAs that have a positive; the paper says the test
+set holds ``all the remaining negative samples'', which is the last arm of Table~\ref{tab:kmerpmtf_rerun}. The
+reported 0.80--0.91 are labelled AUROC in the paper's Table~2 and AUPRC in its text; the rerun's AUROC with the
+released evaluation graph reproduces them. Evaluated over the training graph, the $K=2$ model scores at or under
+chance on two species (0.396 on \emph{A.\ thaliana}), as one would expect of a model that learns to read the
+query edge from its input and is then shown queries whose edge is absent; we did not test that explanation.
+
+\input{tables/tableS8_kmerpmtf_rerun.tex}
+
+\section{\texttt{protocheck} on seven published evaluations}
 \label{app:protocheck_cases}
 \setcounter{table}{0}
-All five cases use \texttt{protocheck} 0.2.0 (\texttt{analysis/protocheck\_mgcnss.py},
+All seven cases use \texttt{protocheck} 0.2.0 (\texttt{analysis/protocheck\_mgcnss.py},
 \texttt{analysis/protocheck\_nimgsa.py}, and the audits inside \texttt{analysis/hybridgnn\_rerun.py},
-\texttt{analysis/hgdti\_rerun.py} and \texttt{analysis/ngcn\_rerun.py});
+\texttt{analysis/hgdti\_rerun.py}, \texttt{analysis/ngcn\_rerun.py}, \texttt{analysis/couplemda\_rerun.py} and
+\texttt{analysis/kmerpmtf\_rerun.py});
 Table~\ref{tab:protocheck_cases} gives every scenario fold by fold as ranges. Each scenario is what someone holding a given set of files could audit.
 
 \paragraph{MGCNSS} Its repository ships five cross-validation folds of 1,086 held-out positives and 1,086
@@ -1106,6 +1166,31 @@ the model fails the margin on all five audits ($-7.4$ to $-2.7$ points); trained
 to 4.4, a warning on all five. No check flags a leak because there is none; what the tool reports is an easy
 test.
 
+\paragraph{CoupleMDA} Its test set is fixed, so each seed's model is audited on the same 1,523 test positives
+with the training graph as the encoder's edges, in both orientations (miRNAs as rows and as columns, so that the
+column-degree checks cover either side), reporting the one with the higher floor. The leakage check fails on
+every audit, for the 42 test positives (2.8\%) that are also training edges; with so few, returning the input
+scores only what its miRNA-degree tie-breaker scores. With the released negatives, the check of negatives against
+positives passes with diseases as columns, because the sampler keeps the disease, and warns with miRNAs as
+columns (TV 0.77--0.79), which is where the floor sits (0.942--0.948); the model clears it by 0.1 to 0.4 points, a
+warning, since a margin over a leaked floor is not read as evidence of learning. With uniform negatives the
+dead-candidate check warns (55\% of the negatives on empty disease columns) and the model fails the margin by 1.4
+to 3.2 points. With negatives matched on either side, the profile matches on that side, the remaining warning is
+again training against evaluation negatives (TV 0.78--0.79), and the model fails the margin by 1.2 to 2.9 points.
+The leak here is real but small; what drives the number is a negative sampler that matches one side's popularity
+and not the other's, which the tool sees only when the free side is put in the columns.
+
+\paragraph{kmerPMTF} Its folds are drawn at run time; each of the 60 folds (four species, three seeds, five folds;
+$K=2$) is audited with the miRNA--gene edges of the graph the spectral layer propagates over at test time as the
+encoder's edges. As released, the leakage check fails on every audit: every test positive is an edge of the
+evaluation graph, and returning the input scores 1.000, 6.9 to 18.7 points above the model. Over the training
+graph, leakage is ok, the negatives warn (TV 0.31--0.61), and the model fails the margin against common
+neighbours or Adamic--Adar on 53 audits and warns on 7, all on tomato. With degree-matched negatives it fails on all
+60, by 3.8 to 15.4 points. Against every remaining unlabeled pair, the dead-candidate check warns (most such
+pairs fall on genes without a positive) and the model clears preferential attachment or gene degree by 4.7 to
+19.6 points (53 ok, 7 warn): the one scenario of the seven in which a leak-free evaluation leaves a published
+model well above its floor, on unmatched negatives that the paper describes but its code does not use.
+
 \input{tables/tableS3_protocheck_cases.tex}
 
 \section*{Declaration of competing interest}
@@ -1126,9 +1211,9 @@ install, is at \url{https://github.com/UlisesMoyaSanchez/microRNA_project}. Larg
 checkpoints are intentionally untracked: the public sources (a CZ CELLxGENE Census query, release
 2025-11-08, retrieved 2026-05-28; miRDB v6.0; and the published matrices of the surveyed papers)
 and the exact build scripts are documented so every graph is reconstructible, rather than
-distributing large binaries in the repository. NIMGSA's, HybridGNN's, HGDTI's and NGCN's code, which have no licence, are not
-redistributed; the rerun scripts fetch NIMGSA's, HybridGNN's and NGCN's at pinned commits and HGDTI's from its
-authors' shared folder (Appendix~\ref{app:nimgsa}).
+distributing large binaries in the repository. NIMGSA's, HybridGNN's, HGDTI's, kmerPMTF's, NGCN's and CoupleMDA's code, which have no licence, are not
+redistributed; the rerun scripts fetch HGDTI's from its authors' shared folder and the others at pinned
+commits (Appendix~\ref{app:nimgsa}).
 [STAGE: replace the two GitHub URLs with archived DOIs (Zenodo) before submission, and point the
 analysis-code URL at the release tag that matches the submitted manuscript.]
 %% STAGE (2026-11-03): protocheck split into its own repository (MIT, v0.1.0, CI on Python

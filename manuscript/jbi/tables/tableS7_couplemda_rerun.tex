@@ -1,0 +1,17 @@
+\begin{table}[h!]
+\caption{CoupleMDA~\cite{li2025couplemda} rerun with its own released code, AUROC as the mean $\pm$ SD over three seeds (its own seed, 5555, and two more) of one model per seed, trained and selected on validation as released and scored on the same 1,523 test positives against four sets of test negatives. Floor: best model-free score on the same pairs (\texttt{protocheck} 0.2.0, the higher of the miRNA-by-disease and disease-by-miRNA orientations). Because 42 test positives are also training edges, the tool's top score in rows 1 and 3 is the input handed back with miRNA degree as tie-breaker; with so few edges in it, that score is in effect miRNA degree. The paper reports $0.9536 \pm 0.0035$.}
+\label{tab:couplemda_rerun}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccl}
+\hline
+Test negatives & CoupleMDA & Floor & Floor heuristic \\
+\hline
+As released: each positive's disease kept, its miRNA replaced at random & $0.949 \pm 0.004$ & 0.946 & miRNA degree \\
+Uniform random pairs, 1:1 (the paper's text) & $0.950 \pm 0.010$ & 0.970 & preferential attachment \\
+Disease kept, miRNA degree-matched & $0.525 \pm 0.003$ & 0.537 & miRNA degree \\
+miRNA kept, disease degree-matched & $0.515 \pm 0.004$ & 0.538 & Adamic--Adar \\
+\hline
+\end{tabular}
+}
+\end{table}

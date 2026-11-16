@@ -219,10 +219,13 @@
   pages   = {e17396},
   year    = {2024},
   doi     = {10.7717/peerj.17396},
-  annote  = {Headline AUROC 0.80--0.91. One of the two papers in this study's pilot
-             literature survey that does strip held-out edges from message passing, and
-             one of the seven overall (Table~\ref{tab:literature_survey}); verified by
-             fetching the publisher page directly, 2026-08-06.}
+  annote  = {Headline 0.80--0.91 on four plant species, labelled AUROC in its Table 2 and
+             AUPRC in its text. Survey row: test-edge removal unclear from the text. Its
+             released code (github.com/Weihankk/kmerPMTF, c4f9a3e) evaluates over a graph
+             that holds the held-out positives as edges; rerun here, it reproduces
+             0.86--0.91 and falls to 0.40--0.64 over the training graph and 0.50--0.52
+             with degree-matched negatives (Appendix B). Publisher page verified
+             2026-08-06.}
 }
 
 @article{almusawi2023review,
@@ -416,8 +419,12 @@
   number  = {10},
   pages   = {4948},
   doi     = {10.3390/ijms26104948},
-  annote  = {Literature-survey row: test edges removed from training graph; negative
-             sampling and model-free baseline unclear from methods section.}
+  annote  = {Survey row: test edges removed from the graph; uniform 1:1 negatives per its
+             text; no model-free baseline. Its released code (github.com/lizhj39/CoupleMDA,
+             c9128cb) keeps each positive's disease and draws the miRNA at random, and 42
+             of its 1,523 test positives are also training edges; rerun here, 0.949
+             (paper 0.9536) against a miRNA-degree floor of 0.946, and 0.515--0.525 with
+             degree-matched negatives (Appendix B).}
 }
 
 @article{zeng2025gonnmda,
@@ -431,8 +438,11 @@
   number  = {4},
   pages   = {425},
   doi     = {10.3390/genes16040425},
-  annote  = {Literature-survey row: uniform-random 1:1 negatives; no model-free
-             baseline; test-edge removal unclear.}
+  annote  = {Survey row: uniform random 1:1 negatives; no model-free baseline; test-edge
+             removal unclear. Its stated code link (github.com/ZengsihaoNB666/GONNMDA) is
+             an empty repository (README only, created 2025-02-24, checked 2026-11-15);
+             features include MISIM v2.0 functional similarity and GIP kernels with no
+             per-fold recomputation stated. Excluded from E3: no usable data.}
 }
 
 @article{liu2024digamn,
