@@ -2253,3 +2253,15 @@ Nota del bib y ‡ de la Tabla 3 aplicadas (e8909e8). MATLAB portado a numpy; en
 - validation (época por validación) 0.875 vs piso 0.903
 - emparejados: enfermedad 0.627 vs piso 0.671; lncRNA 0.654 vs 0.651
 Resultados en results/comparison/higldp_rerun.json (38b7f23).
+
+## 2026-11-16 — MGCNSS (job 4875) y HLGNN-MDA hop 4 (job 4736) terminados
+
+MGCNSS, 3 semillas × 5 folds (época elegida / última; piso): released 0.985/0.982 (reproduce 0.9874); índices
+0.975; sin aristas de prueba 0.954/0.926 (0.909); GIP por fold 0.948/0.915 (0.909); validación 0.945/0.916 (0.906);
+uniformes 0.871 (0.889); emparejados 0.522 (0.534) y 0.531 (0.524). Solo supera el piso contra sus propios
+negativos (selector por distancia). JSON 1fad7a5. Nota del bib y ‡ propuestas, pendientes de aprobación.
+
+HLGNN-MDA hop 4, 5 semillas: sus negativos 0.968 (piso 0.891) pero 0.783 con los mismos negativos orientados
+(miRNA, enfermedad): a hop 4 el modelo aprende el orden del par (positivos miRNA-primero, negativos
+enfermedad-primero, en sample_neg), un artefacto de ~19 pts; a hop 1 no (0.926 vs 0.924). Emparejados 0.500/0.513
+(pisos 0.539/0.524). JSON d6cc68e.
