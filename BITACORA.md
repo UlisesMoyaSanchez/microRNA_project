@@ -2239,3 +2239,17 @@ registraron las cinco decisiones MS abiertas. `17d7dc7`…`b47999d`
 91 commits desde el 2026-05-28. La auditoría original corrió el 2026-07-13 y es la que
 convirtió el proyecto de "un modelo de predicción de enlaces" en "una crítica de método":
 ver `results/EVALUATION_AUDIT.md`, que la documenta entera con job IDs.
+
+## 2026-11-16 — HiGLDP (ref. 17) con su propio código (job 4910)
+
+Código (St0neWang/HiGLDP @ 9808ba8 = zip de Zenodo): clasificador de pares-nodo; los pares de prueba quedan aislados
+en su grafo de pares, pero una de las cuatro redes de lncRNA es el GIP de la matriz completa (fuga por features);
+negativos = sorteo uniforme fijo; main.py reporta el máximo AUROC de prueba en 200 épocas; 122 pares nunca se prueban.
+Nota del bib y ‡ de la Tabla 3 aplicadas (e8909e8). MATLAB portado a numpy; env higldp_py310.
+3 semillas × 5 folds (media):
+- released (máx. prueba) 0.966 (última época 0.953) — reproduce 0.9696; piso 1.0 (input_echo: el GIP ve la prueba)
+- ported (port numpy, matriz completa) 0.932 — el port no llega del todo (−3.4 pts; DAE estocástico)
+- foldfeat (GIP solo con entrenamiento) 0.890 vs piso 0.905 (adamic_adar)
+- validation (época por validación) 0.875 vs piso 0.903
+- emparejados: enfermedad 0.627 vs piso 0.671; lncRNA 0.654 vs 0.651
+Resultados en results/comparison/higldp_rerun.json (38b7f23).
