@@ -1,0 +1,5310 @@
+{
+  "meta": {
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "epochs": 2000,
+    "folds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "runs": [
+    {
+      "seed": 1,
+      "fold": 1,
+      "released": {
+        "selected_epoch": 1992,
+        "selected": 0.9871811503515358,
+        "last": 0.9853285071341603,
+        "best_test": 0.9871811503515358,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.012818849648464248
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.012818849648464248
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1348,
+        "selected": 0.9768898656600498,
+        "last": 0.9744004558265418,
+        "best_test": 0.9768898656600498,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02311013433995024
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02311013433995024
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 336,
+        "selected": 0.9568635131881064,
+        "last": 0.9215132152389868,
+        "best_test": 0.9568635131881064,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.047501432936859156
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.047501432936859156
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9093620802512472,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 497,
+        "selected": 0.9499175849333048,
+        "last": 0.9235337409996305,
+        "best_test": 0.9499175849333048,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.0405555046820576
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.0405555046820576
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9093620802512472,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 331,
+        "selected": 0.9491476993308441,
+        "last": 0.914283243287242,
+        "best_test": 0.9508248289802579,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9071495070358049,
+              "heuristic": "pref_attach",
+              "margin": 0.041998192295039205
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9071495070358049,
+              "heuristic": "pref_attach",
+              "margin": 0.041998192295039205
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9071495070358049,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8860925422843559,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8892153271674652,
+              "heuristic": "pref_attach",
+              "margin": -0.003122784883109353
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8892153271674652,
+              "heuristic": "pref_attach",
+              "margin": -0.003122784883109353
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8892153271674652,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5169366353625076,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5274593944697117,
+              "heuristic": "adamic_adar",
+              "margin": -0.010522759107204127
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5232318067892379,
+              "heuristic": "adamic_adar",
+              "margin": -0.006295171426730306
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5274593944697117,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5440963001400717,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5263071097409182,
+              "heuristic": "adamic_adar",
+              "margin": 0.0177891903991535
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5212125528660432,
+              "heuristic": "common_neigh",
+              "margin": 0.022883747274028532
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5263071097409182,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 2,
+      "released": {
+        "selected_epoch": 1070,
+        "selected": 0.9835033552930835,
+        "last": 0.9795645700131007,
+        "best_test": 0.9835033552930835,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9999999999999999,
+              "heuristic": "input_echo",
+              "margin": -0.016496644706916364
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016496644706916475
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1980,
+        "selected": 0.9803806355117365,
+        "last": 0.9780396067139451,
+        "best_test": 0.9803806355117365,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9999999999999999,
+              "heuristic": "input_echo",
+              "margin": -0.019619364488263402
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.019619364488263513
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 478,
+        "selected": 0.9620246295561455,
+        "last": 0.9388712527429294,
+        "best_test": 0.9620246295561455,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.03798596908926233
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.03798596908926233
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9240386604668832,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 622,
+        "selected": 0.9558604573866624,
+        "last": 0.9171440296558577,
+        "best_test": 0.9558604573866624,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.031821796919779155
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.031821796919779155
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9240386604668832,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 445,
+        "selected": 0.95049160756862,
+        "last": 0.9209832829685702,
+        "best_test": 0.951565886267208,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.920399933525296,
+              "heuristic": "pref_attach",
+              "margin": 0.030091674043323913
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.920399933525296,
+              "heuristic": "pref_attach",
+              "margin": 0.030091674043323913
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.920399933525296,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8735708786531411,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9091433242100193,
+              "heuristic": "pref_attach",
+              "margin": -0.03557244555687822
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9091433242100193,
+              "heuristic": "pref_attach",
+              "margin": -0.03557244555687822
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9091433242100193,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5186587032684526,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5348084951958461,
+              "heuristic": "adamic_adar",
+              "margin": -0.01614979192739341
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5304240475633291,
+              "heuristic": "common_neigh",
+              "margin": -0.011765344294876412
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5348084951958461,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5141343535165458,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.525549518567131,
+              "heuristic": "adamic_adar",
+              "margin": -0.011415165050585152
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5206219963438912,
+              "heuristic": "common_neigh",
+              "margin": -0.0064876428273453746
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.525549518567131,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 3,
+      "released": {
+        "selected_epoch": 1487,
+        "selected": 0.9850523780075402,
+        "last": 0.9843479283045675,
+        "best_test": 0.9850523780075402,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.014947621992459803
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.014947621992459803
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1871,
+        "selected": 0.9721052131769142,
+        "last": 0.9705272868485223,
+        "best_test": 0.9721052131769142,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02789478682308577
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02789478682308577
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 414,
+        "selected": 0.9534388788837677,
+        "last": 0.9249658299672036,
+        "best_test": 0.9534388788837677,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.04304830608209631
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.04304830608209631
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9103905728016713,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 507,
+        "selected": 0.9482701314910345,
+        "last": 0.9073576644316244,
+        "best_test": 0.9482701314910345,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.0378795586893631
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.0378795586893631
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9103905728016713,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 508,
+        "selected": 0.9501702566398392,
+        "last": 0.9242790377447438,
+        "best_test": 0.9506399886043365,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9077604129571409,
+              "heuristic": "pref_attach",
+              "margin": 0.04240984368269829
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9077604129571409,
+              "heuristic": "pref_attach",
+              "margin": 0.04240984368269829
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9077604129571409,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8744866016164207,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8919968356684268,
+              "heuristic": "pref_attach",
+              "margin": -0.017510234052006135
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8919968356684268,
+              "heuristic": "pref_attach",
+              "margin": -0.017510234052006135
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8919968356684268,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.525526625493049,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5333009438729654,
+              "heuristic": "adamic_adar",
+              "margin": -0.0077743183799164894
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5299941665055673,
+              "heuristic": "common_neigh",
+              "margin": -0.004467541012518339
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5333009438729654,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5311515385841566,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5271028560381754,
+              "heuristic": "adamic_adar",
+              "margin": 0.00404868254598123
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5237057782118983,
+              "heuristic": "common_neigh",
+              "margin": 0.007445760372258303
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5271028560381754,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 4,
+      "released": {
+        "selected_epoch": 1982,
+        "selected": 0.9846333408085461,
+        "last": 0.9805822851046189,
+        "best_test": 0.9846333408085461,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.015366659191453858
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.015366659191453858
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1922,
+        "selected": 0.9740511244738832,
+        "last": 0.968750105986454,
+        "best_test": 0.9740511244738832,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.0259488755261168
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.0259488755261168
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 696,
+        "selected": 0.9470296660324438,
+        "last": 0.9224094366947149,
+        "best_test": 0.9470296660324438,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.04138389480717253
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.04138389480717253
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9056457712252712,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 597,
+        "selected": 0.9416082469331761,
+        "last": 0.9042128343660655,
+        "best_test": 0.9416082469331761,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.035962475707904895
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.035962475707904895
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9056457712252712,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 334,
+        "selected": 0.9381980267865924,
+        "last": 0.9172669739425944,
+        "best_test": 0.9401973552564193,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8986091185657743,
+              "heuristic": "pref_attach",
+              "margin": 0.039588908220818064
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8986091185657743,
+              "heuristic": "pref_attach",
+              "margin": 0.039588908220818064
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8986091185657743,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8694577563430774,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8774830506462631,
+              "heuristic": "adamic_adar",
+              "margin": -0.00802529430318566
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8772401296935041,
+              "heuristic": "pref_attach",
+              "margin": -0.007782373350426641
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8774830506462631,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5207903028329754,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5311854542494633,
+              "heuristic": "adamic_adar",
+              "margin": -0.010395151416487836
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.527429294316752,
+              "heuristic": "adamic_adar",
+              "margin": -0.006638991483776557
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5311854542494633,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5344057466703296,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5199928607524529,
+              "heuristic": "adamic_adar",
+              "margin": 0.014412885917876705
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5157991887372859,
+              "heuristic": "adamic_adar",
+              "margin": 0.018606557933043666
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5199928607524529,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "fold": 5,
+      "released": {
+        "selected_epoch": 1975,
+        "selected": 0.9831265548770639,
+        "last": 0.9827532993577284,
+        "best_test": 0.9831265548770639,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016873445122936093
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016873445122936093
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1926,
+        "selected": 0.9715557793989466,
+        "last": 0.9689552957615594,
+        "best_test": 0.9715557793989466,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02844422060105345
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02844422060105345
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 493,
+        "selected": 0.9491307414981908,
+        "last": 0.9219888824449125,
+        "best_test": 0.9491307414981908,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.052804571153370006
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.052804571153370006
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8963261703448208,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 470,
+        "selected": 0.9452033074556808,
+        "last": 0.9187295870089435,
+        "best_test": 0.9452033074556808,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.04887713711086006
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.04887713711086006
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8963261703448208,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 314,
+        "selected": 0.9382904469745531,
+        "last": 0.9094078663994111,
+        "best_test": 0.9421381792035923,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8950522131667397,
+              "heuristic": "pref_attach",
+              "margin": 0.04323823380781344
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8950522131667397,
+              "heuristic": "pref_attach",
+              "margin": 0.04323823380781344
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8950522131667397,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8880672818968351,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8842895007274909,
+              "heuristic": "pref_attach",
+              "margin": 0.003777781169344241
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8842895007274909,
+              "heuristic": "pref_attach",
+              "margin": 0.003777781169344241
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8842895007274909,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5121290898052901,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.538098314730591,
+              "heuristic": "adamic_adar",
+              "margin": -0.02596922492530085
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5339037948237911,
+              "heuristic": "common_neigh",
+              "margin": -0.021774705018500984
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.538098314730591,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5244209748040523,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5176208839100693,
+              "heuristic": "adamic_adar",
+              "margin": 0.006800090893982924
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5166869312766874,
+              "heuristic": "gene_degree",
+              "margin": 0.007734043527364842
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5176208839100693,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 1,
+      "released": {
+        "selected_epoch": 1694,
+        "selected": 0.9871201021539839,
+        "last": 0.985816892714576,
+        "best_test": 0.9871201021539839,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.012879897846016064
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.012879897846016064
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1920,
+        "selected": 0.9753933369283938,
+        "last": 0.974483549206543,
+        "best_test": 0.9753933369283938,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.024606663071606194
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.024606663071606194
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 406,
+        "selected": 0.9575748942679134,
+        "last": 0.9315352943371014,
+        "best_test": 0.9575748942679134,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.04821281401666622
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.04821281401666622
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9093620802512472,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 555,
+        "selected": 0.9514327672808793,
+        "last": 0.9127824750974227,
+        "best_test": 0.9514327672808793,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.042070687029632126
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.042070687029632126
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9093620802512472,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 372,
+        "selected": 0.948357464329199,
+        "last": 0.915479618380934,
+        "best_test": 0.9539857689868375,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9085264830472548,
+              "heuristic": "pref_attach",
+              "margin": 0.03983098128194418
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9085264830472548,
+              "heuristic": "pref_attach",
+              "margin": 0.03983098128194418
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9085264830472548,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8672184745412059,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8871121319726369,
+              "heuristic": "pref_attach",
+              "margin": -0.01989365743143101
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8871121319726369,
+              "heuristic": "pref_attach",
+              "margin": -0.01989365743143101
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8871121319726369,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5172105043598587,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5274983974848142,
+              "heuristic": "adamic_adar",
+              "margin": -0.010287893124955483
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5247698822108944,
+              "heuristic": "adamic_adar",
+              "margin": -0.007559377851035665
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5274983974848142,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5418349731557509,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.527392411030731,
+              "heuristic": "adamic_adar",
+              "margin": 0.014442562125019931
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5227408775339242,
+              "heuristic": "common_neigh",
+              "margin": 0.019094095621826734
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.527392411030731,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 2,
+      "released": {
+        "selected_epoch": 1120,
+        "selected": 0.9811072041268657,
+        "last": 0.9792962487840364,
+        "best_test": 0.9811072041268657,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9999999999999999,
+              "heuristic": "input_echo",
+              "margin": -0.018892795873134194
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.018892795873134305
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1917,
+        "selected": 0.9806400903513324,
+        "last": 0.979607358342745,
+        "best_test": 0.9806400903513324,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9999999999999999,
+              "heuristic": "input_echo",
+              "margin": -0.019359909648667517
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.019359909648667628
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 579,
+        "selected": 0.9632048947088171,
+        "last": 0.9162893548901302,
+        "best_test": 0.9632048947088171,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.039166234241933884
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.039166234241933884
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9240386604668832,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 591,
+        "selected": 0.957880983147306,
+        "last": 0.9298683393872796,
+        "best_test": 0.957880983147306,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.033842322680422754
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.033842322680422754
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9240386604668832,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 491,
+        "selected": 0.9538941966905093,
+        "last": 0.9199208747528395,
+        "best_test": 0.9557409046664564,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9227295157860465,
+              "heuristic": "pref_attach",
+              "margin": 0.031164680904462894
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9227295157860465,
+              "heuristic": "pref_attach",
+              "margin": 0.031164680904462894
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9227295157860465,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8758924059433811,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8995091555338496,
+              "heuristic": "pref_attach",
+              "margin": -0.023616749590468444
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8995091555338496,
+              "heuristic": "pref_attach",
+              "margin": -0.023616749590468444
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8995091555338496,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5324979904968306,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5372817950883334,
+              "heuristic": "adamic_adar",
+              "margin": -0.004783804591502849
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.533722769960217,
+              "heuristic": "adamic_adar",
+              "margin": -0.001224779463386394
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5372817950883334,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.533482392682356,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5249674409613057,
+              "heuristic": "adamic_adar",
+              "margin": 0.008514951721050323
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5207012742115456,
+              "heuristic": "adamic_adar",
+              "margin": 0.012781118470810426
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5249674409613057,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 3,
+      "released": {
+        "selected_epoch": 1013,
+        "selected": 0.9851682246334221,
+        "last": 0.9824816050890741,
+        "best_test": 0.9851682246334221,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.01483177536657787
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.01483177536657787
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1918,
+        "selected": 0.9702228937523952,
+        "last": 0.9697319644970814,
+        "best_test": 0.9702228937523952,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.029777106247604768
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.029777106247604768
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 355,
+        "selected": 0.9516642416965972,
+        "last": 0.9326935143073234,
+        "best_test": 0.9516642416965972,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.0412736688949259
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.0412736688949259
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9103905728016713,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 449,
+        "selected": 0.9459867593242643,
+        "last": 0.903542999976259,
+        "best_test": 0.9459867593242643,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.035596186522593
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.035596186522593
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9103905728016713,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 438,
+        "selected": 0.9450574700948621,
+        "last": 0.9196826172040603,
+        "best_test": 0.9479971103853159,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9069646666598834,
+              "heuristic": "adamic_adar",
+              "margin": 0.03809280343497867
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9066110958490619,
+              "heuristic": "pref_attach",
+              "margin": 0.03844637424580022
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9069646666598834,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8665503359346647,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8886569905273548,
+              "heuristic": "adamic_adar",
+              "margin": -0.022106654592690123
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8879248361025474,
+              "heuristic": "pref_attach",
+              "margin": -0.02137450016788267
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8886569905273548,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5152552662549306,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5332326885965359,
+              "heuristic": "adamic_adar",
+              "margin": -0.017977422341605376
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5294701694765795,
+              "heuristic": "common_neigh",
+              "margin": -0.014214903221648978
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5332326885965359,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.519219159637645,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5236129340781214,
+              "heuristic": "adamic_adar",
+              "margin": -0.0043937744404763945
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5191619269524401,
+              "heuristic": "gene_degree",
+              "margin": 5.723268520485547e-05
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5236129340781214,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 4,
+      "released": {
+        "selected_epoch": 1965,
+        "selected": 0.9841865269481423,
+        "last": 0.979744721480364,
+        "best_test": 0.9841865269481423,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.01581347305185765
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.01581347305185765
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1886,
+        "selected": 0.9763107556749387,
+        "last": 0.9726495596050859,
+        "best_test": 0.9763107556749387,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.023689244325061254
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.023689244325061254
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 507,
+        "selected": 0.9482277369094012,
+        "last": 0.9324374510342582,
+        "best_test": 0.9482277369094012,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.042581965684129974
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.042581965684129974
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9056457712252712,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 582,
+        "selected": 0.9393392889241612,
+        "last": 0.9134862251525356,
+        "best_test": 0.9393392889241612,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.03369351769888995
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.03369351769888995
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9056457712252712,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 597,
+        "selected": 0.9386830208004776,
+        "last": 0.9066454354601847,
+        "best_test": 0.9406272363141812,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9010722437586697,
+              "heuristic": "adamic_adar",
+              "margin": 0.03761077704180793
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.901057405655098,
+              "heuristic": "pref_attach",
+              "margin": 0.037625615145379654
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9010722437586697,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8600410718706863,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8783792721019912,
+              "heuristic": "adamic_adar",
+              "margin": -0.018338200231304835
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8772503043930961,
+              "heuristic": "adamic_adar",
+              "margin": -0.0172092325224098
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8783792721019912,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5310167238145627,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5342353204521636,
+              "heuristic": "adamic_adar",
+              "margin": -0.0032185966376009345
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5301506025117941,
+              "heuristic": "common_neigh",
+              "margin": 0.0008661213027685299
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5342353204521636,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5343574168472676,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5254575223249867,
+              "heuristic": "adamic_adar",
+              "margin": 0.008899894522280904
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5208182832568535,
+              "heuristic": "gene_degree",
+              "margin": 0.013539133590414032
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5254575223249867,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "fold": 5,
+      "released": {
+        "selected_epoch": 1845,
+        "selected": 0.9835321195301913,
+        "last": 0.9821368750945892,
+        "best_test": 0.9835321195301913,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016467880469808738
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016467880469808738
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1950,
+        "selected": 0.9725325505597782,
+        "last": 0.9685245668121648,
+        "best_test": 0.9725325505597782,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.027467449440221836
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.027467449440221836
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 483,
+        "selected": 0.9506730563780104,
+        "last": 0.9170176938025906,
+        "best_test": 0.9506730563780104,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.0543468860331896
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.0543468860331896
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8963261703448208,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 556,
+        "selected": 0.9454661538618072,
+        "last": 0.9078621599530606,
+        "best_test": 0.9454661538618072,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.04913998351698645
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.04913998351698645
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8963261703448208,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 502,
+        "selected": 0.9407205043937744,
+        "last": 0.8989966050419028,
+        "best_test": 0.9441994037626039,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8917467076367904,
+              "heuristic": "pref_attach",
+              "margin": 0.04897379675698399
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8917467076367904,
+              "heuristic": "pref_attach",
+              "margin": 0.04897379675698399
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8917467076367904,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8611662240672343,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8792042706605754,
+              "heuristic": "adamic_adar",
+              "margin": -0.018038046593341073
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8787298752920987,
+              "heuristic": "adamic_adar",
+              "margin": -0.017563651224864363
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8792042706605754,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5278066060932884,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5397614541680656,
+              "heuristic": "adamic_adar",
+              "margin": -0.011954848074777202
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5355715976652456,
+              "heuristic": "common_neigh",
+              "margin": -0.007764991571957203
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5397614541680656,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5223877306689186,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5195265203544865,
+              "heuristic": "adamic_adar",
+              "margin": 0.0028612103144320944
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5226238684886162,
+              "heuristic": "gene_degree",
+              "margin": -0.0002361378196975572
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5226238684886162,
+          "floor_heuristic": "gene_degree (disease_x_mirna)"
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 1,
+      "released": {
+        "selected_epoch": 1811,
+        "selected": 0.98702344250786,
+        "last": 0.9862705147380524,
+        "best_test": 0.98702344250786,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.012976557492139995
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.012976557492139995
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1993,
+        "selected": 0.9756985779161537,
+        "last": 0.9755188248900284,
+        "best_test": 0.9756985779161537,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.024301422083846336
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.024301422083846336
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 567,
+        "selected": 0.9608757363938829,
+        "last": 0.933237860735495,
+        "best_test": 0.9608757363938829,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.0515136561426357
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.0515136561426357
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9093620802512472,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 587,
+        "selected": 0.9559876411315622,
+        "last": 0.9263979189347769,
+        "best_test": 0.9559876411315622,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.046625560880315
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9093620802512472,
+              "heuristic": "pref_attach",
+              "margin": 0.046625560880315
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9093620802512472,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 495,
+        "selected": 0.9538696078331621,
+        "last": 0.9267413150460065,
+        "best_test": 0.9560783655362576,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9092357443979802,
+              "heuristic": "pref_attach",
+              "margin": 0.04463386343518194
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9092357443979802,
+              "heuristic": "pref_attach",
+              "margin": 0.04463386343518194
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9092357443979802,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8906906586083045,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8949004405644925,
+              "heuristic": "pref_attach",
+              "margin": -0.00420978195618793
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8949004405644925,
+              "heuristic": "pref_attach",
+              "margin": -0.00420978195618793
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8949004405644925,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5218984971968703,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5311324610224216,
+              "heuristic": "adamic_adar",
+              "margin": -0.009233963825551306
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.526920135391336,
+              "heuristic": "common_neigh",
+              "margin": -0.005021638194465661
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5311324610224216,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5424106915743313,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5218425363491144,
+              "heuristic": "adamic_adar",
+              "margin": 0.020568155225216933
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.517430956184352,
+              "heuristic": "gene_degree",
+              "margin": 0.02497973538997933
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5218425363491144,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 2,
+      "released": {
+        "selected_epoch": 1892,
+        "selected": 0.9828909014400757,
+        "last": 0.9803618673794642,
+        "best_test": 0.9828909014400757,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9999999999999999,
+              "heuristic": "input_echo",
+              "margin": -0.017109098559924152
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.017109098559924263
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1892,
+        "selected": 0.9805018840152077,
+        "last": 0.9763633249561641,
+        "best_test": 0.9805018840152077,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.9999999999999999,
+              "heuristic": "input_echo",
+              "margin": -0.01949811598479223
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.01949811598479234
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (disease_x_mirna)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 458,
+        "selected": 0.9633261432122884,
+        "last": 0.9323713154869103,
+        "best_test": 0.9633261432122884,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.03928748274540517
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.03928748274540517
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9240386604668832,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 518,
+        "selected": 0.95519825402155,
+        "last": 0.9300260472309555,
+        "best_test": 0.95519825402155,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.031159593554666798
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9240386604668832,
+              "heuristic": "pref_attach",
+              "margin": 0.031159593554666798
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9240386604668832,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 687,
+        "selected": 0.9502974403847393,
+        "last": 0.9257942200923183,
+        "best_test": 0.9555865883893112,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9203282866823357,
+              "heuristic": "pref_attach",
+              "margin": 0.029969153702403606
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9203282866823357,
+              "heuristic": "pref_attach",
+              "margin": 0.029969153702403606
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9203282866823357,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8614019379411156,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8981266682267872,
+              "heuristic": "pref_attach",
+              "margin": -0.03672473028567158
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8981266682267872,
+              "heuristic": "pref_attach",
+              "margin": -0.03672473028567158
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8981266682267872,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5247686103734454,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.545300730204274,
+              "heuristic": "adamic_adar",
+              "margin": -0.0205321198308287
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5412164362097209,
+              "heuristic": "common_neigh",
+              "margin": -0.016447825836275576
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.545300730204274,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5390988268571371,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5236154777530193,
+              "heuristic": "adamic_adar",
+              "margin": 0.01548334910411775
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5185811211840637,
+              "heuristic": "common_neigh",
+              "margin": 0.020517705673073316
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5236154777530193,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 3,
+      "released": {
+        "selected_epoch": 1953,
+        "selected": 0.9858462681202012,
+        "last": 0.9828538475560621,
+        "best_test": 0.9858462681202012,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.014153731879798848
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.014153731879798848
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1998,
+        "selected": 0.9707129751160766,
+        "last": 0.9673180170188809,
+        "best_test": 0.9707129751160766,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02928702488392343
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02928702488392343
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 320,
+        "selected": 0.9524324315157928,
+        "last": 0.9112749237745422,
+        "best_test": 0.9524324315157928,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.04204185871412147
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.04204185871412147
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9103905728016713,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 384,
+        "selected": 0.9455441598920125,
+        "last": 0.8984480191555678,
+        "best_test": 0.9455441598920125,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.03515358709034111
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9103905728016713,
+              "heuristic": "pref_attach",
+              "margin": 0.03515358709034111
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9103905728016713,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 640,
+        "selected": 0.9402465329711139,
+        "last": 0.9162147404264557,
+        "best_test": 0.9431090151229953,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9063626636006906,
+              "heuristic": "pref_attach",
+              "margin": 0.033883869370423314
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9063626636006906,
+              "heuristic": "pref_attach",
+              "margin": 0.033883869370423314
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9063626636006906,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8465324623790483,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.889874138966047,
+              "heuristic": "pref_attach",
+              "margin": -0.04334167658699861
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.889874138966047,
+              "heuristic": "pref_attach",
+              "margin": -0.04334167658699861
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.889874138966047,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5274309901000174,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.528634572272587,
+              "heuristic": "adamic_adar",
+              "margin": -0.0012035821725696616
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5250119552720205,
+              "heuristic": "common_neigh",
+              "margin": 0.00241903482799688
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.528634572272587,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5308742780202749,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5284179359604407,
+              "heuristic": "adamic_adar",
+              "margin": 0.002456342059834138
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5251895885690642,
+              "heuristic": "gene_degree",
+              "margin": 0.0056846894512107005
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5284179359604407,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 4,
+      "released": {
+        "selected_epoch": 1769,
+        "selected": 0.9833982317723731,
+        "last": 0.9810358946130897,
+        "best_test": 0.9833982317723731,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016601768227626934
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016601768227626934
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1976,
+        "selected": 0.9748286411010382,
+        "last": 0.9728564451634565,
+        "best_test": 0.9748286411010382,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.025171358898961826
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.025171358898961826
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 534,
+        "selected": 0.9455916418234418,
+        "last": 0.9318837777981271,
+        "best_test": 0.9455916418234418,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.03994587059817056
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.03994587059817056
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9056457712252712,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 588,
+        "selected": 0.9400913688023361,
+        "last": 0.9188720328032315,
+        "best_test": 0.9400913688023361,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.03444559757706489
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9056457712252712,
+              "heuristic": "pref_attach",
+              "margin": 0.03444559757706489
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9056457712252712,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 279,
+        "selected": 0.9334430505106004,
+        "last": 0.9166539482921766,
+        "best_test": 0.9383040132406757,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9060726846623186,
+              "heuristic": "pref_attach",
+              "margin": 0.027370365848281786
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.9060726846623186,
+              "heuristic": "pref_attach",
+              "margin": 0.027370365848281786
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.9060726846623186,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.8804218430450841,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8885713534724554,
+              "heuristic": "pref_attach",
+              "margin": -0.008149510427371331
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8885713534724554,
+              "heuristic": "pref_attach",
+              "margin": -0.008149510427371331
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8885713534724554,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5022070619198301,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5271745028811357,
+              "heuristic": "adamic_adar",
+              "margin": -0.024967440961305543
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5246435463576271,
+              "heuristic": "adamic_adar",
+              "margin": -0.022436484437797
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5271745028811357,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5267806572177622,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5220727389273833,
+              "heuristic": "adamic_adar",
+              "margin": 0.004707918290378976
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5175945992694565,
+              "heuristic": "common_neigh",
+              "margin": 0.009186057948305737
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5220727389273833,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "fold": 5,
+      "released": {
+        "selected_epoch": 1747,
+        "selected": 0.9839070755302525,
+        "last": 0.9833569700154233,
+        "best_test": 0.9839070755302525,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016092924469747527
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.016092924469747527
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "index": {
+        "selected_epoch": 1999,
+        "selected": 0.9737653849936748,
+        "last": 0.9737653849936748,
+        "best_test": 0.9737653849936748,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02623461500632518
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "error"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 1.0,
+              "heuristic": "input_echo",
+              "margin": -0.02623461500632518
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 1.0,
+          "floor_heuristic": "input_echo (mirna_x_disease)"
+        }
+      },
+      "removed": {
+        "selected_epoch": 590,
+        "selected": 0.9481963649189924,
+        "last": 0.918847443945884,
+        "best_test": 0.9481963649189924,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.051870194574171635
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.051870194574171635
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8963261703448208,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "foldsim": {
+        "selected_epoch": 682,
+        "selected": 0.943774610054638,
+        "last": 0.9096003378000264,
+        "best_test": 0.943774610054638,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.04744843970981727
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8963261703448208,
+              "heuristic": "pref_attach",
+              "margin": 0.04744843970981727
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8963261703448208,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "validation": {
+        "selected_epoch": 629,
+        "selected": 0.9370754182649426,
+        "last": 0.9033674864082971,
+        "best_test": 0.9394105118213049,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.8940567883899894,
+              "heuristic": "adamic_adar",
+              "margin": 0.043018629874953196
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.893408575236816,
+              "heuristic": "pref_attach",
+              "margin": 0.04366684302812651
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8940567883899894,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "uniform": {
+        "auc": 0.855340360659185,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8824784042001159,
+              "heuristic": "adamic_adar",
+              "margin": -0.027138043540930967
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "warn"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.8820082482898026,
+              "heuristic": "adamic_adar",
+              "margin": -0.02666788763061767
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.8824784042001159,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5322114031249894,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5405716146230783,
+              "heuristic": "adamic_adar",
+              "margin": -0.008360211498088965
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "floor": 0.5362189629267862,
+              "heuristic": "common_neigh",
+              "margin": -0.0040075598017967895
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5405716146230783,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5254155516891696,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5224012969350413,
+              "heuristic": "adamic_adar",
+              "margin": 0.0030142547541283093
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok"
+            },
+            "negative_matching": {
+              "status": "info"
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "floor": 0.5216788932640097,
+              "heuristic": "gene_degree",
+              "margin": 0.003736658425159911
+            },
+            "dead_candidates": {
+              "status": "ok"
+            }
+          },
+          "floor": 0.5224012969350413,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "released_selected": {
+      "mean": 0.9845117917400759,
+      "sd": 0.0017439992416261618
+    },
+    "released_last": {
+      "mean": 0.9823954684919272,
+      "sd": 0.002305135400083493
+    },
+    "released_floor": {
+      "mean": 1.0,
+      "sd": 0.0
+    },
+    "index_selected": {
+      "mean": 0.9750393139087012,
+      "sd": 0.0034530098846597477
+    },
+    "index_last": {
+      "mean": 0.9727661164415231,
+      "sd": 0.0037255123043846324
+    },
+    "index_floor": {
+      "mean": 1.0,
+      "sd": 0.0
+    },
+    "removed_selected": {
+      "mean": 0.9540169713989195,
+      "sd": 0.006173943471128829
+    },
+    "removed_last": {
+      "mean": 0.9258224831467406,
+      "sd": 0.008030416827718295
+    },
+    "removed_floor": {
+      "mean": 0.9091526510179787,
+      "sd": 0.009258043613897786
+    },
+    "foldsim_selected": {
+      "mean": 0.9481041143093584,
+      "sd": 0.00604151253982447
+    },
+    "foldsim_last": {
+      "mean": 0.9147909607968825,
+      "sd": 0.009818873810909361
+    },
+    "foldsim_floor": {
+      "mean": 0.9091526510179787,
+      "sd": 0.009258043613897786
+    },
+    "validation_selected": {
+      "mean": 0.9445295162382553,
+      "sd": 0.006741918923865434
+    },
+    "validation_last": {
+      "mean": 0.9157144843631825,
+      "sd": 0.00809473943015027
+    },
+    "validation_floor": {
+      "mean": 0.906404464658181,
+      "sd": 0.009475458035992972
+    },
+    "uniform": {
+      "mean": 0.870462055718916,
+      "sd": 0.012601636804196232
+    },
+    "uniform_floor": {
+      "mean": 0.8892627243097314,
+      "sd": 0.008672802442280685
+    },
+    "matched_disease": {
+      "mean": 0.5217563340331266,
+      "sd": 0.008341408975100677
+    },
+    "matched_disease_floor": {
+      "mean": 0.5339784092874658,
+      "sd": 0.005411646580002292
+    },
+    "matched_mirna": {
+      "mean": 0.5309380394710512,
+      "sd": 0.008877746324857287
+    },
+    "matched_mirna_floor": {
+      "mean": 0.5239318261211671,
+      "sd": 0.002942729857086797
+    }
+  }
+}
