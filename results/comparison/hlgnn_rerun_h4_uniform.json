@@ -1,0 +1,1109 @@
+{
+  "meta": {
+    "hop": 4,
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "epochs": 50,
+    "train_neg": "uniform",
+    "n_mirna": 495,
+    "n_disease": 383,
+    "n_assoc": 5430,
+    "diseases_deg_le1": 105,
+    "mirnas_deg_le1": 127
+  },
+  "runs": [
+    {
+      "seed": 1,
+      "n_train_pos": 4887,
+      "n_test_pos": 543,
+      "sortpooling_k": 850,
+      "theirs": {
+        "auc": 0.9774443867878134,
+        "ap": 0.9782826744519424,
+        "best_epoch_auc": 0.9774443867878134,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.600 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0887 (0.9774 vs pref_attach 0.8888).",
+              "floor": 0.8887837503264383,
+              "heuristic": "pref_attach",
+              "margin": 0.08866063646137512
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.438 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0887 (0.9774 vs pref_attach 0.8888).",
+              "floor": 0.8887837503264383,
+              "heuristic": "pref_attach",
+              "margin": 0.08866063646137512
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8887837503264383,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "theirs_flipped": {
+        "auc": 0.7168211525221384,
+        "ap": 0.6214307204530707,
+        "best_epoch_auc": 0.9082479506459238,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.600 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7168) does not beat a no-learning heuristic (pref_attach, 0.8888); margin -0.1720.",
+              "floor": 0.8887837503264383,
+              "heuristic": "pref_attach",
+              "margin": -0.1719625978042999
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.438 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7168) does not beat a no-learning heuristic (pref_attach, 0.8888); margin -0.1720.",
+              "floor": 0.8887837503264383,
+              "heuristic": "pref_attach",
+              "margin": -0.1719625978042999
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8887837503264383,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5124962268822346,
+        "ap": 0.511056640149362,
+        "best_epoch_auc": 0.5335883791364394,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.586 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5125) does not beat a no-learning heuristic (adamic_adar, 0.5246); margin -0.0121.",
+              "floor": 0.5245532458987482,
+              "heuristic": "adamic_adar",
+              "margin": -0.01205701901651357
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.432 > 0.1, and above the 0.072 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5125) does not beat a no-learning heuristic (adamic_adar, 0.5218); margin -0.0093.",
+              "floor": 0.5217992938758482,
+              "heuristic": "adamic_adar",
+              "margin": -0.009303066993613607
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5245532458987482,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5039376087421019,
+        "ap": 0.5036594873419029,
+        "best_epoch_auc": 0.5217552035109496,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.586 > 0.1, and above the 0.067 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5039) does not beat a no-learning heuristic (adamic_adar, 0.5252); margin -0.0213.",
+              "floor": 0.5252468212542691,
+              "heuristic": "adamic_adar",
+              "margin": -0.02130921251216722
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.432 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5039) does not beat a no-learning heuristic (gene_degree, 0.5200); margin -0.0160.",
+              "floor": 0.5199644563827587,
+              "heuristic": "gene_degree",
+              "margin": -0.01602684764065676
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5252468212542691,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "n_train_pos": 4887,
+      "n_test_pos": 543,
+      "sortpooling_k": 853,
+      "theirs": {
+        "auc": 0.96515843703048,
+        "ap": 0.966028011299383,
+        "best_epoch_auc": 0.9688891602142113,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.551 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0704 (0.9652 vs pref_attach 0.8948).",
+              "floor": 0.8947783441693885,
+              "heuristic": "pref_attach",
+              "margin": 0.07038009286109148
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.490 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0704 (0.9652 vs pref_attach 0.8948).",
+              "floor": 0.8947783441693885,
+              "heuristic": "pref_attach",
+              "margin": 0.07038009286109148
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8947783441693885,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "theirs_flipped": {
+        "auc": 0.7546167699398675,
+        "ap": 0.6312115609733323,
+        "best_epoch_auc": 0.9080054536389812,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.551 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7546) does not beat a no-learning heuristic (pref_attach, 0.8948); margin -0.1402.",
+              "floor": 0.8947783441693885,
+              "heuristic": "pref_attach",
+              "margin": -0.14016157422952102
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.490 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7546) does not beat a no-learning heuristic (pref_attach, 0.8948); margin -0.1402.",
+              "floor": 0.8947783441693885,
+              "heuristic": "pref_attach",
+              "margin": -0.14016157422952102
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8947783441693885,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5034695725608701,
+        "ap": 0.49712878473632327,
+        "best_epoch_auc": 0.5397423766063307,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.552 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5035) does not beat a no-learning heuristic (adamic_adar, 0.5438); margin -0.0403.",
+              "floor": 0.5437698618614952,
+              "heuristic": "adamic_adar",
+              "margin": -0.040300289300625125
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.482 > 0.1, and above the 0.069 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5035) does not beat a no-learning heuristic (common_neigh, 0.5404); margin -0.0369.",
+              "floor": 0.540407123646341,
+              "heuristic": "common_neigh",
+              "margin": -0.03693755108547092
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5437698618614952,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5211786372007366,
+        "ap": 0.528289358299979,
+        "best_epoch_auc": 0.5398051205871479,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.552 > 0.1, and above the 0.064 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5212) does not beat a no-learning heuristic (adamic_adar, 0.5240); margin -0.0028.",
+              "floor": 0.5240088994705765,
+              "heuristic": "adamic_adar",
+              "margin": -0.002830262269839845
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.482 > 0.1, and above the 0.065 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "warn",
+              "message": "Margin over the model-free floor is only +0.0019 (model 0.5212 vs common_neigh 0.5193); below 0.05, so most of the number may be graph structure.",
+              "floor": 0.5193064924758097,
+              "heuristic": "common_neigh",
+              "margin": 0.0018721447249269163
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5240088994705765,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "n_train_pos": 4887,
+      "n_test_pos": 543,
+      "sortpooling_k": 849,
+      "theirs": {
+        "auc": 0.955455165186248,
+        "ap": 0.9613469178903107,
+        "best_epoch_auc": 0.9583922618018036,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.560 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0750 (0.9555 vs pref_attach 0.8805).",
+              "floor": 0.8804540629271255,
+              "heuristic": "pref_attach",
+              "margin": 0.07500110225912249
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.438 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0750 (0.9555 vs pref_attach 0.8805).",
+              "floor": 0.8804540629271255,
+              "heuristic": "pref_attach",
+              "margin": 0.07500110225912249
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8804540629271255,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "theirs_flipped": {
+        "auc": 0.8453225210192336,
+        "ap": 0.8164609241116444,
+        "best_epoch_auc": 0.901617438078474,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.560 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8453) does not beat a no-learning heuristic (pref_attach, 0.8805); margin -0.0351.",
+              "floor": 0.8804540629271255,
+              "heuristic": "pref_attach",
+              "margin": -0.03513154190789192
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.438 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8453) does not beat a no-learning heuristic (pref_attach, 0.8805); margin -0.0351.",
+              "floor": 0.8804540629271255,
+              "heuristic": "pref_attach",
+              "margin": -0.03513154190789192
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8804540629271255,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.5021315995645229,
+        "ap": 0.49923020376592053,
+        "best_epoch_auc": 0.537280099305068,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.565 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5021) does not beat a no-learning heuristic (adamic_adar, 0.5331); margin -0.0309.",
+              "floor": 0.5330609905409209,
+              "heuristic": "adamic_adar",
+              "margin": -0.03092939097639802
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.441 > 0.1, and above the 0.069 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5021) does not beat a no-learning heuristic (adamic_adar, 0.5304); margin -0.0283.",
+              "floor": 0.5304477885290437,
+              "heuristic": "adamic_adar",
+              "margin": -0.028316188964520816
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5330609905409209,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.505570648026617,
+        "ap": 0.5047512489032857,
+        "best_epoch_auc": 0.5221113179966694,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.565 > 0.1, and above the 0.064 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5056) does not beat a no-learning heuristic (adamic_adar, 0.5226); margin -0.0170.",
+              "floor": 0.522613269843208,
+              "heuristic": "adamic_adar",
+              "margin": -0.017042621816590997
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.441 > 0.1, and above the 0.064 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5056) does not beat a no-learning heuristic (gene_degree, 0.5206); margin -0.0150.",
+              "floor": 0.5205817214913396,
+              "heuristic": "gene_degree",
+              "margin": -0.015011073464722635
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.522613269843208,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "n_train_pos": 4887,
+      "n_test_pos": 543,
+      "sortpooling_k": 853,
+      "theirs": {
+        "auc": 0.9601762257969334,
+        "ap": 0.9629526381110408,
+        "best_epoch_auc": 0.9746039498183816,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.576 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0603 (0.9602 vs pref_attach 0.8998).",
+              "floor": 0.8998436487829363,
+              "heuristic": "pref_attach",
+              "margin": 0.06033257701399708
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.471 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0603 (0.9602 vs pref_attach 0.8998).",
+              "floor": 0.8998436487829363,
+              "heuristic": "pref_attach",
+              "margin": 0.06033257701399708
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8998436487829363,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "theirs_flipped": {
+        "auc": 0.8291515318010234,
+        "ap": 0.7970142853780676,
+        "best_epoch_auc": 0.9152532313150121,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.576 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8292) does not beat a no-learning heuristic (pref_attach, 0.8998); margin -0.0707.",
+              "floor": 0.8998436487829363,
+              "heuristic": "pref_attach",
+              "margin": -0.07069211698191291
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.471 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.8292) does not beat a no-learning heuristic (pref_attach, 0.8998); margin -0.0707.",
+              "floor": 0.8998436487829363,
+              "heuristic": "pref_attach",
+              "margin": -0.07069211698191291
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8998436487829363,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.4952958972219679,
+        "ap": 0.4974725296401362,
+        "best_epoch_auc": 0.5469799795827694,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.584 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4953) does not beat a no-learning heuristic (adamic_adar, 0.5361); margin -0.0408.",
+              "floor": 0.5360676142703553,
+              "heuristic": "adamic_adar",
+              "margin": -0.040771717048387446
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.478 > 0.1, and above the 0.067 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4953) does not beat a no-learning heuristic (common_neigh, 0.5333); margin -0.0380.",
+              "floor": 0.5333407947797008,
+              "heuristic": "common_neigh",
+              "margin": -0.03804489755773288
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5360676142703553,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5129608714969357,
+        "ap": 0.5133688632288381,
+        "best_epoch_auc": 0.5274123364840987,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.584 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5130) does not beat a no-learning heuristic (adamic_adar, 0.5242); margin -0.0112.",
+              "floor": 0.5241971314130285,
+              "heuristic": "adamic_adar",
+              "margin": -0.011236259916092783
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.478 > 0.1, and above the 0.067 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5130) does not beat a no-learning heuristic (gene_degree, 0.5239); margin -0.0110.",
+              "floor": 0.5239241103073099,
+              "heuristic": "gene_degree",
+              "margin": -0.010963238810374198
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5241971314130285,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    },
+    {
+      "seed": 5,
+      "n_train_pos": 4887,
+      "n_test_pos": 543,
+      "sortpooling_k": 853,
+      "theirs": {
+        "auc": 0.9797455646788695,
+        "ap": 0.9784285563937317,
+        "best_epoch_auc": 0.981248028651954,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.567 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0892 (0.9797 vs pref_attach 0.8906).",
+              "floor": 0.8905626269717721,
+              "heuristic": "pref_attach",
+              "margin": 0.0891829377070974
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.494 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "ok",
+              "message": "Model clears the model-free floor by +0.0892 (0.9797 vs pref_attach 0.8906).",
+              "floor": 0.8905626269717721,
+              "heuristic": "pref_attach",
+              "margin": 0.0891829377070974
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8905626269717721,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "theirs_flipped": {
+        "auc": 0.7667314455874025,
+        "ap": 0.6801813235936731,
+        "best_epoch_auc": 0.9159145867884918,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.567 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7667) does not beat a no-learning heuristic (pref_attach, 0.8906); margin -0.1238.",
+              "floor": 0.8905626269717721,
+              "heuristic": "pref_attach",
+              "margin": -0.12383118138436966
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "eval negatives do not mirror the held-out positives' column-degree profile (TV=0.494 > 0.2): a popularity-only scorer can separate them, so part of the metric is column degree."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.7667) does not beat a no-learning heuristic (pref_attach, 0.8906); margin -0.1238.",
+              "floor": 0.8905626269717721,
+              "heuristic": "pref_attach",
+              "margin": -0.12383118138436966
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.8905626269717721,
+          "floor_heuristic": "pref_attach (mirna_x_disease)"
+        }
+      },
+      "matched_disease": {
+        "auc": 0.48887057442962334,
+        "ap": 0.4977689609070975,
+        "best_epoch_auc": 0.5550349500930986,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.571 > 0.1, and above the 0.070 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4889) does not beat a no-learning heuristic (adamic_adar, 0.5555); margin -0.0667.",
+              "floor": 0.5555385977229023,
+              "heuristic": "adamic_adar",
+              "margin": -0.06666802329327892
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.499 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.4889) does not beat a no-learning heuristic (common_neigh, 0.5514); margin -0.0625.",
+              "floor": 0.5513567961905925,
+              "heuristic": "common_neigh",
+              "margin": -0.062486221760969185
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.5555385977229023,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      },
+      "matched_mirna": {
+        "auc": 0.5204579293129704,
+        "ap": 0.515882282965622,
+        "best_epoch_auc": 0.5395320994814296,
+        "audit": {
+          "mirna_x_disease": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.571 > 0.1, and above the 0.067 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5205) does not beat a no-learning heuristic (adamic_adar, 0.5249); margin -0.0044.",
+              "floor": 0.524853399536712,
+              "heuristic": "adamic_adar",
+              "margin": -0.004395470223741538
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "disease_x_mirna": {
+            "edge_leakage": {
+              "status": "ok",
+              "message": "No held-out edge is visible to the encoder, shared with training, or used as an evaluation negative."
+            },
+            "negative_matching": {
+              "status": "warn",
+              "message": "train and eval negatives differ (TV=0.499 > 0.1, and above the 0.066 that sampling noise alone reaches at these sizes): the model is scored on a different negative distribution than it trained on."
+            },
+            "model_free_baseline": {
+              "status": "error",
+              "message": "Your model (AUROC 0.5205) does not beat a no-learning heuristic (common_neigh, 0.5209); margin -0.0005.",
+              "floor": 0.5209429233268554,
+              "heuristic": "common_neigh",
+              "margin": -0.0004849940138850206
+            },
+            "dead_candidates": {
+              "status": "ok",
+              "message": "0.0% dead candidate columns."
+            }
+          },
+          "floor": 0.524853399536712,
+          "floor_heuristic": "adamic_adar (mirna_x_disease)"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "theirs": {
+      "mean": 0.9675959558960688,
+      "sd": 0.010641866338057996
+    },
+    "theirs_flipped": {
+      "mean": 0.7825286841739331,
+      "sd": 0.05353238105472776
+    },
+    "matched_disease": {
+      "mean": 0.5004527741318437,
+      "sd": 0.00891214075224647
+    },
+    "matched_mirna": {
+      "mean": 0.5128211389558723,
+      "sd": 0.00805721100673791
+    },
+    "floor_theirs": {
+      "mean": 0.8908844866355321,
+      "sd": 0.007223903693603666
+    },
+    "floor_theirs_flipped": {
+      "mean": 0.8908844866355321,
+      "sd": 0.007223903693603666
+    },
+    "floor_matched_disease": {
+      "mean": 0.5385980620588844,
+      "sd": 0.011705217317073654
+    },
+    "floor_matched_mirna": {
+      "mean": 0.5241839043035588,
+      "sd": 0.0010094194578265895
+    },
+    "theirs_best_epoch": {
+      "mean": 0.9721155574548328,
+      "sd": 0.008898441317388005
+    }
+  }
+}
