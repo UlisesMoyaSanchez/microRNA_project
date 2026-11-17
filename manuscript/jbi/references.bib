@@ -569,8 +569,14 @@
   volume  = {24},
   number  = {1},
   doi     = {10.1186/s12915-026-02557-z},
-  annote  = {Literature-survey row: test edges removed from graph, uniform-random
-             1:1 negatives, no model-free baseline.}
+  annote  = {Literature-survey row: test-edge removal unclear from the text (only
+             the folds are described); negatives not described beyond a 1:1 ratio;
+             no model-free baseline. Released code (github.com/St0neWang/HiGLDP =
+             Zenodo 10.5281/zenodo.18522355): pair-node classifier; test pairs are
+             isolated in its pair graph, but the lncRNA features include a GIP kernel
+             of the full lncRNA-disease matrix; negatives are a fixed uniform draw
+             over unknown pairs (mean degrees match uniform); main.py reports the
+             maximum test AUROC over 200 epochs; 122 pairs are never tested.}
 }
 
 @article{xiong2025gpsdti,

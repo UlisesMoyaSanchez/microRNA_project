@@ -218,6 +218,9 @@ NOTES = {
     'liang2023hmcda': 'Code read 2026-11-16 (shiyangl/HMCDA @4d9e8bb): metapaths from training CDAs only, but 168 '
                       'duplicate rows put 56/432 test positives in training; 1:1 training negatives (text: 5:1); one of '
                       'five 70/10/20 rotations released. Annote was stale. Rerun for E4.',
+    'wang2026higldp': 'Code read 2026-11-16 (St0neWang/HiGLDP @9808ba8 = Zenodo zip): test pairs isolated in the pair '
+                      'graph, but lncRNA features include GIP of the full matrix; fixed uniform negatives; max test-epoch '
+                      'AUROC reported. Annote was stale (said test edges removed, uniform 1:1). Rerun for E4.',
     'zhu2023pitfalls': 'Aug review checked the term "target-link inclusion"; the text now cites it only for "actively re-examined".',
     'almusawi2023review': 'In the bib but not cited; not printed. Bib updated 2026-11-09 to its published version (IEEE Access 2025).',
     'yun2021neognn': 'In the bib but not cited; not printed.',

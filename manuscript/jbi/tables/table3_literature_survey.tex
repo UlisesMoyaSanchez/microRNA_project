@@ -24,7 +24,7 @@ HLGNN-MDA \cite{yu2022hlgnnmda} & miRNA-disease & yes$^{\ddagger}$ & uniform ran
 MEAHNE \cite{huang2022meahne} & miRNA-disease & unclear$^{\ddagger}$ & uniform random, 1:1 & no \\
 CKSNP-GNN \cite{li2022cksnpgnn} & miRNA-disease & unclear$^{\ddagger}$ & uniform random, 1:1 & LLCMDA~\cite{qu2018llcmda} \\
 HMCDA \cite{liang2023hmcda} & circRNA-disease & unclear$^{\ddagger}$ & uniform random, 5:1 & no \\
-HiGLDP \cite{wang2026higldp} & lncRNA-disease & unclear & not described (1:1 ratio only) & no \\
+HiGLDP \cite{wang2026higldp} & lncRNA-disease & unclear$^{\ddagger}$ & not described (1:1 ratio only) & no \\
 GPS-DTI \cite{xiong2025gpsdti} & drug-target & n/a$^{\dagger}$ & not described (balanced; 1--20$\times$ in the COVID-19 arm only) & no \\
 SaeGraphDTI \cite{zhang2025saegraphdti} & drug-target & yes & not described (balanced sets inherited from prior work) & no \\
 DTI-MHAPR \cite{yang2025dtimhapr} & drug-target & unclear & uniform random, 1:1 & named (FSI), no result \\
@@ -54,7 +54,7 @@ neighbour lists and splits that it does not release, and the adjacency it does r
 test positives and negatives alike, so the graph does not separate them, but its disease features are 96\% a
 Gaussian interaction-profile kernel of the full association matrix. HMCDA's released code removes test
 associations from its metapath graph, but 168 duplicate rows in its association file leave 56 of its 432 test
-positives (13\%) as training edges, and it trains on one negative per positive, not the five its text reports.
+positives (13\%) as training edges, and it trains on one negative per positive, not the five its text reports. HiGLDP's released code keeps test pairs out of its pair graph, but one of the four lncRNA similarity networks behind its features is a Gaussian interaction-profile kernel of the full association matrix, test associations included; its negatives are a fixed uniform draw from unknown pairs, and it reports each fold's best test-epoch AUROC.
 $^{\S}$Orro~\cite{orro2026mirnadisease} holds out whole miRNAs, the strongest split in the survey, but removes
 ``all associations involving training miRNAs \ldots{} from the validation graph'' and builds its
 pattern--disease edges ``symmetrically for the validation graph'', so the graph it validates on may
